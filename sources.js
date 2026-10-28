@@ -1,0 +1,33 @@
+// Sources used to check whether each plant is a true Michigan native or a garden favorite sold at Michigan garden centers.
+// Kept here so the research does not have to be redone. Checked October 2026.
+window.STATUS_SOURCES = [
+  { title: "Michigan Wildflower Farm: Dryland species list", url: "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/dryland-species-2/", kind: "native",
+    note: "Michigan seed grower; marks any species that is not native to Michigan.",
+    plants: ["geranium", "bergamot", "bottlebrush", "culvers", "newengland", "coreopsis", "bluestem", "dropseed", "penstemon", "columbine", "butterflyweed", "zizia", "mtnmint", "spiderwort", "rattlesnake"] },
+  { title: "Michigan Wildflower Farm: Wetland species list", url: "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/wetland-species/", kind: "native",
+    note: "Same grower, wetland list.",
+    plants: ["bergamot", "culvers", "newengland", "liatris", "swampmilkweed", "cardinal", "lobelia", "rudbeckia", "mtnmint", "sneezeweed", "spiderwort"] },
+  { title: "Wild Cherry Farm (Michigan native nursery): Solomon's Seal", url: "https://www.wildcherryfarm.com/shop-native-plants/p/solomons-seal-polygonatum-biflorum", kind: "native", note: "Called a Michigan native plant.", plants: ["solomon"] },
+  { title: "Wild Cherry Farm: Prairie Smoke", url: "https://www.wildcherryfarm.com/shop-native-plants/p/prairie-smoke-geum-triflorum", kind: "native", note: "State threatened in Michigan (only native plants are state-listed).", plants: ["prairiesmoke"] },
+  { title: "Wild Cherry Farm: Jacob's Ladder", url: "https://www.wildcherryfarm.com/shop-native-plants/p/jacobs-ladder-polemonium-reptans", kind: "native", note: "State threatened in Michigan.", plants: ["jacobs"] },
+  { title: "Wild Cherry Farm: Prairie Alumroot", url: "https://www.wildcherryfarm.com/shop-native-plants/p/prairie-alumroot-heuchera-richardsonii", kind: "native", note: "Called a Michigan native plant.", plants: ["alumroot"] },
+  { title: "Wild Ginger Woodlands (Michigan nursery): Virginia Bluebells", url: "https://www.wildgingerwoodlands.com/wild-ginger-woodlands-shop/p/virginia-bluebells-mertensia-virginica", kind: "native", note: "Threatened in Michigan; seed from Michigan.", plants: ["bluebells"] },
+  { title: "Wild Ginger Woodlands: Woodland Sunflower", url: "https://www.wildgingerwoodlands.com/wild-ginger-woodlands-shop/p/nrccrx939b7u07jksq6ho64fng6vxn", kind: "native", note: "Native to Michigan, mostly the Lower Peninsula.", plants: ["sunflower"] },
+  { title: "Wild Ginger Woodlands: Wood (Celandine) Poppy", url: "https://www.wildgingerwoodlands.com/wild-ginger-woodlands-shop/p/wood-poppy-celandine-poppy", kind: "native", note: "Grown from Michigan seed.", plants: ["celandine"] },
+  { title: "Wild Ginger Woodlands: Virginia Waterleaf", url: "https://www.wildgingerwoodlands.com/wild-ginger-woodlands-shop/p/virginia-waterleaf", kind: "native", note: "Grown from Michigan seed.", plants: ["waterleaf"] },
+  { title: "Designs By Nature (Michigan nursery): Palm Sedge", url: "https://designsbynaturellc.com/product/palm-sedge/", kind: "native", note: "Native to Michigan.", plants: ["palmsedge"] },
+  { title: "Designs By Nature: Sweet Joe-Pye Weed", url: "https://designsbynaturellc.com/product/sweet-joe-pye-weed-eutrochium-purpureum/", kind: "native", note: "Native to Michigan.", plants: ["joepye"] },
+  { title: "Wild Ginger Woodlands: Black Cohosh", url: "https://www.wildgingerwoodlands.com/wild-ginger-woodlands-shop/p/black-cohosh-actaea-racemosa", kind: "garden", note: "Not native to Michigan, so listed here as a garden favorite.", plants: ["cohosh"] },
+  { title: "Wild Cherry Farm: Blue False Indigo", url: "https://www.wildcherryfarm.com/shop-native-plants/p/blue-false-indigo-baptisia-australis-aka-blue-wild-indigo", kind: "garden", note: "Doubtful as a true Michigan native, so listed here as a garden favorite.", plants: ["baptisia"] },
+  { title: "Wild Cherry Farm: Anise Hyssop", url: "https://www.wildcherryfarm.com/shop-native-plants/p/anise-hyssop-agastache-foeniculum", kind: "garden", note: "Mainly native west of Michigan, so listed here as a garden favorite.", plants: ["hyssop"] },
+  { title: "Bordine's (Michigan garden center): perennials by bloom time, 2026", url: "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf", kind: "garden",
+    note: "Current perennial list from a Michigan garden center.",
+    plants: ["coral", "brunnera", "rozanne", "astilbe", "epimedium", "toad", "bergenia", "ladysmantle", "salvia", "creepphlox", "coneflower", "daylily", "peony", "iris", "lavender", "shasta", "yarrow", "catmint", "hosta", "bleeding", "hellebore", "foxglove", "goatsbeard", "cohosh", "baptisia", "hyssop", "sedum", "caradonna", "siberianiris", "lungwort", "gardenphlox", "anemone", "veronica", "seaholly", "ligularia"] },
+  { title: "English Gardens (Michigan garden center): Japanese Painted Fern", url: "https://plants.englishgardens.com/12150001/Plant/2157/Japanese_Painted_Fern/", kind: "garden", note: "Sold at English Gardens.", plants: ["painted"] },
+  { title: "English Gardens: Golden Variegated Hakone Grass", url: "https://plants.englishgardens.com/12150001/Plant/2380/Golden_Variegated_Hakone_Grass/", kind: "garden", note: "Sold at English Gardens.", plants: ["forestgrass"] },
+  { title: "English Gardens: Lamb's Ears", url: "https://www.englishgardens.com/lambs-ears/", kind: "garden", note: "Sold at English Gardens (also at Wiegand's).", plants: ["lambsear"] },
+  { title: "Ray Wiegand's Nursery (Macomb, Michigan): Masterwort", url: "http://plants.wiegandsnursery.com/12150006/Plant/23731/Star_Of_Billion_Masterwort/", kind: "garden", note: "Sold at Wiegand's.", plants: ["astrantia"] },
+  { title: "Ray Wiegand's Nursery: Bigroot Geranium", url: "http://plants.wiegandsnursery.com/12150006/Plant/6460/Bevans_Variety_Cranesbill", kind: "garden", note: "Sold at Wiegand's.", plants: ["bigroot"] },
+  { title: "Ray Wiegand's Nursery: Autumn Fern", url: "http://plants.wiegandsnursery.com/12150006/Plant/3498/Autumn_Fern/", kind: "garden", note: "Sold at Wiegand's.", plants: ["autumn"] },
+  { title: "Ray Wiegand's Nursery: Ice Dance Sedge", url: "http://plants.wiegandsnursery.com/12150006/Plant/3385/Ice_Dance_Sedge/", kind: "garden", note: "Sold at Wiegand's.", plants: ["morrows"] }
+];
