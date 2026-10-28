@@ -132,7 +132,7 @@
       const x0 = M + labW, cw = W - M - x0, mw = cw / 8, rh = 24;
       sf("rb", 20); color(C.forest); text(first ? "When each plant blooms" : "When each plant blooms (continued)", M, y0); y0 += 16;
       if (first) {
-        y0 += para("The chart shows when each chosen plant is in flower. Foliage plants stay green all season and carry the bed between blooms. Garden favorites are marked ◆ and daisy-family plants (related to ragweed) are marked ✿. The small marks under each bar show when to prep each plant (green) and when to cut it back (brown; dashed = optional trim for more flowers). The Care through the year page explains each one.", M, y0 + 4, W - 2 * M, 8.4, 11, C.muted) + 6;
+        y0 += para("The chart shows when each chosen plant is in flower. Foliage plants stay green all season and carry the bed between blooms. Garden favorites are marked ◆ and daisy-family plants (related to ragweed) are marked ✿. The small marks on each bar show when to prep each plant (green) and when to cut it back (brown; dashed = optional trim for more flowers). The Care through the year page explains each one.", M, y0 + 4, W - 2 * M, 8.4, 11, C.muted) + 6;
       }
       sf("sb", 7.2); color(C.muted);
       Ch.MONTHS.forEach((m, i) => text(m, x0 + mw * i + mw / 2, y0 + 8, { align: "center" }));
@@ -153,15 +153,15 @@
         if (p.toxic) { sf("sb", 6); const tl = "TOXIC", tw2 = doc.getTextWidth(tl) + 12; fill(TOX); doc.roundedRect(x0 - tw2 - 6, ry + 3.5, tw2, 11, 5.5, 5.5, "F"); color("#FFFFFF"); text(tl, x0 - 6 - tw2 / 2, ry + 11.2, { align: "center" }); }
         if (p.bloom) {
           const bx = x0 + (Ch.pct(p.bloom[0]) / 100) * cw, bw = ((Ch.pct(p.bloom[1]) - Ch.pct(p.bloom[0])) / 100) * cw;
-          fill(p.hex); if (p.toxic) { stroke(TOX); doc.setLineWidth(1.6); } else { stroke(Ch.shade(p.hex, 0.78)); doc.setLineWidth(0.5); } doc.roundedRect(bx, ry + 4, bw, 11, 5.5, 5.5, "FD");
+          fill(p.hex); if (p.toxic) { stroke(TOX); doc.setLineWidth(1.6); } else { stroke(Ch.shade(p.hex, 0.78)); doc.setLineWidth(0.5); } doc.roundedRect(bx, ry + 2.5, bw, 19, 9.5, 9.5, "FD");
         } else {
-          fill("#DDE9CD"); stroke("#BCD2A5"); doc.setLineWidth(0.5); doc.roundedRect(x0 + mw * 0.08, ry + 5, cw - mw * 0.16, 9, 4.5, 4.5, "FD");
-          sf("s", 6); color("#5E7A52"); text("foliage all season", x0 + cw / 2, ry + 11.4, { align: "center" });
+          fill("#DDE9CD"); stroke("#BCD2A5"); doc.setLineWidth(0.5); doc.roundedRect(x0 + mw * 0.08, ry + 2.5, cw - mw * 0.16, 19, 9.5, 9.5, "FD");
+          sf("s", 6); color("#5E7A52"); text("foliage all season", x0 + cw / 2, ry + 14, { align: "center" });
         }
         { const cr = window.Care.careFor(p);
           [["prep", "#7FA86A"], ["cut", "#9C7B5B"], ["trim", null]].forEach(([k, col]) => { const w = cr[k]; if (!w) return; const xa = x0 + Ch.pct(w.a) / 100 * cw, wd = Math.max(4, (Ch.pct(w.b) - Ch.pct(w.a)) / 100 * cw);
-            if (col) { fill(col); doc.roundedRect(xa, ry + 17.3, wd, 4.6, 2.3, 2.3, "F"); }
-            else { fill("#FFFFFF"); stroke("#9C7B5B"); doc.setLineWidth(0.6); doc.setLineDashPattern([1.2, 1], 0); doc.roundedRect(xa, ry + 17.3, wd, 4.6, 2.3, 2.3, "FD"); doc.setLineDashPattern([], 0); } }); }
+            if (col) { fill(col); stroke("#FFFFFF"); doc.setLineWidth(0.8); doc.roundedRect(xa, ry + 9.2, wd, 5.6, 2.8, 2.8, "FD"); }
+            else { fill("#FFFFFF"); stroke("#9C7B5B"); doc.setLineWidth(0.6); doc.setLineDashPattern([1.2, 1], 0); doc.roundedRect(xa, ry + 9.2, wd, 5.6, 2.8, 2.8, "FD"); doc.setLineDashPattern([], 0); } }); }
       });
       return top + rows.length * rh;
     };
@@ -544,7 +544,7 @@
       if (hy + 120 > H - 54) { newPage(); hy = 62; }
       sf("sb", 6.8); color(C.muted); text("PHOTO CREDITS", M, hy + 14); hy += 24;
       hy += para("Photos are from Wikimedia Commons and are used under their Creative Commons or public-domain licenses. Each entry shows the file name, photographer and license; search the file name at commons.wikimedia.org to see the original.", M, hy, W - 2 * M, 6.6, 8.6, C.muted);
-      hy += para("This guide was made with Perennial Bed Planner (beta), an early test version: please double-check plant details before you buy. The planner's own text, plant notes and research are \u00A9 2026 spreck79, shared under Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0, creativecommons.org/licenses/by-nc/4.0): free to share and adapt for non-commercial use with credit. Photos keep their own licenses, listed below.", M, hy + 2, W - 2 * M, 6.6, 8.6, C.muted) + 2;
+      hy += para("This guide was made with Perennial Bed Planner (beta), an early test version: please double-check plant details before you buy. The planner's own text, plant notes and research are \u00A9 2026 spreck79 (github.com/spreck79), shared under Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0, creativecommons.org/licenses/by-nc/4.0): free to share and adapt for non-commercial use with credit. Photos keep their own licenses, listed below.", M, hy + 2, W - 2 * M, 6.6, 8.6, C.muted) + 2;
       const parts = []; plants.slice().sort((a, b) => a.name.localeCompare(b.name)).forEach(p => {
         const c = (window.CREDITS && window.CREDITS[p.id]) || p.credit || {}; if (!c.file) return;
         parts.push([p.name + ": ", true]); parts.push([c.file.replace(/_/g, " ") + (c.by || c.lic ? " (" + [c.by, c.lic].filter(Boolean).join(", ") + ")" : "") + "  ·  ", false]);
