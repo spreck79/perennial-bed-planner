@@ -1,4 +1,6 @@
-# Perennial Bed Planner
+# Perennial Bed Planner (beta)
+
+> **Beta version.** This is an early test release. Plant lists, pairings and safety notes are still being checked, and things may change or break. Please double-check anything important before you buy or plant.
 
 Plan a perennial flower bed for Michigan (zone 6B): pick a bed shape, choose Michigan natives and garden favorites, and get a bed plan, bloom chart, shopping list and printable PDF guide.
 
