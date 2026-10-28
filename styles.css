@@ -379,3 +379,8 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 #ictip.k-bulbs { background: #FBEBC4; color: #6E5010; }
 .cpill.big.k-mulch i { display: none; }
 .cpill.big.k-mulch { justify-content: center; padding: 0 3px; }
+
+/* bloom bars: nearly full row height, care marks centered on the same line */
+.brow .track { height: 34px; }
+.brow .bar { top: 4px; height: 26px; border-radius: 13px; }
+.brow .cpill { top: 11.5px; height: 11px; box-shadow: 0 0 0 1px #fff; }

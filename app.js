@@ -135,6 +135,7 @@
   function removePlant(id) { S.placements = S.placements.filter(p => p.id !== id); if (S.waiting) delete S.waiting[id]; selIdx = -1; if (armed === id) armed = null; recarpet(); }
   function togglePlant(id) {
     notice = ""; noFit = [];
+    if (S.removed) delete S.removed[id];
     if (counts()[id] > 0) removePlant(id); else addMany(id, defaultQty(byId[id]));
     refresh();
   }
@@ -220,14 +221,24 @@
   function prefChanged() {
     renderChips(); renderLibrary(); renderBloom(); save();
     const c = counts(), bad = PL.filter(p => c[p.id] > 0 && !matchesPrefs(p));
-    if (!bad.length) return;
     const old = document.getElementById("prefAsk"); if (old) old.remove();
+    if (!bad.length) {
+      const back = PL.filter(p => S.removed && S.removed[p.id] > 0 && !(c[p.id] > 0) && matchesPrefs(p));
+      if (!back.length) return;
+      const n = back.reduce((s, p) => s + S.removed[p.id], 0), names = back.map(p => esc(p.name) + " (" + S.removed[p.id] + ")").join(", ");
+      const ov2 = document.createElement("div"); ov2.id = "prefAsk"; ov2.className = "modalov";
+      ov2.innerHTML = `<div class="modalbox" role="dialog" aria-modal="true"><h3>Put your plants back?</h3><p>You removed ${n === 1 ? "this plant" : "these plants"} when you changed your choices: <b>${names}</b>.</p><p>They match again. Would you like to put ${n === 1 ? "it" : "them"} back in your planner?</p><div class="askbtns"><button class="btn" id="paBack" type="button">Put ${n === 1 ? "it" : "them"} back</button> <button class="btn" id="paNo" type="button">No thanks</button></div></div>`;
+      document.body.appendChild(ov2);
+      $("#paNo").onclick = () => { back.forEach(p => delete S.removed[p.id]); save(); ov2.remove(); };
+      $("#paBack").onclick = () => { notice = ""; noFit = []; back.forEach(p => { addMany(p.id, S.removed[p.id]); delete S.removed[p.id]; }); ov2.remove(); refresh(); save(); toast("Put back " + back.map(p => p.name).join(", ") + "."); };
+      return;
+    }
     const ov = document.createElement("div"); ov.id = "prefAsk"; ov.className = "modalov";
     const names = bad.map(p => esc(p.name) + " (" + c[p.id] + ")").join(", ");
     ov.innerHTML = `<div class="modalbox" role="dialog" aria-modal="true"><h3>Remove these plants?</h3><p>${bad.length === 1 ? "This plant doesn't" : "These plants don't"} match your new choices: <b>${names}</b>.</p><p>Would you like to remove ${bad.length === 1 ? "it" : "them"} from your planner? If you keep ${bad.length === 1 ? "it" : "them"}, nothing changes.</p><div class="askbtns"><button class="btn" id="paYes" type="button">Remove ${bad.length === 1 ? "it" : "them"}</button> <button class="btn" id="paNo" type="button">Keep ${bad.length === 1 ? "it" : "them"}</button></div></div>`;
     document.body.appendChild(ov);
     $("#paNo").onclick = () => ov.remove();
-    $("#paYes").onclick = () => { bad.forEach(p => removePlant(p.id)); ov.remove(); refresh(); save(); toast("Removed " + bad.map(p => p.name).join(", ") + "."); };
+    $("#paYes").onclick = () => { S.removed = S.removed || {}; bad.forEach(p => { const n = c[p.id]; removePlant(p.id); S.removed[p.id] = n; }); ov.remove(); refresh(); save(); toast("Removed " + bad.map(p => p.name).join(", ") + "."); };
   }
   function renderChips() {
     const pr = S.prefs;
