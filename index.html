@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perennial Bed Planner</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1 id="hdrTitle">Perennial Bed Planner</h1>
+    <div class="sub" id="hdrSub">All perennials · Zone 6B · Southern Michigan</div>
+  </div>
+  <div class="actions">
+    <button class="btn primary" id="btnPdf">Create PDF guide</button>
+    <button class="btn" id="btnSave">Save plan</button>
+    <span class="btn filebtn">Open plan<input type="file" id="fileOpen" accept=".json,application/json"></span>
+    <button class="btn danger" id="btnReset">Start over</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="left">
+    <section class="card" id="bedPanel">
+      <h2>1. Name it and size your bed</h2>
+      <label class="field namefield">Garden name
+        <input type="text" id="gName" maxlength="60" placeholder="For example: Backyard Shade Garden" autocomplete="off">
+      </label>
+      <p class="lede">Pick a shape and size. Everything below updates to fit.</p>
+      <div class="shapes" id="shapes"></div>
+      <p class="hint" id="shapeHint"></p>
+      <div class="dims" id="dims"></div>
+      <div id="freeBox" style="display:none">
+        <div class="row" style="margin-top:10px">
+          <button class="btn small" id="btnDraw">Draw the outline</button>
+          <label class="field" style="flex:1;min-width:130px">Tall plants go
+            <select id="freeView"><option value="border">at the back (top)</option><option value="island">in the middle</option></select>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="prefCard">
+      <h2>2. What kind of garden?</h2>
+      <p class="lede">Choose what fits your spot. The plant list in step 3 only shows plants that match.</p>
+      <div class="pgroup"><div class="plabel">Sunlight <small>(pick one or more)</small></div><div class="chips" id="pSun"></div></div>
+      <div class="pgroup"><div class="plabel">Where plants come from</div><div class="chips" id="pOrigin"></div></div>
+      <div class="pgroup"><div class="plabel">Kinds of plants</div><div class="chips" id="pKind"></div></div>
+      <div class="pgroup"><div class="plabel">Safety</div><div class="chips" id="pDaisy"></div><p class="hint" id="daisyHint"></p><div class="chips" id="pTox"></div><p class="hint" id="toxHint"></p></div>
+    </section>
+
+    <section class="card" id="libCard">
+      <h2>3. Pick plants</h2>
+      <p class="lede" id="libLede"></p>
+      <div class="filters">
+        <input type="search" id="q" placeholder="Search plants">
+        <div class="row tight">
+          <select id="fHeight" style="flex:1"><option value="">Any height</option><option value="low">Low (under 12 in)</option><option value="mid">Medium (12–30 in)</option><option value="tall">Tall (30 in and up)</option></select>
+          <select id="fMonth" style="flex:1"><option value="">Any bloom month</option></select>
+        </div>
+      </div>
+      <div class="lib" id="lib"></div>
+    </section>
+  </aside>
+
+  <main class="center">
+    <section class="card" id="planCard">
+      <h2>Bed plan</h2>
+      <p class="lede">Each plant is drawn at its full grown size, so the plan is also your spacing guide. Drag a plant to move it. Click a plant, then press Delete to remove it. Grid squares are 1 foot.</p>
+      <div class="plan-tools">
+        <div class="seg" id="viewSeg"><button data-v="codes" class="on">Letters</button><button data-v="photos">Photos</button></div>
+        <span class="armed" id="armed"></span>
+        <button class="btn small" id="btnSuggest" title="Chooses how many of each plant fills the bed, then arranges them">Suggest quantities</button>
+        <button class="btn small" id="btnArrange" title="Re-arranges the current plants in a new natural-looking layout">Re-arrange</button>
+        <button class="btn small" id="btnClear">Clear bed</button>
+        <span class="tools-right">
+          <button class="btn small" id="btnFill" title="Fills the leftover gaps with a low groundcover you picked (like sedge, foamflower or creeping phlox)">Fill gaps with groundcover</button>
+        </span>
+      </div>
+      <div class="fillpick" id="fillPick"></div>
+      <div class="planwrap"><svg id="plan" xmlns="http://www.w3.org/2000/svg"></svg></div>
+      <div class="statbar" id="stats"></div>
+      <div class="notice" id="notice" style="display:none"></div>
+    </section>
+
+    <section class="card bloom" id="bloomCard">
+      <h2>When each plant blooms</h2>
+      <p class="lede">Tick a row to add or remove that plant. Hover a row to see where it sits in the bed. Striped bars are foliage plants that stay green and carry the bed between flowers. <span class="gf">◆</span> marks a garden favorite (not native). <span class="df">✿</span> marks the daisy family (related to ragweed).</p>
+      <div class="row tight" style="margin-bottom:10px">
+        <div class="seg" id="bloomFilter"><button data-f="all" class="on">All plants</button><button data-f="sel">Chosen only</button></div>
+        <label class="field" style="flex-direction:row;align-items:center;gap:6px">Sort <select id="bloomSort" style="width:auto"><option value="start">by first bloom</option><option value="name">by name</option><option value="height">by height</option></select></label>
+      </div>
+      <div class="bloom-head"><div></div><div class="months" id="monthsHead"></div></div>
+      <div id="bloomRows"></div>
+      <div class="cover"><div style="font-size:12px;font-weight:700;color:var(--muted);padding-left:4px">Chosen plants in bloom</div><div class="covcells" id="cover"></div></div>
+      <div class="legend-note" id="coverNote"></div>
+    </section>
+
+    <section class="card" id="orderCard">
+      <h2>Small to big, with spacing</h2>
+      <p class="lede">A side view of the chosen plants from shortest to tallest, drawn to one scale. The bar under each plant is how far apart to set that kind.</p>
+      <div class="ochart" id="ochart"></div>
+      <div class="scale-note">Mixing two kinds side by side? Average their two spacings. Plant the big back-row plants first, then the middle, then the front, and finish by tucking the low plants into the gaps.</div>
+    </section>
+
+    <section class="card" id="shopCard">
+      <h2>Shopping list</h2>
+      <p class="lede">What to buy for the bed as arranged above. <span class="gf">◆</span> marks a garden favorite (not native). <span class="df">✿</span> marks the daisy family (related to ragweed).</p>
+      <table class="list" id="shop"></table>
+    </section>
+  </main>
+</div>
+
+<footer class="sitefoot">
+  <span>Perennial Bed Planner · Zone 6B · Southern Michigan</span>
+  <a href="credits.html" target="_blank" rel="noopener">Sources and photo credits</a>
+</footer>
+
+<div class="overlay" id="busy"><div class="modal"><h2 id="busyTitle">Making your PDF…</h2><div class="tip" id="busyText">Building pages</div><div class="progress"><i id="busyBar"></i></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="lib/jspdf.umd.min.js"></script>
+<script src="plants.js"></script>
+<script src="images.js"></script>
+<script src="credits.js"></script>
+<script src="companions.js"></script>
+<script src="fonts.js"></script>
+<script src="geometry.js"></script>
+<script src="charts.js"></script>
+<script src="plan.js"></script>
+<script src="pdf.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
