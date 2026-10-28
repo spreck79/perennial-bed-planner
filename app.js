@@ -396,6 +396,7 @@
     t.querySelectorAll("tr[data-id]").forEach(tr => {
       const id = tr.dataset.id;
       tr.querySelectorAll("button").forEach(b => b.onclick = () => setQty(id, +b.dataset.d));
+      tr.onclick = e => { if (e.target.closest("button") || e.target.tagName === "IMG" || e.target.closest("a")) return; pickFromChart(id, e.shiftKey || e.ctrlKey || e.metaKey); };
       tr.onmouseenter = () => setHover(id); tr.onmouseleave = () => setHover(null);
     });
   }
@@ -414,6 +415,7 @@
     const n = document.querySelector("#plan .pl.bad") ? document.querySelectorAll("#plan .pl.bad").length : 0;
     if (n) msgs.push(`${n} plants are drawn with a dashed red edge because they are closer together than their spacing allows. Drag them apart, or remove one.`);
     const box = $("#notice"); box.style.display = msgs.length ? "block" : "none"; box.innerHTML = msgs.map(esc).join("<br>");
+    if (n) { box.insertAdjacentHTML("beforeend", ` <button class="btn small" id="ovFix" type="button">Fix it</button>`); $("#ovFix").onclick = openOverlapFix; }
     const wt = waitTotal();
     if (wt) {
       const ids = Object.keys(S.waiting).filter(k => S.waiting[k] > 0), names = ids.map(k => byId[k].name + (S.waiting[k] > 1 ? " ×" + S.waiting[k] : "")).join(", ");
@@ -430,6 +432,38 @@
     document.querySelectorAll("#viewSeg button").forEach(b => b.classList.toggle("on", b.dataset.v === S.view));
   }
   function refreshPlanOnly() { renderPlan(); }
+  // plants closer together than their spacing allows (early-dormant plants may tuck in among later ones)
+  function overlapPairs() {
+    const out = [], P = S.placements;
+    for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) {
+      const A = byId[P[i].id], B = byId[P[j].id], mix = !!A.dormant !== !!B.dormant;
+      if (Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y) < (A.spacing + B.spacing) / 24 * (mix ? 0.2 : 0.72)) out.push([P[i], P[j]]);
+    }
+    return out;
+  }
+  function movePlacement(pl) {
+    const rest = S.placements.filter(q => q !== pl && !q.c), sel = selected(), t = Geo.depthTargets(sel);
+    const np = Geo.placeBeside(bed, byId, rest, pl.id, pl.x, pl.y, t, pl.id) || Geo.placeOne(bed, byId, rest, pl.id, t, 0);
+    if (!np) return false;
+    pl.x = np.x; pl.y = np.y; return true;
+  }
+  function openOverlapFix() {
+    const old = document.getElementById("ovAsk"); if (old) old.remove();
+    const pairs = overlapPairs(); if (!pairs.length) return;
+    const ov = document.createElement("div"); ov.id = "ovAsk"; ov.className = "modalov";
+    ov.innerHTML = `<div class="modalbox" role="dialog" aria-modal="true"><h3>Move an overlapping plant</h3><p>Pick one plant from each pair to move to the nearest open spot where it fits.</p><div class="ovlist"></div><div class="askbtns"><button class="btn" id="ovDone" type="button">Done</button></div></div>`;
+    document.body.appendChild(ov);
+    const list = ov.querySelector(".ovlist");
+    pairs.forEach(([a, b]) => {
+      const row = document.createElement("div"); row.className = "ovrow";
+      row.innerHTML = `<span>${esc(byId[a.id].name)} and ${esc(byId[b.id].name)}</span>`;
+      [a, b].forEach(pl => { const bt = document.createElement("button"); bt.type = "button"; bt.className = "btn small"; bt.textContent = "Move " + byId[pl.id].name;
+        bt.onclick = () => { S.placements = S.placements.filter(q => !q.c); if (movePlacement(pl)) { refresh(); toast("Moved " + byId[pl.id].name + "."); ov.remove(); if (overlapPairs().length) openOverlapFix(); } else toast("There's no open spot big enough for " + byId[pl.id].name + " right now. Try the other plant, or make room."); };
+        row.appendChild(bt); });
+      list.appendChild(row);
+    });
+    ov.querySelector("#ovDone").onclick = () => ov.remove();
+  }
   function setHover(id) {
     hoverId = id;
     document.querySelectorAll(".brow,.ocol,.pcard").forEach(e => e.classList.toggle("hl", !!id && e.dataset.id === id));

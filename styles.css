@@ -384,3 +384,8 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 .brow .track { height: 34px; }
 .brow .bar { top: 4px; height: 26px; border-radius: 13px; }
 .brow .cpill { top: 11.5px; height: 11px; box-shadow: 0 0 0 1px #fff; }
+
+#shop tr[data-id] { cursor: pointer; }
+.ovlist { display: flex; flex-direction: column; gap: 8px; margin: 10px 0 4px; max-height: 50vh; overflow: auto; }
+.ovrow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-weight: 600; }
+.ovrow span { flex: 1 1 100%; }

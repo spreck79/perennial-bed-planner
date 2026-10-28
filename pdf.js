@@ -45,6 +45,24 @@
     const newPage = () => { doc.addPage(); page++; };
     const rowOf = p => hMean(p) <= 14 ? "Front" : hMean(p) <= 28 ? "Middle" : "Back";
     const stripe = (x, y, w, h) => { fill(C.stripe); doc.rect(x, y, w, h, "F"); };
+    // plant icons, same order and colors as the site: native leaf or garden favorite, daisy, deer, toxic
+    const ICON = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: ["#B8392E", "#FFFFFF"] };
+    const icKinds = p => { const k = [p.native ? "nat" : "gar"]; if (p.fam === "daisy") k.push("daisy"); if (deerEats(p)) k.push("deer"); if (p.toxic && p.toxic.length) k.push("tox"); return k; };
+    const drawIc = (k, x, y, br) => {
+      const c = ICON[k]; fill(c[0]); doc.circle(x, y, br, "F");
+      const u = br * 0.55;
+      if (k === "nat") { fill(c[1]); doc.lines([[u * 0.75, -u * 1.45], [u * 1.1, -u * 0.4], [-u * 0.4, u * 1.1]], x - u * 0.9, y + u * 0.9, [1, 1], "F", true); }
+      else if (k === "gar") { fill(c[1]); doc.lines([[u * 0.8, u * 0.9], [-u * 0.8, u * 0.9], [-u * 0.8, -u * 0.9]], x, y - u * 0.9, [1, 1], "F", true); }
+      else if (k === "deer") { stroke(c[1]); doc.setLineCap("round"); doc.setLineWidth(br * 0.22); doc.line(x, y + u, x, y - u * 0.1); doc.line(x, y - u * 0.1, x - u * 0.8, y - u); doc.line(x, y - u * 0.1, x + u * 0.8, y - u); doc.line(x - u * 0.4, y - u * 0.55, x - u * 1.05, y - u * 0.45); doc.line(x + u * 0.4, y - u * 0.55, x + u * 1.05, y - u * 0.45); doc.setLineCap("butt"); }
+      else if (k === "daisy") { sf("s", br * 1.6); color(c[1]); text("\u273F", x, y + br * 0.55, { align: "center" }); }
+      else { sf("sb", br * 1.5); color(c[1]); text("!", x, y + br * 0.53, { align: "center" }); }
+    };
+    // draws a plant's icon row; y is the icons' center line. Returns the row width.
+    const drawIcons = (p, x, y, br, center) => { const ks = icKinds(p), st = br * 2.35, wd = (ks.length - 1) * st + 2 * br; const x0 = center ? x - wd / 2 : x; ks.forEach((k, i) => drawIc(k, x0 + br + i * st, y, br)); return wd; };
+    const KEYITEMS = [["nat", "native"], ["gar", "garden favorite"], ["daisy", "daisy family"], ["deer", "deer often eat"], ["tox", "toxic"]];
+    // icon key on one line; y is the text baseline. Returns its width.
+    const drawKey = (x, y, size, kinds) => { let lx = x; KEYITEMS.filter(q => !kinds || kinds.includes(q[0])).forEach(([k, t]) => { drawIc(k, lx + size * 0.55, y - size * 0.33, size * 0.55); sf("s", size); color(C.muted); text(t, lx + size * 1.35, y); lx += size * 1.35 + doc.getTextWidth(t) + size * 1.3; }); return lx - x; };
+    const usedKinds = (() => { const s = new Set(); plants.forEach(p => icKinds(p).forEach(k => s.add(k))); return KEYITEMS.map(q => q[0]).filter(k => s.has(k)); })();
 
     // photo with rounded corners, cropped to fill the frame
     const photo = (id, x, y, w, h, r) => {
@@ -130,9 +148,10 @@
     const labW = 187;
     const barsChart = (rows, y0, first) => {
       const x0 = M + labW, cw = W - M - x0, mw = cw / 8, rh = 24;
-      sf("rb", 20); color(C.forest); text(first ? "When each plant blooms" : "When each plant blooms (continued)", M, y0); y0 += 16;
+      sf("rb", 20); color(C.forest); text(first ? "Garden Timeline" : "Garden Timeline (continued)", M, y0); y0 += 16;
       if (first) {
-        y0 += para("The chart shows when each chosen plant is in flower. Foliage plants stay green all season and carry the bed between blooms. Garden favorites are marked ◆ and daisy-family plants (related to ragweed) are marked ✿. The small marks on each bar show when to prep each plant (green) and when to cut it back (brown; dashed = optional trim for more flowers). The Care through the year page explains each one.", M, y0 + 4, W - 2 * M, 8.4, 11, C.muted) + 6;
+        y0 += para("The chart shows when each chosen plant is in flower. Foliage plants stay green all season and carry the bed between blooms. The icons after each name are the same as on the site (key below). The small marks on each bar show when to prep each plant (green) and when to cut it back (brown; dashed = optional trim for more flowers). The Care through the year page explains each one.", M, y0 + 4, W - 2 * M, 8.4, 11, C.muted) + 6;
+        drawKey(M, y0 + 6, 7.2, usedKinds); y0 += 14;
       }
       sf("sb", 7.2); color(C.muted);
       Ch.MONTHS.forEach((m, i) => text(m, x0 + mw * i + mw / 2, y0 + 8, { align: "center" }));
@@ -140,20 +159,18 @@
       const top = y0;
       rows.forEach((p, i) => {
         const ry = y0 + i * rh;
-        if (p.toxic) { fill("#F8E4E1"); doc.rect(M, ry, W - 2 * M, rh, "F"); fill(TOX); doc.rect(M, ry, 3.5, rh, "F"); }
-        else if (i % 2 === 0) stripe(M, ry, W - 2 * M, rh);
+        if (i % 2 === 0) stripe(M, ry, W - 2 * M, rh);
       });
       stroke("#DDD6C3"); doc.setLineWidth(0.4);
       for (let i = 0; i <= 8; i++) doc.line(x0 + mw * i, top, x0 + mw * i, top + rows.length * rh);
       rows.forEach((p, i) => {
         const ry = y0 + i * rh;
         sf("sb", 7.8); color(C.ink); text(p.name, M + 6, ry + 10);
-        let mx = M + 6 + doc.getTextWidth(p.name + " "); if (!p.native) { sf("s", 6.5); color(C.berry); text("◆", mx, ry + 9.6); mx += doc.getTextWidth("◆ "); } if (p.fam === "daisy") { sf("s", 7); color(DAISY); text("✿", mx, ry + 9.8); }
+        drawIcons(p, M + 6 + doc.getTextWidth(p.name) + 3, ry + 7.3, 3.2);
         sf("s", 6.3); color(C.muted); const subl = rowOf(p) + " of bed  ·  " + Ch.heightText(p); text(subl, M + 6, ry + 18.4);
-        if (p.toxic) { sf("sb", 6); const tl = "TOXIC", tw2 = doc.getTextWidth(tl) + 12; fill(TOX); doc.roundedRect(x0 - tw2 - 6, ry + 3.5, tw2, 11, 5.5, 5.5, "F"); color("#FFFFFF"); text(tl, x0 - 6 - tw2 / 2, ry + 11.2, { align: "center" }); }
         if (p.bloom) {
           const bx = x0 + (Ch.pct(p.bloom[0]) / 100) * cw, bw = ((Ch.pct(p.bloom[1]) - Ch.pct(p.bloom[0])) / 100) * cw;
-          fill(p.hex); if (p.toxic) { stroke(TOX); doc.setLineWidth(1.6); } else { stroke(Ch.shade(p.hex, 0.78)); doc.setLineWidth(0.5); } doc.roundedRect(bx, ry + 2.5, bw, 19, 9.5, 9.5, "FD");
+          fill(p.hex); stroke(Ch.shade(p.hex, 0.78)); doc.setLineWidth(0.5); doc.roundedRect(bx, ry + 2.5, bw, 19, 9.5, 9.5, "FD");
         } else {
           fill("#DDE9CD"); stroke("#BCD2A5"); doc.setLineWidth(0.5); doc.roundedRect(x0 + mw * 0.08, ry + 2.5, cw - mw * 0.16, 19, 9.5, 9.5, "FD");
           sf("s", 6); color("#5E7A52"); text("foliage all season", x0 + cw / 2, ry + 14, { align: "center" });
@@ -193,7 +210,7 @@
     };
     let safetyShown = false;
     {
-      const parts = [["About safety: ", true], [toxicPlants.length ? "this plan includes plants that are toxic if eaten: " + toxicPlants.map(p => p.name + " (" + toxLabel(p).replace(/^Toxic to /, "") + ")").join(", ") + ". Keep them away from pets and children who chew on plants. The rest are believed non-toxic. These labels are a starting point, so check the ASPCA toxic and non-toxic plant list (aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants) before you buy. " : "every plant in this plan is believed to be non-toxic to people, dogs and cats, but lists change and look-alikes exist. These labels are a starting point. Check each plant on the ASPCA toxic and non-toxic plant list (aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants) before you buy. No plant is meant to be eaten. If a person or pet has eaten any part of a plant, call Poison Control at 1-800-222-1222 (free, 24 hours; online at poisonhelp.org); for someone unconscious, having trouble breathing or having a seizure, call 911 first. ", false], ["About buying: ", true], ["get the natives as straight species (the Latin name) from a Michigan native nursery; the garden favorites are at any garden center.", false]];
+      const parts = [["Pets, people & wildlife: ", true], [toxicPlants.length ? "this plan includes plants that are toxic if eaten: " + toxicPlants.map(p => p.name + " (" + toxLabel(p).replace(/^Toxic to /, "") + ")").join(", ") + ". Keep them away from pets and children who chew on plants. The rest are believed non-toxic. These labels are a starting point, so check the ASPCA toxic and non-toxic plant list (aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants) before you buy. " : "every plant in this plan is believed to be non-toxic to people, dogs and cats, but lists change and look-alikes exist. These labels are a starting point. Check each plant on the ASPCA toxic and non-toxic plant list (aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants) before you buy. No plant is meant to be eaten. If a person or pet has eaten any part of a plant, call Poison Control at 1-800-222-1222 (free, 24 hours; online at poisonhelp.org); for someone unconscious, having trouble breathing or having a seizure, call 911 first. ", false], ["About buying: ", true], ["get the natives as straight species (the Latin name) from a Michigan native nursery; the garden favorites are at any garden center.", false]];
       const maxW = W - 2 * M - 32, n = flow(parts, 0, 0, maxW, 8.2, 11, C.muted, C.muted, false), h = n * 11 + 20;
       if (bottom + 8 + h < H - 52) {
         fill(C.cream); stroke(C.rule); doc.setLineWidth(0.6); doc.roundedRect(M, bottom + 8, W - 2 * M, h, 10, 10, "FD");
@@ -249,18 +266,23 @@
     groups.forEach(([title, list]) => {
       if (!list.length) return;
       list = list.slice().sort((a, b) => hMean(a) - hMean(b) || a.name.localeCompare(b.name));
-      const startPage = (cont) => { newPage(); let t = cont ? title.replace(/ ◆$/, "") + " (continued)" : title; heading(t, 62, cont ? 18 : 20); if (!cont) { sf("s", 8.4); color(C.muted); text("Listed in planting order, from the front edge of the bed to the back.  ◆ = garden favorite (not native).  ✿ = daisy family.", M, 78); } return cont ? 80 : 94; };
+      const startPage = (cont) => { newPage(); let t = cont ? title.replace(/ ◆$/, "") + " (continued)" : title; heading(t, 62, cont ? 18 : 20); if (!cont) { sf("s", 8.4); color(C.muted); const t0 = "Listed in planting order, from the front edge of the bed to the back."; text(t0, M, 78); drawKey(M, 91, 7.2, usedKinds); } return cont ? 80 : 102; };
       let py = startPage(false); const ch = 129;
       list.forEach(p => {
         if (py + ch > H - 50) py = startPage(true);
         photo(p.id, M, py + 2, 132, 105, 7);
         const tx = M + 148, tw = W - M - tx;
-        sf("rb", 14.5); color(C.forest); text(p.name, tx, py + 16); { let sx = tx + doc.getTextWidth(p.name + " ") + 2; if (!p.native) { sf("s", 9); color(C.berry); text("◆", sx, py + 15.5); sx += doc.getTextWidth("◆") + 4; } if (p.fam === "daisy") { sf("s", 9.5); color(DAISY); text("✿", sx, py + 15.7); } }
+        { // shrink a long name so it doesn't run into the count and row tags
+          sf("sb", 6.2); const pwR = doc.getTextWidth(rowOf(p).toUpperCase() + " ROW") + 16; sf("sb", 6.8); const cntW = counts[p.id] ? doc.getTextWidth("In this bed: " + counts[p.id] + (p.clump ? " clumps, about " + counts[p.id] * p.clump + " bulbs" : "")) + 7 : 0;
+          const icW = icKinds(p).length * 4.6 * 2.35 + 6, room = W - M - pwR - cntW - 10 - tx - icW; let fs = 14.5; sf("rb", fs); while (doc.getTextWidth(p.name) > room && fs > 10.5) { fs -= 0.5; sf("rb", fs); }
+          color(C.forest); text(p.name, tx, py + 16); drawIcons(p, tx + doc.getTextWidth(p.name) + 6, py + 11.4, 4.6); }
         sf("ri", 8.4); color(C.muted); text(p.latin, tx, py + 28);
         const row = rowOf(p).toUpperCase() + " ROW"; sf("sb", 6.2); const pw = doc.getTextWidth(row) + 16;
         fill(rowOf(p) === "Front" ? C.leaf2 : C.leaf); doc.roundedRect(W - M - pw, py + 3, pw, 13, 6.5, 6.5, "F"); color("#FFFFFF"); text(row, W - M - pw / 2, py + 12, { align: "center" });
-        if (p.toxic) { const tl = toxLabel(p).toUpperCase(); sf("sb", 6.2); const tw3 = doc.getTextWidth(tl) + 16; fill(TOX); doc.roundedRect(W - M - pw - 6 - tw3, py + 3, tw3, 13, 6.5, 6.5, "F"); color("#FFFFFF"); text(tl, W - M - pw - 6 - tw3 / 2, py + 12, { align: "center" }); }
-        if (counts[p.id]) { sf("sb", 6.8); color(C.forest); text("In this bed: " + counts[p.id] + (p.clump ? " clumps (about " + counts[p.id] * p.clump + " bulbs)" : ""), W - M, py + 28, { align: "right" }); }
+        { let px = W - M; const tag = (t, bg, fg) => { sf("sb", 6); const tw3 = doc.getTextWidth(t) + 14; fill(bg); doc.roundedRect(px - tw3, py + 19.5, tw3, 12, 6, 6, "F"); color(fg); text(t, px - tw3 / 2, py + 27.6, { align: "center" }); px -= tw3 + 5; };
+          if (p.toxic && p.toxic.length) tag(toxLabel(p).toUpperCase(), "#F6D9D5", "#9A2E24");
+          if (deerEats(p)) tag(p.deer === "D" ? "DEER OFTEN EAT IT" : "DEER SOMETIMES EAT IT", "#EFE2D3", "#6A4526"); }
+        if (counts[p.id]) { sf("sb", 6.8); color(C.forest); text("In this bed: " + counts[p.id] + (p.clump ? " clumps, about " + counts[p.id] * p.clump + " bulbs" : ""), W - M - pw - 7, py + 12.2, { align: "right" }); }
         const c1 = tx, c2 = tx + tw * 0.40, c3 = tx + tw * 0.72;
         const lab = (t, x, y) => { sf("sb", 5.8); color(C.muted); text(t, x, y); };
         const val = (t, x, y, w) => { sf("s", 8.4); color(C.ink); text(wrap(t, w)[0], x, y); };
@@ -303,6 +325,7 @@
     newPage();
     let sy = 62; heading("Planting small to big: front to back", sy, 20); sy += 12;
     sy += para("Put the shortest plants along the edge people see first (the lawn, path or patio side) and step up in height toward the back (the fence, house or trees). Each row is tall enough to be seen over the one in front of it. If the bed is an island that people walk all the way around, put the tallest plants in the middle instead. The bar under each plant shows how far apart to set that kind.", M, sy + 8, W - 2 * M, 8.8, 11.6, C.ink) + 14;
+    drawKey(M, sy + 4, 7.2, usedKinds); sy += 14;
     const k = 1.2, availW = W - 2 * M - 24;
     const colW = p => Math.max(p.spacing * k, 52) + 6;
     const rowsL = []; let cur = [], cw0 = 0;
@@ -352,7 +375,7 @@
       doc.setLineCap("butt");
     };
     rowsL.forEach((row, ri) => {
-      const tall = Math.max(...row.map(p => p.hHi * k)), labelH = 16 + 52 * 0.75 + 30;
+      const tall = Math.max(...row.map(p => p.hHi * k)), labelH = 16 + 52 * 0.75 + 38;
       const boxH = 26 + tall + 8 + labelH;
       if (sy + boxH > H - 80) { newPage(); sy = 62; }
       fill(C.stripe); stroke(C.rule); doc.setLineWidth(0.6); doc.roundedRect(M, sy, W - 2 * M, boxH, 10, 10, "FD");
@@ -365,18 +388,13 @@
       const used = row.reduce((s, p) => s + colW(p), 0); let x = M + 22 + (availW - used) / 2;
       row.forEach(p => {
         const cwid = colW(p), w = Math.max(10, p.spacing * k), sx = x + (cwid - w) / 2;
-        if (p.toxic) {
-          const Hh2 = Math.max(10, p.hHi * k), pw2 = Math.min(cwid - 4, 50), ph2 = pw2 * 0.75, nl2 = wrap(p.name + marks(p), cwid - 2).slice(0, 2);
-          const top = base - Hh2 - 14, bot = base + 20 + ph2 + 8 + nl2.length * 6.8 + 12;
-          fill("#F8E4E1"); stroke(TOX); doc.setLineWidth(1.3); doc.roundedRect(x + 1, top, cwid - 2, bot - top, 6, 6, "FD");
-          sf("sb", 5.8); const tl = "TOXIC", tw = doc.getTextWidth(tl) + 12; fill(TOX); doc.roundedRect(x + cwid / 2 - tw / 2, top - 5, tw, 10, 5, 5, "F"); color("#FFFFFF"); text(tl, x + cwid / 2, top + 2, { align: "center" });
-        }
         silDraw(p, sx, base);
         stroke("#8b8f80"); doc.setLineWidth(0.8); const by = base + 12; doc.line(sx, by, sx + w, by); doc.line(sx, by - 3, sx, by + 3); doc.line(sx + w, by - 3, sx + w, by + 3);
         sf("sb", 6.2); color("#4b5244"); const lab = p.spacing + " in"; const tw = doc.getTextWidth(lab) + 4; fill(C.stripe); doc.rect(sx + w / 2 - tw / 2, by - 4.5, tw, 8, "F"); text(lab, sx + w / 2, by + 2, { align: "center" });
         const pw = Math.min(cwid - 4, 50), ph = pw * 0.75; photo(p.id, x + (cwid - pw) / 2, base + 20, pw, ph, 4);
-        sf("sb", 5.8); color(C.ink); const nl = wrap(p.name + marks(p), cwid - 2).slice(0, 2); text(nl, x + cwid / 2, base + 20 + ph + 8, { align: "center", lineHeightFactor: 1.1 });
-        sf("s", 5.4); color(C.muted); text(Ch.heightText(p) + (counts[p.id] ? "  ·  ×" + counts[p.id] : ""), x + cwid / 2, base + 20 + ph + 8 + nl.length * 6.8 + 2, { align: "center" });
+        sf("sb", 5.8); color(C.ink); const nl = wrap(p.name, cwid - 2).slice(0, 2); text(nl, x + cwid / 2, base + 20 + ph + 8, { align: "center", lineHeightFactor: 1.1 });
+        const iy = base + 20 + ph + 8 + nl.length * 6.8 + 1.5; drawIcons(p, x + cwid / 2, iy, 2.7, true);
+        sf("s", 5.4); color(C.muted); text(Ch.heightText(p) + (counts[p.id] ? "  ·  ×" + counts[p.id] : ""), x + cwid / 2, iy + 9, { align: "center" });
         x += cwid;
       });
       sy += boxH + 8;
@@ -396,7 +414,7 @@
       const cx = { qty: uw * 0.50, sp: uw * 0.60, ht: uw * 0.72, bl: uw * 0.86 };
       const hdr = (cont) => {
         sf("rb", 14); color(C.forest); text(cont ? "Shopping list (continued)" : "Shopping list", M, sy); sy += 12;
-        if (!cont) { sf("s", 7.4); color(C.muted); text("Tick each plant off as you buy it.  Spacing is center to center.  ◆ = garden favorite (not native)  ✿ = daisy family" + (toxicPlants.length ? "  ! = toxic" : "") + (plants.some(deerEats) ? "  Brown note = deer eat it" : ""), M, sy); sy += 12; }
+        if (!cont) { sf("s", 7.4); color(C.muted); text("Tick each plant off as you buy it.  Spacing is center to center.", M, sy); sy += 12; drawKey(M, sy, 7.2, usedKinds); sy += 12; }
         sf("sb", 5.8); color(C.muted); text("PLANT", M + 54, sy); text("HOW MANY", M + cx.qty, sy); text("SPACING", M + cx.sp, sy); text("HEIGHT", M + cx.ht, sy); text("BLOOMS", M + cx.bl, sy);
         stroke(C.rule); doc.setLineWidth(0.5); doc.line(M, sy + 4, W - M, sy + 4); sy += 6;
       };
@@ -406,7 +424,7 @@
         if (sy + rh > H - 56) { newPage(); sy = 62; hdr(true); }
         stroke("#8b8f80"); doc.setLineWidth(0.7); fill("#FFFFFF"); doc.roundedRect(M + 4, sy + 11, 9, 9, 1.5, 1.5, "FD");
         photo(p.id, M + 18, sy + 4, 30, 22, 3);
-        sf("sb", 7.8); color(C.ink); text(p.name + marks(p) + (p.toxic ? " !" : ""), M + 54, sy + 12);
+        sf("sb", 7.8); color(C.ink); text(p.name, M + 54, sy + 12); drawIcons(p, M + 54 + doc.getTextWidth(p.name) + 4, sy + 9.3, 3.2);
         { let lx = M + 54; const lab0 = p.native ? "Michigan native" : "Garden favorite"; sf("s", 6); color(C.muted); text(lab0, lx, sy + 20); lx += doc.getTextWidth(lab0 + "  ");
           if (deerEats(p)) { const dt = p.deer === "D" ? "Deer often eat" : "Deer sometimes eat"; sf("sb", 6); color("#7A5230"); text(dt, lx, sy + 20); lx += doc.getTextWidth(dt + "  "); }
           if (waiting[p.id] > 0) { sf("sb", 6); color(TOX); text(waiting[p.id] + " won't fit in the bed drawing", lx, sy + 20); } }
@@ -507,7 +525,7 @@
       ["Plant at the right depth", "Dig a hole about twice as wide as the pot and just as deep. Loosen circling roots, set the crown level with the soil, firm it in and water well."],
       ["Mulch lightly and water the first season", "Use 1 to 2 inches of shredded leaves, kept off the crowns. Water about an inch a week if it doesn't rain during the first summer; after that the plants mostly take care of themselves."],
       ["Be patient", "Perennials follow the old rule: the first year they sleep, the second year they creep, the third year they leap. The bed will look sparse at first and fill in by year three."],
-      ["Easy yearly care", "No fertilizer needed. Leave stems standing over winter for bees and birds, then cut them back in spring once days are steadily in the 50s. Pinch turtlehead and cut asters back by half in early June. Water astilbe, ferns and other moisture lovers in dry spells."],
+      ["Easy yearly care", "No fertilizer needed. Leave stems standing over winter for bees and birds, then cut them back in spring once days are steadily in the 50s. Pinch turtlehead and cut asters back by half in early June. Water astilbe, ferns and other moisture lovers in dry spells. The Care through the year page has the timing for each plant."],
     ];
     steps.forEach(([t, d], i) => {
       sf("s", 9); const ls = wrap(d, W - 2 * M - 40), h = 20 + ls.length * 12;
@@ -536,7 +554,7 @@
       }
     }
     if (toxicPlants.length) noteBox([["Toxic plants in this plan: ", true], [toxicPlants.map(p => p.name + " (" + toxLabel(p).replace(/^Toxic to /, "") + ")").join(", ") + ". Every part can make a pet or person sick if chewed or eaten. Plant them where pets and small children don't play, wear gloves when handling foxglove, hellebore and bleeding heart, and call your vet or the ASPCA Animal Poison Control Center (888-426-4435) if a pet eats one. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 (free, 24 hours; online at poisonhelp.org); if someone is unconscious, having trouble breathing or having a seizure, call 911 first.", false]], "#F8E4E1", "#E7B9B2", "#7A2A22");
-    if (!safetyShown) noteBox([["Pet and people safety: ", true], [toxicPlants.length ? "the plants not listed above are believed to be non-toxic to people, dogs and cats. Check each plant on the ASPCA toxic and non-toxic plant list (aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants) before buying. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 (free, 24 hours; online at poisonhelp.org); if someone is unconscious, having trouble breathing or having a seizure, call 911 first." : "every plant in this plan is believed to be non-toxic to people, dogs and cats, but lists change and look-alikes exist. Check each plant on the ASPCA toxic and non-toxic plant list before buying, and don't eat anything from the garden unless you know it is edible. Check the ASPCA list at aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 (free, 24 hours; online at poisonhelp.org); if someone is unconscious, having trouble breathing or having a seizure, call 911 first.", false]], C.cream, C.rule, C.ink);
+    if (!safetyShown) noteBox([["Pets, people & wildlife: ", true], [toxicPlants.length ? "the plants not listed above are believed to be non-toxic to people, dogs and cats. Check each plant on the ASPCA toxic and non-toxic plant list (aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants) before buying. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 (free, 24 hours; online at poisonhelp.org); if someone is unconscious, having trouble breathing or having a seizure, call 911 first." : "every plant in this plan is believed to be non-toxic to people, dogs and cats, but lists change and look-alikes exist. Check each plant on the ASPCA toxic and non-toxic plant list before buying, and don't eat anything from the garden unless you know it is edible. Check the ASPCA list at aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 (free, 24 hours; online at poisonhelp.org); if someone is unconscious, having trouble breathing or having a seizure, call 911 first.", false]], C.cream, C.rule, C.ink);
 
     // ================= Credits =================
     progress && progress(0.95, "Photo credits");
