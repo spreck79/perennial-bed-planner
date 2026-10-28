@@ -82,7 +82,7 @@
   const HLK = ["tox", "deer", "daisy", "nat", "gar"];
   function hlKind(p) { return p.toxic && p.toxic.length ? "tox" : deerEats(p) ? "deer" : p.fam === "daisy" ? "daisy" : p.native ? "nat" : "gar"; }
   window.plannerHlKind = hlKind;
-  function markSel() { const ids = selIds(); document.querySelectorAll(".brow,.ocol").forEach(e => { const on = ids.includes(e.dataset.id); e.classList.toggle("sel", on); HLK.forEach(k => e.classList.remove("hl-" + k)); if (on) { const p = PL.find(x => x.id === e.dataset.id); if (p) e.classList.add("hl-" + hlKind(p)); } }); }
+  function markSel() { const ids = selIds(); document.querySelectorAll(".brow,.ocol,#shop tr[data-id]").forEach(e => { const on = ids.includes(e.dataset.id); e.classList.toggle("sel", on); HLK.forEach(k => e.classList.remove("hl-" + k)); if (on) { const p = PL.find(x => x.id === e.dataset.id); if (p) e.classList.add("hl-" + hlKind(p)); } }); }
   function stripFiller() { S.placements = S.placements.filter(p => !isGroundcover(p)); selIdx = -1; }
   function selected() { const c = counts(); return PL.filter(p => c[p.id] > 0); }
   const defaultQty = p => (p.spacing >= 24 ? 1 : p.spacing >= 15 ? 3 : 5);
@@ -217,6 +217,18 @@
   }
   const SUNS = [["full", "Full sun (6+ hours)"], ["part", "Part shade (3–6 hours)"], ["shade", "Full shade (under 3 hours)"]];
   const ORIGINS = [["nat", "Michigan natives"], ["gar", "Garden favorites ◆"]];
+  function prefChanged() {
+    renderChips(); renderLibrary(); renderBloom(); save();
+    const c = counts(), bad = PL.filter(p => c[p.id] > 0 && !matchesPrefs(p));
+    if (!bad.length) return;
+    const old = document.getElementById("prefAsk"); if (old) old.remove();
+    const ov = document.createElement("div"); ov.id = "prefAsk"; ov.className = "modalov";
+    const names = bad.map(p => esc(p.name) + " (" + c[p.id] + ")").join(", ");
+    ov.innerHTML = `<div class="modalbox" role="dialog" aria-modal="true"><h3>Remove these plants?</h3><p>${bad.length === 1 ? "This plant doesn't" : "These plants don't"} match your new choices: <b>${names}</b>.</p><p>Would you like to remove ${bad.length === 1 ? "it" : "them"} from your planner? If you keep ${bad.length === 1 ? "it" : "them"}, nothing changes.</p><div class="askbtns"><button class="btn" id="paYes" type="button">Remove ${bad.length === 1 ? "it" : "them"}</button> <button class="btn" id="paNo" type="button">Keep ${bad.length === 1 ? "it" : "them"}</button></div></div>`;
+    document.body.appendChild(ov);
+    $("#paNo").onclick = () => ov.remove();
+    $("#paYes").onclick = () => { bad.forEach(p => removePlant(p.id)); ov.remove(); refresh(); save(); toast("Removed " + bad.map(p => p.name).join(", ") + "."); };
+  }
   function renderChips() {
     const pr = S.prefs;
     const multi = (box, opts, key) => {
@@ -227,7 +239,7 @@
           const on = pr[key].includes(k);
           if (on && pr[key].length === 1) { toast("Keep at least one choice here."); return; }
           pr[key] = on ? pr[key].filter(x => x !== k) : pr[key].concat(k);
-          renderChips(); renderLibrary(); renderBloom(); save();
+          prefChanged();
         };
         el.appendChild(b);
       });
@@ -235,16 +247,16 @@
     multi("#pSun", SUNS, "sun"); multi("#pOrigin", ORIGINS, "origin"); multi("#pKind", KINDS.filter(k => k[0] !== "all"), "kinds");
     const t = $("#pTox"); t.innerHTML = "";
     { const b = document.createElement("button"); b.type = "button"; b.className = "chip tox" + (pr.toxic ? " on" : ""); b.textContent = (pr.toxic ? "✓ " : "") + "Also show toxic plants"; b.insertAdjacentHTML("beforeend", ' <span class="ic ic-tox chipic">!</span>');
-      b.onclick = () => { pr.toxic = !pr.toxic; renderChips(); renderLibrary(); renderBloom(); save(); };
+      b.onclick = () => { pr.toxic = !pr.toxic; prefChanged(); };
       t.appendChild(b); }
     const dz = $("#pDaisy"); dz.innerHTML = "";
     { const b = document.createElement("button"); b.type = "button"; b.className = "chip daisy" + (pr.daisy !== false ? " on" : ""); b.textContent = (pr.daisy !== false ? "✓ " : "") + "Also show daisy-family plants ✿";
-      b.onclick = () => { pr.daisy = pr.daisy === false; renderChips(); renderLibrary(); renderBloom(); save(); };
+      b.onclick = () => { pr.daisy = pr.daisy === false; prefChanged(); };
       dz.appendChild(b); }
     $("#daisyHint").textContent = pr.daisy === false ? "" : "Daisy-family plants (marked \u273F) are related to ragweed. Most are pollinated by insects, so they shed far less pollen than ragweed, but people with ragweed allergies can still react, often to handling them. If allergies are a concern, skip them or check with a doctor.";
     const dr = $("#pDeer"); dr.innerHTML = "";
     { const b = document.createElement("button"); b.type = "button"; b.className = "chip deer" + (pr.deer !== false ? " on" : ""); b.textContent = (pr.deer !== false ? "✓ " : "") + "Also show plants deer like to eat"; b.insertAdjacentHTML("beforeend", ' <span class="ic ic-deer chipic">' + DEER + "</span>");
-      b.onclick = () => { pr.deer = pr.deer === false; renderChips(); renderLibrary(); renderBloom(); save(); };
+      b.onclick = () => { pr.deer = pr.deer === false; prefChanged(); };
       dr.appendChild(b); }
     $("#deerHint").textContent = pr.deer === false ? "" : "Plants marked with the antler icon are ones deer often or sometimes eat, based on the Rutgers University deer-resistance ratings. No plant is deer-proof: hungry deer eat almost anything, and rabbits nibble many young plants too. If deer visit your yard, skip these or plan on fencing or repellent.";
     { const th = $("#toxHint"); th.textContent = ""; if (pr.toxic) { th.append("Toxic plants are marked with a red ! icon here (hover it to see who it is toxic to) and a red Toxic tag in the PDF guide. Keep them away from pets and children who chew on plants. These labels are my own starting point, so check the "); const ln = document.createElement("a"); ln.href = "https://www.aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants"; ln.target = "_blank"; ln.rel = "noopener"; ln.textContent = "ASPCA toxic and non-toxic plant list"; th.append(ln, " before you buy. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 (free, 24 hours; online at "); const pl = document.createElement("a"); pl.href = "https://poisonhelp.org/"; pl.target = "_blank"; pl.rel = "noopener"; pl.textContent = "poisonhelp.org"; th.append(pl, "). If someone is unconscious, having trouble breathing or having a seizure, call 911 first."); } }

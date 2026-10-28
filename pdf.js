@@ -414,7 +414,6 @@
       placements.slice().sort((a, b) => byId[b.id].spacing - byId[a.id].spacing).forEach(p => {
         const pl = byId[p.id], r = (pl.spacing / 24) * sc * 0.96;
         fill(pl.hex); stroke("#FFFFFF"); doc.setLineWidth(0.9); doc.circle(X(p.x), Y(p.y), r, "FD");
-        if (pl.toxic) { stroke(TOX); doc.setLineWidth(1.8); doc.circle(X(p.x), Y(p.y), r + 0.4, "S"); }
         font("helvetica", "bold", Math.min(8, Math.max(4.5, r * 0.8))); color(pl.txt); text(pl.code, X(p.x), Y(p.y) + Math.min(8, Math.max(4.5, r * 0.8)) * 0.35, { align: "center" });
       });
       const BADC = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: [TOX, "#FFFFFF"] };

@@ -220,7 +220,7 @@ table.list tfoot td { font-weight: 800; border-bottom: 0; }
 
 /* selection spotlight */
 svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .pl:not(.sel) .tx { opacity: .4; }
-.pl.sel circle.pc { stroke-width: .2; }
+.pl.sel circle.pc { stroke-width: .12; }
 
 .fillpick .po-info { display: flex; align-items: center; gap: 10px; margin-right: auto; min-width: 0; }
 .fillpick .po-info img { width: 48px; height: 36px; object-fit: cover; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,.2); flex: none; }
@@ -335,3 +335,15 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 #ictip.k-deer { background: #EFE2D3; color: #6A4526; }
 .chip.deer.on { background: #EFE2D3; border-color: #CDB291; color: #6A4526; font-weight: 600; }
 .bulbn { display: block; font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+
+#shop tr.sel td { background: #E5E2F3; }
+#shop tr.sel.hl-tox td { background: #F6D9D5; }
+#shop tr.sel.hl-deer td { background: #EFE2D3; }
+#shop tr.sel.hl-daisy td { background: #FBEBC4; }
+#shop tr.sel.hl-nat td { background: #E1EBCB; }
+#shop tr.sel.hl-gar td { background: #F3DDEA; }
+.modalov { position: fixed; inset: 0; background: rgba(40,44,36,.45); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.modalbox { background: #fff; border-radius: 14px; padding: 20px 22px; max-width: 460px; box-shadow: 0 10px 40px rgba(0,0,0,.25); font-size: 14px; line-height: 1.45; }
+.modalbox h3 { margin: 0 0 8px; font-size: 17px; }
+.modalbox p { margin: 6px 0; }
+.modalbox .askbtns { display: flex; gap: 8px; margin-top: 14px; }

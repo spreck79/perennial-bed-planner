@@ -151,10 +151,9 @@
       const g = el("g", { class: cls.join(" "), "data-idx": i, "data-id": p.id }, layer);
       const fill = view === "photos" && window.PHOTOS[p.id] ? `url(#ph-${p.id})` : pl.hex;
       const pcEl = el("circle", { class: "pc", cx: p.x, cy: Y(p.y), r, fill }, g);
-      if (selAll.includes(i)) { pcEl.setAttribute("style", `stroke:${HLC[hlKind(pl)]};stroke-width:.24`); }
+      if (selAll.includes(i)) { pcEl.setAttribute("style", `stroke:${HLC[hlKind(pl)]};stroke-width:.12`); }
       if (view !== "photos") el("text", { x: p.x, y: Y(p.y) + fs * 0.35, "font-size": Math.min(fs * 1.05, r * 0.95), fill: pl.txt }, g, pl.code);
-      if (pl.toxic && pl.toxic.length) { el("circle", { class: "tx", "data-ox": 0, "data-oy": 0, cx: p.x, cy: Y(p.y), r: r + 0.04, fill: "none", stroke: "#B8392E", "stroke-width": 0.16 }, g); anyTox = true; }
-      const kinds = badgeKinds(pl), br = Math.min(fs * 0.46, Math.max(r * 0.3, fs * 0.24)), step = br * 1.85;
+            const kinds = badgeKinds(pl), br = Math.min(fs * 0.46, Math.max(r * 0.3, fs * 0.24)), step = br * 1.85;
       kinds.forEach((k, bi) => { const ox = (bi - (kinds.length - 1) / 2) * step, oy = -r * 0.86; drawBadge(k, g, br, "tx", ox, oy, p.x + ox, Y(p.y) + oy); });
     });
     // spotlight: the selected plant gets a name tag above it while the others fade back
