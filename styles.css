@@ -347,3 +347,35 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 .modalbox h3 { margin: 0 0 8px; font-size: 17px; }
 .modalbox p { margin: 6px 0; }
 .modalbox .askbtns { display: flex; gap: 8px; margin-top: 14px; }
+
+/* care timing */
+.brow .track { height: 36px; }
+.brow .bar { top: 3px; height: 15px; }
+.cpill { position: absolute; top: 22px; height: 11px; border-radius: 6px; display: flex; align-items: center; gap: 3px; padding: 0 2px; font-size: 8px; line-height: 1; color: #fff; cursor: help; box-sizing: border-box; overflow: hidden; white-space: nowrap; }
+.cpill i { font-style: normal; display: inline-flex; width: 8px; height: 8px; align-items: center; justify-content: center; flex: none; }
+.cpill i svg { width: 8px; height: 8px; }
+.cpill.k-prep { background: #7FA86A; }
+.cpill.k-cut { background: #9C7B5B; }
+.cpill.k-trim { background: #fff; color: #8A6A4A; border: 1px dashed #9C7B5B; }
+.cpill.k-divide { background: #8C7FC0; }
+.cpill.k-bulbs { background: #C99A1E; }
+.cpill.k-mulch { background: #A68C72; }
+.cpill.big { position: absolute; top: 3px; height: 18px; border-radius: 9px; font-size: 10.5px; padding: 0 6px; }
+.cpill.big i { width: 11px; height: 11px; font-size: 10px; }
+.cpill.big i svg { width: 11px; height: 11px; }
+.cpill.big b { font-weight: 700; overflow: hidden; text-overflow: ellipsis; }
+.gcare { display: grid; grid-template-columns: var(--label) 1fr; align-items: center; border-bottom: 2px solid #e4dcc4; padding: 4px 0 6px; margin-bottom: 2px; }
+.gc-lab { padding: 0 6px; font-size: 12.5px; line-height: 1.2; }
+.gc-lab small { display: block; color: var(--muted); font-size: 10.5px; }
+.gc-track { background-image: linear-gradient(to right, #ece7d4 1px, transparent 1px); background-size: 12.5% 100%; border-right: 1px solid #ece7d4; }
+.gc-lane { position: relative; height: 24px; }
+.gc-key { grid-column: 1 / -1; font-size: 11px; color: var(--muted); padding: 6px 6px 0; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.gc-key .cpill { position: static; width: 22px; margin-left: 8px; }
+.gc-key .cpill:first-child { margin-left: 0; }
+#ictip.k-prep, #ictip.k-cut, #ictip.k-trim, #ictip.k-divide, #ictip.k-bulbs, #ictip.k-mulch { white-space: normal; max-width: 320px; border-radius: 10px; font-weight: 600; line-height: 1.4; padding: 6px 10px; }
+#ictip.k-prep { background: #E4EEDA; color: #3F6B3A; }
+#ictip.k-cut, #ictip.k-trim, #ictip.k-mulch { background: #EFE6DA; color: #5E4430; }
+#ictip.k-divide { background: #E8E4F4; color: #4A3F86; }
+#ictip.k-bulbs { background: #FBEBC4; color: #6E5010; }
+.cpill.big.k-mulch i { display: none; }
+.cpill.big.k-mulch { justify-content: center; padding: 0 3px; }

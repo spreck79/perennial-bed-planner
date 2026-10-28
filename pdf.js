@@ -129,10 +129,10 @@
     let y = 284;
     const labW = 187;
     const barsChart = (rows, y0, first) => {
-      const x0 = M + labW, cw = W - M - x0, mw = cw / 8, rh = 21;
+      const x0 = M + labW, cw = W - M - x0, mw = cw / 8, rh = 24;
       sf("rb", 20); color(C.forest); text(first ? "When each plant blooms" : "When each plant blooms (continued)", M, y0); y0 += 16;
       if (first) {
-        y0 += para("The chart shows when each chosen plant is in flower. Foliage plants stay green all season and carry the bed between blooms. Garden favorites are marked ◆ and daisy-family plants (related to ragweed) are marked ✿.", M, y0 + 4, W - 2 * M, 8.4, 11, C.muted) + 6;
+        y0 += para("The chart shows when each chosen plant is in flower. Foliage plants stay green all season and carry the bed between blooms. Garden favorites are marked ◆ and daisy-family plants (related to ragweed) are marked ✿. The small marks under each bar show when to prep each plant (green) and when to cut it back (brown; dashed = optional trim for more flowers). The Care through the year page explains each one.", M, y0 + 4, W - 2 * M, 8.4, 11, C.muted) + 6;
       }
       sf("sb", 7.2); color(C.muted);
       Ch.MONTHS.forEach((m, i) => text(m, x0 + mw * i + mw / 2, y0 + 8, { align: "center" }));
@@ -153,20 +153,24 @@
         if (p.toxic) { sf("sb", 6); const tl = "TOXIC", tw2 = doc.getTextWidth(tl) + 12; fill(TOX); doc.roundedRect(x0 - tw2 - 6, ry + 3.5, tw2, 11, 5.5, 5.5, "F"); color("#FFFFFF"); text(tl, x0 - 6 - tw2 / 2, ry + 11.2, { align: "center" }); }
         if (p.bloom) {
           const bx = x0 + (Ch.pct(p.bloom[0]) / 100) * cw, bw = ((Ch.pct(p.bloom[1]) - Ch.pct(p.bloom[0])) / 100) * cw;
-          fill(p.hex); if (p.toxic) { stroke(TOX); doc.setLineWidth(1.6); } else { stroke(Ch.shade(p.hex, 0.78)); doc.setLineWidth(0.5); } doc.roundedRect(bx, ry + 5.5, bw, 12, 6, 6, "FD");
+          fill(p.hex); if (p.toxic) { stroke(TOX); doc.setLineWidth(1.6); } else { stroke(Ch.shade(p.hex, 0.78)); doc.setLineWidth(0.5); } doc.roundedRect(bx, ry + 4, bw, 11, 5.5, 5.5, "FD");
         } else {
-          fill("#DDE9CD"); stroke("#BCD2A5"); doc.setLineWidth(0.5); doc.roundedRect(x0 + mw * 0.08, ry + 7, cw - mw * 0.16, 9, 4.5, 4.5, "FD");
-          sf("s", 6); color("#5E7A52"); text("foliage all season", x0 + cw / 2, ry + 13.4, { align: "center" });
+          fill("#DDE9CD"); stroke("#BCD2A5"); doc.setLineWidth(0.5); doc.roundedRect(x0 + mw * 0.08, ry + 5, cw - mw * 0.16, 9, 4.5, 4.5, "FD");
+          sf("s", 6); color("#5E7A52"); text("foliage all season", x0 + cw / 2, ry + 11.4, { align: "center" });
         }
+        { const cr = window.Care.careFor(p);
+          [["prep", "#7FA86A"], ["cut", "#9C7B5B"], ["trim", null]].forEach(([k, col]) => { const w = cr[k]; if (!w) return; const xa = x0 + Ch.pct(w.a) / 100 * cw, wd = Math.max(4, (Ch.pct(w.b) - Ch.pct(w.a)) / 100 * cw);
+            if (col) { fill(col); doc.roundedRect(xa, ry + 17.3, wd, 4.6, 2.3, 2.3, "F"); }
+            else { fill("#FFFFFF"); stroke("#9C7B5B"); doc.setLineWidth(0.6); doc.setLineDashPattern([1.2, 1], 0); doc.roundedRect(xa, ry + 17.3, wd, 4.6, 2.3, 2.3, "FD"); doc.setLineDashPattern([], 0); } }); }
       });
       return top + rows.length * rh;
     };
-    const perFirst = Math.max(5, Math.floor((H - 60 - y - 100) / 21));
+    const perFirst = Math.max(5, Math.floor((H - 60 - y - 120) / 24));
     let bottom = barsChart(sorted.slice(0, perFirst), y, true);
     let rest = sorted.slice(perFirst);
     while (rest.length) {
       newPage();
-      const take = rest.slice(0, 29); rest = rest.slice(29);
+      const take = rest.slice(0, 26); rest = rest.slice(26);
       bottom = barsChart(take, 66, false);
     }
     // kinds-in-bloom strip + safety note
@@ -198,6 +202,47 @@
     }
 
     if (bottom + 8 + 40 < H - 52 || page > 1) drawStrip();
+
+    // ================= Care through the year =================
+    {
+      progress && progress(0.22, "Care calendar");
+      const CC = { prep: "#7FA86A", cut: "#9C7B5B", divide: "#8C7FC0", bulbs: "#C99A1E", mulch: "#A68C72" };
+      newPage(); heading("Care through the year", 62, 20);
+      let cy = 72;
+      cy += para("Timing for Michigan zone 6B, based on university extension advice. Most plants are best cut back in spring, not fall: seed heads feed birds over winter, and native bees and butterflies spend the winter in the hollow stems and fallen leaves.", M, cy + 4, W - 2 * M, 8.4, 11, C.muted) + 10;
+      const x0 = M + labW, cw = W - M - x0, mw = cw / 8, tasks = window.Care.gardenTasks(plants);
+      sf("sb", 7.2); color(C.muted); Ch.MONTHS.forEach((m, i) => text(m, x0 + mw * i + mw / 2, cy + 8, { align: "center" })); cy += 13;
+      stripe(M, cy, W - 2 * M, 44);
+      stroke("#DDD6C3"); doc.setLineWidth(0.4); for (let i = 0; i <= 8; i++) doc.line(x0 + mw * i, cy, x0 + mw * i, cy + 44);
+      sf("sb", 9); color(C.ink); text("Whole garden", M + 6, cy + 18); sf("s", 6.5); color(C.muted); text("Michigan zone 6B", M + 6, cy + 28);
+      tasks.forEach(t => { const xa = x0 + Ch.pct(t.a) / 100 * cw, wd = (Ch.pct(t.b) - Ch.pct(t.a)) / 100 * cw, yy = cy + 5 + t.lane * 19;
+        fill(CC[t.k]); doc.roundedRect(xa, yy, wd, 14, 7, 7, "F"); sf("sb", 6.8); color("#FFFFFF"); text(t.label, xa + wd / 2, yy + 9.6, { align: "center" }); });
+      cy += 56;
+      tasks.forEach(t => {
+        const parts = [[t.label + ": ", true], [t.text, false]];
+        const n = flow(parts, 0, 0, W - 2 * M - 14, 8, 10.6, C.muted, C.ink, false);
+        if (cy + n * 10.6 > H - 60) { newPage(); cy = 66; }
+        fill(CC[t.k]); doc.circle(M + 4, cy - 2.6, 3, "F");
+        flow(parts, M + 14, cy, W - 2 * M - 14, 8, 10.6, C.muted, C.ink, true); cy += n * 10.6 + 5;
+      });
+      // per-plant table
+      cy += 8;
+      const cols = [["Plant", M, 108], ["Prep", M + 108, 152], ["Cut back", M + 260, 160], ["Divide", M + 420, W - M - (M + 420)]];
+      const th = () => { fill(C.cream); doc.rect(M, cy, W - 2 * M, 15, "F"); sf("sb", 7); color(C.muted); cols.forEach(([t, x]) => text(t.toUpperCase(), x + 5, cy + 10)); cy += 17; };
+      if (cy + 60 > H - 60) { newPage(); cy = 66; }
+      th();
+      plants.slice().sort((p, q) => (p.bloom ? p.bloom[0] : 99) - (q.bloom ? q.bloom[0] : 99) || p.name.localeCompare(q.name)).forEach((p, i) => {
+        const cr = window.Care.careFor(p);
+        sf("s", 7.2);
+        const cells = [wrap(p.name, cols[0][2] - 10), wrap(cr.prep ? cr.prep.sum : "Same time as cut back", cols[1][2] - 10), wrap(cr.cut.sum + (cr.trim ? ". " + cr.trim.sum : ""), cols[2][2] - 10), wrap(cr.divideShort, cols[3][2] - 10)];
+        const nl = Math.max(...cells.map(c => c.length)), rhh = nl * 9 + 7;
+        if (cy + rhh > H - 56) { newPage(); cy = 66; th(); }
+        if (i % 2 === 0) stripe(M, cy, W - 2 * M, rhh);
+        cells.forEach((c, ci) => { if (ci === 0) { sf("sb", 7.4); color(C.ink); } else { sf("s", 7.2); color(ci === 1 && cr.prep ? "#3F6B3A" : ci === 2 ? "#5E4430" : C.muted); } text(c, cols[ci][1] + 5, cy + 9.5, { lineHeightFactor: 9 / 7.2 }); });
+        cy += rhh;
+      });
+      sf("ri", 6.8); color(C.muted); if (cy + 14 < H - 50) text("Divide only when a clump is crowded, dying in the middle, or flowering less. Many plants go years without it.", M, cy + 12);
+    }
     // ================= Profiles =================
     progress && progress(0.25, "Plant profiles");
     const groups = [["Your plants, smallest to tallest", plants.slice()]];
