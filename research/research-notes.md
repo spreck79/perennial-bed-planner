@@ -168,6 +168,15 @@ Each entry: the plant the source is about, what the source says, the partners in
 - **Wild Strawberry** – Izel Native Plants: plant wild strawberry intermingled with lanceleaf coreopsis and purple coneflower.  
   Partners in the planner: Lanceleaf Coreopsis, Purple Coneflower  
   Source: https://www.izelplants.com/fragaria-virginiana-wild-strawberry/
+- **Daffodil** – Purdue Extension: interplant daffodils with late-emerging, sturdy perennials such as hosta, grasses or daylilies.  
+  Partners in the planner: Hosta, Daylily, Little Bluestem, Prairie Dropseed  
+  Source: https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf
+- **Darwin Hybrid Tulip** – Purdue Extension: plant tulips with later-emerging plants that hide the ripening foliage, especially hosta, daylily and ornamental grasses.  
+  Partners in the planner: Hosta, Daylily, Little Bluestem, Prairie Dropseed  
+  Source: https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf
+- **Allium 'Purple Sensation'** – Purdue Extension: alliums look good planted with grasses, in cottage plantings or English borders.  
+  Partners in the planner: Little Bluestem, Prairie Dropseed  
+  Source: https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf
 
 ## Michigan native or garden favorite
 
@@ -243,7 +252,37 @@ Each entry: the plant the source is about, what the source says, the partners in
 - **Ray Wiegand's Nursery: Ice Dance Sedge** (garden-center check) – Sold at Wiegand's.  
   Plants: Morrow's Sedge  
   http://plants.wiegandsnursery.com/12150006/Plant/3385/Ice_Dance_Sedge/
+- **English Gardens (Detroit-area garden centers): Fall is for planting** (garden-center check) – Michigan garden center; names tulips and daffodils among the fall bulbs to plant.  
+  Plants: Daffodil, Darwin Hybrid Tulip  
+  https://www.englishgardens.com/fall-is-for-planting/
+- **English Gardens plant finder: Tulipa 'Apeldoorn' (Darwin hybrid)** (garden-center check) – Darwin hybrid tulip in the English Gardens plant finder: about 24 in tall in flower, set 6 in apart.  
+  Plants: Darwin Hybrid Tulip  
+  https://plants.englishgardens.com/12150001/Plant/Print?id=10785
+- **MIgardener (St. Clair, Michigan): Allium 'Purple Sensation'** (garden-center check) – Michigan garden company selling the bulbs; 24 to 32 in tall, May bloom, deer resistant.  
+  Plants: Allium 'Purple Sensation'  
+  https://migardener.com/products/allium-purple-sensation
 
 ## Still to research
 
 No published companion pairing found yet for: .
+
+## Deer ratings (added October 2026)
+Source: Rutgers NJAES "Landscape Plants Rated by Deer Resistance" (https://extension.rutgers.edu/deer-resistant-plants). A = rarely damaged, B = seldom severely damaged, C = occasionally severely damaged, D = frequently severely damaged. Plants rated C or D get the antler icon and the "Also show plants deer like to eat" option.
+- C: Wild Blue Phlox, Creeping Phlox, Garden Phlox (Phlox sp.), White Turtlehead (Chelone), Woodland Sunflower (Helianthus), Foxglove Beardtongue (Penstemon), Daylily, Shasta Daisy, Solomon's Seal, Goat's Beard, Prairie Smoke (Geum), Sedum 'Autumn Joy' (Sedum spectabile).
+- D: Hosta, Wild Strawberry (Fragaria), Darwin Hybrid Tulip.
+- Not rated (not on the Rutgers list at genus or species level): Jacob's Ladder (P. reptans), Maidenhair Fern, Wild Geranium, Lady Fern, Wild Bergamot, Culver's Root, Geranium 'Rozanne', Masterwort, Autumn Fern, Sweet Joe-Pye Weed, Prairie Dropseed, Celandine Poppy, Virginia Waterleaf, Golden Alexanders, Mountain Mint.
+- Eryngium (Rattlesnake Master, Sea Holly) left unrated: Rutgers rates Eryngium D but University of Illinois Extension "Deer Resistant Perennials" lists Rattlesnake Master as deer resistant.
+- Rabbits: no comprehensive Midwest rabbit rating list was found (Colorado State and UMN lists are partial), so rabbits are mentioned only in general terms.
+
+## Early-dormant plants
+- Virginia Bluebells: Penn State Extension "Spring Ephemerals for Residential Gardens" (foliage dies back by summer; interplant with hostas or ferns).
+- Mayapple: same Penn State article (dormant in summer; pair with ferns or late-summer flowers).
+- Bleeding Heart: UW-Madison Extension (ferns, hosta, hardy geranium and astilbe fill in as it dies back).
+- Spring bulbs: leaves die back by early summer (Iowa State, UW-Madison, Purdue).
+
+## Spring bulbs
+- Daffodil: English Gardens (Michigan) fall bulbs page; Purdue (naturalizes, squirrel and deer resistant); NC State (deer and rabbit resistant; toxic to cats, dogs, horses); ASPCA (toxic). Rutgers A.
+- Darwin Hybrid Tulip: English Gardens plant finder (Tulipa 'Apeldoorn', 6 in apart, 24 in); Iowa State (Darwin hybrids longest lasting); Longfield (20 to 24 in, mid-April to mid-May); Purdue (squirrels and deer love hybrid tulips); ASPCA (toxic). Rutgers D.
+- Allium 'Purple Sensation': MIgardener, St. Clair, Michigan (sold; 24 to 32 in, May); Iowa State (20 to 30 in; deer and rabbits rarely browse); Purdue (squirrels don't eat them); ASPCA lists onion (Allium) as toxic. Rutgers A.
+- Planting: UW-Madison "Plant Bulbs Now for Spring Color" (6 to 8 in deep, clumps of 5 to 8).
+- Not added: grape hyacinth (Muscari). ASPCA lists it as non-toxic, but a Michigan garden center selling it could not be confirmed, and UW-Madison notes it can spread aggressively.

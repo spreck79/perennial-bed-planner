@@ -11,19 +11,49 @@
   // The 15 plants and counts from the original guide
   const DEFAULT_COUNTS = { sedge: 4, foam: 5, phlox: 3, jacobs: 3, bluebells: 3, fern: 3, geranium: 1, goldenrod: 3, aster: 3, turtle: 3, coral: 3, forestgrass: 2, brunnera: 2, rozanne: 1, astilbe: 3 };
 
+  // little icons with hover labels: native leaf, garden favorite, daisy family, toxic
+  const deerEats = p => p.deer === "C" || p.deer === "D";
+  const DEER = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 11V6.2M6 6.2 3.2 2M4.3 3.7 2 4.2M6 6.2 8.8 2M7.7 3.7 10 4.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>';
+  const deerTip = p => (p.deer === "D" ? "Deer often eat this" : "Deer sometimes eat this") + (p.id === "tulip" ? "; squirrels dig up the bulbs" : "");
+  const LEAF = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M10.6 1.4C5.2 1.2 1.6 3.9 1.7 8c0 .9.3 1.7.7 2.3.5-2.6 2.3-4.6 4.9-5.8-2.1 1.5-3.6 3.4-4.2 6 .5.2 1.1.3 1.7.3 4 0 6-3.4 5.8-9.4z" fill="currentColor"/></svg>';
+  function icons(p, off) {
+    let h = p.native ? '<span class="ic ic-nat" data-k="nat" data-tip="Michigan native">' + LEAF + "</span>" : '<span class="ic ic-gar" data-k="gar" data-tip="Garden favorite (not native)">◆</span>';
+    if (p.fam === "daisy") h += '<span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span>';
+    if (p.toxic && p.toxic.length) h += '<span class="ic ic-tox" data-k="tox" data-tip="' + esc(window.toxLabel(p)) + '">!</span>';
+    if (deerEats(p)) h += '<span class="ic ic-deer" data-k="deer" data-tip="' + esc(deerTip(p)) + '">' + DEER + "</span>";
+    if (off) h += '<span class="ic ic-off" data-k="off" data-tip="Outside your step 2 choices">–</span>';
+    return '<span class="ics">' + h + "</span>";
+  }
+  const KEY = () => '<span class="ickey">' + icons({ native: true }).replace(/<\/?span class="ics">/g, "") + ' native ' + icons({}).replace(/<\/?span class="ics">/g, "") + ' garden favorite <span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span> daisy family <span class="ic ic-tox" data-k="tox" data-tip="Toxic plant">!</span> toxic <span class="ic ic-deer" data-k="deer" data-tip="Deer often or sometimes eat this">' + DEER + '</span> deer often eat</span>';
+  window.plannerKey = KEY;
+  document.querySelectorAll(".keyslot").forEach(e => (e.innerHTML = KEY()));
+  { const tip = document.createElement("div"); tip.id = "ictip"; document.body.appendChild(tip);
+    const show = el => { tip.textContent = el.dataset.tip; tip.className = "on k-" + el.dataset.k; const r = el.getBoundingClientRect(), tw = tip.offsetWidth;
+      tip.style.left = Math.max(6, Math.min(window.innerWidth - tw - 6, r.left + r.width / 2 - tw / 2)) + "px"; tip.style.top = Math.max(6, r.top - tip.offsetHeight - 6) + "px"; };
+    document.addEventListener("mouseover", e => { const el = e.target.closest && e.target.closest(".ic"); if (el) show(el); else tip.className = ""; });
+    document.addEventListener("touchstart", e => { const el = e.target.closest && e.target.closest(".ic"); if (el) { show(el); clearTimeout(tip.t); tip.t = setTimeout(() => (tip.className = ""), 2000); } }, { passive: true });
+    window.addEventListener("scroll", () => (tip.className = ""), true); }
+
   let S, bed, selIdx = -1, extraSel = [], armed = null, hoverId = null, notice = "", noFit = [], lastUnplaced = {}; noFit = [];
 
   function freshState() {
     return { shape: "rect", dims: { w: 16, d: 6 }, freePoly: null, freeView: "border", placements: [], seed: 7, fill: true, view: "codes",
       filter: { q: "", height: "", month: "" }, bloomFilter: "sel", bloomSort: "start",
-      name: "", prefs: { sun: ["full", "part", "shade"], origin: ["nat", "gar"], kinds: ["clump", "fern", "grass", "mat"], toxic: true, daisy: true } };
+      name: "", prefs: { sun: ["full", "part", "shade"], origin: ["nat", "gar"], kinds: ["clump", "fern", "grass", "mat", "bulb"], toxic: true, daisy: true, deer: true, v2: true }, waiting: {} };
   }
   function load() { try { const t = localStorage.getItem(LS); return t ? JSON.parse(t) : null; } catch (e) { return null; } }
   let saveT = 0;
   function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) {} }, 200); }
   function toast(msg, ms) { const t = $("#toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("on"), ms || 2600); }
 
-  function counts(real) { const c = {}; S.placements.forEach(p => { if (real && p.c) return; c[p.id] = (c[p.id] || 0) + 1; }); return c; }
+  // counts include plants that are chosen but didn't fit in the bed ("waiting"), so they stay on the shopping list
+  function counts(real) { const c = {}; S.placements.forEach(p => { if (real && p.c) return; c[p.id] = (c[p.id] || 0) + 1; }); const w = S.waiting || {}; Object.keys(w).forEach(id => { if (byId[id] && w[id] > 0) c[id] = (c[id] || 0) + w[id]; }); return c; }
+  // plans saved before spring bulbs and the deer option existed: turn the new choices on
+  function migratePrefs(raw) { const pr = S.prefs; if (!(raw && raw.v2)) { if (Array.isArray(pr.kinds) && !pr.kinds.includes("bulb")) pr.kinds.push("bulb"); if (pr.deer == null) pr.deer = true; pr.v2 = true; } }
+  function cleanWaiting(w) { const o = {}; if (w && typeof w === "object") Object.keys(w).forEach(k => { const n = Math.floor(+w[k]); if (byId[k] && n > 0 && n < 500) o[k] = n; }); return o; }
+  function placedCounts() { const c = {}; S.placements.forEach(p => { c[p.id] = (c[p.id] || 0) + 1; }); return c; }
+  const waitTotal = () => Object.keys(S.waiting || {}).reduce((s, k) => s + (S.waiting[k] > 0 ? S.waiting[k] : 0), 0);
+  function addWaiting(id, n) { S.waiting = S.waiting || {}; S.waiting[id] = (S.waiting[id] || 0) + n; S.waitAck = false; }
   // the groundcover used for the carpet: the smallest chosen filler plant that is also chosen on purpose
   function fillerId() {
     const rc = counts(true);
@@ -35,6 +65,21 @@
   // every selected plant: the main one plus any added with shift/ctrl
   function selAll() { const out = []; [selIdx].concat(extraSel).forEach(i => { if (i >= 0 && S.placements[i] && !out.includes(i)) out.push(i); }); return out; }
   function clearSel() { selIdx = -1; extraSel = []; }
+  // kinds of plant in the current selection, and selecting every planted one of some kinds
+  const selIds = () => { const s = []; selAll().forEach(i => { const id = S.placements[i] && S.placements[i].id; if (id && !s.includes(id)) s.push(id); }); return s; };
+  function selectIds(ids) {
+    const idx = []; S.placements.forEach((p, i) => { if (ids.includes(p.id)) idx.push(i); });
+    selIdx = idx.length ? idx[0] : -1; extraSel = idx.slice(1); if (selIdx >= 0) optMode = "idle";
+  }
+  // click in the bloom chart or Small to big: highlight that plant; Shift or Ctrl adds or removes it from the highlight
+  function pickFromChart(id, add) {
+    let ids = selIds();
+    if (add) ids = ids.includes(id) ? ids.filter(x => x !== id) : ids.concat(id);
+    else ids = ids.length === 1 && ids[0] === id ? [] : [id];
+    if (ids.length && !S.placements.some(p => ids.includes(p.id))) toast("That plant doesn't fit in the bed yet, so there is nothing to highlight on the plan.");
+    selectIds(ids); renderPlan();
+  }
+  function markSel() { const ids = selIds(); document.querySelectorAll(".brow,.ocol").forEach(e => e.classList.toggle("sel", ids.includes(e.dataset.id))); }
   function stripFiller() { S.placements = S.placements.filter(p => !isGroundcover(p)); selIdx = -1; }
   function selected() { const c = counts(); return PL.filter(p => c[p.id] > 0); }
   const defaultQty = p => (p.spacing >= 24 ? 1 : p.spacing >= 15 ? 3 : 5);
@@ -44,7 +89,7 @@
     const c = counts(true);
     items = items || PL.filter(p => c[p.id] > 0).map(p => ({ plant: p, n: c[p.id] }));
     if (seedBump) S.seed = (S.seed * 7 + 13) % 100000;
-    if (!items.length) { S.placements = []; notice = ""; noFit = []; lastUnplaced = {}; return; }
+    if (!items.length) { S.placements = []; S.waiting = {}; notice = ""; noFit = []; lastUnplaced = {}; return; }
     // try several arrangements and keep the one that fits the most plants
     let r = null, seed = S.seed;
     for (let t = 0; t < 8; t++) {
@@ -57,7 +102,8 @@
     S.placements = r.placements; selIdx = -1;
     lastUnplaced = r.unplaced;
     const missing = Object.keys(r.unplaced).reduce((s, k) => s + r.unplaced[k], 0);
-    notice = missing ? `${missing} plant${missing > 1 ? "s" : ""} didn't fit (${Object.keys(r.unplaced).map(k => byId[k].name).join(", ")}). Try a bigger bed or fewer plants.` : ""; noFit = missing ? Object.keys(r.unplaced) : [];
+    const before = waitTotal(); S.waiting = Object.assign({}, r.unplaced); if (missing && missing !== before) S.waitAck = false;
+    notice = ""; noFit = [];
   }
   function rebuildBed(keepLayout) {
     bed = Geo.buildBed(S);
@@ -66,7 +112,7 @@
   function addMany(id, n) {
     let added = 0;
     for (let i = 0; i < n; i++) if (addOne(id, true)) added++;
-    if (added < n) notice = `Only ${added} of ${n} ${byId[id].name} fit. The bed is getting full.`, noFit = [id];
+    if (added < n) addWaiting(id, n - added);
     return added;
   }
   function addOne(id, quiet) {
@@ -76,13 +122,14 @@
     const p = Geo.placeOne(bed, byId, S.placements, id, t, 0);
     if (p) S.placements.push(p);
     recarpet();
-    if (!p) { if (!quiet) { notice = `No room left for another ${byId[id].name}.`; noFit = [id]; } return false; }
-    if (!quiet) notice = ""; noFit = []; return true;
+    if (!p) { if (!quiet) addWaiting(id, 1); return false; }
+    return true;
   }
   function removeOne(id) {
+    if (S.waiting && S.waiting[id] > 0) { S.waiting[id]--; if (!S.waiting[id]) delete S.waiting[id]; return; }
     for (let i = S.placements.length - 1; i >= 0; i--) if (S.placements[i].id === id && !S.placements[i].c) { S.placements.splice(i, 1); selIdx = -1; recarpet(); return; }
   }
-  function removePlant(id) { S.placements = S.placements.filter(p => p.id !== id); selIdx = -1; if (armed === id) armed = null; recarpet(); }
+  function removePlant(id) { S.placements = S.placements.filter(p => p.id !== id); if (S.waiting) delete S.waiting[id]; selIdx = -1; if (armed === id) armed = null; recarpet(); }
   function togglePlant(id) {
     notice = ""; noFit = [];
     if (counts()[id] > 0) removePlant(id); else addMany(id, defaultQty(byId[id]));
@@ -95,7 +142,7 @@
   }
 
   // ---------- library ----------
-  const KINDS = [["all", "All"], ["clump", "Flowers"], ["fern", "Ferns"], ["grass", "Grasses & sedges"], ["mat", "Groundcovers"]];
+  const KINDS = [["all", "All"], ["clump", "Flowers"], ["fern", "Ferns"], ["grass", "Grasses & sedges"], ["mat", "Groundcovers"], ["bulb", "Spring bulbs"]];
   function renderShapesPanel() {
     const box = $("#shapes"); box.innerHTML = "";
     Object.keys(Geo.SHAPES).forEach(k => {
@@ -152,6 +199,7 @@
     if (!pr.kinds.includes(p.kind)) return false;
     if (p.toxic && !pr.toxic) return false;
     if (p.fam === "daisy" && pr.daisy === false) return false;
+    if (deerEats(p) && pr.deer === false) return false;
     return true;
   }
   function passes(p) {
@@ -171,7 +219,7 @@
     const multi = (box, opts, key) => {
       const el = $(box); el.innerHTML = "";
       opts.forEach(([k, l]) => {
-        const b = document.createElement("button"); b.type = "button"; b.className = "chip" + (key === "origin" ? " o-" + k : key === "kinds" ? " o-kind" : key === "sun" ? " o-sun" : "") + (pr[key].includes(k) ? " on" : ""); b.textContent = (pr[key].includes(k) ? "✓ " : "") + l;
+        const b = document.createElement("button"); b.type = "button"; b.className = "chip" + (key === "origin" ? " o-" + k : key === "kinds" ? " o-kind" : key === "sun" ? " o-sun" : "") + (pr[key].includes(k) ? " on" : ""); b.textContent = (pr[key].includes(k) ? "✓ " : "") + l; if (key === "origin" && k === "nat") b.insertAdjacentHTML("beforeend", " " + LEAF);
         b.onclick = () => {
           const on = pr[key].includes(k);
           if (on && pr[key].length === 1) { toast("Keep at least one choice here."); return; }
@@ -183,7 +231,7 @@
     };
     multi("#pSun", SUNS, "sun"); multi("#pOrigin", ORIGINS, "origin"); multi("#pKind", KINDS.filter(k => k[0] !== "all"), "kinds");
     const t = $("#pTox"); t.innerHTML = "";
-    { const b = document.createElement("button"); b.type = "button"; b.className = "chip tox" + (pr.toxic ? " on" : ""); b.textContent = (pr.toxic ? "✓ " : "") + "Also show toxic plants";
+    { const b = document.createElement("button"); b.type = "button"; b.className = "chip tox" + (pr.toxic ? " on" : ""); b.textContent = (pr.toxic ? "✓ " : "") + "Also show toxic plants"; b.insertAdjacentHTML("beforeend", ' <span class="ic ic-tox chipic">!</span>');
       b.onclick = () => { pr.toxic = !pr.toxic; renderChips(); renderLibrary(); renderBloom(); save(); };
       t.appendChild(b); }
     const dz = $("#pDaisy"); dz.innerHTML = "";
@@ -191,20 +239,25 @@
       b.onclick = () => { pr.daisy = pr.daisy === false; renderChips(); renderLibrary(); renderBloom(); save(); };
       dz.appendChild(b); }
     $("#daisyHint").textContent = pr.daisy === false ? "" : "Daisy-family plants (marked \u273F) are related to ragweed. Most are pollinated by insects, so they shed far less pollen than ragweed, but people with ragweed allergies can still react, often to handling them. If allergies are a concern, skip them or check with a doctor.";
-    { const th = $("#toxHint"); th.textContent = ""; if (pr.toxic) { th.append("Toxic plants are marked with a red Toxic tag here and in the PDF guide. Keep them away from pets and children who chew on plants. These labels are my own starting point, so check the "); const ln = document.createElement("a"); ln.href = "https://www.aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants"; ln.target = "_blank"; ln.rel = "noopener"; ln.textContent = "ASPCA toxic and non-toxic plant list"; th.append(ln, " before you buy. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 (free, 24 hours; online at "); const pl = document.createElement("a"); pl.href = "https://poisonhelp.org/"; pl.target = "_blank"; pl.rel = "noopener"; pl.textContent = "poisonhelp.org"; th.append(pl, "). If someone is unconscious, having trouble breathing or having a seizure, call 911 first."); } }
+    const dr = $("#pDeer"); dr.innerHTML = "";
+    { const b = document.createElement("button"); b.type = "button"; b.className = "chip deer" + (pr.deer !== false ? " on" : ""); b.textContent = (pr.deer !== false ? "✓ " : "") + "Also show plants deer like to eat"; b.insertAdjacentHTML("beforeend", ' <span class="ic ic-deer chipic">' + DEER + "</span>");
+      b.onclick = () => { pr.deer = pr.deer === false; renderChips(); renderLibrary(); renderBloom(); save(); };
+      dr.appendChild(b); }
+    $("#deerHint").textContent = pr.deer === false ? "" : "Plants marked with the antler icon are ones deer often or sometimes eat, based on the Rutgers University deer-resistance ratings. No plant is deer-proof: hungry deer eat almost anything, and rabbits nibble many young plants too. If deer visit your yard, skip these or plan on fencing or repellent.";
+    { const th = $("#toxHint"); th.textContent = ""; if (pr.toxic) { th.append("Toxic plants are marked with a red ! icon here (hover it to see who it is toxic to) and a red Toxic tag in the PDF guide. Keep them away from pets and children who chew on plants. These labels are my own starting point, so check the "); const ln = document.createElement("a"); ln.href = "https://www.aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants"; ln.target = "_blank"; ln.rel = "noopener"; ln.textContent = "ASPCA toxic and non-toxic plant list"; th.append(ln, " before you buy. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 (free, 24 hours; online at "); const pl = document.createElement("a"); pl.href = "https://poisonhelp.org/"; pl.target = "_blank"; pl.rel = "noopener"; pl.textContent = "poisonhelp.org"; th.append(pl, "). If someone is unconscious, having trouble breathing or having a seizure, call 911 first."); } }
   }
   function renderLibrary() {
     const c = counts(), list = PL.filter(passes).sort((a, b) => a.name.localeCompare(b.name));
     const sel = Object.keys(c).length;
     const nMatch = PL.filter(matchesPrefs).length, outside = selected().filter(p => !matchesPrefs(p)).length;
-    $("#libLede").textContent = `${nMatch} of ${PL.length} plants fit your garden, ${sel} chosen so far. Click a plant to add or remove it. ◆ marks a garden favorite (not native). ✿ marks the daisy family (related to ragweed).` + (outside ? ` ${outside} chosen plant${outside > 1 ? "s don't" : " doesn't"} fit your step 2 choices (marked).` : "");
+    $("#libLede").innerHTML = `${nMatch} of ${PL.length} plants fit your garden, ${sel} chosen so far. Click a plant to add or remove it. ` + KEY() + (outside ? ` ${outside} chosen plant${outside > 1 ? "s don't" : " doesn't"} fit your step 2 choices (marked <span class="ic ic-off" data-k="off" data-tip="Outside your step 2 choices">–</span>).` : "");
     const box = $("#lib"); box.style.minHeight = box.offsetHeight + "px"; box.innerHTML = "";
     requestAnimationFrame(() => { box.style.minHeight = ""; });
     if (!list.length) { box.innerHTML = '<div class="empty">No plants match those filters.</div>'; return; }
     list.forEach(p => {
       const on = c[p.id] > 0, d = document.createElement("div");
       d.className = "pcard" + (on ? " on" : ""); d.dataset.id = p.id;
-      d.innerHTML = `<img src="${imgSrc(p.id)}" alt=""><div><div class="nm">${esc(p.name)}${p.native ? "" : '&nbsp;<span class="gf" title="Garden favorite, not native">◆</span>'}${p.fam === "daisy" ? '&nbsp;<span class="df" title="Daisy family, related to ragweed">✿</span>' : ""}</div><div class="meta"><span class="tag ${p.native ? "nat" : "gar"}">${p.native ? "Native" : "Garden"}</span>${p.toxic ? '<span class="tag tox" title="' + esc(window.toxLabel(p)) + '">Toxic</span>' : ""}${p.fam ? '<span class="tag daisy" title="Daisy family, a relative of ragweed">Daisy family</span>' : ""}${!matchesPrefs(p) ? '<span class="tag off" title="Doesn\'t match your step 2 choices">Outside your choices</span>' : ""}${Ch.heightText(p)} · ${esc(Ch.bloomText(p))}${on ? " · <b>×" + c[p.id] + "</b>" : ""}</div></div><div class="tick">${on ? "✓" : ""}</div>`;
+      d.innerHTML = `<img src="${imgSrc(p.id)}" alt=""><div><div class="nm">${esc(p.name)}${icons(p, !matchesPrefs(p))}</div><div class="meta">${Ch.heightText(p)} · ${esc(Ch.bloomText(p))}${on ? " · <b>×" + c[p.id] + "</b>" : ""}</div></div><div class="tick">${on ? "✓" : ""}</div>`;
       d.onclick = () => togglePlant(p.id);
       d.onmouseenter = () => setHover(p.id); d.onmouseleave = () => setHover(null);
       box.appendChild(d);
@@ -221,15 +274,16 @@
     const sorters = { start: (a, b) => (a.bloom ? a.bloom[0] : 99) - (b.bloom ? b.bloom[0] : 99) || a.name.localeCompare(b.name), name: (a, b) => a.name.localeCompare(b.name), height: (a, b) => Geo.hMean(a) - Geo.hMean(b) };
     list.sort(sorters[S.bloomSort] || sorters.start);
     const box = $("#bloomRows"); box.innerHTML = "";
-    if (!list.length) box.innerHTML = '<div class="empty">Nothing chosen yet. Switch to "All plants" and tick some rows.</div>';
+    if (!list.length) box.innerHTML = '<div class="empty">Nothing chosen yet. Switch to "All plants" and click + Add on some rows.</div>';
     list.forEach(p => {
       const on = c[p.id] > 0, r = document.createElement("div");
       r.className = "brow" + (on ? "" : " off") + (p.toxic ? " tox" : ""); r.dataset.id = p.id;
       let bar;
       if (p.bloom) { const a = Ch.pct(p.bloom[0]), b = Ch.pct(p.bloom[1]); bar = `<div class="bar${p.toxic ? " toxbar" : ""}" style="left:${a}%;width:${b - a}%;background:${p.hex}" title="${esc(Ch.bloomText(p))}: ${esc(p.color)}"></div>`; }
       else bar = `<div class="bar leaf" style="left:2%;width:96%" title="Foliage plant, green all season"></div>`;
-      r.innerHTML = `<div class="lab"><div class="cb">${on ? "✓" : ""}</div><img src="${imgSrc(p.id)}" alt=""><div class="nm">${esc(p.name)}${p.native ? "" : '&nbsp;<span class="gf" title="Garden favorite, not native">◆</span>'}${p.fam === "daisy" ? '&nbsp;<span class="df" title="Daisy family, related to ragweed">✿</span>' : ""}${p.toxic ? '<span class="toxpill" title="' + esc(window.toxLabel(p)) + '">TOXIC</span>' : ""}<small>${on ? "×" + c[p.id] + " · " : ""}${esc(Ch.bloomText(p))}</small></div></div><div class="track">${bar}</div>`;
-      r.onclick = () => togglePlant(p.id);
+      r.innerHTML = `<div class="lab"><img src="${imgSrc(p.id)}" alt=""><div class="nm">${esc(p.name)}${icons(p)}<small>${on ? "×" + c[p.id] + " · " : ""}${esc(Ch.bloomText(p))}</small></div></div><div class="track">${bar}</div>`;
+      r.onclick = e => { if (e.target.closest(".addbtn")) return; if (on) pickFromChart(p.id, e.shiftKey || e.ctrlKey || e.metaKey); };
+      if (!on) { const ab = document.createElement("button"); ab.type = "button"; ab.className = "addbtn"; ab.textContent = "+ Add"; ab.onclick = () => togglePlant(p.id); r.querySelector(".nm").appendChild(ab); }
       r.onmouseenter = () => setHover(p.id); r.onmouseleave = () => setHover(null);
       box.appendChild(r);
     });
@@ -243,7 +297,7 @@
   // ---------- small to big chart ----------
   function renderOrder() {
     const sel = selected().sort((a, b) => Geo.hMean(a) - Geo.hMean(b) || a.name.localeCompare(b.name));
-    const host = $("#ochart"); host.innerHTML = "";
+    const host = $("#ochart"); host.innerHTML = '<div class="okey">' + KEY() + "</div>";
     if (!sel.length) { host.innerHTML = '<div class="empty" style="padding:18px">Choose some plants and they will line up here from smallest to biggest.</div>'; return; }
     // one scale for every row (like the PDF), so 1 ft is the same height everywhere
     const maxH = Math.max(...sel.map(p => p.hHi)), k = Math.max(1.6, Math.min(3.2, 230 / maxH));
@@ -255,7 +309,7 @@
     rows.forEach((list, ri) => {
       const tall = Math.max(...list.map(p => Math.max(14, p.hHi * k))), top = 34, plotH = Math.ceil(tall) + top;
       const rw = document.createElement("div"); rw.className = "orow";
-      if (ri === 0) { const t = document.createElement("div"); t.className = "otitle"; t.innerHTML = "SIDE VIEW <span>(heights to scale)</span> <em>◆ = garden favorite, not native</em> <em class='dk'>✿ = daisy family</em>"; rw.appendChild(t); }
+      if (ri === 0) { const t = document.createElement("div"); t.className = "otitle"; t.innerHTML = "SIDE VIEW <span>(heights to scale)</span>"; rw.appendChild(t); }
       const grid = document.createElement("div"); grid.className = "gridlines"; grid.style.height = plotH + "px";
       for (let ft = 1; ft * 12 * k <= tall + 2; ft++) { const l = document.createElement("div"); l.style.top = (plotH - ft * 12 * k) + "px"; l.innerHTML = `<span>${ft} ft</span>`; grid.appendChild(l); }
       rw.appendChild(grid);
@@ -264,13 +318,11 @@
       list.forEach(p => {
         const w = Math.max(14, p.spacing * k), H = Math.max(14, p.hHi * k), col = document.createElement("div");
         col.className = "ocol" + (p.toxic ? " tox" : ""); col.dataset.id = p.id; col.style.width = (colW(p) - 6) + "px";
-        col.innerHTML = (p.toxic ? `<div class="toxflag" style="top:${Math.max(0, plotH - H - 24)}px" title="${esc(window.toxLabel(p))}">TOXIC</div>` : "")
-          + `<div class="oplot" style="height:${plotH}px"><div class="oh-top" style="top:${Math.max(0, plotH - H - 17)}px">${Ch.heightText(p)}</div>${Ch.silSVG(p, k)}</div>`
+        col.innerHTML = `<div class="oplot" style="height:${plotH}px"><div class="oh-top" style="top:${Math.max(0, plotH - H - 17)}px">${Ch.heightText(p)}</div>${Ch.silSVG(p, k)}</div>`
           + `<div class="dim" style="width:${w}px"><i></i><b>${p.spacing} in apart</b></div>`
-          + `<img src="${imgSrc(p.id)}" alt=""><div class="on">${esc(p.name)}${p.native ? "" : '&nbsp;<span class="gf" title="Garden favorite, not native">◆</span>'}${p.fam === "daisy" ? '&nbsp;<span class="df" title="Daisy family, related to ragweed">✿</span>' : ""}</div>`
-          + (p.toxic ? `<div class="toxwho">${esc(window.toxLabel(p).replace(/^Toxic to /, "to "))}</div>` : "");
+          + `<img src="${imgSrc(p.id)}" alt=""><div class="on">${esc(p.name)}${icons(p)}</div>`;
         if (p.toxic) col.style.setProperty("--toxtop", Math.max(0, plotH - H - 24) + "px");
-        col.onclick = () => { armed = p.id; selIdx = -1; refreshPlanOnly(); toast(`Placing ${p.name}: click the bed. Press Esc to stop.`); };
+        col.onclick = e => pickFromChart(p.id, e.shiftKey || e.ctrlKey || e.metaKey);
         col.onmouseenter = () => setHover(p.id); col.onmouseleave = () => setHover(null);
         cols.appendChild(col);
       });
@@ -289,10 +341,10 @@
     const t = $("#shop");
     if (!sel.length) { t.innerHTML = '<tbody><tr><td class="empty">No plants chosen yet.</td></tr></tbody>'; return; }
     t.innerHTML = `<thead><tr><th>Plant</th><th>How many</th><th>Spacing</th><th>Height</th><th>Blooms</th></tr></thead><tbody>` +
-      sel.map(p => `<tr data-id="${p.id}"><td><img src="${imgSrc(p.id)}" alt=""><b>${esc(p.name)}</b>${p.native ? "" : '&nbsp;<span class="gf" title="Garden favorite, not native">◆</span>'}${p.fam === "daisy" ? '&nbsp;<span class="df" title="Daisy family, related to ragweed">✿</span>' : ""} <span class="tag ${p.native ? "nat" : "gar"}">${p.native ? "Native" : "Garden"}</span></td>
-        <td><div class="stepper"><button type="button" data-d="-1">−</button><span>${c[p.id]}</span><button type="button" data-d="1">+</button></div></td>
+      sel.map(p => `<tr data-id="${p.id}"><td><img src="${imgSrc(p.id)}" alt=""><b>${esc(p.name)}</b>${icons(p)}${S.waiting && S.waiting[p.id] > 0 ? `<small class="wfit">${S.waiting[p.id]} won't fit in the bed yet</small>` : ""}</td>
+        <td><div class="stepper"><button type="button" data-d="-1">−</button><span>${c[p.id]}</span><button type="button" data-d="1">+</button></div>${p.clump ? `<small class="bulbn">spots, about ${c[p.id] * p.clump} bulbs</small>` : ""}</td>
         <td>${p.spacing} in</td><td>${Ch.heightText(p)}</td><td>${esc(Ch.bloomText(p))}</td></tr>`).join("") +
-      `</tbody><tfoot><tr><td>Total</td><td>${S.placements.length} plants</td><td colspan="3"></td></tr></tfoot>`;
+      `</tbody><tfoot><tr><td>Total</td><td>${S.placements.length + waitTotal()} plants</td><td colspan="3"></td></tr></tfoot>`;
     t.querySelectorAll("tr[data-id]").forEach(tr => {
       const id = tr.dataset.id;
       tr.querySelectorAll("button").forEach(b => b.onclick = () => setQty(id, +b.dataset.d));
@@ -304,6 +356,7 @@
   function renderPlan() {
     if (selIdx < 0) extraSel = [];
     window.Plan.render({ bed, placements: S.placements, byId, view: S.view, selIdx, selAll: selAll(), hoverId, armed });
+    markSel();
     const cv = S.placements.reduce((s, p) => s + Math.PI * Math.pow(byId[p.id].spacing / 24, 2), 0) / (bed.area || 1);
     const bb = bed.bb, kinds = Object.keys(counts()).length;
     $("#stats").innerHTML = `<span><b>${bed.label}</b> · ${bb.w.toFixed(1).replace(/\.0$/, "")} × ${bb.h.toFixed(1).replace(/\.0$/, "")} ft</span><span><b>${Math.round(bed.area)}</b> sq ft</span><span><b>${S.placements.length}</b> plants, ${kinds} kinds</span><span>Full-grown coverage <b>${Math.round(cv * 100)}%</b></span>`;
@@ -313,11 +366,14 @@
     const n = document.querySelector("#plan .pl.bad") ? document.querySelectorAll("#plan .pl.bad").length : 0;
     if (n) msgs.push(`${n} plants are drawn with a dashed red edge because they are closer together than their spacing allows. Drag them apart, or remove one.`);
     const box = $("#notice"); box.style.display = msgs.length ? "block" : "none"; box.innerHTML = msgs.map(esc).join("<br>");
-    if (notice && noFit.length) {
-      const names = noFit.map(i => byId[i].name).join(", ");
-      box.insertAdjacentHTML("beforeend", `<div class="askrow"><b>Would you like me to remove ${esc(names)} from the plan?</b><div class="askbtns"><button class="btn small" id="nfYes" type="button">Yes</button> <button class="btn small" id="nfNo" type="button">No</button></div></div>`);
-      $("#nfYes").onclick = () => { const ids = noFit.slice(); notice = ""; noFit = []; ids.forEach(removePlant); refresh(); toast("Removed " + names + "."); };
-      $("#nfNo").onclick = () => { notice = ""; noFit = []; refreshPlanOnly(); };
+    const wt = waitTotal();
+    if (wt) {
+      const ids = Object.keys(S.waiting).filter(k => S.waiting[k] > 0), names = ids.map(k => byId[k].name + (S.waiting[k] > 1 ? " ×" + S.waiting[k] : "")).join(", ");
+      box.style.display = "block";
+      box.insertAdjacentHTML("beforeend", (msgs.length ? "<br>" : "") + `<div class="askrow"><b>${wt} plant${wt > 1 ? "s don't" : " doesn't"} fit in the bed right now: ${esc(names)}.</b> They stay on your shopping list and will be placed if the bed gets bigger or you make room.` +
+        (S.waitAck ? ` <button class="btn small" id="nfYes" type="button">Remove them</button>` : `<div class="askbtns">Remove them from the plan? <button class="btn small" id="nfYes" type="button">Yes</button> <button class="btn small" id="nfNo" type="button">No, keep them</button></div>`) + "</div>");
+      $("#nfYes").onclick = () => { S.waiting = {}; S.waitAck = false; save(); refresh(); toast("Removed " + names + "."); };
+      if ($("#nfNo")) $("#nfNo").onclick = () => { S.waitAck = true; save(); refresh(); };
     }
     renderFillPick();
     const a = $("#armed");
@@ -383,7 +439,7 @@
         const j = JSON.parse(r.result), plan = j.plan || j;
         if (!plan || !Array.isArray(plan.placements) || !plan.shape) throw new Error("not a planner file");
         plan.placements = plan.placements.filter(p => byId[p.id]);
-        S = Object.assign(freshState(), plan); S.prefs = Object.assign(freshState().prefs, plan.prefs || {});
+        S = Object.assign(freshState(), plan); S.prefs = Object.assign(freshState().prefs, plan.prefs || {}); S.waiting = cleanWaiting(S.waiting); migratePrefs(plan.prefs);
         init(false); save(); toast("Opened " + gardenName() + ".");
       } catch (err) { toast("That file isn't a saved garden plan.", 5000); }
       e.target.value = "";
@@ -400,7 +456,7 @@
   // groundcovers to offer: low plants that suit the step-2 choices (sun, origin, safety)
   function groundcovers() {
     const pr = S.prefs, low = p => p.filler || (p.kind === "mat" && p.hHi <= 12);
-    return PL.filter(p => low(p) && p.sun.some(x => pr.sun.includes(x)) && pr.origin.includes(p.native ? "nat" : "gar") && !(p.toxic && !pr.toxic) && !(p.fam === "daisy" && pr.daisy === false))
+    return PL.filter(p => low(p) && p.sun.some(x => pr.sun.includes(x)) && pr.origin.includes(p.native ? "nat" : "gar") && !(p.toxic && !pr.toxic) && !(p.fam === "daisy" && pr.daisy === false) && !(deerEats(p) && pr.deer === false))
       .sort((a, b) => (b.filler ? 1 : 0) - (a.filler ? 1 : 0) || a.name.localeCompare(b.name));
   }
   function fillWith(ids) {
@@ -423,7 +479,7 @@
     const tiles = document.createElement("div"); tiles.className = "fp-tiles";
     ids.forEach(id => {
       const pl = byId[id], tox = pl.toxic && pl.toxic.length, t = document.createElement("div"); t.className = "fp-tile on" + (tox ? " tox" : ""); t.title = pl.name + (tox ? ": " + window.toxLabel(pl) : "");
-      t.innerHTML = `<img src="${imgSrc(id)}" alt=""><div class="fp-tn">${esc(pl.name)}${pl.native ? "" : '&nbsp;<span class="gf" title="Garden favorite, not native">◆</span>'}${pl.fam === "daisy" ? '&nbsp;<span class="df" title="Daisy family, related to ragweed">✿</span>' : ""}</div><small>${groups[id].length} of ${cnt[id] || 0} selected${tox ? ' · <b class="toxtxt">toxic</b>' : ""}</small>`;
+      t.innerHTML = `<img src="${imgSrc(id)}" alt=""><div class="fp-tn">${esc(pl.name)}${icons(pl)}</div><small>${groups[id].length} of ${cnt[id] || 0} selected</small>`;
       t.onclick = () => { if (idxs.length === groups[id].length) { clearSel(); } else { const rest = idxs.filter(i => S.placements[i].id !== id); selIdx = rest[rest.length - 1]; extraSel = rest.slice(0, -1); } renderPlan(); };
       tiles.appendChild(t);
     });
@@ -457,7 +513,7 @@
     list.forEach(c => {
       const pl = byId[c.id], t = document.createElement("div"); t.className = "fp-tile comp" + (pl.toxic && pl.toxic.length ? " tox" : "");
       t.title = "Plant " + pl.name + " beside it";
-      t.innerHTML = `<img src="${imgSrc(c.id)}" alt=""><div class="fp-tn">${esc(pl.name)}${pl.native ? "" : '&nbsp;<span class="gf">◆</span>'}${pl.fam === "daisy" ? '&nbsp;<span class="df">✿</span>' : ""}</div><small>${cnt[c.id] ? cnt[c.id] + " in bed" : "+ add"}</small>`;
+      t.innerHTML = `<img src="${imgSrc(c.id)}" alt=""><div class="fp-tn">${esc(pl.name)}${icons(pl)}</div><small>${cnt[c.id] ? cnt[c.id] + " in bed" : "+ add"}</small>`;
       t.onmouseenter = () => { showWhy(c); setHover(c.id); };
       t.onmouseleave = () => setHover(null);
       t.querySelector("img").onclick = t.onclick = ev => {
@@ -535,7 +591,7 @@
       const tiles = document.createElement("div"); tiles.className = "fp-tiles";
       list.forEach(p => {
         const on = S.fillPicks.includes(p.id), t = document.createElement("div"); t.className = "fp-tile" + (on ? " on" : ""); t.title = p.latin + ": " + p.hLo + "–" + p.hHi + " in tall";
-        t.innerHTML = `<img src="${imgSrc(p.id)}" alt=""><div class="fp-tn">${on ? "✓ " : ""}${esc(p.name)}${p.native ? "" : '&nbsp;<span class="gf" title="Garden favorite, not native">◆</span>'}${p.fam === "daisy" ? '&nbsp;<span class="df" title="Daisy family, related to ragweed">✿</span>' : ""}</div><small>${p.native ? "native" : "garden"}${p.toxic ? " · toxic" : ""}</small>`;
+        t.innerHTML = `<img src="${imgSrc(p.id)}" alt=""><div class="fp-tn">${on ? "✓ " : ""}${esc(p.name)}${icons(p)}</div><small>${Ch.heightText(p)}</small>`;
         t.onclick = () => { S.fillPicks = on ? S.fillPicks.filter(i => i !== p.id) : S.fillPicks.concat(p.id); save(); renderFillPick(); };
         tiles.appendChild(t);
       });
@@ -580,13 +636,13 @@
     if (!selected().length) { toast("Choose some plants first."); return; }
     optMode = "suggest"; clearSel(); renderPlan();
   });
-  function doClear() { S.placements = []; selIdx = -1; notice = ""; noFit = []; refresh(); toast("Bed cleared."); }
+  function doClear() { S.placements = []; S.waiting = {}; selIdx = -1; notice = ""; noFit = []; refresh(); toast("Bed cleared."); }
   $("#btnClear").addEventListener("click", () => { if (!S.placements.length) { toast("The bed is already empty."); return; } optMode = "clear"; clearSel(); renderPlan(); });
   $("#btnReset").addEventListener("click", () => { optMode = "reset"; clearSel(); renderPlan(); $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" }); });
   // Build the guide PDF; returns the jsPDF document
   function buildPdf() {
     const sel = selected();
-    return window.PDFExport.make({ plants: sel, bed, placements: S.placements, byId, name: gardenName(), prefs: S.prefs }, (f, m) => { const bar = $("#busyBar"), txt = $("#busyText"); bar.style.width = Math.round(f * 100) + "%"; txt.textContent = m; });
+    return window.PDFExport.make({ plants: sel, bed, placements: S.placements, waiting: Object.assign({}, S.waiting || {}), byId, name: gardenName(), prefs: S.prefs }, (f, m) => { const bar = $("#busyBar"), txt = $("#busyText"); bar.style.width = Math.round(f * 100) + "%"; txt.textContent = m; });
   }
   $("#btnPdf").addEventListener("click", () => {
     if (!S.placements.length) { toast("Add some plants to the bed first."); return; }
@@ -653,7 +709,7 @@
     window.addEventListener("scroll", () => { mag.classList.remove("on"); }, true);
   })();
   const saved = load();
-  if (saved && saved.placements && saved.shape && saved.placements.every(p => byId[p.id])) { S = Object.assign(freshState(), saved); S.prefs = Object.assign(freshState().prefs, saved.prefs || {}); init(false); }
+  if (saved && saved.placements && saved.shape && saved.placements.every(p => byId[p.id])) { S = Object.assign(freshState(), saved); S.prefs = Object.assign(freshState().prefs, saved.prefs || {}); S.waiting = cleanWaiting(S.waiting); migratePrefs(saved.prefs); init(false); }
   else { S = freshState(); init(true); }
   window.__app = { get S() { return S; }, get bed() { return bed; } };
 })();

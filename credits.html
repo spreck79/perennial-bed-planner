@@ -58,6 +58,11 @@
   <p>"Michigan native" means the plant is a true Michigan native. "Garden favorite" (marked ◆) means a plant that Michigan garden centers sell. Each status was checked against the sources below. Plants not named here are common, well-known Michigan woodland natives (such as the ferns, sedges, mayapple and jack-in-the-pulpit).</p>
   <div class="card"><table id="status"><thead><tr><th>Source</th><th>What it shows</th><th>Plants checked</th></tr></thead><tbody></tbody></table></div>
 
+  <h2>Deer, early-dormant plants and spring bulbs</h2>
+  <p>The antler icon marks plants deer often or sometimes eat. "Early-dormant" plants (Virginia Bluebells, Mayapple, Bleeding Heart and the spring bulbs) die back by early summer, so the bed plan lets them share space with later-growing plants without flagging them as too close.</p>
+  <div class="card"><table id="extra"><thead><tr><th>Source</th><th>Topic</th><th>What it shows</th></tr></thead><tbody></tbody></table></div>
+  <div class="card"><table id="deer"><thead><tr><th>Plant</th><th>Rutgers deer rating</th></tr></thead><tbody></tbody></table></div>
+
   <h2>Plant information</h2>
   <p>Height, spacing, bloom time and light needs are typical ranges drawn from general horticultural references. Real sizes vary with soil, water, sun and climate, so treat the spacing as a guide, not a rule.</p>
 
@@ -99,6 +104,18 @@
     var tr = document.createElement("tr");
     tr.innerHTML = '<td class="p">' + esc(p.name) + "<small>" + esc(p.latin) + "</small></td><td>" + esc(p.toxic.join(", ")) + "</td><td>" + esc(p.toxSrc || "") + "</td>";
     tt.appendChild(tr);
+  });
+  var te = document.querySelector("#extra tbody");
+  (window.EXTRA_SOURCES || []).forEach(function (s) {
+    var tr = document.createElement("tr");
+    tr.innerHTML = '<td><a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.title) + "</a></td><td>" + esc(s.topic) + "</td><td>" + esc(s.note) + "</td>";
+    te.appendChild(tr);
+  });
+  var td = document.querySelector("#deer tbody"), RT = { A: "A: rarely damaged", B: "B: seldom severely damaged", C: "C: occasionally severely damaged", D: "D: frequently severely damaged" };
+  window.PLANTS.slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).forEach(function (p) {
+    var tr = document.createElement("tr");
+    tr.innerHTML = '<td class="p">' + esc(p.name) + "<small>" + esc(p.latin) + "</small></td><td>" + (p.deer ? esc(RT[p.deer]) : "Not rated") + (p.dormant ? " · early-dormant" : "") + "</td>";
+    td.appendChild(tr);
   });
   var ts = document.querySelector("#status tbody");
   (window.STATUS_SOURCES || []).forEach(function (s) {

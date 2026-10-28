@@ -1,5 +1,23 @@
 // Photo credits for every plant picture. Generated from the Wikimedia Commons file pages.
 window.CREDITS = {
+ "daffodil": {
+  "file": "Narzisse.jpg",
+  "by": "Martin Hirtreiter",
+  "lic": "CC BY 3.0",
+  "licUrl": "https://creativecommons.org/licenses/by/3.0/"
+ },
+ "tulip": {
+  "file": "Tulp R01.jpg",
+  "by": "Marc Ryckaert (MJJR)",
+  "lic": "CC BY (attribution required)",
+  "licUrl": "https://commons.wikimedia.org/wiki/File:Tulp_R01.jpg"
+ },
+ "allium": {
+  "file": "Allium purple sensation, 17-04-2024 (d.j.b.) 02.jpg",
+  "by": "Dominicus Johannes Bergsma",
+  "lic": "CC BY-SA 4.0",
+  "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+ },
  "sedge": {
   "file": "Carex pensylvanica kz1.jpg",
   "by": "Krzysztof Ziarnek, Kenraiz",

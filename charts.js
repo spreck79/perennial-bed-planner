@@ -67,6 +67,11 @@
       s += `<ellipse cx="${cx}" cy="${H}" rx="${w / 2}" ry="${mh}" fill="${leaf}" stroke="${leafD}" stroke-width=".8"/>`;
       s += `<ellipse cx="${cx}" cy="${H}" rx="${w * 0.32}" ry="${mh * 0.62}" fill="${leaf2}" opacity=".85"/>`;
       if (p.bloom) s += heads(Math.min(7, Math.max(3, Math.round(w / 14))), 0, w * 0.4, H - mh * 0.4, Math.max(2.2, w * 0.035), Math.max(3, H * 0.06));
+    } else if (p.kind === "bulb") {   // strap leaves low, flower stems above
+      const lh = H * 0.45;
+      for (let i = 0; i < 6; i++) { const d = (i - 2.5) / 2.5, tx = cx + d * w * 0.42, ty = H - lh * (0.75 + 0.25 * (i % 2));
+        s += `<path d="M${(cx + d * 2).toFixed(1)} ${H} Q${(cx + d * w * 0.15).toFixed(1)} ${(H - lh * 0.8).toFixed(1)} ${tx.toFixed(1)} ${ty.toFixed(1)}" stroke="${leaf}" stroke-width="${Math.max(2, w * 0.06).toFixed(1)}" stroke-linecap="round" fill="none"/>`; }
+      if (p.bloom) s += heads(3, 0, w * 0.22, H, Math.max(3, w * 0.09), Math.max(4, H * 0.08));
     } else { // clump
       const mh = H * (p.bloom ? (p.hHi > 30 ? 0.42 : 0.55) : 0.8);
       s += `<ellipse cx="${cx}" cy="${H}" rx="${w / 2}" ry="${mh}" fill="${leaf}" stroke="${leafD}" stroke-width=".8"/>`;

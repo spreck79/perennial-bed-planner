@@ -164,7 +164,9 @@
       if (edgeDist(bed.poly, x, y) < r * 0.75) return false;
       for (let i = 0; i < placed.length; i++) {
         const q = placed[i];
-        if (Math.hypot(x - q.x, y - q.y) < (spFt(byId[id]) + spFt(byId[q.id])) / 2 * factor) return false;
+        // early-dormant plants (spring bulbs, bluebells) may share space with later-growing plants
+        const mix = !!byId[id].dormant !== !!byId[q.id].dormant, f = mix ? factor * 0.3 : factor;
+        if (Math.hypot(x - q.x, y - q.y) < (spFt(byId[id]) + spFt(byId[q.id])) / 2 * f) return false;
       }
       return true;
     }

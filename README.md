@@ -8,9 +8,12 @@ Plan a perennial flower bed for Michigan (zone 6B): pick a bed shape, choose Mic
 
 ## What it does
 - **Step 1:** name your garden. The PDF guide is saved as the date and name, like "26-10-28 Backyard Garden.pdf".
-- **Step 2:** choose sun or shade, natives and/or garden favorites (◆), kinds of plants, and safety options (daisy family ✿, toxic plants).
+- **Step 2:** choose sun or shade, natives and/or garden favorites, kinds of plants (including spring bulbs), and safety and animal options (daisy family, toxic plants, plants deer like to eat).
+- Small icons show native, garden favorite, daisy family, toxic and deer-eaten plants; hover an icon for its label.
 - Pick a bed shape (rectangle, L-shape, curved border, half moon, corner wedge, round or oval island, or draw your own) and set its size.
 - Click plants to add them; each is placed in the bed plan automatically. Drag to rearrange.
+- Click a row in the bloom chart or a plant in Small to big to highlight it on the bed plan (Shift- or Ctrl-click for several).
+- Early-dormant plants (Virginia Bluebells, Mayapple, Bleeding Heart, spring bulbs) may share space with later plants.
 - Click or right-click a plant on the bed plan to see plants that go well with it, each from a published source.
 - Create a PDF guide with bloom calendar, plant profiles, side view, bed plan and shopping list.
 - Save and open plans as files. Your work is also remembered in your own browser; nothing is sent anywhere.

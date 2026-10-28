@@ -59,3 +59,7 @@ add("palmsedge", ["swampmilkweed","turtle","joepye","lobelia"], "https://newmoon
 add("goldenrod", ["aster"], "https://newmoonnursery.com/plant/Solidago-flexicaulis", "New Moon Nurseries: at a woods edge, try pairing zigzag goldenrod with heart-leaved aster (Aster cordifolius).")
 add("sunflower", ["columbine","sedge","coreopsis"], "https://newmoonnursery.com/plant/Helianthus-divaricatus", "New Moon Nurseries: in lightly shaded gardens, companions include wild columbine, Pennsylvania sedge and lanceleaf coreopsis.")
 add("strawberry", ["coreopsis","coneflower"], "https://www.izelplants.com/fragaria-virginiana-wild-strawberry/", "Izel Native Plants: plant wild strawberry intermingled with lanceleaf coreopsis and purple coneflower.")
+PU = "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf"
+add("daffodil", ["hosta","daylily"]+GRASSES, PU, "Purdue Extension: interplant daffodils with late-emerging, sturdy perennials such as hosta, grasses or daylilies.")
+add("tulip", ["hosta","daylily"]+GRASSES, PU, "Purdue Extension: plant tulips with later-emerging plants that hide the ripening foliage, especially hosta, daylily and ornamental grasses.")
+add("allium", GRASSES, PU, "Purdue Extension: alliums look good planted with grasses, in cottage plantings or English borders.")
