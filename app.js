@@ -30,8 +30,8 @@
   { const tip = document.createElement("div"); tip.id = "ictip"; document.body.appendChild(tip);
     const show = el => { tip.textContent = el.dataset.tip; tip.className = "on k-" + el.dataset.k; const r = el.getBoundingClientRect(), tw = tip.offsetWidth;
       tip.style.left = Math.max(6, Math.min(window.innerWidth - tw - 6, r.left + r.width / 2 - tw / 2)) + "px"; tip.style.top = Math.max(6, r.top - tip.offsetHeight - 6) + "px"; };
-    document.addEventListener("mouseover", e => { const el = e.target.closest && e.target.closest(".ic"); if (el) show(el); else tip.className = ""; });
-    document.addEventListener("touchstart", e => { const el = e.target.closest && e.target.closest(".ic"); if (el) { show(el); clearTimeout(tip.t); tip.t = setTimeout(() => (tip.className = ""), 2000); } }, { passive: true });
+    document.addEventListener("mouseover", e => { const el = e.target.closest && e.target.closest(".ic, .cpill"); if (el) show(el); else tip.className = ""; });
+    document.addEventListener("touchstart", e => { const el = e.target.closest && e.target.closest(".ic, .cpill"); if (el) { show(el); clearTimeout(tip.t); tip.t = setTimeout(() => (tip.className = ""), 2000); } }, { passive: true });
     window.addEventListener("scroll", () => (tip.className = ""), true); }
 
   let S, bed, selIdx = -1, extraSel = [], armed = null, hoverId = null, notice = "", noFit = [], lastUnplaced = {}; noFit = [];
@@ -283,6 +283,7 @@
   function renderBloom() {
     const c = counts();
     $("#monthsHead").innerHTML = Ch.MONTHS.map(m => `<div>${m}</div>`).join("");
+    renderGardenCare();
     let list = PL.slice();
     if (S.bloomFilter === "sel") list = list.filter(p => c[p.id] > 0);
     else list = list.filter(p => matchesPrefs(p) || c[p.id] > 0);
@@ -296,6 +297,7 @@
       let bar;
       if (p.bloom) { const a = Ch.pct(p.bloom[0]), b = Ch.pct(p.bloom[1]); bar = `<div class="bar" style="left:${a}%;width:${b - a}%;background:${p.hex}" title="${esc(Ch.bloomText(p))}: ${esc(p.color)}"></div>`; }
       else bar = `<div class="bar leaf" style="left:2%;width:96%" title="Foliage plant, green all season"></div>`;
+      bar += carePills(p);
       r.innerHTML = `<div class="lab"><img src="${imgSrc(p.id)}" alt=""><div class="nm">${esc(p.name)}${icons(p)}<small>${on ? "×" + c[p.id] + " · " : ""}${esc(Ch.bloomText(p))}</small></div></div><div class="track">${bar}</div>`;
       r.onclick = e => { if (e.target.closest(".addbtn")) return; if (on) pickFromChart(p.id, e.shiftKey || e.ctrlKey || e.metaKey); };
       if (!on) { const ab = document.createElement("button"); ab.type = "button"; ab.className = "addbtn"; ab.textContent = "+ Add"; ab.onclick = () => togglePlant(p.id); r.querySelector(".nm").appendChild(ab); }
@@ -307,6 +309,27 @@
     $("#cover").innerHTML = cov.map(n => `<div class="covcell" style="background:${n === 0 ? "#D9A09A" : Ch.shade("#6E9A5B", 1.25 - 0.55 * (n / mx))}">${n}</div>`).join("");
     const gaps = Ch.MONTHS.filter((m, i) => cov[i] === 0 && i < 7);
     $("#coverNote").textContent = !selected().length ? "" : gaps.length ? `Gap: nothing chosen is in bloom in ${gaps.join(", ")}. Look for plants with a bar there, or lean on the foliage plants.` : "Something is in bloom in every month from April to October.";
+  }
+
+  // ---------- care timing ----------
+  const SPROUT = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 11V6.5M6 6.8C6 4.2 4.2 2.8 1.6 3c0 2.4 1.8 3.8 4.4 3.8zM6 6.2c0-2.6 1.8-4 4.4-3.8 0 2.4-1.8 3.8-4.4 3.8z" fill="currentColor" stroke="currentColor" stroke-width=".8" stroke-linejoin="round"/></svg>';
+  const CARE_ICON = { prep: SPROUT, cut: "✂", trim: "✂", divide: "↔", bulbs: "●", mulch: "≋" };
+  const CARE_LAB = { prep: "Prep", cut: "Cut back", trim: "Optional trim" };
+  function pill(k, w, tip, label) {
+    const a = Ch.pct(w.a), b = Ch.pct(w.b);
+    return `<span class="cpill k-${k}${label ? " big" : ""}" data-k="${k}" data-tip="${esc(tip)}" style="left:${a}%;width:${Math.max(1.2, b - a)}%"><i>${CARE_ICON[k]}</i>${label ? "<b>" + esc(label) + "</b>" : ""}</span>`;
+  }
+  function carePills(p) {
+    const c = window.Care.careFor(p); let h = "";
+    ["prep", "cut", "trim"].forEach(k => { if (c[k]) h += pill(k, c[k], CARE_LAB[k] + ": " + c[k].text + (k === "prep" || (k === "cut" && !c.prep) ? " " + c.divide : "")); });
+    return h;
+  }
+  function renderGardenCare() {
+    const box = $("#gardenCare"); if (!box) return;
+    const tasks = window.Care.gardenTasks(selected());
+    const lane = n => tasks.filter(t => t.lane === n).map(t => pill(t.k, t, t.label + ": " + t.text, t.label)).join("");
+    box.innerHTML = `<div class="gc-lab"><b>Whole garden</b><small>Michigan zone 6B. Hover or tap for details.</small></div><div class="gc-track"><div class="gc-lane">${lane(0)}</div><div class="gc-lane">${lane(1)}</div></div>`
+      + `<div class="gc-key"><span class="cpill k-prep"><i>${SPROUT}</i></span> prep <span class="cpill k-cut"><i>✂</i></span> cut back <span class="cpill k-trim"><i>✂</i></span> optional trim for more flowers</div>`;
   }
 
   // ---------- small to big chart ----------
