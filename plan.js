@@ -119,7 +119,8 @@
     const bad = new Set();
     for (let i = 0; i < placements.length; i++) for (let j = i + 1; j < placements.length; j++) {
       const a = placements[i], b = placements[j];
-      const need = (sp(byId[a.id]) + sp(byId[b.id])) / 2 * 0.72;
+      const mix = !!byId[a.id].dormant !== !!byId[b.id].dormant;   // an early-dormant plant tucked among later ones is fine
+      const need = (sp(byId[a.id]) + sp(byId[b.id])) / 2 * (mix ? 0.2 : 0.72);
       if (Math.hypot(a.x - b.x, a.y - b.y) < need) { bad.add(i); bad.add(j); }
     }
     ctx.badCount = bad.size;

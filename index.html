@@ -48,6 +48,7 @@
       <div class="pgroup"><div class="plabel">Where plants come from</div><div class="chips" id="pOrigin"></div></div>
       <div class="pgroup"><div class="plabel">Kinds of plants</div><div class="chips" id="pKind"></div></div>
       <div class="pgroup"><div class="plabel">Safety</div><div class="chips" id="pDaisy"></div><p class="hint" id="daisyHint"></p><div class="chips" id="pTox"></div><p class="hint" id="toxHint"></p></div>
+      <div class="pgroup"><div class="plabel">Animals</div><div class="chips" id="pDeer"></div><p class="hint" id="deerHint"></p></div>
     </section>
 
     <section class="card" id="libCard">
@@ -86,7 +87,7 @@
 
     <section class="card bloom" id="bloomCard">
       <h2>When each plant blooms</h2>
-      <p class="lede">Tick a row to add or remove that plant. Hover a row to see where it sits in the bed. Striped bars are foliage plants that stay green and carry the bed between flowers. <span class="gf">◆</span> marks a garden favorite (not native). <span class="df">✿</span> marks the daisy family (related to ragweed).</p>
+      <p class="lede">Click a row to highlight that plant on the bed plan and in Small to big; Shift- or Ctrl-click to highlight several. In "All plants", use + Add to choose a new plant. Striped bars are foliage plants that stay green and carry the bed between flowers. <span class="keyslot"></span></p>
       <div class="row tight" style="margin-bottom:10px">
         <div class="seg" id="bloomFilter"><button data-f="all" class="on">All plants</button><button data-f="sel">Chosen only</button></div>
         <label class="field" style="flex-direction:row;align-items:center;gap:6px">Sort <select id="bloomSort" style="width:auto"><option value="start">by first bloom</option><option value="name">by name</option><option value="height">by height</option></select></label>
@@ -99,14 +100,14 @@
 
     <section class="card" id="orderCard">
       <h2>Small to big, with spacing</h2>
-      <p class="lede">A side view of the chosen plants from shortest to tallest, drawn to one scale. The bar under each plant is how far apart to set that kind.</p>
+      <p class="lede">A side view of the chosen plants from shortest to tallest, drawn to one scale. The bar under each plant is how far apart to set that kind. Click a plant to highlight it on the bed plan and in the bloom chart; Shift- or Ctrl-click to highlight several.</p>
       <div class="ochart" id="ochart"></div>
       <div class="scale-note">Mixing two kinds side by side? Average their two spacings. Plant the big back-row plants first, then the middle, then the front, and finish by tucking the low plants into the gaps.</div>
     </section>
 
     <section class="card" id="shopCard">
       <h2>Shopping list</h2>
-      <p class="lede">What to buy for the bed as arranged above. <span class="gf">◆</span> marks a garden favorite (not native). <span class="df">✿</span> marks the daisy family (related to ragweed).</p>
+      <p class="lede">What to buy for the bed as arranged above. <span class="keyslot"></span></p>
       <table class="list" id="shop"></table>
     </section>
   </main>

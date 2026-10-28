@@ -31,3 +31,36 @@ window.STATUS_SOURCES = [
   { title: "Ray Wiegand's Nursery: Autumn Fern", url: "http://plants.wiegandsnursery.com/12150006/Plant/3498/Autumn_Fern/", kind: "garden", note: "Sold at Wiegand's.", plants: ["autumn"] },
   { title: "Ray Wiegand's Nursery: Ice Dance Sedge", url: "http://plants.wiegandsnursery.com/12150006/Plant/3385/Ice_Dance_Sedge/", kind: "garden", note: "Sold at Wiegand's.", plants: ["morrows"] }
 ];
+
+// Spring bulbs: garden favorites checked against Michigan garden centers (October 2026).
+window.STATUS_SOURCES.push(
+  { title: "English Gardens (Detroit-area garden centers): Fall is for planting", url: "https://www.englishgardens.com/fall-is-for-planting/", kind: "garden", note: "Michigan garden center; names tulips and daffodils among the fall bulbs to plant.", plants: ["daffodil", "tulip"] },
+  { title: "English Gardens plant finder: Tulipa 'Apeldoorn' (Darwin hybrid)", url: "https://plants.englishgardens.com/12150001/Plant/Print?id=10785", kind: "garden", note: "Darwin hybrid tulip in the English Gardens plant finder: about 24 in tall in flower, set 6 in apart.", plants: ["tulip"] },
+  { title: "MIgardener (St. Clair, Michigan): Allium 'Purple Sensation'", url: "https://migardener.com/products/allium-purple-sensation", kind: "garden", note: "Michigan garden company selling the bulbs; 24 to 32 in tall, May bloom, deer resistant.", plants: ["allium"] }
+);
+
+// Other research behind the planner: deer ratings, early-dormant plants and spring bulbs. Checked October 2026.
+window.EXTRA_SOURCES = [
+  { title: "Rutgers NJAES: Landscape Plants Rated by Deer Resistance", url: "https://extension.rutgers.edu/deer-resistant-plants", topic: "Deer",
+    note: "Rates plants A (rarely damaged), B (seldom severely damaged), C (occasionally severely damaged) or D (frequently severely damaged). Plants rated C or D get the antler icon. Rated at genus level where Rutgers lists a whole genus (for example Phlox, Hosta, Geum). Plants Rutgers does not list are left unrated." },
+  { title: "University of Illinois Extension: Deer Resistant Perennials", url: "https://extension.illinois.edu/media/3883/download", topic: "Deer",
+    note: "Lists Rattlesnake Master (Eryngium) as deer resistant, while Rutgers rates Eryngium D. Because the two disagree, Rattlesnake Master and Sea Holly are left unrated." },
+  { title: "Penn State Extension: Spring Ephemerals for Residential Gardens", url: "https://extension.psu.edu/spring-ephemerals-for-residential-gardens", topic: "Early-dormant plants",
+    note: "Virginia bluebell foliage dies back by summer, so interplant with hostas or ferns; mayapple goes dormant in summer, so pair it with ferns or late-summer flowers." },
+  { title: "UW-Madison Extension: Bleeding heart", url: "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/", topic: "Early-dormant plants",
+    note: "Ferns, hosta, hardy geranium and astilbe fill in as bleeding heart dies back." },
+  { title: "Purdue Extension (Marion County): Gardening with Bulbs", url: "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf", topic: "Spring bulbs",
+    note: "Daffodils naturalize and are squirrel and deer resistant; hybrid tulips are 'like candy to squirrels and deer'; squirrels don't eat alliums; interplant bulbs with later perennials that hide the ripening leaves; plant from mid-October." },
+  { title: "UW-Madison Extension: Plant Bulbs Now for Spring Color", url: "https://hort.extension.wisc.edu/2021/10/06/planting-spring-bulbs/", topic: "Spring bulbs",
+    note: "Plant large bulbs 6 to 8 in deep in clumps of 5 to 8; squirrels are less likely to dig daffodils than tulips." },
+  { title: "Iowa State Extension: All About Ornamental Onions", url: "https://yardandgarden.extension.iastate.edu/how-to/all-about-ornamental-onions", topic: "Spring bulbs",
+    note: "'Purple Sensation' grows 20 to 30 in; deer and rabbits rarely browse alliums; plant in October among perennials that hide the fading leaves." },
+  { title: "Iowa State Extension: Bulbs FAQ", url: "https://yardandgarden.extension.iastate.edu/faq/bulbs", topic: "Spring bulbs",
+    note: "Most modern tulips bloom well for only 3 or 4 years; Darwin hybrids are generally the longest lasting." },
+  { title: "Longfield Gardens: What Makes Darwin Hybrid Tulips Special", url: "https://www.longfield-gardens.com/article/What-Makes-Darwin-Hybrid-Tulips-Special", topic: "Spring bulbs",
+    note: "Darwin hybrids stand 20 to 24 in tall and flower mid-April to mid-May." },
+  { title: "NC State Extension Plant Toolbox: Daffodils", url: "https://plants.ces.ncsu.edu/plants/narcissus/common-name/daffodils", topic: "Spring bulbs",
+    note: "Daffodils are deer and rabbit resistant and toxic to cats, dogs and horses (bulbs most of all)." },
+  { title: "ASPCA: Daffodil, Tulip and Onion plant pages", url: "https://www.aspca.org/pet-care/aspca-poison-control/toxic-and-non-toxic-plants/daffodil", topic: "Spring bulbs",
+    note: "Daffodil (Narcissus), tulip (Tulipa) and onion (Allium) are all listed as toxic to dogs, cats and horses." }
+];

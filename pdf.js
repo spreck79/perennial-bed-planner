@@ -3,6 +3,8 @@
 (function () {
   const W = 612, H = 792, M = 42;
   const DAISY = "#B7791F";
+  const deerEats = p => p.deer === "C" || p.deer === "D";
+  const deerText = p => (p.deer === "D" ? "Deer often eat it" : "Deer sometimes eat it") + (p.id === "tulip" ? " and squirrels dig the bulbs" : "") + ".";
   const marks = p => (p.native ? "" : " ◆") + (p.fam === "daisy" ? " ✿" : "");
   const C = { forest: "#3F6B3A", ink: "#2E3A2C", muted: "#6B7464", rule: "#D9D3C2", cream: "#F5F2E8", soft: "#EEF0E2", band: "#ECEFE0", leaf: "#5E8F4E", leaf2: "#8DB46F", leafD: "#41693A", berry: "#A8578A", soil: "#B89A74", stripe: "#F7F5EE" };
   const rgb = h => { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
@@ -38,6 +40,7 @@
     const text = (t, x, y, opt) => doc.text(t, x, y, opt);
     const hMean = Geo.hMean;
     const counts = {}; placements.forEach(p => (counts[p.id] = (counts[p.id] || 0) + 1));
+    const waiting = data.waiting || {}; let nWait = 0; Object.keys(waiting).forEach(k => { if (waiting[k] > 0 && byId[k]) { counts[k] = (counts[k] || 0) + waiting[k]; nWait += waiting[k]; } });
     let page = 1;
     const newPage = () => { doc.addPage(); page++; };
     const rowOf = p => hMean(p) <= 14 ? "Front" : hMean(p) <= 28 ? "Middle" : "Back";
@@ -113,7 +116,7 @@
     }
     sf("s", 8.8); color(C.muted);
     text(plants.length + " perennials (" + nNative + " Michigan native" + (nNative === 1 ? "" : "s") + ", " + (plants.length - nNative) + " garden favorite" + (plants.length - nNative === 1 ? "" : "s") + ") for color from April through November.", M, 119);
-    text("Planned for a " + dimsText() + ", with " + placements.length + " plants.", M, 132);
+    text("Planned for a " + dimsText() + ", with " + placements.length + " plants" + (nWait ? " drawn (" + nWait + " more on the shopping list didn't fit)." : "."), M, 132);
     {
       // 7 photos spread across the bloom order
       const pick = []; const ph0 = window.PHOTO_PLACEHOLDER || []; const cand = sorted.filter(p => window.PHOTOS[p.id] && !ph0.includes(p.id));
@@ -212,20 +215,20 @@
         const row = rowOf(p).toUpperCase() + " ROW"; sf("sb", 6.2); const pw = doc.getTextWidth(row) + 16;
         fill(rowOf(p) === "Front" ? C.leaf2 : C.leaf); doc.roundedRect(W - M - pw, py + 3, pw, 13, 6.5, 6.5, "F"); color("#FFFFFF"); text(row, W - M - pw / 2, py + 12, { align: "center" });
         if (p.toxic) { const tl = toxLabel(p).toUpperCase(); sf("sb", 6.2); const tw3 = doc.getTextWidth(tl) + 16; fill(TOX); doc.roundedRect(W - M - pw - 6 - tw3, py + 3, tw3, 13, 6.5, 6.5, "F"); color("#FFFFFF"); text(tl, W - M - pw - 6 - tw3 / 2, py + 12, { align: "center" }); }
-        if (counts[p.id]) { sf("sb", 6.8); color(C.forest); text("In this bed: " + counts[p.id], W - M, py + 28, { align: "right" }); }
+        if (counts[p.id]) { sf("sb", 6.8); color(C.forest); text("In this bed: " + counts[p.id] + (p.clump ? " clumps (about " + counts[p.id] * p.clump + " bulbs)" : ""), W - M, py + 28, { align: "right" }); }
         const c1 = tx, c2 = tx + tw * 0.40, c3 = tx + tw * 0.72;
         const lab = (t, x, y) => { sf("sb", 5.8); color(C.muted); text(t, x, y); };
         const val = (t, x, y, w) => { sf("s", 8.4); color(C.ink); text(wrap(t, w)[0], x, y); };
         lab("HEIGHT", c1, py + 41); val(Ch.heightText(p), c1, py + 51, tw * 0.38);
-        lab("SPACING", c2, py + 41); val(p.spacing + " in apart", c2, py + 51, tw * 0.3);
+        lab("SPACING", c2, py + 41); val(p.clump ? "clumps of " + p.clump + ", " + p.spacing + " in apart" : p.spacing + " in apart", c2, py + 51, tw * 0.3);
         lab("PLACE IN BED", c3, py + 41); val(rowOf(p) + " row", c3, py + 51, tw * 0.28);
         lab("BLOOMS", c1, py + 62); val(p.bloom ? Ch.bloomText(p) : "Foliage plant", c1, py + 72, tw * 0.38);
         lab("COLOR", c2, py + 62); fill(p.hex); stroke(Ch.shade(p.hex, 0.75)); doc.setLineWidth(0.4); doc.circle(c2 + 4, py + 69.6, 3.7, "FD"); val(p.color, c2 + 12, py + 72, tw * 0.58 - 12);
         const lt = p.light || "", soil = lt + (p.moisture && !/soil|moist|dry|wet/i.test(lt) ? "; " + p.moisture.toLowerCase() + " soil" : "");
         const parts = [["Light & soil: ", true], [soil, false]];
         const ln = flow(parts, tx, py + 87, tw, 7.8, 10, C.muted, C.muted, true);
-        let note = p.notes; if (p.fam === "daisy") note += " Daisy family, like ragweed.";
-        const pf = data.prefs || {}, okPref = q => (!(q.toxic && q.toxic.length) || pf.toxic) && !(q.fam === "daisy" && pf.daisy === false) && (!pf.sun || q.sun.some(s => pf.sun.includes(s))) && (!pf.origin || pf.origin.includes(q.native ? "nat" : "gar"));
+        let note = p.notes; if (p.fam === "daisy") note += " Daisy family, like ragweed."; if (deerEats(p) && !/deer/i.test(p.notes)) note += " " + deerText(p);
+        const pf = data.prefs || {}, okPref = q => (!(q.toxic && q.toxic.length) || pf.toxic) && !(deerEats(q) && pf.deer === false) && !(q.fam === "daisy" && pf.daisy === false) && (!pf.sun || q.sun.some(s => pf.sun.includes(s))) && (!pf.origin || pf.origin.includes(q.native ? "nat" : "gar"));
         const comps = (window.COMPANIONS && window.COMPANIONS[p.id] || []).filter(c => byId[c.id] && (counts[c.id] || okPref(byId[c.id])));
         const inPlan = comps.filter(c => counts[c.id]).map(c => byId[c.id].name).slice(0, 4);
         const others = comps.filter(c => !counts[c.id]).map(c => byId[c.id].name).slice(0, Math.max(0, 4 - inPlan.length));
@@ -348,7 +351,7 @@
       const cx = { qty: uw * 0.50, sp: uw * 0.60, ht: uw * 0.72, bl: uw * 0.86 };
       const hdr = (cont) => {
         sf("rb", 14); color(C.forest); text(cont ? "Shopping list (continued)" : "Shopping list", M, sy); sy += 12;
-        if (!cont) { sf("s", 7.4); color(C.muted); text("Tick each plant off as you buy it.  Spacing is center to center.  ◆ = garden favorite (not native)  ✿ = daisy family" + (toxicPlants.length ? "  ! = toxic" : ""), M, sy); sy += 12; }
+        if (!cont) { sf("s", 7.4); color(C.muted); text("Tick each plant off as you buy it.  Spacing is center to center.  ◆ = garden favorite (not native)  ✿ = daisy family" + (toxicPlants.length ? "  ! = toxic" : "") + (plants.some(deerEats) ? "  Brown note = deer eat it" : ""), M, sy); sy += 12; }
         sf("sb", 5.8); color(C.muted); text("PLANT", M + 54, sy); text("HOW MANY", M + cx.qty, sy); text("SPACING", M + cx.sp, sy); text("HEIGHT", M + cx.ht, sy); text("BLOOMS", M + cx.bl, sy);
         stroke(C.rule); doc.setLineWidth(0.5); doc.line(M, sy + 4, W - M, sy + 4); sy += 6;
       };
@@ -359,13 +362,15 @@
         stroke("#8b8f80"); doc.setLineWidth(0.7); fill("#FFFFFF"); doc.roundedRect(M + 4, sy + 11, 9, 9, 1.5, 1.5, "FD");
         photo(p.id, M + 18, sy + 4, 30, 22, 3);
         sf("sb", 7.8); color(C.ink); text(p.name + marks(p) + (p.toxic ? " !" : ""), M + 54, sy + 12);
-        sf("s", 6); color(C.muted); text(p.native ? "Michigan native" : "Garden favorite", M + 54, sy + 20);
+        { let lx = M + 54; const lab0 = p.native ? "Michigan native" : "Garden favorite"; sf("s", 6); color(C.muted); text(lab0, lx, sy + 20); lx += doc.getTextWidth(lab0 + "  ");
+          if (deerEats(p)) { const dt = p.deer === "D" ? "Deer often eat" : "Deer sometimes eat"; sf("sb", 6); color("#7A5230"); text(dt, lx, sy + 20); lx += doc.getTextWidth(dt + "  "); }
+          if (waiting[p.id] > 0) { sf("sb", 6); color(TOX); text(waiting[p.id] + " won't fit in the bed drawing", lx, sy + 20); } }
         if (p.toxic) { sf("sb", 6); color(TOX); text(toxLabel(p), M + 54, sy + 27.5); }
-        sf("sb", 9.5); color(C.forest); text(String(counts[p.id] || 0), M + cx.qty + 14, sy + 17, { align: "center" });
+        sf("sb", 9.5); color(C.forest); text(String(counts[p.id] || 0), M + cx.qty + 14, sy + (p.clump ? 14 : 17), { align: "center" }); if (p.clump) { sf("s", 5.6); color(C.muted); text("clumps, about " + (counts[p.id] || 0) * p.clump + " bulbs", M + cx.qty + 14, sy + 22, { align: "center" }); }
         sf("s", 7.4); color(C.ink); text(p.spacing + " in", M + cx.sp, sy + 16.5); text(Ch.heightText(p), M + cx.ht, sy + 16.5); text(p.bloom ? Ch.bloomText(p) : "Foliage plant", M + cx.bl, sy + 16.5);
         stroke(C.rule); doc.setLineWidth(0.4); doc.line(M, sy + rh, W - M, sy + rh); sy += rh;
       });
-      sf("sb", 8.8); color(C.ink); text("Total: " + placements.length + " plants", W - M - 6, sy + 15, { align: "right" }); sy += 26;
+      sf("sb", 8.8); color(C.ink); text("Total: " + (placements.length + nWait) + " plants", W - M - 6, sy + 15, { align: "right" }); sy += 26;
     }
     sy = richBox("How to make it look natural", [
       [["Long, uneven drifts. ", true], ["Stretch each group into a long, irregular shape that runs at an angle across the bed, so drifts slide past each other instead of sitting in a row of blobs.", false]],
@@ -462,6 +467,10 @@
       fill(bg); stroke(bd); doc.setLineWidth(0.6); doc.roundedRect(M, hy, W - 2 * M, h, 10, 10, "FD");
       flow(parts, M + 16, hy + 19, maxW, 8.8, 12, col, col, true); hy += h + 10;
     };
+    { const bl = plants.filter(p => p.kind === "bulb");
+      if (bl.length) noteBox([["Spring bulbs: ", true], [(bl.length === 1 ? bl[0].name + " is" : bl.map(p => p.name).join(", ").replace(/, ([^,]*)$/, " and $1") + " are") + " planted as bulbs in the fall, not as potted plants in spring. In Michigan, plant them in October once the soil cools, 6 to 8 inches deep, in clumps of 5 to 8 bulbs. Each spot on the bed plan is one clump. They bloom in spring and their leaves die back by early summer, which is why the plan lets them sit right among the later perennials that grow up and hide the fading leaves. Let the leaves turn yellow before you cut them off; they feed next year's flowers.", false]], C.soft, C.rule, C.ink); }
+    { const dp = plants.filter(deerEats);
+      if (dp.length) noteBox([["Deer: ", true], [dp.map(p => p.name).join(", ").replace(/, ([^,]*)$/, " and $1") + (dp.length === 1 ? " is" : " are") + " rated by Rutgers University as plants deer often or sometimes eat. No plant is deer-proof, and rabbits nibble many young plants too. If deer visit your yard, protect these with fencing or a repellent, or swap them for plants deer leave alone.", false]], C.soft, C.rule, C.ink); }
     noteBox([["Where to buy: ", true], ["for the natives, Michigan native plant nurseries such as Wildtype Native Plant Nursery in Mason and Michigan Wildflower Farm in Portland, plus local native plant sales (often run by Wild Ones chapters and conservation districts) every May. The garden favorites are stocked at most garden centers and nurseries from April on.", false]], C.soft, C.rule, C.ink);
     {
       const daisy = plants.filter(p => p.fam === "daisy").map(p => p.name);
