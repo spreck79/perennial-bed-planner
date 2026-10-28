@@ -3,6 +3,23 @@
   const NS = "http://www.w3.org/2000/svg";
   let svg, wrap, cb = {}, ctx = null, drag = null, draw = null, ui = null;
   const sp = p => p.spacing / 12;
+  const LEAFD = "M10.6 1.4C5.2 1.2 1.6 3.9 1.7 8c0 .9.3 1.7.7 2.3.5-2.6 2.3-4.6 4.9-5.8-2.1 1.5-3.6 3.4-4.2 6 .5.2 1.1.3 1.7.3 4 0 6-3.4 5.8-9.4z";
+  const DEERD = "M6 11V6.2M6 6.2 3.2 2M4.3 3.7 2 4.2M6 6.2 8.8 2M7.7 3.7 10 4.2";
+  const BAD = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: ["#B8392E", "#FFFFFF"] };
+  const HLC = { tox: "#B8392E", deer: "#7A5230", daisy: "#C99A1E", nat: "#5E8F4A", gar: "#B8629B" };
+  const HLT = { tox: "#B8392E", deer: "#7A5230", daisy: "#8A6410", nat: "#3F6B3A", gar: "#8A3F72" };
+  const deerEats = p => p.deer === "C" || p.deer === "D";
+  const badgeKinds = pl => { const k = [pl.native ? "nat" : "gar"]; if (pl.fam === "daisy") k.push("daisy"); if (deerEats(pl)) k.push("deer"); if (pl.toxic && pl.toxic.length) k.push("tox"); return k; };
+  const hlKind = pl => pl.toxic && pl.toxic.length ? "tox" : deerEats(pl) ? "deer" : pl.fam === "daisy" ? "daisy" : pl.native ? "nat" : "gar";
+  function drawBadge(k, parent, br, cls, ox, oy, x, y) {
+    const g = el("g", { class: cls + " bdg", "data-ox": ox, "data-oy": oy, transform: `translate(${x} ${y})` }, parent), c = BAD[k];
+    el("circle", { cx: 0, cy: 0, r: br, fill: c[0], stroke: "#fff", "stroke-width": br * 0.16 }, g);
+    const s = br * 1.25 / 12;
+    if (k === "nat") el("path", { d: LEAFD, fill: c[1], transform: `translate(${-br * 0.62} ${-br * 0.62}) scale(${s})` }, g);
+    else if (k === "deer") el("path", { d: DEERD, fill: "none", stroke: c[1], "stroke-width": 1.5, "stroke-linecap": "round", transform: `translate(${-br * 0.62} ${-br * 0.62}) scale(${s})` }, g);
+    else el("text", { x: 0, y: br * 0.36, "font-size": br * (k === "gar" ? 1.05 : k === "tox" ? 1.4 : 1.25), fill: c[1], "text-anchor": "middle", "font-weight": 800, "font-family": "sans-serif" }, g, k === "gar" ? "◆" : k === "daisy" ? "✿" : "!");
+    return g;
+  }
 
   function el(name, attrs, parent, text) {
     const e = document.createElementNS(NS, name);
@@ -63,7 +80,7 @@
     const c = drag.g.querySelector("circle.pc"), t = drag.g.querySelector("text:not(.tx)");
     c.setAttribute("cx", p.x); c.setAttribute("cy", ctx.H - p.y);
     if (t) { t.setAttribute("x", p.x); t.setAttribute("y", ctx.H - p.y + ctx.fs * 0.35); }
-    drag.g.querySelectorAll(".tx").forEach(e => { const ox = +e.dataset.ox, oy = +e.dataset.oy; if (e.tagName === "circle") { e.setAttribute("cx", p.x + ox); e.setAttribute("cy", ctx.H - p.y + oy); } else { e.setAttribute("x", p.x + ox); e.setAttribute("y", ctx.H - p.y + oy); } });
+    drag.g.querySelectorAll(".tx").forEach(e => { const ox = +e.dataset.ox, oy = +e.dataset.oy; if (e.tagName === "g") { e.setAttribute("transform", `translate(${p.x + ox} ${ctx.H - p.y + oy})`); } else if (e.tagName === "circle") { e.setAttribute("cx", p.x + ox); e.setAttribute("cy", ctx.H - p.y + oy); } else { e.setAttribute("x", p.x + ox); e.setAttribute("y", ctx.H - p.y + oy); } });
   }
   function onUp(e) {
     if (drag) {
@@ -79,7 +96,7 @@
     if (draw) return renderDraw();
     const { bed, placements, byId, view, selIdx, hoverId } = c, selAll = c.selAll || (selIdx >= 0 ? [selIdx] : []);
     const bb = bed.bb, fs = Math.max(0.26, Math.max(bb.w, bb.h) / 46);
-    const mL = fs * 4.2, mR = fs * 1.6, mT = fs * 3.2, mB = fs * 5;
+    const mL = fs * 4.2, mR = fs * 1.6, mT = fs * 3.2, mB = fs * 7.2;
     c.H = bb.h; c.ox = mL; c.oy = mT; c.fs = fs;
     svg.setAttribute("viewBox", `0 0 ${(bb.w + mL + mR).toFixed(2)} ${(bb.h + mT + mB).toFixed(2)}`);
     svg.style.maxHeight = "640px";
@@ -133,15 +150,12 @@
       if (hoverId && !selAll.includes(i)) cls.push(hoverId === p.id ? "hl" : "dim");
       const g = el("g", { class: cls.join(" "), "data-idx": i, "data-id": p.id }, layer);
       const fill = view === "photos" && window.PHOTOS[p.id] ? `url(#ph-${p.id})` : pl.hex;
-      el("circle", { class: "pc", cx: p.x, cy: Y(p.y), r, fill }, g);
+      const pcEl = el("circle", { class: "pc", cx: p.x, cy: Y(p.y), r, fill }, g);
+      if (selAll.includes(i)) { pcEl.setAttribute("style", `stroke:${HLC[hlKind(pl)]};stroke-width:.24`); }
       if (view !== "photos") el("text", { x: p.x, y: Y(p.y) + fs * 0.35, "font-size": Math.min(fs * 1.05, r * 0.95), fill: pl.txt }, g, pl.code);
-      if (pl.toxic && pl.toxic.length) {
-        el("circle", { class: "tx", "data-ox": 0, "data-oy": 0, cx: p.x, cy: Y(p.y), r: r + 0.04, fill: "none", stroke: "#B8392E", "stroke-width": 0.16 }, g);
-        const bx = p.x + r * 0.72, by = Y(p.y) - r * 0.72, br = Math.max(fs * 0.5, 0.3);
-        el("circle", { class: "tx", "data-ox": r * 0.72, "data-oy": -r * 0.72, cx: bx, cy: by, r: br, fill: "#B8392E", stroke: "#fff", "stroke-width": 0.05 }, g);
-        el("text", { class: "tx", "data-ox": r * 0.72, "data-oy": -r * 0.72 + fs * 0.3, x: bx, y: by + fs * 0.3, "font-size": fs * 0.85, fill: "#fff", "text-anchor": "middle", "font-weight": 800, "font-family": "sans-serif" }, g, "!");
-        anyTox = true;
-      }
+      if (pl.toxic && pl.toxic.length) { el("circle", { class: "tx", "data-ox": 0, "data-oy": 0, cx: p.x, cy: Y(p.y), r: r + 0.04, fill: "none", stroke: "#B8392E", "stroke-width": 0.16 }, g); anyTox = true; }
+      const kinds = badgeKinds(pl), br = Math.min(fs * 0.46, Math.max(r * 0.3, fs * 0.24)), step = br * 1.85;
+      kinds.forEach((k, bi) => { const ox = (bi - (kinds.length - 1) / 2) * step, oy = -r * 0.86; drawBadge(k, g, br, "tx", ox, oy, p.x + ox, Y(p.y) + oy); });
     });
     // spotlight: the selected plant gets a name tag above it while the others fade back
     svg.classList.toggle("hasSel", selAll.length > 0);
@@ -151,15 +165,21 @@
       let cx = Math.max(w / 2, Math.min(bb.w - w / 2, p.x)), cy = Y(p.y) - r - h * 0.5 - fsz * 0.45;
       if (cy - h / 2 < -mT * 0.9) cy = Y(p.y) + r + h * 0.5 + fsz * 0.45;
       const lg = el("g", { class: "sellab", "pointer-events": "none" }, root);
-      el("rect", { x: cx - w / 2, y: cy - h / 2, width: w, height: h, rx: h / 2, fill: tox ? "#B8392E" : "#2E3A2C", stroke: "#fff", "stroke-width": 0.06 }, lg);
+      el("rect", { x: cx - w / 2, y: cy - h / 2, width: w, height: h, rx: h / 2, fill: HLT[hlKind(pl)], stroke: "#fff", "stroke-width": 0.06 }, lg);
       el("text", { x: cx, y: cy + fsz * 0.34, "font-size": fsz, fill: "#fff", "text-anchor": "middle", "font-weight": 700, "font-family": "sans-serif" }, lg, txt);
     }
-    if (anyTox) {
-      const lgd = el("g", { "pointer-events": "none" }, root); root.insertBefore(lgd, layer);
-      const lx = fs * 0.4, ly = -fs * 0.9;
-      el("circle", { cx: lx, cy: ly - fs * 0.3, r: fs * 0.5, fill: "#B8392E" }, lgd);
-      el("text", { x: lx, y: ly - fs * 0.3 + fs * 0.3, "font-size": fs * 0.85, fill: "#fff", "text-anchor": "middle", "font-weight": 800, "font-family": "sans-serif" }, lgd, "!");
-      el("text", { x: lx + fs * 0.9, y: ly, "font-size": fs * 0.9, fill: "#B8392E", "font-weight": 700, "font-family": "sans-serif" }, lgd, "= Toxic plant");
+    {
+      const used = new Set(); placements.forEach(p => badgeKinds(byId[p.id]).forEach(k => used.add(k)));
+      const items = [["nat", "Michigan native"], ["gar", "Garden favorite"], ["daisy", "Daisy family"], ["deer", "Deer eat it"], ["tox", "Toxic plant"]].filter(x => used.has(x[0]));
+      if (items.length) {
+        const lgd = el("g", { "pointer-events": "none" }, root); root.insertBefore(lgd, layer);
+        const lbr = fs * 0.4; let lx = lbr, ly = bb.h + fs * 5.7;
+        items.forEach(([k, t]) => {
+          drawBadge(k, lgd, lbr, "lgb", 0, 0, lx, ly);
+          el("text", { x: lx + lbr * 1.5, y: ly + fs * 0.3, "font-size": fs * 0.8, fill: k === "tox" ? "#B8392E" : "#4b5244", "font-weight": 700, "font-family": "sans-serif" }, lgd, t);
+          lx += lbr * 1.5 + t.length * fs * 0.5 + fs * 0.9;
+        });
+      }
     }
     svg.classList.toggle("placing", !!c.armed);
     svg.classList.remove("drawing");

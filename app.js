@@ -19,12 +19,12 @@
   function icons(p, off) {
     let h = p.native ? '<span class="ic ic-nat" data-k="nat" data-tip="Michigan native">' + LEAF + "</span>" : '<span class="ic ic-gar" data-k="gar" data-tip="Garden favorite (not native)">◆</span>';
     if (p.fam === "daisy") h += '<span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span>';
-    if (p.toxic && p.toxic.length) h += '<span class="ic ic-tox" data-k="tox" data-tip="' + esc(window.toxLabel(p)) + '">!</span>';
     if (deerEats(p)) h += '<span class="ic ic-deer" data-k="deer" data-tip="' + esc(deerTip(p)) + '">' + DEER + "</span>";
+    if (p.toxic && p.toxic.length) h += '<span class="ic ic-tox" data-k="tox" data-tip="' + esc(window.toxLabel(p)) + '">!</span>';
     if (off) h += '<span class="ic ic-off" data-k="off" data-tip="Outside your step 2 choices">–</span>';
     return '<span class="ics">' + h + "</span>";
   }
-  const KEY = () => '<span class="ickey">' + icons({ native: true }).replace(/<\/?span class="ics">/g, "") + ' native ' + icons({}).replace(/<\/?span class="ics">/g, "") + ' garden favorite <span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span> daisy family <span class="ic ic-tox" data-k="tox" data-tip="Toxic plant">!</span> toxic <span class="ic ic-deer" data-k="deer" data-tip="Deer often or sometimes eat this">' + DEER + '</span> deer often eat</span>';
+  const KEY = () => '<span class="ickey">' + icons({ native: true }).replace(/<\/?span class="ics">/g, "") + ' native ' + icons({}).replace(/<\/?span class="ics">/g, "") + ' garden favorite <span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span> daisy family <span class="ic ic-deer" data-k="deer" data-tip="Deer often or sometimes eat this">' + DEER + '</span> deer often eat <span class="ic ic-tox" data-k="tox" data-tip="Toxic plant">!</span> toxic</span>';
   window.plannerKey = KEY;
   document.querySelectorAll(".keyslot").forEach(e => (e.innerHTML = KEY()));
   { const tip = document.createElement("div"); tip.id = "ictip"; document.body.appendChild(tip);
@@ -79,7 +79,10 @@
     if (ids.length && !S.placements.some(p => ids.includes(p.id))) toast("That plant doesn't fit in the bed yet, so there is nothing to highlight on the plan.");
     selectIds(ids); renderPlan();
   }
-  function markSel() { const ids = selIds(); document.querySelectorAll(".brow,.ocol").forEach(e => e.classList.toggle("sel", ids.includes(e.dataset.id))); }
+  const HLK = ["tox", "deer", "daisy", "nat", "gar"];
+  function hlKind(p) { return p.toxic && p.toxic.length ? "tox" : deerEats(p) ? "deer" : p.fam === "daisy" ? "daisy" : p.native ? "nat" : "gar"; }
+  window.plannerHlKind = hlKind;
+  function markSel() { const ids = selIds(); document.querySelectorAll(".brow,.ocol").forEach(e => { const on = ids.includes(e.dataset.id); e.classList.toggle("sel", on); HLK.forEach(k => e.classList.remove("hl-" + k)); if (on) { const p = PL.find(x => x.id === e.dataset.id); if (p) e.classList.add("hl-" + hlKind(p)); } }); }
   function stripFiller() { S.placements = S.placements.filter(p => !isGroundcover(p)); selIdx = -1; }
   function selected() { const c = counts(); return PL.filter(p => c[p.id] > 0); }
   const defaultQty = p => (p.spacing >= 24 ? 1 : p.spacing >= 15 ? 3 : 5);
@@ -277,9 +280,9 @@
     if (!list.length) box.innerHTML = '<div class="empty">Nothing chosen yet. Switch to "All plants" and click + Add on some rows.</div>';
     list.forEach(p => {
       const on = c[p.id] > 0, r = document.createElement("div");
-      r.className = "brow" + (on ? "" : " off") + (p.toxic ? " tox" : ""); r.dataset.id = p.id;
+      r.className = "brow" + (on ? "" : " off"); r.dataset.id = p.id;
       let bar;
-      if (p.bloom) { const a = Ch.pct(p.bloom[0]), b = Ch.pct(p.bloom[1]); bar = `<div class="bar${p.toxic ? " toxbar" : ""}" style="left:${a}%;width:${b - a}%;background:${p.hex}" title="${esc(Ch.bloomText(p))}: ${esc(p.color)}"></div>`; }
+      if (p.bloom) { const a = Ch.pct(p.bloom[0]), b = Ch.pct(p.bloom[1]); bar = `<div class="bar" style="left:${a}%;width:${b - a}%;background:${p.hex}" title="${esc(Ch.bloomText(p))}: ${esc(p.color)}"></div>`; }
       else bar = `<div class="bar leaf" style="left:2%;width:96%" title="Foliage plant, green all season"></div>`;
       r.innerHTML = `<div class="lab"><img src="${imgSrc(p.id)}" alt=""><div class="nm">${esc(p.name)}${icons(p)}<small>${on ? "×" + c[p.id] + " · " : ""}${esc(Ch.bloomText(p))}</small></div></div><div class="track">${bar}</div>`;
       r.onclick = e => { if (e.target.closest(".addbtn")) return; if (on) pickFromChart(p.id, e.shiftKey || e.ctrlKey || e.metaKey); };
@@ -317,11 +320,10 @@
       const cols = document.createElement("div"); cols.className = "orow-cols";
       list.forEach(p => {
         const w = Math.max(14, p.spacing * k), H = Math.max(14, p.hHi * k), col = document.createElement("div");
-        col.className = "ocol" + (p.toxic ? " tox" : ""); col.dataset.id = p.id; col.style.width = (colW(p) - 6) + "px";
+        col.className = "ocol"; col.dataset.id = p.id; col.style.width = (colW(p) - 6) + "px";
         col.innerHTML = `<div class="oplot" style="height:${plotH}px"><div class="oh-top" style="top:${Math.max(0, plotH - H - 17)}px">${Ch.heightText(p)}</div>${Ch.silSVG(p, k)}</div>`
           + `<div class="dim" style="width:${w}px"><i></i><b>${p.spacing} in apart</b></div>`
           + `<img src="${imgSrc(p.id)}" alt=""><div class="on">${esc(p.name)}${icons(p)}</div>`;
-        if (p.toxic) col.style.setProperty("--toxtop", Math.max(0, plotH - H - 24) + "px");
         col.onclick = e => pickFromChart(p.id, e.shiftKey || e.ctrlKey || e.metaKey);
         col.onmouseenter = () => setHover(p.id); col.onmouseleave = () => setHover(null);
         cols.appendChild(col);
