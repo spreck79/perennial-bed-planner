@@ -417,9 +417,21 @@
         if (pl.toxic) { stroke(TOX); doc.setLineWidth(1.8); doc.circle(X(p.x), Y(p.y), r + 0.4, "S"); }
         font("helvetica", "bold", Math.min(8, Math.max(4.5, r * 0.8))); color(pl.txt); text(pl.code, X(p.x), Y(p.y) + Math.min(8, Math.max(4.5, r * 0.8)) * 0.35, { align: "center" });
       });
-      let anyTox = false;
-      placements.forEach(p => { const pl = byId[p.id]; if (!pl.toxic) return; anyTox = true; const r = (pl.spacing / 24) * sc * 0.96, br = Math.max(3.4, Math.min(5, r * 0.4)), bx2 = X(p.x) + r * 0.72, by2 = Y(p.y) - r * 0.72; fill(TOX); stroke("#FFFFFF"); doc.setLineWidth(0.7); doc.circle(bx2, by2, br, "FD"); font("helvetica", "bold", br * 1.5); color("#FFFFFF"); text("!", bx2, by2 + br * 0.52, { align: "center" }); });
-      if (anyTox) { fill(TOX); doc.circle(bx + 4, byy - 12, 4, "F"); font("helvetica", "bold", 6); color("#FFFFFF"); text("!", bx + 4, byy - 9.9, { align: "center" }); font("helvetica", "bold", 7.2); color(TOX); text("= Toxic plant", bx + 11, byy - 9.5); }
+      const BADC = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: [TOX, "#FFFFFF"] };
+      const kindsOf = pl => { const k = [pl.native ? "nat" : "gar"]; if (pl.fam === "daisy") k.push("daisy"); if (deerEats(pl)) k.push("deer"); if (pl.toxic && pl.toxic.length) k.push("tox"); return k; };
+      const pbadge = (k, x, y, br) => {
+        const c = BADC[k]; fill(c[0]); stroke("#FFFFFF"); doc.setLineWidth(0.6); doc.circle(x, y, br, "FD");
+        const u = br * 0.55;
+        if (k === "nat") { fill(c[1]); doc.lines([[u * 0.75, -u * 1.45], [u * 1.1, -u * 0.4], [-u * 0.4, u * 1.1]], x - u * 0.9, y + u * 0.9, [1, 1], "F", true); }
+        else if (k === "gar") { fill(c[1]); doc.lines([[u * 0.8, u * 0.9], [-u * 0.8, u * 0.9], [-u * 0.8, -u * 0.9]], x, y - u * 0.9, [1, 1], "F", true); }
+        else if (k === "deer") { stroke(c[1]); doc.setLineWidth(br * 0.22); doc.line(x, y + u, x, y - u * 0.1); doc.line(x, y - u * 0.1, x - u * 0.8, y - u); doc.line(x, y - u * 0.1, x + u * 0.8, y - u); doc.line(x - u * 0.4, y - u * 0.55, x - u * 1.05, y - u * 0.45); doc.line(x + u * 0.4, y - u * 0.55, x + u * 1.05, y - u * 0.45); }
+        else if (k === "daisy") { sf("s", br * 1.5); color(c[1]); text("✿", x, y + br * 0.5, { align: "center" }); }
+        else { font("helvetica", "bold", br * 1.5); color(c[1]); text("!", x, y + br * 0.52, { align: "center" }); }
+      };
+      const usedK = new Set();
+      placements.forEach(p => { const pl = byId[p.id], ks = kindsOf(pl); ks.forEach(k => usedK.add(k)); const r = (pl.spacing / 24) * sc * 0.96, br = Math.max(2.6, Math.min(4.4, r * 0.3)), st = br * 1.85;
+        ks.forEach((k, bi) => pbadge(k, X(p.x) + (bi - (ks.length - 1) / 2) * st, Y(p.y) - r * 0.86, br)); });
+      { let lx = bx + 4; [["nat", "Michigan native"], ["gar", "Garden favorite"], ["daisy", "Daisy family"], ["deer", "Deer eat it"], ["tox", "Toxic plant"]].filter(q => usedK.has(q[0])).forEach(([k, t]) => { pbadge(k, lx, byy - 12, 4); sf("sb", 6.8); color(k === "tox" ? TOX : C.muted); text(t, lx + 7, byy - 9.6); lx += 7 + doc.getTextWidth(t) + 12; }); }
       font("helvetica", "normal", 6.4); color(C.muted);
       const xs = bb.w > 30 ? 5 : bb.w > 16 ? 2 : 1; for (let gx = 0; gx <= bb.w + 0.01; gx += xs) text(gx + " ft", X(gx), byy + bh + 12, { align: "center" });
       const ys = bb.h > 24 ? 5 : bb.h > 12 ? 2 : 1; for (let gy = 0; gy <= bb.h + 0.01; gy += ys) text(String(gy), bx - 8, Y(gy) + 2, { align: "right" });
