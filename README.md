@@ -20,3 +20,6 @@ Plants are believed non-toxic to people, dogs and cats unless marked Toxic. Plea
 
 ## Sources
 Photo credits, companion-plant sources and native/garden status sources are on the [Sources and photo credits](https://spreck79.github.io/perennial-bed-planner/credits.html) page. Research notes are in the `research` folder.
+
+## License
+The planner's own text, plant notes, research and code are © 2026 spreck79, licensed under [Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/). Photos keep their own licenses (see the Sources and photo credits page); jsPDF is MIT licensed; the DejaVu fonts have their own free license. Details in `LICENSE.txt`.

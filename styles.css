@@ -16,6 +16,8 @@ h1, h2, h3 { font-family: var(--serif); color: var(--forest); margin: 0; }
 .top > div:first-child { margin-left: 0; }
 @media (max-width: 1050px) { .top > div:first-child { margin-left: 0; } }
 .top h1 { font-size: 22px; line-height: 1.1; }
+.top .ttl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.top .beta { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; background: #E5E2F3; color: #4F4A8A; border: 1px solid #BDB7DD; }
 .top .sub { color: var(--muted); font-size: 12px; }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .btn { border: 1px solid var(--rule); background: #fff; color: var(--ink); padding: 7px 12px; border-radius: 8px; font-weight: 600; font-size: 13px; transition: background .15s, border-color .15s; }

@@ -1,0 +1,15 @@
+Perennial Bed Planner (beta)
+Copyright (c) 2026 spreck79
+
+The planner's own text, plant notes, research notes and code are licensed under
+the Creative Commons Attribution-NonCommercial 4.0 International License
+(CC BY-NC 4.0). Full license: https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+You are free to share and adapt this work for non-commercial purposes, as long as
+you give appropriate credit, link to the license, and say if you made changes.
+
+Not covered by this license (each keeps its own terms):
+- Plant photos from Wikimedia Commons: each photo's author and license are listed
+  on the "Sources and photo credits" page (credits.html).
+- jsPDF (lib/jspdf.umd.min.js): MIT License.
+- DejaVu fonts (embedded in fonts.js): DejaVu Fonts License (free, Bitstream Vera based).
