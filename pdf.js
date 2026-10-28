@@ -103,6 +103,7 @@
     // ================= Page 1: cover + bloom calendar =================
     progress && progress(0.05, "Cover and bloom calendar");
     fill(C.band); doc.rect(0, 0, W, 262, "F");
+    { sf("sb", 7); const bt = "BETA", bw = doc.getTextWidth(bt) + 16; fill("#E5E2F3"); stroke("#BDB7DD"); doc.setLineWidth(0.6); doc.roundedRect(W - M - bw, 26, bw, 14, 7, 7, "FD"); color("#4F4A8A"); text(bt, W - M - bw / 2, 35.6, { align: "center" }); }
     { let ts = 34; sf("rb", ts); while (doc.getTextWidth(gName) > W - 2 * M && ts > 18) { ts -= 1; sf("rb", ts); } color(C.forest); text(gName, M, 80); }
     {
       const nN = plants.filter(p => p.native).length, mix = nN && nN < plants.length ? "Michigan natives + garden favorites" : nN ? "Michigan natives" : "Garden favorites";
@@ -478,6 +479,7 @@
       if (hy + 120 > H - 54) { newPage(); hy = 62; }
       sf("sb", 6.8); color(C.muted); text("PHOTO CREDITS", M, hy + 14); hy += 24;
       hy += para("Photos are from Wikimedia Commons and are used under their Creative Commons or public-domain licenses. Each entry shows the file name, photographer and license; search the file name at commons.wikimedia.org to see the original.", M, hy, W - 2 * M, 6.6, 8.6, C.muted);
+      hy += para("This guide was made with Perennial Bed Planner (beta), an early test version: please double-check plant details before you buy. The planner's own text, plant notes and research are \u00A9 2026 spreck79, shared under Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0, creativecommons.org/licenses/by-nc/4.0): free to share and adapt for non-commercial use with credit. Photos keep their own licenses, listed below.", M, hy + 2, W - 2 * M, 6.6, 8.6, C.muted) + 2;
       const parts = []; plants.slice().sort((a, b) => a.name.localeCompare(b.name)).forEach(p => {
         const c = (window.CREDITS && window.CREDITS[p.id]) || p.credit || {}; if (!c.file) return;
         parts.push([p.name + ": ", true]); parts.push([c.file.replace(/_/g, " ") + (c.by || c.lic ? " (" + [c.by, c.lic].filter(Boolean).join(", ") + ")" : "") + "  ·  ", false]);
@@ -496,6 +498,7 @@
     for (let i = 1; i <= n; i++) {
       doc.setPage(i); stroke(C.rule); doc.setLineWidth(0.6); doc.line(M, H - 40, W - M, H - 40);
       sf("s", 7.2); color(C.muted); text(gName + "  ·  Zone 6B  ·  Southern Michigan", M, H - 26); text(String(i), W - M, H - 26, { align: "right" });
+      sf("s", 6); text("Made with Perennial Bed Planner (beta)  ·  CC BY-NC 4.0  ·  Photos have their own licenses", M, H - 16);
     }
     return doc;
   }
