@@ -67,19 +67,25 @@
   <main class="center">
     <section class="card" id="planCard">
       <h2>Bed plan</h2>
-      <p class="lede">Each plant is drawn at its full grown size, so the plan is also your spacing guide. Drag a plant to move it. Click a plant, then press Delete to remove it. Grid squares are 1 foot.</p>
+      <p class="lede">Each plant is drawn at its full grown size, so the plan is also your spacing guide. Drag a plant to move it; right-click it for more choices. Ctrl+Z undoes your last change. Grid squares are 1 foot.</p>
       <div class="plan-tools">
+        <span class="undogrp"><button class="btn small ibtn" id="btnUndo" type="button" title="Undo (Ctrl+Z)" aria-label="Undo" disabled>↶</button><button class="btn small ibtn" id="btnRedo" type="button" title="Redo (Ctrl+Y)" aria-label="Redo" disabled>↷</button></span>
         <div class="seg" id="viewSeg"><button data-v="codes" class="on">Letters</button><button data-v="photos">Photos</button></div>
+        <label class="gridtoggle" id="gridToggleWrap"><input type="checkbox" id="chkGrid" checked> Grid</label>
+        <label class="gridtoggle" id="sunToggleWrap" hidden><input type="checkbox" id="chkSun" checked> Sun zones</label>
         <span class="armed" id="armed"></span>
         <button class="btn small" id="btnSuggest" title="Chooses how many of each plant fills the bed, then arranges them">Suggest quantities</button>
         <button class="btn small" id="btnArrange" title="Re-arranges the current plants in a new natural-looking layout">Re-arrange</button>
         <button class="btn small" id="btnClear">Clear bed</button>
         <span class="tools-right">
-          <button class="btn small" id="btnFill" title="Fills the leftover gaps with a low groundcover you picked (like sedge, foamflower or creeping phlox)">Fill gaps with groundcover</button>
+          <button class="btn small" id="btnObj" type="button" title="Add a path, stepping stone, stump, rock, birdbath, shrub or tree">Add object ▾</button>
+          <button class="btn small" id="btnPaint" type="button" title="Paint the spots that get full sun, part shade or full shade">Paint sun</button>
+          <button class="btn small" id="btnFill" title="Fills the leftover gaps with a low groundcover, or with plants that go well with their neighbors">Fill gaps</button>
         </span>
       </div>
-      <div class="fillpick" id="fillPick"></div>
+      <div class="paintbar" id="paintBar" hidden></div>
       <div class="planwrap"><svg id="plan" xmlns="http://www.w3.org/2000/svg"></svg></div>
+      <div class="fillpick" id="fillPick"></div>
       <div class="statbar" id="stats"></div>
       <div class="notice" id="notice" style="display:none"></div>
     </section>

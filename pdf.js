@@ -223,7 +223,7 @@
     // ================= Care through the year =================
     {
       progress && progress(0.22, "Care calendar");
-      const CC = { prep: "#7FA86A", cut: "#9C7B5B", divide: "#8C7FC0", bulbs: "#C99A1E", mulch: "#A68C72" };
+      const CC = { prep: "#7FA86A", cut: "#9C7B5B", divide: "#8C7FC0", bulbs: "#7FA86A", mulch: "#A68C72" };
       newPage(); heading("Care through the year", 62, 20);
       let cy = 72;
       cy += para("Timing for Michigan zone 6B, based on university extension advice. Most plants are best cut back in spring, not fall: seed heads feed birds over winter, and native bees and butterflies spend the winter in the hollow stems and fallen leaves.", M, cy + 4, W - 2 * M, 8.4, 11, C.muted) + 10;
@@ -255,7 +255,7 @@
         const nl = Math.max(...cells.map(c => c.length)), rhh = nl * 9 + 7;
         if (cy + rhh > H - 56) { newPage(); cy = 66; th(); }
         if (i % 2 === 0) stripe(M, cy, W - 2 * M, rhh);
-        cells.forEach((c, ci) => { if (ci === 0) { sf("sb", 7.4); color(C.ink); } else { sf("s", 7.2); color(ci === 1 && cr.prep ? "#3F6B3A" : ci === 2 ? "#5E4430" : C.muted); } text(c, cols[ci][1] + 5, cy + 9.5, { lineHeightFactor: 9 / 7.2 }); });
+        cells.forEach((c, ci) => { if (ci === 0) { sf("sb", 7.4); color(C.ink); } else { sf("s", 7.2); color(ci === 1 && cr.prep ? "#3F6B3A" : ci === 2 ? "#5E4430" : ci === 3 ? "#4A3F86" : C.muted); } text(c, cols[ci][1] + 5, cy + 9.5, { lineHeightFactor: 9 / 7.2 }); });
         cy += rhh;
       });
       sf("ri", 6.8); color(C.muted); if (cy + 14 < H - 50) text("Divide only when a clump is crowded, dying in the middle, or flowering less. Many plants go years without it.", M, cy + 12);
@@ -450,7 +450,8 @@
     newPage();
     const planPage = page;
     let by0 = 62; heading("Bed plan: " + dimsShort + ", planted the natural way", by0, 15.5); by0 += 12;
-    by0 += para("Each plant is drawn at the size it grows to, so the plan doubles as a spacing guide: plant each one at the center of its drawing. Each grid square is 1 foot. Drifts run at an angle and repeat along the bed.", M, by0 + 8, W - 2 * M, 8.8, 11.6, C.ink) + 18;
+    const OBJS = (data.objects || []).filter(o => Geo.pip(bed.poly, o.x, o.y)), SUNP = data.sun;
+    by0 += para("Each plant is drawn at the size it grows to, so the plan doubles as a spacing guide: plant each one at the center of its drawing. Each grid square is 1 foot. Drifts run at an angle and repeat along the bed." + (SUNP ? " The colors under the plants show how much sun each part of the bed gets." : "") + (OBJS.length ? " Paths, stones and other objects are drawn where they sit; trees show their canopy as a dashed ring." : ""), M, by0 + 8, W - 2 * M, 8.8, 11.6, C.ink) + 18;
     {
       const bb = bed.bb, availBW = W - 2 * M - 26, availBH = 218;
       const sc = Math.min(availBW / bb.w, availBH / bb.h), bw = bb.w * sc, bh = bb.h * sc;
@@ -461,6 +462,21 @@
       const drawPoly = (f, s, lw) => { doc.setLineWidth(lw || 0.5); doc.lines(pathLines(P.concat([P[0]])), P[0][0], P[0][1], [1, 1], f, true); };
       fill("#8E7660"); stroke("#8E7660"); doc.setLineWidth(6); doc.setLineJoin("round"); drawPoly("FD", 1, 6);
       fill("#A68C72"); stroke("#8E7660"); doc.setLineJoin("miter"); drawPoly("F", 0, 0.5);
+      // painted sun zones (fine cells, runs merged per row), then the outline again to tidy the curved edges
+      const ZC = (window.Plan && window.Plan.ZONE) || { full: "#C9AE66", part: "#B7AC8C", shade: "#7C7678" }, ZL = { full: "Full sun", part: "Part shade", shade: "Full shade" };
+      if (SUNP) {
+        const res = 0.25, nx = Math.ceil(bb.w / res), ny = Math.ceil(bb.h / res);
+        for (let j = 0; j < ny; j++) {
+          const cy = (j + 0.5) * res; let i = 0;
+          while (i < nx) {
+            const zAt = ii => Geo.pip(bed.poly, (ii + 0.5) * res, cy) ? SUNP.zoneAt((ii + 0.5) * res, cy) : null;
+            const z = zAt(i); let k = i + 1; while (k < nx && zAt(k) === z) k++;
+            if (z && ZC[z]) { fill(ZC[z]); doc.rect(X(i * res), Y((j + 1) * res) - 0.2, (k - i) * res * sc + 0.2, res * sc + 0.4, "F"); }
+            i = k;
+          }
+        }
+        stroke("#8E7660"); doc.setLineWidth(5); doc.setLineJoin("round"); doc.lines(pathLines(P.concat([P[0]])), P[0][0], P[0][1], [1, 1], "S", true); doc.setLineJoin("miter");
+      }
       // grid lines clipped to polygon by scan intersection
       stroke("#BBA388"); doc.setLineWidth(0.35);
       const segsAt = (c, vertical) => {
@@ -473,12 +489,41 @@
       };
       for (let gx = 1; gx < bb.w; gx++) segsAt(gx, true).forEach(s => doc.line(X(gx), Y(s[0]), X(gx), Y(s[1])));
       for (let gy = 1; gy < bb.h; gy++) segsAt(gy, false).forEach(s => doc.line(X(s[0]), Y(gy), X(s[1]), Y(gy)));
+      // objects sit under the plants
+      const polyO = pts => { const Q = pts.map(q => [X(q[0]), Y(q[1])]); doc.lines(pathLines(Q.concat([Q[0]])), Q[0][0], Q[0][1], [1, 1], "FD", true); };
+      const drawObj = (o, cx, cy, s2) => {
+        const r = o.w / 2 * s2; doc.setLineWidth(0.7);
+        if (o.t === "path") {
+          if (o.pts && s2 === sc) {
+            const sm = Geo.pathPts(o).map(q => [X(q[0]), Y(q[1])]), wpt = o.w * sc;
+            doc.setLineCap(1); doc.setLineJoin(1);
+            const strokeLine = (col, lw) => { doc.setDrawColor(col); doc.setLineWidth(lw); for (let k = 0; k + 1 < sm.length; k++) doc.line(sm[k][0], sm[k][1], sm[k + 1][0], sm[k + 1][1]); };
+            strokeLine("#AFA28A", wpt); strokeLine("#D9D0BE", Math.max(0.5, wpt - 1.4));
+            fill("#BFB39C"); const sd = Geo.objBlock(o); for (let u = 0; u + 1 < sd.pts.length; u += 2) { const q = sd.pts[u], nx = sd.pts[u + 1], L = Math.hypot(nx[0] - q[0], nx[1] - q[1]) || 1, px = -(nx[1] - q[1]) / L, py = (nx[0] - q[0]) / L, off = ((u * 7) % 9 / 9 - 0.5) * (o.w - 0.4); doc.circle(X(q[0] + px * off), Y(q[1] + py * off), 0.05 * sc, "F"); }
+            doc.setLineCap(0); doc.setLineJoin(0);
+          } else {
+          fill("#D9D0BE"); stroke("#AFA28A"); if (s2 === sc) polyO(Geo.objOutline(o)); else doc.roundedRect(cx - r * 1.4, cy - r * 0.7, r * 2.8, r * 1.4, 1, 1, "FD");
+          if (s2 === sc) { fill("#BFB39C"); const rot = (o.rot || 0) * Math.PI / 180, c = Math.cos(rot), sn = Math.sin(rot); for (let u = -o.w / 2 + 0.25; u < o.w / 2; u += 0.5) for (let v = -o.h / 2 + 0.25; v < o.h / 2; v += 0.5) { const jx = ((u * 7 + v * 13) % 1) * 0.12, gx = o.x + (u + jx) * c - v * sn, gy = o.y + (u + jx) * sn + v * c; doc.circle(X(gx), Y(gy), 0.05 * sc, "F"); } }
+          }
+        } else if (o.t === "stone") { fill("#BDB8AC"); stroke("#8F8A7E"); doc.circle(cx, cy, r, "FD"); }
+        else if (o.t === "stump") { fill("#A27A55"); stroke("#6E4F33"); doc.circle(cx, cy, r, "FD"); stroke("#7E5B3C"); doc.setLineWidth(0.4); doc.circle(cx, cy, r * 0.66, "S"); doc.circle(cx, cy, r * 0.36, "S"); }
+        else if (o.t === "rock") { fill("#A19D93"); stroke("#6F6B62"); if (s2 === sc) polyO(Geo.objOutline(o, 24)); else doc.ellipse(cx, cy, r, r * 0.7, "FD"); }
+        else if (o.t === "birdbath") { fill("#D4CFC4"); stroke("#8F8A7E"); doc.circle(cx, cy, r, "FD"); fill("#A9D0E3"); doc.circle(cx, cy, r * 0.72, "F"); }
+        else if (o.t === "shrub") { fill("#557A47"); stroke("#3C5A32"); doc.circle(cx, cy, r, "FD"); fill("#628A52"); for (let k = 0; k < 7; k++) { const a = k / 7 * Math.PI * 2 + 0.4; doc.circle(cx + Math.cos(a) * r * 0.52, cy + Math.sin(a) * r * 0.52, r * 0.32, "F"); } }
+        else if (o.t === "tree") { const tr = (s2 === sc ? Geo.trunkR(o) : o.w / 2) * s2; fill("#7A5636"); stroke("#5A3E26"); doc.circle(cx, cy, tr, "FD"); }
+      };
+      OBJS.forEach(o => drawObj(o, X(o.x), Y(o.y), sc));
       // plants, big first
       placements.slice().sort((a, b) => byId[b.id].spacing - byId[a.id].spacing).forEach(p => {
         const pl = byId[p.id], r = (pl.spacing / 24) * sc * 0.96;
         fill(pl.hex); stroke("#FFFFFF"); doc.setLineWidth(0.9); doc.circle(X(p.x), Y(p.y), r, "FD");
         font("helvetica", "bold", Math.min(8, Math.max(4.5, r * 0.8))); color(pl.txt); text(pl.code, X(p.x), Y(p.y) + Math.min(8, Math.max(4.5, r * 0.8)) * 0.35, { align: "center" });
       });
+      // tree canopies as dashed rings over the plants
+      // (drawn as short dashes, keeping only the ones inside the bed)
+      OBJS.filter(o => o.t === "tree").forEach(o => { stroke("#2F5A2A"); doc.setLineWidth(0.8); const R = o.w / 2, n = Math.max(24, Math.round(R * 2 * Math.PI / 0.5));
+        for (let k = 0; k < n; k++) { const a0 = k / n * Math.PI * 2, a1 = (k + 0.6) / n * Math.PI * 2, x0 = o.x + Math.cos(a0) * R, y0 = o.y + Math.sin(a0) * R, x1 = o.x + Math.cos(a1) * R, y1 = o.y + Math.sin(a1) * R;
+          if (Geo.pip(bed.poly, x0, y0) && Geo.pip(bed.poly, x1, y1)) doc.line(X(x0), Y(y0), X(x1), Y(y1)); } });
       const BADC = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: [TOX, "#FFFFFF"] };
       const kindsOf = pl => { const k = [pl.native ? "nat" : "gar"]; if (pl.fam === "daisy") k.push("daisy"); if (deerEats(pl)) k.push("deer"); if (pl.toxic && pl.toxic.length) k.push("tox"); return k; };
       const pbadge = (k, x, y, br) => {
@@ -500,7 +545,25 @@
       font("helvetica", "bold", 7.2); color("#4b5244");
       text(bed.mode === "island" ? "ALL SIDES ARE THE FRONT: tall plants in the middle" : "FRONT EDGE (lawn / path side)", bx, byy + bh + 24);
       if (bed.mode !== "island") text("BACK (fence / house / trees)", bx + bw, byy - 8, { align: "right" });
-      by0 = byy + bh + 48;
+      // north arrow, bottom right
+      { const nx = bx + bw + 14, ny = byy + bh - 9, r = 8, a = (data.north || 0) * Math.PI / 180;
+        fill("#FFFFFF"); stroke("#8E7660"); doc.setLineWidth(0.8); doc.circle(nx, ny, r, "FD");
+        const tip = [nx + Math.sin(a) * r * 0.78, ny - Math.cos(a) * r * 0.78], b1 = [nx + Math.sin(a + 2.6) * r * 0.42, ny - Math.cos(a + 2.6) * r * 0.42], b2 = [nx + Math.sin(a - 2.6) * r * 0.42, ny - Math.cos(a - 2.6) * r * 0.42];
+        fill("#4b5244"); doc.lines([[b1[0] - tip[0], b1[1] - tip[1]], [nx - b1[0], ny - b1[1]], [b2[0] - nx, b2[1] - ny]], tip[0], tip[1], [1, 1], "F", true);
+        sf("sb", 6); color("#4b5244"); text("N", tip[0] + Math.sin(a) * 4.2, tip[1] - Math.cos(a) * 4.2 + 2, { align: "center" }); }
+      // second legend row: sun zones and the kinds of objects in the bed
+      const extra = [];
+      if (SUNP) ["full", "part", "shade"].filter(z => SUNP.zones.has(z)).forEach(z => extra.push({ z, t: ZL[z] }));
+      const OL = Geo.OBJ; [...new Set(OBJS.map(o => o.t))].forEach(t => extra.push({ o: t, t: OL[t].label }));
+      if (extra.length) {
+        let lx = bx + 4; const ly = byy + bh + 38;
+        extra.forEach(it => {
+          if (it.z) { fill(ZC[it.z]); stroke("#8E7660"); doc.setLineWidth(0.5); doc.roundedRect(lx - 4, ly - 4, 8, 8, 1.5, 1.5, "FD"); }
+          else drawObj({ t: it.o, x: 0, y: 0, w: 8, h: 8, rot: 0 }, lx, ly, 1);
+          sf("sb", 6.8); color(C.muted); text(it.t, lx + 7, ly + 2.4); lx += 7 + doc.getTextWidth(it.t) + 12;
+        });
+      }
+      by0 = byy + bh + (extra.length ? 54 : 48);
     }
     by0 = richBox("Getting the spacing right", [
       [["Mixing two kinds? ", true], ["Average their two spacings. A plant that wants 18 in next to one that wants 12 in goes about 15 in apart.", false]],
