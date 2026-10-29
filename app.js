@@ -35,15 +35,60 @@
     window.addEventListener("scroll", () => (tip.className = ""), true); }
 
   let S, bed, selIdx = -1, extraSel = [], armed = null, hoverId = null, notice = "", noFit = [], lastUnplaced = {}; noFit = [];
+  let objSel = -1, objArmed = null, paint = null, pathDraw = null;   // selected object, object waiting to be placed, sun-paint mode {brush, size}
 
   function freshState() {
     return { shape: "rect", dims: { w: 16, d: 6 }, freePoly: null, freeView: "border", placements: [], seed: 7, fill: true, view: "codes",
       filter: { q: "", height: "", month: "" }, bloomFilter: "sel", bloomSort: "start",
-      name: "", prefs: { sun: ["full", "part", "shade"], origin: ["nat", "gar"], kinds: ["clump", "fern", "grass", "mat", "bulb"], toxic: true, daisy: true, deer: true, v2: true }, waiting: {} };
+      name: "", prefs: { sun: ["full", "part", "shade"], origin: ["nat", "gar"], kinds: ["clump", "fern", "grass", "mat", "bulb"], toxic: true, daisy: true, deer: true, v2: true }, waiting: {}, north: 0, showGrid: true,
+      objects: [], sun: { res: 0.5, cells: {} }, sunBase: null, showSun: true, fillMode: "ground", compSkip: [], freeCtrl: null, freeSmooth: false };
   }
   function load() { try { const t = localStorage.getItem(LS); return t ? JSON.parse(t) : null; } catch (e) { return null; } }
   let saveT = 0;
-  function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) {} }, 200); }
+  function save() { track(); clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) {} }, 200); }
+
+  // ---------- undo / redo: every saved change to the bed is a step you can go back to ----------
+  const HKEYS = ["shape", "dims", "freePoly", "freeCtrl", "freeSmooth", "freeView", "placements", "objects", "sun", "sunBase", "waiting", "waitAck", "north", "removed"];
+  let hist = [], fut = [], hcur = null;
+  const snapState = () => JSON.stringify(HKEYS.map(k => S[k] === undefined ? null : S[k]));
+  function track() {
+    if (!S) return;
+    const s = snapState(); if (hcur === null) { hcur = s; return; } if (s === hcur) return;
+    hist.push(hcur); if (hist.length > 80) hist.shift(); fut = []; hcur = s; undoUI();
+  }
+  function undoUI() { const u = $("#btnUndo"), r = $("#btnRedo"); if (u) u.disabled = !hist.length; if (r) r.disabled = !fut.length; }
+  function applySnap(snapStr) {
+    const v = JSON.parse(snapStr); HKEYS.forEach((k, i) => { S[k] = v[i]; }); normalizeExtras(); hcur = snapStr;
+    bed = Geo.buildBed(S); attachExtras(); clearSel(); objSel = -1; objArmed = null; pathDraw = null; armed = null; optMode = "idle"; notice = ""; noFit = [];
+    fullRender();
+  }
+  function undo() { track(); if (!hist.length) { toast("Nothing to undo."); return; } fut.push(hcur); applySnap(hist.pop()); undoUI(); toast("Undone. Press Redo (Ctrl+Y) to put it back."); }
+  function redo() { track(); if (!fut.length) { toast("Nothing to redo."); return; } hist.push(hcur); applySnap(fut.pop()); undoUI(); toast("Redone."); }
+
+  // objects and sun zones: make sure saved plans have them in a usable shape, and hand them to the layout engine
+  function normalizeExtras() {
+    S.objects = Array.isArray(S.objects) ? S.objects.filter(o => o && Geo.OBJ[o.t] && isFinite(o.x) && isFinite(o.y) && o.w > 0).map(o => Object.assign({ t: o.t, x: +o.x, y: +o.y, w: +o.w, h: +(o.h || o.w), rot: +(o.rot || 0) }, Array.isArray(o.pts) && o.pts.length >= 2 && o.pts.every(q => Array.isArray(q) && isFinite(q[0]) && isFinite(q[1])) ? { pts: o.pts.map(q => [+q[0], +q[1]]) } : {})) : [];
+    if (!S.sun || typeof S.sun !== "object" || !S.sun.cells) S.sun = { res: 0.5, cells: {} };
+    S.sun.res = 0.5;
+    if (S.sunBase && !["full", "part", "shade"].includes(S.sunBase)) S.sunBase = null;
+    if (!Array.isArray(S.compSkip)) S.compSkip = [];
+  }
+  function sunBase() { if (S.sunBase) return S.sunBase; const s = (S.prefs && S.prefs.sun) || []; return s.length === 1 ? s[0] : s.includes("part") ? "part" : s[0] || "part"; }
+  function sunActive() { return !!S.sunBase || Object.keys(S.sun.cells).length > 0; }
+  function zoneAt(x, y) { if (!sunActive()) return null; const r = S.sun.res; return S.sun.cells[Math.floor(x / r) + "," + Math.floor(y / r)] || sunBase(); }
+  function zonesPresent() { const z = new Set([sunBase()]); Object.keys(S.sun.cells).forEach(k => z.add(S.sun.cells[k])); return z; }
+  function attachExtras() { if (!bed) return; bed.objects = S.objects; bed.lightAt = zoneAt; bed.lightZones = () => (sunActive() ? zonesPresent() : null); }
+  // plants (by index) standing in light that doesn't suit them
+  function lightBadIdx() {
+    if (!sunActive()) return [];
+    const zs = zonesPresent(), out = [];
+    S.placements.forEach((p, i) => { const pl = byId[p.id]; if (p.c || !pl.sun.some(z => zs.has(z))) return; if (!pl.sun.includes(zoneAt(p.x, p.y))) out.push(i); });
+    return out;
+  }
+  // how much of the bed the objects take up (trees only count their trunk)
+  const polyLen = P => P.reduce((s, q, i) => s + (i ? Math.hypot(q[0] - P[i - 1][0], q[1] - P[i - 1][1]) : 0), 0);
+  function objArea() { return S.objects.reduce((a, o) => a + (o.t === "tree" ? Math.PI * Geo.trunkR(o) ** 2 : o.t === "path" ? (o.pts ? o.w * polyLen(Geo.pathPts(o)) : o.w * o.h) : o.t === "rock" ? Math.PI * o.w * o.h / 4 : Math.PI * o.w * o.w / 4), 0); }
+  const plantBed = () => Object.assign({}, bed, { area: Math.max(bed.area * 0.3, bed.area - objArea()) });
   function toast(msg, ms) { const t = $("#toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("on"), ms || 2600); }
 
   // counts include plants that are chosen but didn't fit in the bed ("waiting"), so they stay on the shopping list
@@ -92,24 +137,32 @@
     const c = counts(true);
     items = items || PL.filter(p => c[p.id] > 0).map(p => ({ plant: p, n: c[p.id] }));
     if (seedBump) S.seed = (S.seed * 7 + 13) % 100000;
-    if (!items.length) { S.placements = []; S.waiting = {}; notice = ""; noFit = []; lastUnplaced = {}; return; }
+    // locked plants keep their spot; only the rest get laid out again
+    S.placements.forEach(p => { if (p.lock && !Geo.pip(bed.poly, p.x, p.y)) delete p.lock; });   // a locked plant left outside a reshaped bed is set free
+    const locked = S.placements.filter(p => p.lock && !p.c), lockedCount = {};
+    locked.forEach(p => { lockedCount[p.id] = (lockedCount[p.id] || 0) + 1; });
+    const avoidPlants = []; const seen = {}; locked.forEach(p => { if (!seen[p.id]) { seen[p.id] = 1; avoidPlants.push(byId[p.id]); } });
+    const remaining = items.map(it => ({ plant: it.plant, n: it.n - (lockedCount[it.plant.id] || 0) })).filter(it => it.n > 0);
+    if (!remaining.length) { S.placements = locked; S.waiting = {}; notice = ""; noFit = []; lastUnplaced = {}; selIdx = -1; return; }
     // try several arrangements and keep the one that fits the most plants
     let r = null, seed = S.seed;
     for (let t = 0; t < 8; t++) {
-      const cand = Geo.autoLayout(bed, items, seed, { fill: false }), miss = Object.keys(cand.unplaced).reduce((s, k) => s + cand.unplaced[k], 0);
+      const cand = Geo.autoLayout(bed, remaining, seed, { fill: false, avoid: locked, avoidPlants }), miss = Object.keys(cand.unplaced).reduce((s, k) => s + cand.unplaced[k], 0);
       if (!r || miss < r.miss) { r = cand; r.miss = miss; r.seed = seed; }
       if (!miss) break;
       seed = (seed * 31 + 17) % 100000;
     }
     S.seed = r.seed;
-    S.placements = r.placements; selIdx = -1;
+    S.placements = locked.concat(r.placements); selIdx = -1;
+    // painted sun zones: give any plant that still landed in the wrong light one more try somewhere that suits it
+    lightBadIdx().map(i => S.placements[i]).forEach(pl => { if (!pl.lock) moveToLight(pl); });
     lastUnplaced = r.unplaced;
     const missing = Object.keys(r.unplaced).reduce((s, k) => s + r.unplaced[k], 0);
     const before = waitTotal(); S.waiting = Object.assign({}, r.unplaced); if (missing && missing !== before) S.waitAck = false;
     notice = ""; noFit = [];
   }
   function rebuildBed(keepLayout) {
-    bed = Geo.buildBed(S);
+    bed = Geo.buildBed(S); attachExtras();
     if (!keepLayout) relayout(false);
   }
   function addMany(id, n) {
@@ -149,7 +202,7 @@
   const KINDS = [["all", "All"], ["clump", "Flowers"], ["fern", "Ferns"], ["grass", "Grasses & sedges"], ["mat", "Groundcovers"], ["bulb", "Spring bulbs"]];
   function renderShapesPanel() {
     const box = $("#shapes"); box.innerHTML = "";
-    Object.keys(Geo.SHAPES).forEach(k => {
+    ["rect", "circle", "free"].forEach(k => {
       const sh = Geo.SHAPES[k]; let poly;
       if (k === "free") poly = [[0, 0], [9, 1], [11, 5], [7, 7], [3, 6], [0, 4]];
       else { const d = {}; sh.params.forEach(q => (d[q.k] = q.def)); poly = Geo.buildBed({ shape: k, dims: d }).poly; }
@@ -181,18 +234,22 @@
     });
     $("#freeBox").style.display = S.shape === "free" ? "block" : "none";
     $("#freeView").value = S.freeView || "border";
+    $("#btnDraw").textContent = S.freePoly ? "Edit the outline" : "Draw the outline";
     if (S.shape === "free") { const bb = bed.bb; const d = document.createElement("div"); d.className = "hint"; d.style.gridColumn = "1 / -1"; d.textContent = `Outline is about ${bb.w.toFixed(1)} ft by ${bb.h.toFixed(1)} ft, ${Math.round(bed.area)} sq ft.`; box.appendChild(d); }
   }
   function startDraw() {
-    armed = null; selIdx = -1;
+    armed = null; selIdx = -1; extraSel = []; objSel = -1; objArmed = null; pathDraw = null; paint = null; renderPaintBar();
     $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" });
+    const existing = S.shape === "free" && S.freePoly ? (S.freeCtrl || S.freePoly) : null;
     window.Plan.startDraw({
-      onDone: pts => {
-        const bb = Geo.bbox(pts); S.freePoly = pts.map(q => [q[0] - bb.x0, q[1] - bb.y0]); S.shape = "free"; S.dims = {};
-        rebuildBed(); fullRender(); toast("Shape saved. Your plants were re-arranged to fit.");
+      onDone: out => {
+        const bb = Geo.bbox(out.poly), sh = q => [Math.round((q[0] - bb.x0) * 100) / 100, Math.round((q[1] - bb.y0) * 100) / 100];
+        S.freePoly = out.poly.map(sh); S.freeCtrl = out.pts.map(sh); S.freeSmooth = !!out.smooth; S.shape = "free"; S.dims = {};
+        rebuildBed(); fullRender();
+        toast("Shape saved. Your plants were re-arranged to fit.");
       },
       onCancel: () => { if (S.shape === "free" && !S.freePoly) { S.shape = "rect"; S.dims = { w: 16, d: 6 }; rebuildBed(); } fullRender(); }
-    });
+    }, { pts: existing, smooth: S.freeSmooth });
   }
 
   // does a plant fit the step-2 choices?
@@ -310,7 +367,7 @@
       else bar = `<div class="bar leaf" style="left:2%;width:96%" title="Foliage plant, green all season"></div>`;
       bar += carePills(p);
       r.innerHTML = `<div class="lab"><img src="${imgSrc(p.id)}" alt=""><div class="nm">${esc(p.name)}${icons(p)}<small>${on ? "×" + c[p.id] + " · " : ""}${esc(Ch.bloomText(p))}</small></div></div><div class="track">${bar}</div>`;
-      r.onclick = e => { if (e.target.closest(".addbtn")) return; if (on) pickFromChart(p.id, e.shiftKey || e.ctrlKey || e.metaKey); };
+      r.onclick = e => { if (e.target.closest(".addbtn")) return; if (on) pickFromChart(p.id, e.ctrlKey || e.metaKey); };
       if (!on) { const ab = document.createElement("button"); ab.type = "button"; ab.className = "addbtn"; ab.textContent = "+ Add"; ab.onclick = () => togglePlant(p.id); r.querySelector(".nm").appendChild(ab); }
       r.onmouseenter = () => setHover(p.id); r.onmouseleave = () => setHover(null);
       box.appendChild(r);
@@ -340,7 +397,7 @@
     const tasks = window.Care.gardenTasks(selected());
     const lane = n => tasks.filter(t => t.lane === n).map(t => pill(t.k, t, t.label + ": " + t.text, t.label)).join("");
     box.innerHTML = `<div class="gc-lab"><b>Whole garden</b><small>Michigan zone 6B. Hover or tap for details.</small></div><div class="gc-track"><div class="gc-lane">${lane(0)}</div><div class="gc-lane">${lane(1)}</div></div>`
-      + `<div class="gc-key"><span class="cpill k-prep"><i>${SPROUT}</i></span> prep <span class="cpill k-cut"><i>✂</i></span> cut back <span class="cpill k-trim"><i>✂</i></span> optional trim for more flowers</div>`;
+      + `<div class="gc-key"><span class="cpill k-prep"><i>${SPROUT}</i></span> prep <span class="cpill k-cut"><i>✂</i></span> cut back <span class="cpill k-trim"><i>✂</i></span> optional trim for more flowers <span class="cpill k-divide"><i>↔</i></span> divide <span class="cpill k-bulbs"><i>●</i></span> plant bulbs</div>`;
   }
 
   // ---------- small to big chart ----------
@@ -370,7 +427,7 @@
         col.innerHTML = `<div class="oplot" style="height:${plotH}px"><div class="oh-top" style="top:${Math.max(0, plotH - H - 17)}px">${Ch.heightText(p)}</div>${Ch.silSVG(p, k)}</div>`
           + `<div class="dim" style="width:${w}px"><i></i><b>${p.spacing} in apart</b></div>`
           + `<img src="${imgSrc(p.id)}" alt=""><div class="on">${esc(p.name)}${icons(p)}</div>`;
-        col.onclick = e => pickFromChart(p.id, e.shiftKey || e.ctrlKey || e.metaKey);
+        col.onclick = e => pickFromChart(p.id, e.ctrlKey || e.metaKey);
         col.onmouseenter = () => setHover(p.id); col.onmouseleave = () => setHover(null);
         cols.appendChild(col);
       });
@@ -396,26 +453,50 @@
     t.querySelectorAll("tr[data-id]").forEach(tr => {
       const id = tr.dataset.id;
       tr.querySelectorAll("button").forEach(b => b.onclick = () => setQty(id, +b.dataset.d));
-      tr.onclick = e => { if (e.target.closest("button") || e.target.tagName === "IMG" || e.target.closest("a")) return; pickFromChart(id, e.shiftKey || e.ctrlKey || e.metaKey); };
+      tr.onclick = e => { if (e.target.closest("button") || e.target.tagName === "IMG" || e.target.closest("a")) return; pickFromChart(id, e.ctrlKey || e.metaKey); };
       tr.onmouseenter = () => setHover(id); tr.onmouseleave = () => setHover(null);
     });
   }
 
   // ---------- plan ----------
+  function planCtx() {
+    return { bed, placements: S.placements, byId, view: S.view, selIdx, selAll: selAll(), hoverId, armed, north: S.north || 0, showGrid: S.showGrid !== false,
+      objects: S.objects, objSel, objArmed, pathDraw, paint, lightBad: paint ? [] : lightBadIdx(),
+      sun: { show: !!paint || (sunActive() && S.showSun !== false), res: S.sun.res, cells: S.sun.cells, base: sunBase() } };
+  }
   function renderPlan() {
     if (selIdx < 0) extraSel = [];
-    window.Plan.render({ bed, placements: S.placements, byId, view: S.view, selIdx, selAll: selAll(), hoverId, armed });
+    if (objSel >= S.objects.length) objSel = -1;
+    window.Plan.render(planCtx());
     markSel();
     const cv = S.placements.reduce((s, p) => s + Math.PI * Math.pow(byId[p.id].spacing / 24, 2), 0) / (bed.area || 1);
     const bb = bed.bb, kinds = Object.keys(counts()).length;
-    $("#stats").innerHTML = `<span><b>${bed.label}</b> · ${bb.w.toFixed(1).replace(/\.0$/, "")} × ${bb.h.toFixed(1).replace(/\.0$/, "")} ft</span><span><b>${Math.round(bed.area)}</b> sq ft</span><span><b>${S.placements.length}</b> plants, ${kinds} kinds</span><span>Full-grown coverage <b>${Math.round(cv * 100)}%</b></span>`;
+    $("#stats").innerHTML = `<span><b>${bed.label}</b> · ${bb.w.toFixed(1).replace(/\.0$/, "")} × ${bb.h.toFixed(1).replace(/\.0$/, "")} ft</span><span><b>${Math.round(bed.area)}</b> sq ft</span><span><b>${S.placements.length}</b> plants, ${kinds} kinds</span>` + (S.objects.length ? `<span><b>${S.objects.length}</b> object${S.objects.length > 1 ? "s" : ""}</span>` : "") + `<span>Full-grown coverage <b>${Math.round(cv * 100)}%</b></span>`;
     const bad = window.Plan.lastBad || 0;
     const msgs = [];
     if (notice) msgs.push(notice);
     const n = document.querySelector("#plan .pl.bad") ? document.querySelectorAll("#plan .pl.bad").length : 0;
-    if (n) msgs.push(`${n} plants are drawn with a dashed red edge because they are closer together than their spacing allows. Drag them apart, or remove one.`);
+    if (n) msgs.push(`${n} plant${n > 1 ? "s are" : " is"} drawn with a dashed red edge because ${n > 1 ? "they are" : "it is"} closer to another plant than the spacing allows, or sitting on an object. Drag ${n > 1 ? "them" : "it"} clear, or remove one.`);
     const box = $("#notice"); box.style.display = msgs.length ? "block" : "none"; box.innerHTML = msgs.map(esc).join("<br>");
     if (n) { box.insertAdjacentHTML("beforeend", ` <button class="btn small" id="ovFix" type="button">Fix it</button>`); $("#ovFix").onclick = openOverlapFix; }
+    const outObjs = S.objects.filter(o => !Geo.pip(bed.poly, o.x, o.y));
+    if (outObjs.length) {
+      box.style.display = "block";
+      box.insertAdjacentHTML("beforeend", (box.innerHTML ? "<br>" : "") + `${outObjs.length === 1 ? "The " + esc(Geo.OBJ[outObjs[0].t].label.toLowerCase()) + " sits" : outObjs.length + " objects sit"} outside the bed now (shown faded). Drag ${outObjs.length === 1 ? "it" : "them"} back in, or <button class="btn small" id="outRm" type="button">Remove ${outObjs.length === 1 ? "it" : "them"}</button>`);
+      $("#outRm").onclick = () => { S.objects = S.objects.filter(o => !outObjs.includes(o)); objSel = -1; attachExtras(); refresh(); toast("Removed. Undo brings " + (outObjs.length === 1 ? "it" : "them") + " back."); };
+    }
+    const lb = paint ? [] : lightBadIdx();
+    if (lb.length) {
+      const kinds2 = {}; lb.forEach(i => { const id = S.placements[i].id; kinds2[id] = (kinds2[id] || 0) + 1; });
+      const nm = Object.keys(kinds2).map(id => byId[id].name + (kinds2[id] > 1 ? " ×" + kinds2[id] : "")).join(", ");
+      box.style.display = "block";
+      box.insertAdjacentHTML("beforeend", (box.innerHTML ? "<br>" : "") + `${lb.length} plant${lb.length > 1 ? "s sit" : " sits"} in light that doesn't suit ${lb.length > 1 ? "them" : "it"} (dotted gold edge): ${esc(nm)}. <button class="btn small" id="lbFix" type="button">Move ${lb.length > 1 ? "them" : "it"}</button>`);
+      $("#lbFix").onclick = () => {
+        let moved = 0, stuck = 0;
+        lb.map(i => S.placements[i]).forEach(pl => { if (pl.lock) { stuck++; return; } if (moveToLight(pl)) moved++; else stuck++; });
+        refresh(); toast(moved ? `Moved ${moved} plant${moved > 1 ? "s" : ""} into light that suits ${moved > 1 ? "them" : "it"}.` + (stuck ? ` ${stuck} couldn't find a spot (locked plants stay put).` : "") : "No open spot with the right light. Paint more of that light, or make room.", 4500);
+      };
+    }
     const wt = waitTotal();
     if (wt) {
       const ids = Object.keys(S.waiting).filter(k => S.waiting[k] > 0), names = ids.map(k => byId[k].name + (S.waiting[k] > 1 ? " ×" + S.waiting[k] : "")).join(", ");
@@ -428,8 +509,17 @@
     renderFillPick();
     const a = $("#armed");
     if (armed) { a.classList.add("on"); a.innerHTML = `Placing <b>${esc(byId[armed].name)}</b>: click the bed <button class="btn small" id="armOff" type="button">Stop</button>`; $("#armOff").onclick = () => { armed = null; refreshPlanOnly(); }; }
+    else if (pathDraw) {
+      a.classList.add("on"); const n = pathDraw.pts.length;
+      a.innerHTML = `Drawing a <b>path</b>: click along the bed to lay it out${n >= 2 ? "" : " (at least 2 points)"}. <button class="btn small primary" id="pdDone" type="button"${n >= 2 ? "" : " disabled"}>Finish</button> <button class="btn small" id="pdUndo" type="button"${n ? "" : " disabled"}>Undo point</button> <button class="btn small" id="pdOff" type="button">Cancel</button>`;
+      $("#pdDone").onclick = finishPath; $("#pdUndo").onclick = () => { pathDraw.pts.pop(); renderPlan(); }; $("#pdOff").onclick = () => { pathDraw = null; renderPlan(); };
+    }
+    else if (objArmed) { a.classList.add("on"); a.innerHTML = `Placing a <b>${esc(Geo.OBJ[objArmed].label.toLowerCase())}</b>: click the bed where it goes <button class="btn small" id="armOff" type="button">Stop</button>`; $("#armOff").onclick = () => { objArmed = null; pathDraw = null; refreshPlanOnly(); }; }
     else a.classList.remove("on");
+    const sw = $("#sunToggleWrap"); if (sw) { sw.hidden = !sunActive(); $("#chkSun").checked = S.showSun !== false; }
+    undoUI();
     document.querySelectorAll("#viewSeg button").forEach(b => b.classList.toggle("on", b.dataset.v === S.view));
+    if ($("#chkGrid")) $("#chkGrid").checked = S.showGrid !== false;
   }
   function refreshPlanOnly() { renderPlan(); }
   // plants closer together than their spacing allows (early-dormant plants may tuck in among later ones)
@@ -441,6 +531,29 @@
     }
     return out;
   }
+  // plants sitting on an object: [plant, object]
+  function objOverlaps() {
+    const out = []; if (!S.objects.length) return out;
+    S.placements.forEach(p => { if (p.c) return; const o = Geo.objHit(S.objects, p.x, p.y, byId[p.id].spacing / 24, 0.5); if (o) out.push([p, o]); });
+    return out;
+  }
+  // move a plant somewhere whose painted light suits it
+  function moveToLight(pl) {
+    const rest = S.placements.filter(q => q !== pl && !q.c), t = Geo.depthTargets(selected());
+    for (let k = 0; k < 4; k++) {
+      const np = Geo.placeOne(bed, byId, rest, pl.id, t, 0);
+      if (np && byId[pl.id].sun.includes(zoneAt(np.x, np.y))) { pl.x = np.x; pl.y = np.y; return true; }
+    }
+    return false;
+  }
+  // after an object is placed, moved or resized: groundcover under it goes, other plants step aside
+  function settleObjects() {
+    let moved = 0, stuck = 0;
+    S.placements = S.placements.filter(p => !(p.c && Geo.objHit(S.objects, p.x, p.y, byId[p.id].spacing / 24, 0.7)));
+    S.placements.forEach(p => { if (p.c || p.lock || !Geo.objHit(S.objects, p.x, p.y, byId[p.id].spacing / 24, 0.7)) return; if (movePlacement(p)) moved++; else stuck++; });
+    return { moved, stuck };
+  }
+  function settleNote(r) { return (r.moved ? ` Moved ${r.moved} plant${r.moved > 1 ? "s" : ""} out of the way.` : "") + (r.stuck ? ` ${r.stuck} plant${r.stuck > 1 ? "s" : ""} couldn't find another spot and ${r.stuck > 1 ? "are" : "is"} marked in red.` : ""); }
   function movePlacement(pl) {
     const rest = S.placements.filter(q => q !== pl && !q.c), sel = selected(), t = Geo.depthTargets(sel);
     const np = Geo.placeBeside(bed, byId, rest, pl.id, pl.x, pl.y, t, pl.id) || Geo.placeOne(bed, byId, rest, pl.id, t, 0);
@@ -449,7 +562,7 @@
   }
   function openOverlapFix() {
     const old = document.getElementById("ovAsk"); if (old) old.remove();
-    const pairs = overlapPairs(); if (!pairs.length) return;
+    const pairs = overlapPairs(), opairs = objOverlaps(); if (!pairs.length && !opairs.length) return;
     const ov = document.createElement("div"); ov.id = "ovAsk"; ov.className = "modalov";
     ov.innerHTML = `<div class="modalbox" role="dialog" aria-modal="true"><h3>Move an overlapping plant</h3><p>Pick one plant from each pair to move to the nearest open spot where it fits.</p><div class="ovlist"></div><div class="askbtns"><button class="btn" id="ovDone" type="button">Done</button></div></div>`;
     document.body.appendChild(ov);
@@ -458,9 +571,16 @@
       const row = document.createElement("div"); row.className = "ovrow";
       row.innerHTML = `<span>${esc(byId[a.id].name)} and ${esc(byId[b.id].name)}</span>`;
       [a, b].forEach(pl => { const bt = document.createElement("button"); bt.type = "button"; bt.className = "btn small"; bt.textContent = "Move " + byId[pl.id].name;
-        bt.onclick = () => { S.placements = S.placements.filter(q => !q.c); if (movePlacement(pl)) { refresh(); toast("Moved " + byId[pl.id].name + "."); ov.remove(); if (overlapPairs().length) openOverlapFix(); } else toast("There's no open spot big enough for " + byId[pl.id].name + " right now. Try the other plant, or make room."); };
+        bt.onclick = () => { if (pl.lock) { toast("That plant is locked. Unlock it first, or move the other one."); return; } S.placements = S.placements.filter(q => !q.c); if (movePlacement(pl)) { refresh(); toast("Moved " + byId[pl.id].name + "."); ov.remove(); if (overlapPairs().length || objOverlaps().length) openOverlapFix(); } else toast("There's no open spot big enough for " + byId[pl.id].name + " right now. Try the other plant, or make room."); };
         row.appendChild(bt); });
       list.appendChild(row);
+    });
+    opairs.forEach(([pl, o]) => {
+      const row = document.createElement("div"); row.className = "ovrow";
+      row.innerHTML = `<span>${esc(byId[pl.id].name)} is on the ${esc(Geo.OBJ[o.t].label.toLowerCase())}</span>`;
+      const bt = document.createElement("button"); bt.type = "button"; bt.className = "btn small"; bt.textContent = "Move " + byId[pl.id].name;
+      bt.onclick = () => { if (pl.lock) { toast("That plant is locked. Unlock it first, or move the other one."); return; } S.placements = S.placements.filter(q => !q.c); if (movePlacement(pl)) { refresh(); toast("Moved " + byId[pl.id].name + "."); ov.remove(); if (overlapPairs().length || objOverlaps().length) openOverlapFix(); } else toast("There's no open spot big enough for " + byId[pl.id].name + " right now."); };
+      row.appendChild(bt); list.appendChild(row);
     });
     ov.querySelector("#ovDone").onclick = () => ov.remove();
   }
@@ -472,16 +592,156 @@
   function refresh() { renderLibrary(); renderBloom(); renderOrder(); renderShop(); renderPlan(); save(); }
   function fullRender() { renderShapesPanel(); renderDims(); renderChips(); refresh(); }
 
+  // ---------- right-click plant menu ----------
+  function closePlantMenu() { const m = document.getElementById("plantMenu"); if (m) m.remove(); }
+  function openPlantMenu(idx, cx, cy) {
+    closePlantMenu();
+    if (!S.placements[idx]) return;
+    if (!selAll().includes(idx)) { selIdx = idx; extraSel = []; }
+    optMode = "idle"; renderPlan();
+    const group = selAll().map(i => S.placements[i]).filter(Boolean), n = group.length;
+    const names = [...new Set(group.map(q => byId[q.id].name))];
+    const what = n === 1 ? names[0] : n + " plants";
+    const m = document.createElement("div"); m.id = "plantMenu"; m.className = "ctxmenu";
+    const item = (label, fn) => { const b = document.createElement("button"); b.type = "button"; b.className = "ctxitem"; b.textContent = label; b.onclick = e => { e.stopPropagation(); fn && fn(); }; m.appendChild(b); return b; };
+    if (n > 1) { const h = document.createElement("div"); h.className = "ctxhead"; h.textContent = n + " plants selected"; m.appendChild(h); }
+    const allLocked = group.every(q => q.lock);
+    item(allLocked ? (n > 1 ? "Unlock all " + n : "Unlock (let Re-arrange move it)") : (n > 1 ? "Lock all " + n + " in place" : "Lock in place"), () => {
+      const v = !allLocked; group.forEach(q => { if (v) q.lock = true; else delete q.lock; });
+      closePlantMenu(); save(); renderPlan(); toast((v ? "Locked " : "Unlocked ") + what + (v ? ". Locked plants can't be dragged, moved or removed until you unlock them." : "."), 3500);
+    });
+    item(n > 1 ? "Move all " + n + " to open spots" : "Move to an open spot", () => {
+      closePlantMenu(); let moved = 0, stuck = 0, locked = 0;
+      group.forEach(q => { if (q.lock) { locked++; return; } if (movePlacement(q)) moved++; else stuck++; });
+      if (moved) refresh();
+      toast(moved ? "Moved " + moved + (moved > 1 ? " plants." : " plant.") + (stuck ? " " + stuck + " had no open spot." : "") + (locked ? " " + locked + " locked stayed put." : "") : locked ? "Locked plants stay put. Unlock first." : "No open spot nearby.");
+    });
+    item(n > 1 ? "Duplicate all " + n : "Duplicate " + names[0], () => {
+      closePlantMenu(); notice = ""; noFit = []; let ok = 0;
+      group.forEach(q => { if (addOne(q.id, true)) ok++; });
+      refresh(); toast(ok ? "Added " + ok + " more plant" + (ok > 1 ? "s" : "") + "." : "No room left for more.");
+    });
+    item(n > 1 ? "Remove all " + n : "Remove this " + names[0], () => {
+      closePlantMenu(); const del = group.filter(q => !q.lock), kept = n - del.length;
+      if (!del.length) { toast("Locked plants can't be removed. Unlock first."); return; }
+      S.placements = S.placements.filter(q => !del.includes(q)); clearSel(); refresh();
+      if (kept) toast(kept + " locked plant" + (kept > 1 ? "s" : "") + " stayed.");
+    });
+    document.body.appendChild(m);
+    const vw = window.innerWidth, vh = window.innerHeight, mw = 220;
+    m.style.left = Math.min(cx, vw - mw - 10) + "px"; m.style.top = Math.min(cy, vh - m.offsetHeight - 10) + "px";
+    setTimeout(() => document.addEventListener("click", closePlantMenu, { once: true }), 0);
+  }
+
+  // ---------- objects: add, right-click menu, sizing ----------
+  function openObjMenu(oi, cx, cy) {
+    closePlantMenu();
+    const o = S.objects[oi]; if (!o) return;
+    const d = Geo.OBJ[o.t], m = document.createElement("div"); m.id = "plantMenu"; m.className = "ctxmenu";
+    const item = (label, fn) => { const b = document.createElement("button"); b.type = "button"; b.className = "ctxitem"; b.textContent = label; b.onclick = e => { e.stopPropagation(); closePlantMenu(); fn(); }; m.appendChild(b); };
+    item("Duplicate " + d.label.toLowerCase(), () => {
+      const c = Object.assign({}, o), step = (d.shape === "circ" ? o.w : Math.max(o.w, o.h)) / 2 + 0.6;
+      if (o.pts) { const off = o.w + 0.4, np = o.pts.map(q => [q[0] + off, q[1]]); const ok = np.every(q => Geo.pip(bed.poly, q[0], q[1])); const np2 = ok ? np : o.pts.map(q => [q[0] - off, q[1]]); c.pts = np2.every(q => Geo.pip(bed.poly, q[0], q[1])) ? np2 : o.pts.map(q => [q[0], q[1]]); c.x = c.pts.reduce((s, q) => s + q[0], 0) / c.pts.length; c.y = c.pts.reduce((s, q) => s + q[1], 0) / c.pts.length; S.objects.push(c); objSel = S.objects.length - 1; refresh(); toast("Added another path."); return; }
+      const spots = [[step, 0], [-step, 0], [0, step], [0, -step]].map(([dx, dy]) => [o.x + dx, o.y + dy]).filter(q => Geo.pip(bed.poly, q[0], q[1]));
+      if (spots.length) { c.x = spots[0][0]; c.y = spots[0][1]; }
+      S.objects.push(c); objSel = S.objects.length - 1; const r = settleObjects(); refresh(); toast("Added another " + d.label.toLowerCase() + "." + settleNote(r));
+    });
+    if (d.rot && !o.pts) item("Turn 90°", () => { o.rot = ((o.rot || 0) + 90) % 360; const r = settleObjects(); refresh(); if (r.moved || r.stuck) toast(settleNote(r).trim()); });
+    item("Remove this " + d.label.toLowerCase(), () => { S.objects.splice(oi, 1); objSel = -1; refresh(); toast(d.label + " removed."); });
+    document.body.appendChild(m);
+    m.style.left = Math.min(cx, window.innerWidth - 210) + "px"; m.style.top = Math.min(cy, window.innerHeight - m.offsetHeight - 10) + "px";
+    setTimeout(() => document.addEventListener("click", closePlantMenu, { once: true }), 0);
+  }
+  function openObjPicker() {
+    closePlantMenu();
+    const btn = $("#btnObj"), r = btn.getBoundingClientRect(), m = document.createElement("div"); m.id = "plantMenu"; m.className = "ctxmenu objmenu";
+    const ICON = { path: "▭", stone: "●", stump: "◎", rock: "⬬", birdbath: "◉", shrub: "✺", tree: "♣" };
+    Object.keys(Geo.OBJ).forEach(t => {
+      const d = Geo.OBJ[t], b = document.createElement("button"); b.type = "button"; b.className = "ctxitem";
+      b.innerHTML = `<span><i class="oic oic-${t}">${ICON[t]}</i>${esc(d.label)}</span><small>${t === "path" ? "draw it" : d.shape === "circ" ? d.w + " ft" : d.w + " × " + d.h + " ft"}</small>`;
+      b.onclick = e => { e.stopPropagation(); closePlantMenu(); objArmed = t; pathDraw = null; if (t === "path") { objArmed = null; pathDraw = { pts: [], w: Geo.OBJ.path.w }; } armed = null; paint = null; renderPaintBar(); clearSel(); objSel = -1; renderPlan(); };
+      m.appendChild(b);
+    });
+    document.body.appendChild(m);
+    m.style.left = Math.min(r.left, window.innerWidth - 230) + "px"; m.style.top = (r.bottom + 4) + "px";
+    setTimeout(() => document.addEventListener("click", closePlantMenu, { once: true }), 0);
+  }
+  // the selection bar for a selected object: what it is, and its size
+  function renderObjOptions(box) {
+    const o = S.objects[objSel], d = Geo.OBJ[o.t];
+    const lab = document.createElement("div"); lab.className = "fp-lab fp-full";
+    if (o.pts) lab.innerHTML = `Path <span class="fp-hint">Drag the path to move it, the white dots to reshape the curve, and the orange dot to change its width. Plants are kept off the path but can lean over its edges. Right-click it to duplicate or remove it.</span>`;
+    else lab.innerHTML = `${esc(d.label)} <span class="fp-hint">${esc(d.note)} Drag it to move it, drag the white dots to resize${d.rot ? " and the orange dot to turn it" : ""}. Right-click it to duplicate or remove it.</span>`;
+    box.appendChild(lab);
+    const row = document.createElement("div"); row.className = "objfields";
+    const field = (label, key, min, max, step) => {
+      const l = document.createElement("label"); l.className = "field"; l.textContent = label;
+      const i = document.createElement("input"); i.type = "number"; i.min = min; i.max = max; i.step = step; i.value = Math.round((o[key] || 0) * 100) / 100;
+      i.onchange = () => {
+        let v = parseFloat(i.value); if (!isFinite(v)) return; v = Math.max(min, Math.min(max, v));
+        if (key === "rot") v = ((v % 360) + 360) % 360;
+        o[key] = v; if (d.shape === "circ" && key === "w") o.h = v;
+        const r = settleObjects(); refresh(); if (r.moved || r.stuck) toast(settleNote(r).trim());
+      };
+      l.appendChild(i); row.appendChild(l);
+    };
+    if (o.pts) field("Width (ft)", "w", d.min, d.max, 0.25);
+    else if (d.shape === "circ") field(o.t === "tree" ? "Canopy width (ft)" : "Width (ft)", "w", d.min, d.max, 0.25);
+    else { field("Width (ft)", "w", d.min, d.max, 0.25); field(o.t === "path" ? "Length (ft)" : "Depth (ft)", "h", d.min, d.max, 0.25); field("Turn (degrees)", "rot", 0, 359, 15); }
+    box.appendChild(row);
+  }
+
+  // ---------- sun painting ----------
+  function paintAt(x, y) {
+    const res = S.sun.res, r = Math.max(paint.size / 2, res * 0.72), cells = S.sun.cells;
+    for (let i = Math.floor((x - r) / res); i <= Math.floor((x + r) / res); i++) for (let j = Math.floor((y - r) / res); j <= Math.floor((y + r) / res); j++) {
+      const cx = (i + 0.5) * res, cy = (j + 0.5) * res;
+      if (i < 0 || j < 0 || Math.hypot(cx - x, cy - y) > r || !Geo.pip(bed.poly, cx, cy)) continue;
+      if (paint.brush === "erase") delete cells[i + "," + j]; else cells[i + "," + j] = paint.brush;
+    }
+  }
+  function renderPaintBar() {
+    const bar = $("#paintBar"); if (!bar) return;
+    $("#btnPaint").classList.toggle("on", !!paint);
+    if (!paint) { bar.hidden = true; bar.innerHTML = ""; return; }
+    bar.hidden = false; bar.innerHTML = "";
+    const Z = window.Plan.ZONE, L = window.Plan.ZONE_LAB;
+    const grp = (title) => { const g = document.createElement("div"); g.className = "pb-grp"; if (title) { const t = document.createElement("span"); t.className = "pb-lab"; t.textContent = title; g.appendChild(t); } bar.appendChild(g); return g; };
+    const g1 = grp("Paint:");
+    [["full"], ["part"], ["shade"], ["erase"]].forEach(([k]) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "btn small zbtn" + (paint.brush === k ? " on" : "");
+      b.innerHTML = k === "erase" ? '<i class="zsw zerase"></i>Eraser' : `<i class="zsw" style="background:${Z[k]}"></i>${L[k]}`;
+      b.title = k === "erase" ? "Paint back to the rest of the bed's light" : "Paint spots that get " + L[k].toLowerCase();
+      b.onclick = () => { paint.brush = k; renderPaintBar(); }; g1.appendChild(b);
+    });
+    const g2 = grp("Brush:");
+    [1, 2, 4].forEach(n => { const b = document.createElement("button"); b.type = "button"; b.className = "btn small" + (paint.size === n ? " on" : ""); b.textContent = n + " ft"; b.onclick = () => { paint.size = n; renderPaintBar(); renderPlanOnly(); }; g2.appendChild(b); });
+    const g3 = grp("Rest of the bed:");
+    const sel = document.createElement("select");
+    ["full", "part", "shade"].forEach(k => { const o = document.createElement("option"); o.value = k; o.textContent = L[k] + (!S.sunBase && sunBase() === k ? " (from step 2)" : ""); sel.appendChild(o); });
+    sel.value = sunBase(); sel.onchange = () => { S.sunBase = sel.value; save(); renderPaintBar(); renderPlan(); };
+    g3.appendChild(sel);
+    const g4 = grp(""); g4.classList.add("pb-right");
+    const clr = document.createElement("button"); clr.type = "button"; clr.className = "btn small"; clr.textContent = "Clear painting"; clr.disabled = !sunActive();
+    clr.onclick = () => { S.sun.cells = {}; S.sunBase = null; save(); renderPaintBar(); renderPlan(); toast("Sun zones cleared. Undo brings them back."); };
+    const done = document.createElement("button"); done.type = "button"; done.className = "btn small primary"; done.textContent = "Done";
+    done.onclick = () => { paint = null; renderPaintBar(); renderPlan(); };
+    g4.append(clr, done);
+    const hint = document.createElement("p"); hint.className = "pb-hint";
+    hint.textContent = "Drag across the bed to mark spots that get more or less sun than the rest (use the north arrow to line the plan up with your yard). New plants, Re-arrange and Fill gaps put each plant in light that suits it; plants already in the wrong light get a dotted gold edge.";
+    bar.appendChild(hint);
+  }
+
   // ---------- plan callbacks ----------
   window.Plan.init($("#plan"), {
     onSelect(i, add) {
+      objSel = -1;
       if (i < 0) { clearSel(); }
       else if (add) {
         const cur = selAll();
         if (cur.includes(i)) { const rest = cur.filter(x => x !== i); selIdx = rest.length ? rest[rest.length - 1] : -1; extraSel = rest.slice(0, -1); }
         else { selIdx = i; extraSel = cur; }
-      } else if (!selAll().includes(i) || selAll().length === 1) { selIdx = i; extraSel = []; }
-      else { selIdx = i; extraSel = selAll().filter(x => x !== i); }   // clicking inside a group keeps the group
+      } else { const cur = selAll(); if (!cur.includes(i) || cur.length === 1) { selIdx = i; extraSel = []; } else { selIdx = i; extraSel = cur.filter(x => x !== i); } }   // clicking inside a group keeps the group
       if (selIdx >= 0) optMode = "idle";
       renderPlan();
     },
@@ -491,8 +751,42 @@
       if (!Geo.pip(bed.poly, x, y)) { toast("Click inside the bed."); return; }
       S.placements.push({ id: armed, x, y }); notice = ""; noFit = []; refresh();
     },
-    onHover(id) { if (id !== hoverId) setHover(id); }
+    onHover(id) { if (id !== hoverId) setHover(id); },
+    onNorthMove(ang) { S.north = ang; renderPlanOnly(); },
+    onNorthDone() { save(); },
+    onContextMenu(idx, x, y) { openPlantMenu(idx, x, y); },
+    onObjSelect(i) { objSel = i; clearSel(); optMode = "idle"; renderPlan(); },
+    onObjMenu(i, x, y) { openObjMenu(i, x, y); },
+    onLockedDrag() { toast("Locked in place. Right-click it and choose Unlock to move it.", 2500); },
+    onObjChange() { renderPlanOnly(); },
+    onObjDone() { const r = settleObjects(); refresh(); if (r.moved || r.stuck) toast(settleNote(r).trim(), 3500); },
+    onPathPoint(x, y) {
+      if (!pathDraw) return;
+      if (!Geo.pip(bed.poly, x, y)) { toast("Click inside the bed."); return; }
+      const l = pathDraw.pts[pathDraw.pts.length - 1]; if (l && Math.hypot(l[0] - x, l[1] - y) < 0.4) return;
+      pathDraw.pts.push([x, y]); renderPlan();
+    },
+    onPathFinish() { finishPath(); },
+    onObjPlace(x, y) {
+      if (!objArmed) return;
+      if (!Geo.pip(bed.poly, x, y)) { toast("Click inside the bed."); return; }
+      const d = Geo.OBJ[objArmed]; S.objects.push({ t: objArmed, x, y, w: d.w, h: d.h, rot: 0 });
+      objArmed = null; pathDraw = null; objSel = S.objects.length - 1; clearSel();
+      const r = settleObjects(); refresh(); toast(`Placed the ${d.label.toLowerCase()}.` + settleNote(r) + " Drag the white dot to resize it.", 4000);
+    },
+    onPaintStart() {},
+    onPaint(x, y) { paintAt(x, y); renderPlanOnly(); },
+    onPaintEnd() { save(); renderPlan(); renderPaintBar(); }
   });
+  function finishPath() {
+    if (!pathDraw) return;
+    if (pathDraw.pts.length < 2) { toast("Click at least two points along the bed, then Finish."); return; }
+    const P = pathDraw.pts.map(q => [q[0], q[1]]), cx = P.reduce((s, q) => s + q[0], 0) / P.length, cy = P.reduce((s, q) => s + q[1], 0) / P.length;
+    S.objects.push({ t: "path", x: cx, y: cy, w: pathDraw.w, h: pathDraw.w, rot: 0, pts: P });
+    pathDraw = null; objSel = S.objects.length - 1; clearSel();
+    const r = settleObjects(); refresh(); toast("Path added." + settleNote(r) + " Drag the white dots to reshape it, the orange dot for width.", 4500);
+  }
+  function renderPlanOnly() { window.Plan.render(planCtx()); }
 
   // ---------- toolbar / buttons ----------
   const fileDate = () => { const d = new Date(), z = n => String(n).padStart(2, "0"); return z(d.getFullYear() % 100) + "-" + z(d.getMonth() + 1) + "-" + z(d.getDate()); };
@@ -533,6 +827,7 @@
   $("#fMonth").innerHTML = '<option value="">Any bloom month</option>' + Ch.MONTHS.map((m, i) => `<option value="${4 + i}">Blooms in ${m}</option>`).join("");
   $("#fMonth").addEventListener("change", e => { S.filter.month = e.target.value; renderLibrary(); save(); });
   $("#viewSeg").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; S.view = b.dataset.v; renderPlan(); save(); });
+  $("#chkGrid") && $("#chkGrid").addEventListener("change", e => { S.showGrid = e.target.checked; renderPlanOnly(); save(); });
   $("#bloomFilter").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; S.bloomFilter = b.dataset.f; document.querySelectorAll("#bloomFilter button").forEach(x => x.classList.toggle("on", x === b)); renderBloom(); save(); });
   $("#bloomSort").addEventListener("change", e => { S.bloomSort = e.target.value; renderBloom(); save(); });
   // groundcovers to offer: low plants that suit the step-2 choices (sun, origin, safety)
@@ -540,6 +835,27 @@
     const pr = S.prefs, low = p => p.filler || (p.kind === "mat" && p.hHi <= 12);
     return PL.filter(p => low(p) && p.sun.some(x => pr.sun.includes(x)) && pr.origin.includes(p.native ? "nat" : "gar") && !(p.toxic && !pr.toxic) && !(p.fam === "daisy" && pr.daisy === false) && !(deerEats(p) && pr.deer === false))
       .sort((a, b) => (b.filler ? 1 : 0) - (a.filler ? 1 : 0) || a.name.localeCompare(b.name));
+  }
+  // companions of the plants in the bed: { plantId: [companion ids] } (skipping any the user left out) and the full list
+  function compCandidates() {
+    const c = counts(true), pairs = {}, all = {};
+    PL.filter(p => c[p.id] > 0).forEach(p => {
+      const list = companionsFor(p.id).map(x => x.id);
+      list.forEach(id => { all[id] = 1; });
+      pairs[p.id] = list.filter(id => !S.compSkip.includes(id));
+    });
+    return { pairs, all: Object.keys(all).map(id => byId[id]).sort((a, b) => Geo.hMean(a) - Geo.hMean(b) || a.name.localeCompare(b.name)) };
+  }
+  function fillCompanions() {
+    S.placements = S.placements.filter(p => !p.c);
+    const { pairs, all } = compCandidates(), sel = selected();
+    all.forEach(p => { if (!sel.some(q => q.id === p.id)) sel.push(p); });
+    S.seed = (S.seed * 7 + 13) % 100000;
+    const added = Geo.fillCompanions(bed, byId, S.placements, pairs, Geo.depthTargets(sel), S.seed, 60);
+    clearSel(); optMode = "idle"; refresh();
+    if (!added.length) { toast("There are no gaps big enough for a companion plant right now.", 4000); return; }
+    const tally = {}; added.forEach(q => { tally[q.id] = (tally[q.id] || 0) + 1; });
+    toast(`Added ${added.length} plant${added.length > 1 ? "s" : ""}: ` + Object.keys(tally).map(id => byId[id].name + (tally[id] > 1 ? " ×" + tally[id] : "")).join(", ") + ". Press Undo to take them back.", 6000);
   }
   function fillWith(ids) {
     S.seed = (S.seed * 7 + 13) % 100000;
@@ -567,12 +883,6 @@
     });
     box.appendChild(tiles);
     if (idxs.length === 1) renderCompanions(tiles, box, idxs[0]);
-    const acts = document.createElement("div"); acts.className = "po-acts";
-    const mk = (t, f, title) => { const b = document.createElement("button"); b.type = "button"; b.className = "btn small"; b.textContent = t; if (title) b.title = title; b.onclick = f; acts.appendChild(b); return b; };
-    mk("Duplicate selected", () => { const objs = idxs.map(i => S.placements[i]), list = objs.map(o => o.id); clearSel(); notice = ""; noFit = []; list.forEach(id => addOne(id, true)); const keep = objs.map(o => S.placements.indexOf(o)).filter(i => i >= 0); selIdx = keep.length ? keep[0] : -1; extraSel = keep.slice(1); refresh(); }, "Adds one more copy of each selected plant in a good spot");
-    mk("Remove selected", () => { idxs.slice().sort((a, b) => b - a).forEach(i => S.placements.splice(i, 1)); clearSel(); refresh(); }, "Takes out only the selected plants");
-    mk("Remove all similar", () => { clearSel(); ids.forEach(removePlant); refresh(); }, "Takes every copy of the selected kinds out of the bed, not just the plants you picked");
-    box.appendChild(acts);
   }
   // researched good neighbors for the selected plant; click one to plant it right beside
   function companionsFor(id) {
@@ -618,7 +928,7 @@
     const have = S.placements.filter(p => !p.c).length, hasFill = S.placements.some(isGroundcover);
     let title, lines;
     if (optMode === "suggest") {
-      const sel = selected(), q = Geo.suggestQuantities(bed, sel), total = sel.reduce((n, p) => n + (q[p.id] || 0), 0);
+      const sel = selected(), q = Geo.suggestQuantities(plantBed(), sel), total = sel.reduce((n, p) => n + (q[p.id] || 0), 0);
       title = "Suggest quantities";
       lines = [
         `I will pick how many of each of your ${sel.length} chosen kind${sel.length === 1 ? "" : "s"} of plant to set out so the bed looks full once they are grown (about ${total} plants, compared with ${have} in the bed now).`,
@@ -635,7 +945,7 @@
       title = "Clear bed";
       lines = [
         `I will remove all ${S.placements.length} plants from the bed, including any groundcover filler.`,
-        "The plant list on the left stays as it is, so you can add plants again afterward."
+        "The plant list on the left stays as it is, so you can add plants again afterward." + (S.objects.length ? " Objects like paths and birdbaths stay; right-click one to remove it." : "")
       ];
     } else {
       title = "Re-arrange";
@@ -656,19 +966,26 @@
   }
   function renderFillPick() {
     const box = $("#fillPick"); box.hidden = false; box.innerHTML = "";
+    if (objSel >= 0 && S.objects[objSel]) { renderObjOptions(box); return; }
     if (selAll().length) { renderPlantOptions(box); return; }
     if (optMode === "suggest" || optMode === "arrange" || optMode === "clear" || optMode === "reset") { renderConfirm(box); return; }
     if (optMode !== "fill") {
-      const lab = document.createElement("span"); lab.className = "fp-lab idle"; lab.textContent = "Options bar: click Suggest quantities, Re-arrange, Clear bed or Fill gaps with groundcover above, or click a plant on the bed, and its options will show up here.";
+      const lab = document.createElement("span"); lab.className = "fp-lab idle"; lab.textContent = "Selection bar: click a plant or object on the bed to see it here. Right-click one for more choices. The buttons above the plan add objects, paint sun zones, fill gaps, suggest quantities or re-arrange.";
       box.appendChild(lab); return;
     }
+    // two ways to fill: a low groundcover carpet, or companions of the neighboring plants
+    const modeRow = document.createElement("div"); modeRow.className = "fp-full fp-moderow";
+    modeRow.innerHTML = `<span class="fp-lab">Fill gaps with</span><div class="seg"><button type="button" data-m="ground" class="${S.fillMode !== "comp" ? "on" : ""}">Groundcover</button><button type="button" data-m="comp" class="${S.fillMode === "comp" ? "on" : ""}">Companion plants</button></div>`;
+    modeRow.querySelectorAll("button").forEach(b => { b.onclick = () => { S.fillMode = b.dataset.m; save(); renderFillPick(); }; });
+    box.appendChild(modeRow);
+    if (S.fillMode === "comp") { renderCompFill(box); return; }
     const list = groundcovers();
     S.fillPicks = (S.fillPicks || []).filter(id => list.some(p => p.id === id));
     if (!list.length) {
       const lab = document.createElement("span"); lab.className = "fp-lab"; lab.textContent = "No groundcover matches your garden choices in step 2. Try adding more sun or origin choices.";
       box.appendChild(lab);
     } else {
-      const lab = document.createElement("div"); lab.className = "fp-lab fp-full"; lab.innerHTML = "Fill gaps with groundcover <span class=\"fp-hint\">I will tuck low plants into the empty spaces between your plants. Click a name to pick one or more, then confirm. Click a photo to enlarge it.</span>";
+      const lab = document.createElement("div"); lab.className = "fp-lab fp-full"; lab.innerHTML = "<span class=\"fp-hint\">I will tuck a low groundcover into the empty spaces between your plants, in light that suits it. Click a name to pick one or more, then confirm. Click a photo to enlarge it.</span>";
       box.appendChild(lab);
       const tiles = document.createElement("div"); tiles.className = "fp-tiles";
       list.forEach(p => {
@@ -689,16 +1006,45 @@
     const cn = document.createElement("button"); cn.type = "button"; cn.className = "btn small"; cn.textContent = "Cancel"; cn.onclick = () => { optMode = "idle"; renderFillPick(); }; acts.appendChild(cn);
     box.appendChild(acts);
   }
+  function renderCompFill(box) {
+    const { all } = compCandidates();
+    const lab = document.createElement("div"); lab.className = "fp-lab fp-full";
+    lab.innerHTML = `<span class="fp-hint">For each empty spot I look at the nearest plant and tuck in one of its researched companions that fits there: short ones toward the front, tall ones toward the back, and only in light that suits it. Any groundcover filler is cleared first; you can add it back afterward. Click a plant to leave it out.</span>`;
+    box.appendChild(lab);
+    if (!all.length) {
+      const e = document.createElement("span"); e.className = "fp-lab"; e.textContent = "None of the plants in your bed have researched companions that match your step 2 choices yet.";
+      box.appendChild(e);
+    } else {
+      const tiles = document.createElement("div"); tiles.className = "fp-tiles";
+      all.forEach(p => {
+        const on = !S.compSkip.includes(p.id), t = document.createElement("div"); t.className = "fp-tile" + (on ? " on" : ""); t.title = p.latin + ": " + Ch.heightText(p);
+        t.innerHTML = `<img src="${imgSrc(p.id)}" alt=""><div class="fp-tn">${on ? "✓ " : ""}${esc(p.name)}${icons(p)}</div><small>${Ch.heightText(p)}</small>`;
+        t.onclick = () => { S.compSkip = on ? S.compSkip.concat(p.id) : S.compSkip.filter(i => i !== p.id); save(); renderFillPick(); };
+        tiles.appendChild(t);
+      });
+      box.appendChild(tiles);
+    }
+    const acts = document.createElement("div"); acts.className = "po-acts";
+    const go = document.createElement("button"); go.type = "button"; go.className = "btn fillgo"; go.textContent = "Fill with companions"; go.disabled = !all.some(p => !S.compSkip.includes(p.id));
+    go.onclick = fillCompanions; acts.appendChild(go);
+    const cn = document.createElement("button"); cn.type = "button"; cn.className = "btn small"; cn.textContent = "Cancel"; cn.onclick = () => { optMode = "idle"; renderFillPick(); }; acts.appendChild(cn);
+    box.appendChild(acts);
+  }
   $("#btnFill").addEventListener("click", () => {
     if (!S.placements.length) { toast("Add some plants to the bed first."); return; }
-    optMode = "fill"; selIdx = -1; renderPlan();
+    optMode = "fill"; clearSel(); objSel = -1; renderPlan();
   });
+  $("#btnUndo").addEventListener("click", undo);
+  $("#btnRedo").addEventListener("click", redo);
+  $("#btnObj").addEventListener("click", e => { e.stopPropagation(); if (document.querySelector(".objmenu")) { closePlantMenu(); return; } openObjPicker(); });
+  $("#btnPaint").addEventListener("click", () => { paint = paint ? null : { brush: sunBase() === "shade" ? "full" : "shade", size: 2 }; objArmed = null; pathDraw = null; armed = null; clearSel(); objSel = -1; renderPaintBar(); renderPlan(); });
+  $("#chkSun").addEventListener("change", e => { S.showSun = e.target.checked; renderPlanOnly(); save(); });
   $("#freeView").addEventListener("change", e => { S.freeView = e.target.value; rebuildBed(); refresh(); });
   $("#btnDraw").addEventListener("click", startDraw);
   function doArrange() { relayout(true); refresh(); toast("New arrangement. Click Re-arrange again for another."); }
   function doSuggest() {
     const sel = selected(); if (!sel.length) { toast("Choose some plants first."); return; }
-    const q = Geo.suggestQuantities(bed, sel); let first = true;
+    const q = Geo.suggestQuantities(plantBed(), sel); let first = true;
     for (let pass = 0; pass < 8; pass++) {
       relayout(first, sel.map(p => ({ plant: p, n: q[p.id] }))); first = false;
       const ids = Object.keys(lastUnplaced); if (!ids.length) break;
@@ -724,7 +1070,8 @@
   // Build the guide PDF; returns the jsPDF document
   function buildPdf() {
     const sel = selected();
-    return window.PDFExport.make({ plants: sel, bed, placements: S.placements, waiting: Object.assign({}, S.waiting || {}), byId, name: gardenName(), prefs: S.prefs }, (f, m) => { const bar = $("#busyBar"), txt = $("#busyText"); bar.style.width = Math.round(f * 100) + "%"; txt.textContent = m; });
+    return window.PDFExport.make({ plants: sel, bed, placements: S.placements, waiting: Object.assign({}, S.waiting || {}), byId, name: gardenName(), prefs: S.prefs,
+      objects: S.objects, north: S.north || 0, sun: sunActive() ? { res: S.sun.res, zoneAt, zones: zonesPresent() } : null }, (f, m) => { const bar = $("#busyBar"), txt = $("#busyText"); bar.style.width = Math.round(f * 100) + "%"; txt.textContent = m; });
   }
   $("#btnPdf").addEventListener("click", () => {
     if (!S.placements.length) { toast("Add some plants to the bed first."); return; }
@@ -741,17 +1088,24 @@
   });
   window.addEventListener("keydown", e => {
     if (e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
-    if ((e.key === "Delete" || e.key === "Backspace") && selAll().length) { e.preventDefault(); selAll().sort((a, b) => b - a).forEach(i => S.placements.splice(i, 1)); clearSel(); refresh(); }
-    if (e.key === "Escape") { armed = null; clearSel(); renderPlan(); }
+    if (window.Plan.isDrawing()) return;
+    const k = e.key.toLowerCase();
+    if ((e.ctrlKey || e.metaKey) && k === "z" && !e.shiftKey) { e.preventDefault(); undo(); return; }
+    if ((e.ctrlKey || e.metaKey) && (k === "y" || (k === "z" && e.shiftKey))) { e.preventDefault(); redo(); return; }
+    if (pathDraw && !/INPUT|SELECT|TEXTAREA/.test((e.target && e.target.tagName) || "")) { if (e.key === "Enter") { e.preventDefault(); finishPath(); return; } if (e.key === "Backspace") { e.preventDefault(); pathDraw.pts.pop(); renderPlan(); return; } }
+    if ((e.key === "Delete" || e.key === "Backspace") && objSel >= 0 && S.objects[objSel]) { e.preventDefault(); S.objects.splice(objSel, 1); objSel = -1; refresh(); return; }
+    if ((e.key === "Delete" || e.key === "Backspace") && selAll().length) { e.preventDefault(); const dl = selAll().filter(i => !S.placements[i].lock); if (!dl.length) { toast("Locked plants cannot be removed. Unlock first."); return; } dl.sort((a, b) => b - a).forEach(i => S.placements.splice(i, 1)); clearSel(); refresh(); }
+    if (e.key === "Escape") { armed = null; objArmed = null; pathDraw = null; objSel = -1; closePlantMenu(); if (paint) { paint = null; renderPaintBar(); } clearSel(); renderPlan(); }
   });
 
   function init(fresh) {
+    normalizeExtras(); objSel = -1; objArmed = null; pathDraw = null; paint = null; renderPaintBar();
     if (fresh) {
       S = S || freshState();
-      bed = Geo.buildBed(S);
+      bed = Geo.buildBed(S); attachExtras();
       const items = Object.keys(DEFAULT_COUNTS).map(id => ({ plant: byId[id], n: DEFAULT_COUNTS[id] }));
       relayout(false, items);
-    } else bed = Geo.buildBed(S);
+    } else { bed = Geo.buildBed(S); attachExtras(); }
     armed = null; selIdx = -1; hoverId = null;
     document.querySelectorAll("#bloomFilter button").forEach(x => x.classList.toggle("on", x.dataset.f === S.bloomFilter));
     $("#bloomSort").value = S.bloomSort || "start"; $("#q").value = S.filter.q || ""; $("#fHeight").value = S.filter.height || ""; $("#fMonth").value = S.filter.month || "";
