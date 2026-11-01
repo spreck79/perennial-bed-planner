@@ -7,16 +7,23 @@ Plan a perennial flower bed for Michigan (zone 6B): pick a bed shape, choose Mic
 **Open the planner:** https://spreck79.github.io/perennial-bed-planner/
 
 ## What it does
-- **Step 1:** name your garden. The PDF guide is saved as the date and name, like "26-10-28 Backyard Garden.pdf".
-- **Step 2:** choose sun or shade, natives and/or garden favorites, kinds of plants (including spring bulbs), and safety and animal options (daisy family, toxic plants, plants deer like to eat).
-- Small icons show native, garden favorite, daisy family, toxic and deer-eaten plants; hover an icon for its label.
-- Pick a bed shape (rectangle, L-shape, curved border, half moon, corner wedge, round or oval island, or draw your own) and set its size.
-- Click plants to add them; each is placed in the bed plan automatically. Drag to rearrange.
-- Click a row in the bloom chart or a plant in Small to big to highlight it on the bed plan (Shift- or Ctrl-click for several).
+A guided tour walks first-time visitors through six steps, lighting up one at a time. Each finished step folds down to a one-line summary and can be opened again to change it. Or load the example garden to see a finished plan right away.
+
+1. **Name your garden.** The PDF guide is saved as the date and name, like "26-10-28 Backyard Garden.pdf".
+2. **Your bed.** A rectangle, a round island, or draw your own: drag the dots, click a dot to switch between a sharp corner and a curve (crisp corners against a house, a curved front), and drag inside to move the shape. Pick the front of the bed (any edge or corner, or all sides) and plants run short to tall from there.
+3. **Add objects.** Paths, stepping stones, rocks, a birdbath, shrubs, a hedge or trees, placed before the plants so they're laid out around them.
+4. **How much sun?** Full sun (6+ hours of direct sun a day), part shade (3 to 6) or shade (under 3), and map sunny and shady spots right on the bed plan.
+5. **What kind of garden?** Michigan natives and/or garden favorites, kinds of plants (including spring bulbs), and whether to leave out plants that are toxic, that deer eat, or in the daisy family (ragweed allergies).
+6. **Pick plants,** or let **Suggest a planting** choose plants that suit each part of the bed and go well together.
+
+On the bed plan:
+- Right-click any plant, object or empty spot for a menu; click one for a card with what it is, its sun needs and plants that go well with it (each pairing from a published source).
+- Drag to rearrange; Ctrl- or Shift-click to work on several plants at once. Undo and redo any change.
+- Zoom with Ctrl + scroll or the buttons in the corner.
+- Small icons show sun needs, native, garden favorite, daisy family, toxic and deer-eaten plants; hover one for what it means.
 - Early-dormant plants (Virginia Bluebells, Mayapple, Bleeding Heart, spring bulbs) may share space with later plants.
-- Click or right-click a plant on the bed plan to see plants that go well with it, each from a published source.
-- Create a PDF guide with bloom calendar, plant profiles, side view, bed plan and shopping list.
-- Save and open plans as files. Your work is also remembered in your own browser; nothing is sent anywhere.
+
+Then create a PDF guide with a bloom calendar, care through the year, plant profiles, a side view with spacing, the bed plan and a shopping list. Save and open plans as files; your work is also remembered in your own browser, and nothing is sent anywhere.
 
 ## Safety
 Plants are believed non-toxic to people, dogs and cats unless marked Toxic. Please check the [ASPCA plant list](https://www.aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants) before buying. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 ([poisonhelp.org](https://poisonhelp.org/)).

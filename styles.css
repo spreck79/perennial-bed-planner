@@ -105,12 +105,26 @@ input[type=number], input[type=search], select { font: inherit; padding: 6px 8px
 .ctxsub { position: absolute; top: -5px; left: 100%; margin-left: 2px; background: #fff; border: 1px solid var(--rule); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.18); padding: 5px; min-width: 160px; display: none; max-height: 220px; overflow-y: auto; }
 .ctxmenu .has-sub:hover .ctxsub, .ctxmenu .has-sub.open .ctxsub { display: block; }
 .ctxsub .ctxitem { font-weight: 500; }
+.ctxitem.on { background: var(--soft); }
+.ctxitem.on .check { color: var(--forest); }
+.ctxitem .check { width: 14px; color: transparent; font-weight: 700; }
+
+/* popup "select" buttons: open a ctxmenu instead of a native dropdown */
+.selbtn { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; text-align: left; font-weight: 600; }
+.selbtn::after { content: "▾"; color: var(--muted); font-size: 11px; margin-left: 4px; }
+.selbtn.open { background: var(--soft); border-color: #c9c2a8; }
+.selmenu { max-height: 260px; overflow-y: auto; }
 
 /* bloom chart */
 .bloom { --label: 250px; }
 .bloom-head, .brow { display: grid; grid-template-columns: var(--label) 1fr; align-items: center; }
 .bloom-head { position: sticky; top: 56px; z-index: 5; background: #fff; border-bottom: 1px solid var(--rule); padding-bottom: 4px; }
 .months { display: grid; grid-template-columns: repeat(8, 1fr); font-size: 11px; color: var(--muted); text-align: center; font-weight: 700; }
+.zone-head { display: flex; align-items: center; gap: 7px; font-weight: 800; font-size: 11.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); padding: 14px 4px 5px; }
+.zone-head:first-child { padding-top: 2px; }
+.zone-head .zh-hrs { text-transform: none; letter-spacing: 0; font-weight: 600; color: var(--muted, #6b6b5e); margin-left: 4px; }
+.zone-head .zh-hrs::before { content: "· "; }
+.zone-head i { width: 11px; height: 11px; border-radius: 50%; flex: none; box-shadow: 0 0 0 1px rgba(0,0,0,.15) inset; }
 .brow { min-height: 34px; border-bottom: 1px solid #f0ecdd; cursor: pointer; border-radius: 6px; }
 .brow:hover, .brow.hl { background: #f6f8ec; }
 .brow.off .bar, .brow.off .lab { opacity: .45; }
@@ -164,8 +178,23 @@ table.list tfoot td { font-weight: 800; border-bottom: 0; }
 .toast.on { opacity: 1; transform: translate(-50%, 0); }
 .overlay { position: fixed; inset: 0; background: rgba(46,58,44,.45); display: none; place-items: center; z-index: 50; }
 .overlay.on { display: grid; }
-.modal { background: #fff; border-radius: 14px; padding: 20px 22px; width: min(460px, 92vw); box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+.modal { background: #fff; border-radius: 14px; padding: 20px 22px; width: min(460px, 92vw); max-height: 82vh; box-shadow: 0 20px 60px rgba(0,0,0,.3); display: flex; flex-direction: column; }
 .modal h2 { font-size: 20px; margin-bottom: 6px; }
+.modal.wide { width: min(640px, 94vw); }
+.modal-head { flex: none; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.modal-head h2 { margin-bottom: 0; }
+.modal-x { border: 0; background: none; font-size: 24px; line-height: 1; color: var(--muted); cursor: pointer; padding: 0 2px; border-radius: 6px; flex: none; }
+.modal-x:hover { color: var(--ink); background: var(--soft); }
+/* top and bottom stay put; only the middle "scroll" section scrolls */
+.modal-top { flex: none; }
+.modal-top:not(:empty) { margin-bottom: 10px; }
+.modal-scroll { flex: 1 1 auto; overflow-y: auto; min-height: 0; }
+.modal-bottom { flex: none; }
+.modal-bottom:not(:empty) { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--rule); }
+.modal-top.fillpick, .modal-scroll.fillpick, .modal-bottom.fillpick { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start; align-content: flex-start; justify-content: flex-start; margin: 0; padding: 0; background: transparent; border: 0; height: auto; overflow-y: visible; box-sizing: content-box; }
+.modal-top.fillpick:not(:empty) { margin-bottom: 10px; }
+.modal-scroll.fillpick { overflow-y: auto; flex: 1 1 auto; min-height: 0; }
+.modal-bottom.fillpick:not(:empty) { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--rule); }
 .progress { height: 8px; background: var(--soft); border-radius: 999px; overflow: hidden; margin: 12px 0 4px; }
 .progress i { display: block; height: 100%; width: 0; background: var(--forest); transition: width .2s; }
 .tip { font-size: 12px; color: var(--muted); }
@@ -212,6 +241,8 @@ table.list tfoot td { font-weight: 800; border-bottom: 0; }
 .ocol .toxflag { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); background: #B8392E; color: #fff; font-size: 9px; font-weight: 800; letter-spacing: .06em; padding: 1px 8px; border-radius: 0 0 8px 8px; z-index: 2; }
 .ocol .toxwho { color: #B8392E; font-size: 10px; font-weight: 700; }
 .pl .tx { pointer-events: none; }
+/* the sun badge takes hover so it can show how many hours of sun the plant needs; pressing it still drags the plant */
+.pl .tx.sunb { pointer-events: auto; cursor: grab; }
 .pl.dim .tx { opacity: .28; }
 
 .plan-tools .tools-right { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
@@ -254,8 +285,8 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 .fillpick .fp-tile small { font-size: 10px; color: #5E7A52; }
 .fillpick .fp-tile.on .fp-tn { color: #3F6B3A; }
 
-/* options bar: one constant size for every state */
-.fillpick { height: 244px; box-sizing: border-box; overflow-y: auto; align-content: flex-start; }
+/* selection bar: hidden until something is selected (see JS), then grows with the selection up to about two tile rows before it scrolls */
+.fillpick { height: auto; max-height: 280px; box-sizing: border-box; overflow-y: auto; align-content: flex-start; }
 .fillpick .po-info { min-height: 44px; }
 .fillpick .fp-tile.tox { border-color: #B8392E; background: #FBE9E6; }
 .fillpick .fp-tile .toxtxt { color: #B8392E; }
@@ -347,6 +378,10 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 .brow .addbtn:hover { background: var(--forest); color: #fff; }
 .ic-deer { background: #EFE2D3; color: #7A5230; }
 #ictip.k-deer { background: #EFE2D3; color: #6A4526; }
+.ic-sun { color: #fff; }
+#ictip.k-sun { background: #B5A153; color: #fff; }
+/* sun tips are two lines: the plant's light, then how many hours of direct sun it needs */
+#ictip.k-sun { white-space: pre-line; max-width: 300px; border-radius: 10px; line-height: 1.4; text-align: left; padding: 5px 10px; }
 .chip.deer.on { background: #EFE2D3; border-color: #CDB291; color: #6A4526; font-weight: 600; }
 .bulbn { display: block; font-size: 10.5px; color: var(--muted); margin-top: 2px; }
 
@@ -417,13 +452,13 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 .ob { cursor: grab; }
 .obh { cursor: pointer; }
 #plan.painting { cursor: crosshair; }
-#plan.painting .pl, #plan.painting .ob, #plan.painting .compass { pointer-events: none; }
+#plan.painting .pl, #plan.painting .ob { pointer-events: none; }
 #plan.painting .player, #plan.painting .olayer { opacity: .5; }
 #plan.placing .pl, #plan.placing .ob { pointer-events: none; }
 .objmenu { min-width: 210px; }
 .objmenu .ctxitem small { color: var(--muted); font-weight: 500; font-size: 11px; }
 .oic { display: inline-block; width: 18px; text-align: center; font-style: normal; margin-right: 6px; color: #6F6B62; }
-.oic-shrub, .oic-tree { color: #557A47; } .oic-stump { color: #A27A55; } .oic-birdbath { color: #6FA6C0; }
+.oic-shrub, .oic-hedge, .oic-tree { color: #557A47; } .oic-stump { color: #A27A55; } .oic-birdbath { color: #6FA6C0; }
 .objfields { flex-basis: 100%; display: flex; gap: 12px; flex-wrap: wrap; }
 .objfields .field { width: 130px; }
 
@@ -450,3 +485,277 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 .ob.out { opacity: .35; }
 .gridtoggle[hidden] { display: none; }
 .ctxhead { padding: 5px 10px 4px; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+
+/* hours next to each Paint sun brush name */
+.zbtn .zhrs { font-weight: 500; opacity: .7; font-size: .92em; }
+
+/* ---------- bed plan: toolbar menus, right-click menus, the card beside a selection, the paint palette ---------- */
+.plan-tools .tmenu { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; padding: 5px 11px; }
+.plan-tools .tmenu .caret { font-size: 10px; color: var(--muted); }
+.plan-tools .tmenu.on { border-color: var(--forest); background: #EAF2DF; color: var(--forest-d); }
+.plan-tools .tools-hint { margin-left: auto; font-size: 12px; color: var(--muted); }
+.plan-tools .tools-hint[hidden] { display: none; }
+.ctxitem small { color: var(--muted); font-weight: 500; font-size: 11px; white-space: nowrap; }
+.ctxitem:disabled { opacity: .45; cursor: default; background: none; }
+.ctxitem .ctxl { display: inline-flex; align-items: center; flex: 1; }
+.ctxmenu .ctxitem .check { flex: none; }
+.oic-plant { color: #B4548A; }
+
+.selcard { position: absolute; z-index: 20; width: 300px; max-height: calc(100% - 12px); overflow-y: auto; box-sizing: border-box; background: #fff; border: 1px solid var(--rule); border-radius: 12px; box-shadow: 0 10px 28px rgba(40,40,20,.2); padding: 10px 12px 12px; font-size: 12.5px; color: var(--ink); }
+.selcard[hidden] { display: none; }
+.selcard.addcard { width: 320px; }
+.sc-head { position: relative; display: flex; align-items: center; gap: 10px; padding-right: 22px; }
+.sc-head img { width: 46px; height: 46px; object-fit: cover; border-radius: 8px; flex: none; background: var(--soft); }
+.sc-name { font-weight: 800; font-size: 14px; color: var(--forest-d); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.sc-sub { font-size: 11.5px; color: var(--muted); font-style: italic; line-height: 1.35; }
+.sc-oic { font-size: 18px; flex: none; }
+.sc-oic .oic { width: 26px; margin: 0; font-size: 20px; }
+.sc-x { position: absolute; top: -6px; right: -6px; border: 0; background: none; font-size: 21px; line-height: 1; color: var(--muted); padding: 2px 5px; border-radius: 6px; cursor: pointer; }
+.sc-x:hover { background: var(--soft); color: var(--ink); }
+.sc-facts { margin: 9px 0 8px; color: #4A5246; line-height: 1.5; }
+.sc-facts > span:not(:last-of-type)::after { content: " · "; color: #B6B09A; }
+.sc-facts.sc-hint { color: var(--muted); font-size: 11.5px; }
+.sc-sun { display: flex; align-items: center; gap: 6px; margin-top: 3px; font-weight: 600; color: #5E5326; }
+.sc-tox { margin-top: 3px; color: #9A2E24; font-weight: 600; }
+.sc-lock { margin-top: 3px; color: #6E5010; font-weight: 600; }
+.sc-acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.sc-chips { display: flex; flex-wrap: wrap; gap: 5px; margin: 9px 0; }
+.sc-chip { border: 1px solid var(--rule); background: #fff; border-radius: 999px; padding: 3px 9px; font-size: 11.5px; cursor: pointer; }
+/* hovering a name shows "Remove" in the same box (stacked, so the box keeps its width and nothing shifts) */
+.sc-chip { display: inline-grid; }
+.sc-chip > span { grid-area: 1 / 1; }
+.sc-chip .sc-rm { visibility: hidden; color: var(--warn); font-weight: 700; text-align: center; }
+.sc-chip:hover { border-color: var(--warn); background: #FCEDEA; }
+.sc-chip:hover .sc-cn { visibility: hidden; }
+.sc-chip:hover .sc-rm { visibility: visible; }
+.sc-comp { border-top: 1px solid var(--rule); margin-top: 10px; padding-top: 8px; }
+.sc-comp-h { font-size: 12px; margin-bottom: 4px; color: var(--forest-d); }
+.sc-comp-h span { color: var(--muted); font-size: 11px; }
+.sc-row { display: flex; align-items: center; gap: 8px; width: 100%; border: 0; background: none; padding: 4px 6px; border-radius: 8px; text-align: left; cursor: pointer; font: inherit; color: inherit; }
+.sc-row:hover { background: var(--soft); }
+.sc-row img { width: 32px; height: 32px; object-fit: cover; border-radius: 6px; flex: none; background: var(--soft); }
+.sc-row .sc-rn { flex: 1; font-weight: 700; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; line-height: 1.25; }
+.sc-row .sc-rn em { flex-basis: 100%; font-style: normal; font-weight: 500; font-size: 11px; color: var(--muted); }
+.sc-row small { color: var(--forest); font-weight: 700; white-space: nowrap; }
+.sc-why { margin-top: 6px; font-size: 11.5px; color: #4A5246; line-height: 1.4; }
+.sc-fields { display: flex; gap: 8px; margin: 2px 0 10px; }
+.sc-fields label { display: flex; flex-direction: column; gap: 3px; font-size: 11px; color: var(--muted); font-weight: 600; }
+.sc-fields input { width: 76px; padding: 4px 6px; }
+.sc-search { margin: 9px 0 6px; }
+.sc-list { max-height: 300px; overflow-y: auto; margin: 0 -4px; }
+.sc-sec { font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding: 8px 6px 3px; }
+.sc-empty { padding: 12px 6px; color: var(--muted); }
+
+/* the paint palette floats over the top of the plan instead of pushing it down */
+.planwrap .paintbar { position: absolute; top: 8px; left: 8px; right: 8px; z-index: 15; margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 5px; padding: 6px 8px; background: rgba(255,251,238,.97); border: 1px solid #EBDDAF; border-radius: 12px; box-shadow: 0 6px 18px rgba(80,60,10,.15); }
+.planwrap .paintbar[hidden] { display: none; }
+.paintbar .pb-lab { font-size: 11.5px; font-weight: 700; color: #6E5010; }
+.paintbar .pb-sep { width: 1px; height: 20px; background: #E5D8AC; margin: 0 2px; }
+.paintbar .pb-grow { flex: 1; }
+.paintbar .pb-btn { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--rule); background: #fff; border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; }
+.paintbar .pb-btn:hover { border-color: #c9c2a8; }
+.paintbar .pb-btn.on { border-color: var(--forest); background: #EAF2DF; box-shadow: 0 0 0 1px var(--forest) inset; }
+.paintbar .pb-size { width: 26px; height: 26px; justify-content: center; padding: 0; }
+.paintbar .pb-dot { display: inline-block; border-radius: 50%; background: #6F6B5E; }
+.paintbar select { width: auto; padding: 3px 6px; font-size: 12px; }
+@media print { .selcard, .planwrap .paintbar { display: none !important; } }
+
+/* holding Ctrl / Cmd / Shift to pick several plants: the card fades and lets clicks through to plants under it */
+.selcard { transition: opacity .12s; }
+.selcard.passthru { pointer-events: none; opacity: .15; }
+.sc-head { cursor: move; }
+.sc-head .sc-x { cursor: pointer; }
+.sc-tip { margin-top: 9px; font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+/* ---------- step 1: your bed ---------- */
+.bp-lab { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 12px 0 6px; }
+#bedPanel .shapes { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+#bedPanel .shape { padding: 8px 4px 7px; font-size: 12px; font-weight: 600; color: #4A5246; border-radius: 12px; }
+#bedPanel .shape svg { height: 40px; margin-bottom: 4px; }
+#bedPanel .shape:hover { border-color: #c9c2a8; background: #FAFAF4; }
+#bedPanel .shape.on { border-color: var(--forest); background: #EAF2DF; color: var(--forest-d); box-shadow: 0 0 0 1px var(--forest) inset; }
+#bedPanel .hint { margin: 8px 0 2px; }
+#bedPanel .dims { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.dimrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.dimlab { display: flex; flex-direction: column; line-height: 1.2; }
+.dimlab b { font-size: 13px; color: var(--ink); }
+.dimlab span { font-size: 11px; color: var(--muted); }
+.stepper { display: inline-flex; align-items: center; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; background: #fff; flex: none; }
+.stepper .stbtn { width: 34px; height: 34px; border: 0; background: var(--soft); font-size: 18px; font-weight: 700; color: var(--forest-d); cursor: pointer; line-height: 1; }
+.stepper .stbtn:hover { background: #E1E8D2; }
+.stepper .stbtn:disabled { color: #B9BBAE; cursor: default; background: #F4F4EE; }
+.stepper input[type=number] { width: 54px; border: 0; border-radius: 0; text-align: right; font-size: 15px; font-weight: 700; padding: 6px 2px; -moz-appearance: textfield; }
+.stepper input[type=number]::-webkit-outer-spin-button, .stepper input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.stepper input[type=number]:focus { outline: none; background: #FFFDF2; }
+.stepper .stunit { font-size: 12px; color: var(--muted); padding: 0 8px 0 3px; }
+.bp-draw { width: 100%; padding: 9px 12px; font-size: 13.5px; }
+.seg2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.seg2btn { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; text-align: left; border: 1.5px solid var(--rule); background: #fff; border-radius: 10px; padding: 7px 10px; cursor: pointer; font: inherit; color: var(--ink); }
+.seg2btn b { font-size: 13px; }
+.seg2btn span { font-size: 11px; color: var(--muted); line-height: 1.25; }
+.seg2btn:hover { border-color: #c9c2a8; }
+.seg2btn.on { border-color: var(--forest); background: #EAF2DF; box-shadow: 0 0 0 1px var(--forest) inset; }
+.seg2btn.on b { color: var(--forest-d); }
+.bp-summary { display: flex; align-items: baseline; gap: 8px; margin: 14px 0 4px; padding: 8px 12px; background: #F6F3EA; border-radius: 10px; font-size: 13px; }
+.bp-summary:empty { display: none; }
+.bp-summary b { color: var(--forest-d); font-size: 14px; }
+.bp-summary span { color: var(--muted); }
+/* the garden name sits at the top by itself */
+#nameCard { padding: 14px 16px; }
+#nameCard h2 { margin-bottom: 4px; }
+#nameCard .namefield { margin: 0; }
+#nameCard .namefield .opt { font-weight: 500; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+
+/* ---------- step 2: what kind of garden ---------- */
+#prefCard .bp-lab small { text-transform: none; letter-spacing: 0; font-weight: 500; }
+.pc-count { position: relative; overflow: hidden; margin: 10px 0 2px; padding: 7px 12px; border-radius: 10px; background: #F6F3EA; font-size: 13px; color: var(--muted); }
+.pc-count b { color: var(--forest-d); font-size: 15px; }
+.pc-count i { position: absolute; left: 0; bottom: 0; height: 3px; background: var(--leaf); border-radius: 0 3px 3px 0; transition: width .2s; }
+.optlist { display: flex; flex-direction: column; gap: 6px; }
+.optrow { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; border: 1.5px solid var(--rule); background: #fff; border-radius: 10px; padding: 7px 10px; cursor: pointer; font: inherit; color: var(--ink); }
+.optrow:hover { border-color: #c9c2a8; }
+.optrow.on { border-color: var(--forest); background: #EAF2DF; box-shadow: 0 0 0 1px var(--forest) inset; }
+.optrow .optsw { width: 24px; height: 24px; flex: none; margin: 0; }
+.optrow .optsw svg { width: 15px; height: 15px; }
+.optt { flex: 1; display: flex; flex-direction: column; line-height: 1.25; }
+.optt b { font-size: 13px; }
+.optt span { font-size: 11px; color: var(--muted); }
+.optrow small { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.optck, .kck { width: 18px; height: 18px; flex: none; border-radius: 5px; border: 1.5px solid #C9C2A8; display: inline-grid; place-items: center; font-size: 12px; font-weight: 900; color: #fff; background: #fff; }
+.optrow.on .optck, .kchip.on .kck { background: var(--forest); border-color: var(--forest); }
+.seg2btn.ck b { display: flex; align-items: center; gap: 5px; }
+.seg2btn.ck .ic { margin: 0; }
+.kchips { margin-top: 8px; gap: 6px; }
+.kchip { display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid var(--rule); background: #fff; border-radius: 999px; padding: 4px 11px 4px 6px; font-size: 12.5px; font-weight: 600; color: var(--ink); cursor: pointer; }
+.kchip:hover { border-color: #c9c2a8; }
+.kchip.on { border-color: var(--forest); background: #EAF2DF; color: var(--forest-d); }
+.kchip .kck { width: 16px; height: 16px; border-radius: 50%; font-size: 10px; }
+.avoid { display: flex; flex-direction: column; gap: 6px; }
+.avrow { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 10px; border: 1.5px solid var(--rule); border-radius: 10px; padding: 8px 10px; background: #fff; }
+.avrow.on { border-color: #C9B27A; background: #FBF6E4; }
+.avt { display: flex; flex-direction: column; line-height: 1.3; }
+.avt b { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+.avt b .ic { margin: 0; }
+.avt span { font-size: 11.5px; color: var(--muted); }
+.whybtn { border: 0; background: none; padding: 0; font: inherit; color: var(--forest); font-weight: 700; text-decoration: underline; cursor: pointer; }
+.avmore { grid-column: 1 / -1; margin: 4px 0 0; font-size: 11.5px; color: #4A5246; line-height: 1.45; }
+.switch { position: relative; width: 40px; height: 23px; border-radius: 999px; border: 0; background: #CFCAB8; cursor: pointer; flex: none; transition: background .15s; }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 17px; height: 17px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: left .15s; }
+.switch.on { background: var(--forest); }
+.switch.on::after { left: 20px; }
+
+/* "Include / Leave out" on each plant-to-watch-out-for row: says exactly what it does */
+.avrow { grid-template-columns: 1fr; }
+.inout { display: inline-flex; justify-self: start; border: 1.5px solid var(--rule); border-radius: 999px; overflow: hidden; margin-top: 4px; }
+.inout button { border: 0; background: #fff; padding: 4px 12px; font: inherit; font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer; }
+.inout button + button { border-left: 1.5px solid var(--rule); }
+.inout button:hover { background: #F4F4EC; }
+.inout .io-in.on { background: #EAF2DF; color: var(--forest-d); }
+.inout .io-out.on { background: #F4E3B5; color: #6E5010; }
+.avrow.on .inout { border-color: #D8C185; }
+
+/* ---------- step 3: pick plants ---------- */
+#libCard .lede .whybtn { font-size: inherit; }
+.liboff { display: block; margin-top: 6px; color: #8A6410; }
+.libkey { margin: 2px 0 10px; padding: 8px 10px; border-radius: 10px; background: #F6F3EA; font-size: 12px; line-height: 1.7; }
+.libkey[hidden] { display: none; }
+.libtabs { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1.5px solid var(--rule); border-radius: 10px; overflow: hidden; margin: 4px 0 10px; }
+.libtab { border: 0; background: #fff; padding: 8px 6px; font: inherit; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; }
+.libtab + .libtab { border-left: 1.5px solid var(--rule); }
+.libtab span { display: inline-block; min-width: 20px; margin-left: 4px; padding: 0 6px; border-radius: 999px; background: var(--soft); font-size: 11.5px; color: var(--muted); }
+.libtab:hover { background: #F7F7F0; }
+.libtab.on { background: #EAF2DF; color: var(--forest-d); }
+.libtab.on span { background: var(--forest); color: #fff; }
+.libsort { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); font-weight: 600; }
+.libsort .selbtn { width: auto; }
+.libsort .libn { margin-left: auto; font-weight: 500; }
+/* the plant list sits in the page (no scroll box); it shows 15 at a time with Show more / Show all */
+.libmore { display: flex; align-items: center; gap: 8px; margin-top: 4px; padding: 8px 4px 2px; font-size: 12px; color: var(--muted); }
+.libmore span { margin-right: auto; }
+#libCard .pcard { grid-template-columns: 54px 1fr auto; }
+#libCard .pc-main { min-width: 0; }
+.pc-add { border: 1.5px solid var(--forest); background: #fff; color: var(--forest-d); font-weight: 700; font-size: 12px; border-radius: 999px; padding: 4px 11px; cursor: pointer; white-space: nowrap; }
+.pc-add:hover { background: #EAF2DF; }
+.pc-qty { display: inline-flex; align-items: center; border: 1.5px solid var(--forest); border-radius: 999px; overflow: hidden; background: #fff; }
+.pc-qty button { width: 26px; height: 26px; border: 0; background: #EAF2DF; color: var(--forest-d); font-size: 15px; font-weight: 800; cursor: pointer; line-height: 1; }
+.pc-qty button:hover { background: #D9E8C6; }
+.pc-qty b { min-width: 24px; text-align: center; font-size: 13px; color: var(--forest-d); }
+#libCard .pcard.on { cursor: default; }
+
+/* with plants selected or pointed at, the bed, its sun colors, grid and objects fade back too, so those plants stand out */
+#plan .bedrim, #plan .soil, #plan .zlayer, #plan .glayer, #plan .olayer, #plan .clayer { transition: opacity .15s; }
+svg.hasSel .bedrim, svg.hasSel .soil, svg.hasHover .bedrim, svg.hasHover .soil { opacity: .45; }
+svg.hasSel .zlayer, svg.hasSel .glayer, svg.hasSel .olayer, svg.hasSel .clayer,
+svg.hasHover .zlayer, svg.hasHover .glayer, svg.hasHover .olayer, svg.hasHover .clayer { opacity: .3; }
+
+/* ---------- guided tour: a veil with holes over the step in use, and a coach card beside it ---------- */
+#tourVeil { position: fixed; left: 0; top: 0; z-index: 45; pointer-events: none; }
+#tourVeil .tv-dim { fill: rgba(34,40,30,.62); pointer-events: auto; cursor: default; }
+#tourVeil .tv-ring { fill: none; stroke: #F2C40C; stroke-width: 3; filter: drop-shadow(0 0 6px rgba(242,196,12,.55)); pointer-events: none; }
+#tourCoach { position: fixed; z-index: 46; width: 310px; max-width: calc(100vw - 20px); box-sizing: border-box; background: #fff; border-radius: 14px; padding: 14px 16px 12px; box-shadow: 0 14px 40px rgba(0,0,0,.32); border-top: 4px solid var(--forest); font-size: 13px; color: var(--ink); transition: left .25s ease, top .25s ease; }
+#tourCoach .tc-kick { display: flex; align-items: center; justify-content: space-between; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--forest); }
+#tourCoach .tc-dots { display: flex; gap: 4px; }
+#tourCoach .tc-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--rule); }
+#tourCoach .tc-dots i.done { background: var(--leaf); }
+#tourCoach .tc-dots i.on { background: var(--forest); width: 18px; border-radius: 4px; }
+#tourCoach h3 { margin: 6px 0 4px; font-size: 17px; }
+#tourCoach p { margin: 0 0 12px; line-height: 1.5; }
+#tourCoach .tc-acts { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }
+#tourCoach .tc-back { margin-right: auto; }
+#tourCoach .tc-skip { display: block; margin: 8px auto 0; background: none; border: 0; color: var(--muted); font-size: 12px; text-decoration: underline; cursor: pointer; }
+#tourCoach .tc-skip:hover { color: var(--ink); }
+body.touring .toast { z-index: 60; }
+
+/* ---------- steps 1 to 4: fold down to a summary once done ---------- */
+.step .stephead { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.step .stephead h2 { display: flex; align-items: center; gap: 7px; }
+.step .stepck { display: none; width: 20px; height: 20px; border-radius: 50%; background: var(--forest); color: #fff; font-size: 12px; font-family: system-ui, sans-serif; align-items: center; justify-content: center; flex: none; }
+.step.done .stepck { display: inline-flex; }
+.step .steptog { background: none; border: 0; padding: 2px 0; color: var(--forest); font-size: 12px; font-weight: 700; text-decoration: underline; cursor: pointer; white-space: nowrap; }
+.step .stepsum { display: none; font-size: 12.5px; color: var(--muted); margin: 4px 0 0 27px; line-height: 1.45; cursor: pointer; }
+.step .stepsum b { color: var(--ink); font-weight: 700; }
+.step.done:not(.open) { padding-top: 12px; padding-bottom: 12px; }
+.step.done:not(.open) .stephead { cursor: pointer; }
+.step.done:not(.open) .stepbody { display: none; }
+.step.done:not(.open) .stepsum { display: block; }
+.step.done:not(.open):hover { border-color: #c9c2a8; }
+.step .stepfoot { display: flex; justify-content: flex-end; margin-top: 12px; }
+body.touring .step .stepfoot { display: none; }
+#nameCard .examplenote { margin: 10px 0 0; font-size: 12px; color: var(--muted); }
+#nameCard .examplenote .whybtn { font-size: inherit; }
+#sunCard .sunpaintbtn { width: 100%; margin-top: 10px; }
+
+/* ---------- step 3: objects ---------- */
+#objCard .objgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+#objCard .objbtn { display: grid; grid-template-columns: 26px 1fr; grid-template-rows: auto auto; align-items: center; column-gap: 6px; text-align: left; padding: 7px 9px; border: 1px solid var(--rule); border-radius: 10px; background: #fff; cursor: pointer; font: inherit; color: var(--ink); }
+#objCard .objbtn:hover { border-color: #c9c2a8; background: #FAFAF4; }
+#objCard .objbtn.on { border-color: var(--forest); background: #EAF2DF; box-shadow: 0 0 0 1px var(--forest) inset; }
+#objCard .objbtn .oic { grid-row: 1 / 3; width: 26px; margin: 0; font-size: 18px; }
+#objCard .objbtn b { font-size: 12.5px; line-height: 1.2; }
+#objCard .objbtn span { font-size: 11px; color: var(--muted); }
+#objCard .objlist { margin: 10px 0 0; font-size: 12px; color: var(--muted); line-height: 1.45; }
+#objCard .objlist b { color: var(--ink); }
+#bedPanel.isdrawing #dims, #bedPanel.isdrawing #bedSummary { display: none; }
+
+/* ---------- step 2: front of the bed ---------- */
+#bedPanel .frontrow { display: flex; gap: 12px; align-items: center; }
+#bedPanel .frontpad { flex: none; display: grid; grid-template-columns: repeat(3, 30px); grid-template-rows: repeat(3, 30px); gap: 3px; padding: 6px; border-radius: 12px; background: #EFE6D8; box-shadow: inset 0 0 0 2px #C9AE92; }
+#bedPanel .frontpad button { border: 1px solid transparent; border-radius: 7px; background: rgba(255,255,255,.55); color: #6F6B62; font-size: 15px; line-height: 1; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+#bedPanel .frontpad button:hover { background: #fff; border-color: #c9c2a8; }
+#bedPanel .frontpad button.on { background: var(--forest); color: #fff; border-color: var(--forest); }
+#bedPanel .frontpad .fp-c span { font-size: 8.5px; font-weight: 800; line-height: 1.05; text-transform: uppercase; }
+#bedPanel .frontsay { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.45; }
+#bedPanel .frontsay b { color: var(--ink); }
+#ictip.k-draw { background: #2F5430; color: #fff; }
+
+/* ---------- zoom: a small bar in the bottom right corner of the plan (also while editing the outline) ---------- */
+.planwrap .zoombar { position: absolute; right: 10px; bottom: 10px; z-index: 12; display: flex; align-items: center; gap: 2px; padding: 3px; background: rgba(255,255,255,.95); border: 1px solid var(--rule); border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,.1); }
+.planwrap .zoombar[hidden] { display: none; }
+.planwrap .zoombar button { border: 0; background: none; min-width: 28px; height: 26px; padding: 0 6px; border-radius: 7px; font: inherit; font-size: 15px; font-weight: 700; color: var(--ink); cursor: pointer; }
+.planwrap .zoombar button.zfit { font-size: 12px; }
+.planwrap .zoombar button:hover:not(:disabled) { background: var(--soft); }
+.planwrap .zoombar button:disabled { opacity: .35; cursor: default; }
+.planwrap .zoombar .zpct { min-width: 42px; text-align: center; font-size: 12px; font-weight: 700; color: var(--muted); }
+.planwrap .zoomhint { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 12; background: rgba(46,58,44,.88); color: #fff; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 999px; pointer-events: none; opacity: 0; transition: opacity .2s; white-space: nowrap; }
+.planwrap .zoomhint.on { opacity: 1; }
+#plan.panning, #plan.drawing.panning { cursor: grabbing; }

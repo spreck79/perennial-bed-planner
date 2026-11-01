@@ -113,20 +113,26 @@
       build(p, st) {
         const poly = (st && st.freePoly && st.freePoly.length >= 3) ? st.freePoly : [[0, 0], [10, 0], [10, 5], [0, 5]];
         const bb = bbox(poly);
-        if (st && st.freeView === "island") {
-          let mx = 0;
-          for (let i = 0; i < 400; i++) {
-            const x = bb.x0 + Math.random() * bb.w, y = bb.y0 + Math.random() * bb.h;
-            if (pip(poly, x, y)) mx = Math.max(mx, edgeDist(poly, x, y));
-          }
-          mx = mx || 1;
-          return { poly, depth: (x, y) => clamp01(edgeDist(poly, x, y) / mx), mode: "island" };
-        }
+        if (st && st.freeView === "island") return { poly, depth: islandDepth(poly), mode: "island" };
         return { poly, depth: (x, y) => clamp01((y - bb.y0) / (bb.h || 1)), mode: "border" };
       }
     }
   };
 
+  // island depth: 0 at the edge, 1 at the point farthest from any edge (tallest plants in the middle)
+  function islandDepth(poly) {
+    const bb = bbox(poly); let mx = 0;
+    for (let i = 0; i < 400; i++) {
+      const x = bb.x0 + Math.random() * bb.w, y = bb.y0 + Math.random() * bb.h;
+      if (pip(poly, x, y)) mx = Math.max(mx, edgeDist(poly, x, y));
+    }
+    mx = mx || 1;
+    return (x, y) => clamp01(edgeDist(poly, x, y) / mx);
+  }
+  // Which side is the front (where people see the bed from): short plants there, tall plants toward the
+  // opposite side. Each value is the direction from front to back on the plan (+y is up on screen);
+  // "c" means seen from all sides, tallest in the middle.
+  const FRONTS = { s: [0, 1], n: [0, -1], w: [1, 0], e: [-1, 0], sw: [1, 1], se: [-1, 1], nw: [1, -1], ne: [-1, -1] };
   function buildBed(state) {
     const sh = SHAPES[state.shape] || SHAPES.rect;
     const p = {};
@@ -139,7 +145,16 @@
       bed.poly = bed.poly.map(q => [q[0] - dx, q[1] - dy]);
       bed.depth = (x, y) => old(x + dx, y + dy);
     }
+    const f = state.front || (state.shape === "free" && state.freeView === "island" ? "c" : null);
+    if (f === "c") { if (bed.mode !== "island") { bed.depth = islandDepth(bed.poly); bed.mode = "island"; } }
+    else if (f && FRONTS[f]) {
+      const v = FRONTS[f], L = Math.hypot(v[0], v[1]), bx = v[0] / L, by = v[1] / L, pr = (x, y) => x * bx + y * by;
+      let lo = Infinity, hi = -Infinity; bed.poly.forEach(q => { const t = pr(q[0], q[1]); lo = Math.min(lo, t); hi = Math.max(hi, t); });
+      bed.depth = (x, y) => clamp01((pr(x, y) - lo) / ((hi - lo) || 1)); bed.mode = "border"; bed.depthFt = hi - lo;
+    }
+    bed.front = bed.mode === "island" ? "c" : (f && FRONTS[f] ? f : "s");
     bed.bb = bbox(bed.poly);
+    if (bed.depthFt == null) bed.depthFt = bed.mode === "island" ? Math.min(bed.bb.w, bed.bb.h) / 2 : bed.bb.h;
     bed.area = area(bed.poly);
     bed.label = sh.label;
     return bed;
@@ -154,9 +169,23 @@
     rock: { label: "Rock", w: 2, h: 1.4, min: 0.5, max: 8, shape: "ell", rot: true, note: "Plants are kept clear of the rock but can tuck in around it." },
     birdbath: { label: "Birdbath", w: 2, h: 2, min: 1, max: 4, shape: "circ", note: "Size is the width of the bowl." },
     shrub: { label: "Shrub", w: 4, h: 4, min: 1.5, max: 12, shape: "circ", note: "Size is how wide the shrub grows. Nothing is planted under it." },
+    hedge: { label: "Hedge / shrub row", w: 4, h: 1.5, min: 1, max: 24, shape: "rect", rot: true, note: "A straight run of shrubs, like a boxwood hedge. Nothing is planted under it." },
     tree: { label: "Tree", w: 10, h: 10, min: 4, max: 40, shape: "circ", note: "Size is the canopy width. Only the trunk takes up room, so plants can grow underneath. Use Paint sun to mark the shade it casts." }
   };
   const trunkR = o => Math.max(0.6, o.w * 0.06);
+  // How a hedge is drawn, in its own unrotated frame (feet, centered on 0,0), so the screen and the PDF match:
+  // a soft-cornered outline, and a row of the round shrub's rosettes (7 lobes in a ring + a bright center)
+  // spaced so neighbors always overlap, like several round shrubs grown into one. hw/hh are half the size.
+  function hedgeLayout(hw, hh) {
+    const m = Math.min(hw, hh), R = m * 0.6, cx = hw - R, cy = hh - R, outline = [];
+    [[cx, cy, 0], [-cx, cy, 90], [-cx, -cy, 180], [cx, -cy, 270]].forEach(([x, y, a0]) => {
+      for (let k = 0; k <= 8; k++) { const a = (a0 + 90 * k / 8) * Math.PI / 180; outline.push([x + Math.cos(a) * R, y + Math.sin(a) * R]); }
+    });
+    const long = hw >= hh, span = Math.abs(hw - hh), n = 1 + Math.ceil(2 * span / (1.6 * m) - 1e-9), centers = [], lobes = [];
+    for (let i = 0; i < n; i++) { const t = n === 1 ? 0 : -span + 2 * span * i / (n - 1); centers.push(long ? [t, 0] : [0, t]); }
+    centers.forEach(([x, y], i) => { for (let k = 0; k < 7; k++) { const a = k / 7 * Math.PI * 2 + 0.4 + i * 0.9; lobes.push([x + Math.cos(a) * m * 0.52, y + Math.sin(a) * m * 0.52]); } });
+    return { outline, lobes, centers, lobeR: m * 0.34, centerR: m * 0.3 };
+  }
   // a drawn path: its clicked points joined by a smooth curve (Catmull-Rom), as many small steps
   function pathPts(o) {
     const P = o.pts; if (!P || P.length < 2) return [];
@@ -215,14 +244,15 @@
     return out;
   }
 
-  function makeEngine(bed, byId, placed, rng) {
+  function makeEngine(bed, byId, placed, rng, lightOf) {
     const bb = bed.bb, blocks = (bed.objects || []).map(objBlock).filter(Boolean);
-    // painted sun zones: 1 when the spot's light doesn't suit the plant (ignored for plants that suit none of the bed's zones)
+    // painted sun zones: 1 when the spot's light doesn't suit the plant (ignored for plants that suit none of the bed's zones).
+    // lightOf can narrow a plant to particular zones, e.g. the zone a suggested planting picked it for.
     const zones = bed.lightZones ? bed.lightZones() : null;
     function lightPen(id, x, y) {
       if (!zones || !bed.lightAt) return 0;
-      const pl = byId[id]; if (!pl || !pl.sun || !pl.sun.some(z => zones.has(z))) return 0;
-      const z = bed.lightAt(x, y); return z && !pl.sun.includes(z) ? 1 : 0;
+      const pl = byId[id], ok = (lightOf && lightOf[id]) || (pl && pl.sun); if (!ok || !ok.some(z => zones.has(z))) return 0;
+      const z = bed.lightAt(x, y); return z && !ok.includes(z) ? 1 : 0;
     }
     function valid(id, x, y, factor) {
       const r = spFt(byId[id]) / 2;
@@ -288,7 +318,7 @@
     return out;
   }
 
-  // items: [{ plant, n }]; returns { placements, unplaced:{id:n} }
+  // items: [{ plant, n, zones? }] (zones narrows where in the light it may go); returns { placements, unplaced:{id:n} }
   function autoLayout(bed, items, seed, opts) {
     opts = opts || {};
     const rng = mulberry32(seed || 1);
@@ -296,7 +326,8 @@
     (opts.avoidPlants || []).forEach(p => { if (!byId[p.id]) byId[p.id] = p; });
     const placed = (opts.avoid || []).map(a => ({ id: a.id, x: a.x, y: a.y })), avoidN = placed.length, unplaced = {};
     const targets = depthTargets(items.map(i => i.plant));
-    const eng = makeEngine(bed, byId, placed, rng);
+    const lightOf = {}; items.forEach(it => { if (it.zones && it.zones.length) lightOf[it.plant.id] = it.zones; });
+    const eng = makeEngine(bed, byId, placed, rng, lightOf);
     const order = items.slice().sort((a, b) => (a.plant.filler ? 1 : 0) - (b.plant.filler ? 1 : 0) || spFt(b.plant) - spFt(a.plant) || hMean(b.plant) - hMean(a.plant));
     order.forEach(it => {
       const p = it.plant, anchors = [], target = targets[p.id];
@@ -364,6 +395,27 @@
       if (best) break;
     }
     return best ? { id, x: best[0], y: best[1] } : null;
+  }
+
+  // place a plant as close as it can go to a chosen spot (for "Add a plant here"): the spot itself if it's
+  // free, otherwise the nearest open spot, preferring light that suits the plant
+  function placeAt(bed, byId, placed, id, tx, ty) {
+    const eng = makeEngine(bed, byId, placed, mulberry32(7)), s = spFt(byId[id]);
+    for (const factor of [0.92, 0.82]) {
+      let best = null, bs = 1e9;
+      for (let rr = 0; rr <= s * 3 + 1; rr += s * 0.2 + 0.05) {
+        const n = rr === 0 ? 1 : Math.max(8, Math.round(TAU * rr / (s * 0.25 + 0.1)));
+        for (let a = 0; a < n; a++) {
+          const x = tx + Math.cos(a / n * TAU) * rr, y = ty + Math.sin(a / n * TAU) * rr;
+          if (!eng.valid(id, x, y, factor)) continue;
+          const sc = rr + eng.lightPen(id, x, y) * s * 2;
+          if (sc < bs) { bs = sc; best = [x, y]; }
+        }
+        if (best && bs <= rr + 1e-6) break;   // nothing farther out can beat it
+      }
+      if (best) return { id, x: best[0], y: best[1] };
+    }
+    return null;
   }
 
   // place a new plant right beside an existing one (for "goes well with")
@@ -438,5 +490,5 @@
     return out;
   }
 
-  window.Geo = { OBJ, pathPts, segDist, objBlock, objDist, objHit, objOutline, trunkR, fillCompanions, refillCarpet, SHAPES, buildBed, autoLayout, placeOne, placeBeside, suggestQuantities, depthTargets, mulberry32, pip, edgeDist, area, bbox, hMean, spFt };
+  window.Geo = { OBJ, pathPts, segDist, objBlock, objDist, objHit, objOutline, trunkR, hedgeLayout, fillCompanions, refillCarpet, SHAPES, buildBed, autoLayout, placeOne, placeAt, placeBeside, suggestQuantities, depthTargets, mulberry32, pip, edgeDist, area, bbox, hMean, spFt };
 })();

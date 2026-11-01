@@ -1,8 +1,8 @@
 // Interactive bed plan: SVG drawing, dragging, placing, objects, sun zones, and the outline drawing tool.
 (function () {
   const NS = "http://www.w3.org/2000/svg";
-  let svg, wrap, cb = {}, ctx = null, drag = null, draw = null, ui = null, northDrag = false, northCenter = { x: 0, y: 0 };
-  let objDrag = null, paintDrag = false, brushEl = null, rubberEl = null;
+  let svg, wrap, cb = {}, ctx = null, drag = null, draw = null, ui = null;
+  let objDrag = null, paintDrag = false, brushEl = null, rubberEl = null, curDefs = null, ctxEat = 0;
   const sp = p => p.spacing / 12;
   const LEAFD = "M10.6 1.4C5.2 1.2 1.6 3.9 1.7 8c0 .9.3 1.7.7 2.3.5-2.6 2.3-4.6 4.9-5.8-2.1 1.5-3.6 3.4-4.2 6 .5.2 1.1.3 1.7.3 4 0 6-3.4 5.8-9.4z";
   const DEERD = "M6 11V6.2M6 6.2 3.2 2M4.3 3.7 2 4.2M6 6.2 8.8 2M7.7 3.7 10 4.2";
@@ -13,11 +13,23 @@
   const badgeKinds = pl => { const k = [pl.native ? "nat" : "gar"]; if (pl.fam === "daisy") k.push("daisy"); if (deerEats(pl)) k.push("deer"); if (pl.toxic && pl.toxic.length) k.push("tox"); return k; };
   const hlKind = pl => pl.toxic && pl.toxic.length ? "tox" : deerEats(pl) ? "deer" : pl.fam === "daisy" ? "daisy" : pl.native ? "nat" : "gar";
 
-  // sun-zone colors: soil mixed with sunny yellow, sage, or slate blue (opaque, so painted rows don't show seams)
+  // sun-zone colors: match the per-plant sun-badge icon colors, so the painted zones and the badges read as the same system
   const SOIL = "#A68C72";
-  function mix(a, b, t) { const h = s => [1, 3, 5].map(i => parseInt(s.slice(i, i + 2), 16)), A = h(a), B = h(b); return "#" + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, "0")).join(""); }
-  const ZONE = { full: mix(SOIL, "#F7CF4A", 0.42), part: mix(SOIL, "#6FC25A", 0.6), shade: mix(SOIL, "#465F88", 0.46) };
-  const ZONE_LAB = { full: "Full sun", part: "Part shade", shade: "Full shade" };
+  const ZONE = { full: "#F2C40C", part: "#B5A153", shade: "#6E6E6E" };
+  const ZONE_LAB = { full: "Full sun", part: "Part shade", shade: "Shade" };
+  // How much direct sun each light level means. One wording, shared with app.js (tooltips, timeline,
+  // paint buttons) and pdf.js (legend, plant cards), so every place says the same thing.
+  const ZONE_HRS = { full: "6+ hrs", part: "3–6 hrs", shade: "under 3 hrs" };
+  const ZONE_TIP = { full: "Full sun: 6 or more hours of direct sun a day", part: "Part shade: 3 to 6 hours of direct sun a day", shade: "Shade: little or no direct sun, under 3 hours a day" };
+  // a plant's light range, in hours of direct sun a day
+  function sunNeed(p) {
+    const k = ["full", "part", "shade"].filter(z => p && p.sun && p.sun.includes(z)).join(",");
+    // shade plants lead with the shade, so "up to 6 hours" never reads as "needs 6 hours of sun"
+    return ({ full: "Needs 6 or more hours of direct sun a day", part: "Needs 3 to 6 hours of direct sun a day", shade: "Does best with little or no direct sun, under 3 hours a day",
+      "full,part": "Needs at least 3 hours of direct sun a day", "part,shade": "Grows in shade, or with up to 6 hours of direct sun a day",
+      "full,part,shade": "Grows in any light, from shade to full sun" })[k] || "";
+  }
+  const sunTip = p => [p.light, sunNeed(p)].filter(Boolean).join("\n");
 
   function drawBadge(k, parent, br, cls, ox, oy, x, y) {
     const g = el("g", { class: cls + " bdg", "data-ox": ox, "data-oy": oy, transform: `translate(${x} ${y})` }, parent), c = BAD[k];
@@ -26,6 +38,31 @@
     if (k === "nat") el("path", { d: LEAFD, fill: c[1], transform: `translate(${-br * 0.62} ${-br * 0.62}) scale(${s})` }, g);
     else if (k === "deer") el("path", { d: DEERD, fill: "none", stroke: c[1], "stroke-width": 1.5, "stroke-linecap": "round", transform: `translate(${-br * 0.62} ${-br * 0.62}) scale(${s})` }, g);
     else el("text", { x: 0, y: br * 0.36, "font-size": br * (k === "gar" ? 1.05 : k === "tox" ? 1.4 : 1.25), fill: c[1], "text-anchor": "middle", "font-weight": 800, "font-family": "sans-serif" }, g, k === "gar" ? "◆" : k === "daisy" ? "✿" : "!");
+    return g;
+  }
+
+  // sun-needs badge: same colors as the plant-list icon, blended left-to-right when a plant spans more
+  // than one light level. Drawn alone above each plant, leading the way the icon leads everywhere else.
+  const SUNCOL = { full: "#F2C40C", part: "#B5A153", shade: "#6E6E6E" };
+  const sunCats = pl => ["full", "part", "shade"].filter(k => pl.sun && pl.sun.includes(k));
+  function sunFill(pl) {
+    const cats = sunCats(pl);
+    if (cats.length <= 1) return SUNCOL[cats[0] || "part"];
+    const id = "sungrad-" + cats.join("-");
+    if (curDefs && !curDefs.querySelector("#" + id)) {
+      const grad = el("linearGradient", { id, x1: "0%", y1: "0%", x2: "100%", y2: "0%" }, curDefs);
+      cats.forEach((k, i) => el("stop", { offset: (i / (cats.length - 1) * 100) + "%", "stop-color": SUNCOL[k] }, grad));
+    }
+    return curDefs ? `url(#${id})` : SUNCOL[cats[0]];
+  }
+  function drawSunBadge(pl, parent, br, cls, ox, oy, x, y) {
+    const g = el("g", { class: cls + " bdg sunb", "data-ox": ox, "data-oy": oy, "data-k": "sun", "data-tip": sunTip(pl), transform: `translate(${x} ${y})` }, parent);
+    el("circle", { cx: 0, cy: 0, r: br, fill: sunFill(pl), stroke: "#fff", "stroke-width": br * 0.16 }, g);
+    const s = br / 6, sw = br * 0.22;
+    el("circle", { cx: 0, cy: 0, r: 2.5 * s, fill: "#fff" }, g);
+    [[0, -5.2, 0, -3.6], [0, 3.6, 0, 5.2], [-5.2, 0, -3.6, 0], [3.6, 0, 5.2, 0],
+     [-3.7, -3.7, -2.6, -2.6], [2.6, 2.6, 3.7, 3.7], [-3.7, 3.7, -2.6, 2.6], [2.6, -2.6, 3.7, -3.7]]
+      .forEach(([x1, y1, x2, y2]) => el("line", { x1: x1 * s, y1: y1 * s, x2: x2 * s, y2: y2 * s, stroke: "#fff", "stroke-width": sw, "stroke-linecap": "round" }, g));
     return g;
   }
 
@@ -40,8 +77,56 @@
   function toBed(evt) { const q = svgPt(evt); return { x: q.x - ctx.ox, y: ctx.H - (q.y - ctx.oy) }; } // bed coordinates (feet), y up
   const near = (e, el2) => e.target.closest && e.target.closest(el2);
 
+  // --------------- zoom and pan ---------------
+  // The plan's full picture is "base" (in viewBox units). The view shows 1/z of it, centered at fx, fy
+  // (fractions of the base). Dragging empty space pans; Ctrl + scroll, a trackpad pinch or the buttons zoom.
+  let base = null, view = { z: 1, fx: 0.5, fy: 0.5 }, mainView = null, pan = null, zbar = null, zhint = null, hintT = 0;
+  const ZMAX = 8;
+  function viewRect() {
+    const z = view.z, vw = base.w / z, vh = base.h / z, sl = z > 1.001 ? 0.25 : 0;   // a little slack so the edges can be pulled into view
+    const cl = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    const cx = cl(view.fx * base.w, vw / 2 - sl * vw, base.w - vw / 2 + sl * vw), cy = cl(view.fy * base.h, vh / 2 - sl * vh, base.h - vh / 2 + sl * vh);
+    view.fx = cx / base.w; view.fy = cy / base.h;
+    return { x: cx - vw / 2, y: cy - vh / 2, w: vw, h: vh, cx, cy };
+  }
+  function applyView() {
+    if (!base) return;
+    const r = viewRect();
+    svg.setAttribute("viewBox", `${r.x.toFixed(3)} ${r.y.toFixed(3)} ${r.w.toFixed(3)} ${r.h.toFixed(3)}`);
+    if (zbar) { zbar.querySelector(".zpct").textContent = Math.round(view.z * 100) + "%"; zbar.querySelector(".zout").disabled = view.z <= 1.001; zbar.querySelector(".zin").disabled = view.z >= ZMAX - 0.001;
+      zbar.querySelector(".zfit").disabled = view.z <= 1.001 && Math.abs(view.fx - 0.5) < 0.001 && Math.abs(view.fy - 0.5) < 0.001; }
+  }
+  // zoom by a factor, keeping the point under (clientX, clientY) still (or the middle of the view)
+  function zoomBy(f, clientX, clientY) {
+    if (!base) return;
+    const r = viewRect(), nz = Math.max(1, Math.min(ZMAX, view.z * f)); if (nz === view.z) return;
+    let px = r.cx, py = r.cy;
+    if (clientX != null) { const q = svgPt({ clientX, clientY }); px = q.x; py = q.y; }
+    const relx = (px - r.x) / r.w, rely = (py - r.y) / r.h, nw = base.w / nz, nh = base.h / nz;
+    view.z = nz; view.fx = (px - relx * nw + nw / 2) / base.w; view.fy = (py - rely * nh + nh / 2) / base.h;
+    applyView(); cb.onView && cb.onView();
+  }
+  function resetView() { view = { z: 1, fx: 0.5, fy: 0.5 }; applyView(); cb && cb.onView && cb.onView(); }
+  function zoomHint() {
+    if (!zhint) return;
+    zhint.classList.add("on"); clearTimeout(hintT); hintT = setTimeout(() => zhint.classList.remove("on"), 1400);
+  }
+  function makeZoomBar() {
+    zbar = document.createElement("div"); zbar.className = "zoombar";
+    zbar.innerHTML = '<button type="button" class="zout" title="Zoom out">−</button><span class="zpct">100%</span><button type="button" class="zin" title="Zoom in (or Ctrl + scroll)">+</button><button type="button" class="zfit" title="Show the whole bed">Fit</button>';
+    zbar.querySelector(".zin").onclick = () => zoomBy(1.4);
+    zbar.querySelector(".zout").onclick = () => zoomBy(1 / 1.4);
+    zbar.querySelector(".zfit").onclick = resetView;
+    zhint = document.createElement("div"); zhint.className = "zoomhint"; zhint.textContent = "Hold Ctrl and scroll to zoom. Drag an empty spot to move around.";
+    wrap.append(zbar, zhint);
+    svg.addEventListener("wheel", e => {
+      if (e.ctrlKey || e.metaKey) { e.preventDefault(); zoomBy(Math.exp(-e.deltaY * 0.0025), e.clientX, e.clientY); }
+      else zoomHint();
+    }, { passive: false });
+  }
+
   function init(svgEl, callbacks) {
-    svg = svgEl; wrap = svg.parentElement; cb = callbacks;
+    svg = svgEl; wrap = svg.parentElement; cb = callbacks; makeZoomBar();
     svg.addEventListener("pointerdown", onDown);
     svg.addEventListener("pointermove", onMove);
     svg.addEventListener("pointerup", onUp);
@@ -50,6 +135,13 @@
     svg.addEventListener("pointerover", e => { if (draw || (ctx && ctx.paint)) return; const g = near(e, ".pl"); cb.onHover && cb.onHover(g ? g.dataset.id : null); });
     svg.addEventListener("pointerleave", () => { cb.onHover && cb.onHover(null); if (brushEl) brushEl.setAttribute("visibility", "hidden"); });
     svg.addEventListener("contextmenu", e => { if (draw || near(e, ".pl") || near(e, ".ob")) e.preventDefault(); });
+    // Our own menu opens on the right-button press. Near the window edge it gets nudged to fit and lands
+    // under the pointer, so the browser's menu event that follows fires on our menu instead of the plant.
+    // Swallow that follow-up event wherever it lands.
+    window.addEventListener("contextmenu", e => {
+      if (ctxEat && Date.now() - ctxEat < 1500) { e.preventDefault(); ctxEat = 0; }
+      else if (e.target && e.target.closest && e.target.closest(".ctxmenu")) e.preventDefault();
+    }, true);
     window.addEventListener("keydown", e => {
       if (!draw) return;
       if (e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
@@ -61,6 +153,7 @@
 
   function onDown(e) {
     if (!ctx) return;
+    if (e.button === 2 && (draw || near(e, ".pl") || near(e, ".ob"))) ctxEat = Date.now();
     if (draw) { drawDown(e); return; }
     const pt = toBed(e);
     if (ctx.paint) {
@@ -70,14 +163,13 @@
     }
     if (ctx.pathDraw) { if (e.button === 0) cb.onPathPoint && cb.onPathPoint(pt.x, pt.y); e.preventDefault(); return; }
     if (ctx.objArmed) { if (e.button === 0) cb.onObjPlace && cb.onObjPlace(pt.x, pt.y); e.preventDefault(); return; }
-    if (near(e, ".north-hit")) { northDrag = true; svg.setPointerCapture(e.pointerId); e.preventDefault(); return; }
     const h = near(e, ".obh");
     if (h) { objDrag = { oi: +h.dataset.oi, h: h.dataset.h, moved: false, sx: e.clientX, sy: e.clientY }; cb.onObjEditStart && cb.onObjEditStart(); svg.setPointerCapture(e.pointerId); e.preventDefault(); return; }
     const g = near(e, ".pl");
     if (g && e.button === 2) { cb.onSelect && cb.onSelect(+g.dataset.idx, false); cb.onContextMenu && cb.onContextMenu(+g.dataset.idx, e.clientX, e.clientY); e.preventDefault(); return; }
     if (g) {
       const idx = +g.dataset.idx, p = ctx.placements[idx];
-      cb.onSelect && cb.onSelect(idx, e.ctrlKey || e.metaKey);
+      cb.onSelect && cb.onSelect(idx, e.ctrlKey || e.metaKey || e.shiftKey);
       drag = { idx, dx: p.x - pt.x, dy: p.y - pt.y, moved: false, g: svg.querySelector(`.pl[data-idx="${idx}"]`) || g, sx: e.clientX, sy: e.clientY };
       svg.setPointerCapture(e.pointerId);
       e.preventDefault(); return;
@@ -90,12 +182,25 @@
       objDrag = { oi, h: "move", dx: o.x - pt.x, dy: o.y - pt.y, moved: false, sx: e.clientX, sy: e.clientY };
       svg.setPointerCapture(e.pointerId); e.preventDefault(); return;
     }
-    if (ctx.armed) cb.onPlace && cb.onPlace(pt.x, pt.y);
-    else if (!(e.ctrlKey || e.metaKey)) cb.onSelect && cb.onSelect(-1);
+    // right-click an empty spot inside the bed: add a plant or object right there
+    if (e.button === 2) {
+      if (window.Geo.pip(ctx.bed.poly, pt.x, pt.y)) { ctxEat = Date.now(); cb.onSpotMenu && cb.onSpotMenu(pt.x, pt.y, e.clientX, e.clientY); e.preventDefault(); }
+      return;
+    }
+    if (ctx.armed) { cb.onPlace && cb.onPlace(pt.x, pt.y); return; }
+    if (e.button === 0) { const r = viewRect(); pan = { sx: e.clientX, sy: e.clientY, cx: r.cx, cy: r.cy, moved: false, add: e.ctrlKey || e.metaKey || e.shiftKey }; svg.setPointerCapture(e.pointerId); e.preventDefault(); }
   }
   function onMove(e) {
     if (draw) { drawMove(e); return; }
     if (!ctx) return;
+    if (pan) {
+      if (view.z <= 1.001) return;   // at 100% the plan stays put; zoom in to move around
+      if (!pan.moved && Math.hypot(e.clientX - pan.sx, e.clientY - pan.sy) < 4) return;
+      if (!pan.moved) { pan.moved = true; svg.classList.add("panning"); cb.onPanStart && cb.onPanStart(); }
+      const m = svg.getScreenCTM();
+      view.fx = (pan.cx - (e.clientX - pan.sx) / m.a) / base.w; view.fy = (pan.cy - (e.clientY - pan.sy) / m.d) / base.h;
+      applyView(); return;
+    }
     if (ctx.paint) {
       const pt = toBed(e);
       if (brushEl) { brushEl.setAttribute("visibility", "visible"); brushEl.setAttribute("cx", pt.x); brushEl.setAttribute("cy", ctx.H - pt.y); }
@@ -105,11 +210,6 @@
     if (ctx.pathDraw) {
       const pt = toBed(e), P = ctx.pathDraw.pts;
       if (rubberEl && P.length) { const l = P[P.length - 1]; rubberEl.setAttribute("x1", l[0]); rubberEl.setAttribute("y1", ctx.H - l[1]); rubberEl.setAttribute("x2", pt.x); rubberEl.setAttribute("y2", ctx.H - pt.y); rubberEl.setAttribute("visibility", "visible"); }
-      return;
-    }
-    if (northDrag) {
-      const q = svgPt(e), ang = Math.atan2(q.x - northCenter.x, -(q.y - northCenter.y)) * 180 / Math.PI;
-      cb.onNorthMove && cb.onNorthMove(((ang % 360) + 360) % 360);
       return;
     }
     if (objDrag) {
@@ -159,13 +259,24 @@
     if (draw) { drawUp(e); return; }
     const rel = () => { try { svg.releasePointerCapture(e.pointerId); } catch (_) {} };
     if (paintDrag) { paintDrag = false; rel(); cb.onPaintEnd && cb.onPaintEnd(); return; }
-    if (northDrag) { northDrag = false; rel(); cb.onNorthDone && cb.onNorthDone(); return; }
+    if (pan) {   // a click (no drag) on empty space clears the selection; a drag moved the view
+      const p = pan; pan = null; rel(); svg.classList.remove("panning");
+      if (p.moved) cb.onView && cb.onView(); else if (!p.add) cb.onSelect && cb.onSelect(-1);
+      return;
+    }
     if (objDrag) { const d = objDrag; objDrag = null; rel(); if (d.moved) cb.onObjDone && cb.onObjDone(d.oi); return; }
     if (drag) { const d = drag; drag = null; rel(); if (d.moved) cb.onMoved && cb.onMoved(d.idx); }
   }
   function onDbl(e) { if (draw) drawDbl(e); else if (ctx && ctx.pathDraw) cb.onPathFinish && cb.onPathFinish(); }
 
   // --------------- objects ---------------
+  // the round-shrub graphic, seen from above: a dark clump, 7 lighter lobes in a ring, and a bright center.
+  // The hedge reuses the same rosette (see Geo.hedgeLayout) so the two read as the same plant.
+  function shrubBlob(cx, cy, r, parent) {
+    el("circle", { cx, cy, r, fill: "#557A47", stroke: "#3C5A32", "stroke-width": 0.07 }, parent);
+    for (let k = 0; k < 7; k++) { const a = k / 7 * Math.PI * 2 + 0.4; el("circle", { cx: cx + Math.cos(a) * r * 0.52, cy: cy + Math.sin(a) * r * 0.52, r: r * 0.34, fill: "#628A52" }, parent); }
+    el("circle", { cx, cy, r: r * 0.3, fill: "#6A9459" }, parent);
+  }
   function drawObject(o, i, parent, Y) {
     const G = window.Geo, d = G.OBJ[o.t]; if (!d) return;
     const g = el("g", { class: "ob" + (window.Geo.pip(ctx.bed.poly, o.x, o.y) ? "" : " out"), "data-oi": i }, parent);
@@ -191,9 +302,16 @@
       el("circle", { cx, cy, r, fill: "#D4CFC4", stroke: "#8F8A7E", "stroke-width": 0.06 }, g);
       el("circle", { cx, cy, r: r * 0.72, fill: "#A9D0E3", stroke: "#8DB6CB", "stroke-width": 0.03 }, g);
     } else if (o.t === "shrub") {
-      el("circle", { cx, cy, r, fill: "#557A47", stroke: "#3C5A32", "stroke-width": 0.07 }, g);
-      for (let k = 0; k < 7; k++) { const a = k / 7 * Math.PI * 2 + 0.4; el("circle", { cx: cx + Math.cos(a) * r * 0.52, cy: cy + Math.sin(a) * r * 0.52, r: r * 0.34, fill: "#628A52" }, g); }
-      el("circle", { cx, cy, r: r * 0.3, fill: "#6A9459" }, g);
+      shrubBlob(cx, cy, r, g);
+    } else if (o.t === "hedge") {
+      // several round shrubs grown together: one soft-cornered clump with a single outline, and inside it a row
+      // of the round shrub's rosettes (lobe ring + bright center) overlapping like neighboring plants
+      const rot = (o.rot || 0) * Math.PI / 180, cr = Math.cos(rot), sr = Math.sin(rot);
+      const toScreen = (lx, ly) => [o.x + lx * cr - ly * sr, Y(o.y + lx * sr + ly * cr)];
+      const L = G.hedgeLayout(o.w / 2, o.h / 2);
+      el("polygon", { points: L.outline.map(p => { const q = toScreen(p[0], p[1]); return q[0].toFixed(3) + "," + q[1].toFixed(3); }).join(" "), fill: "#557A47", stroke: "#3C5A32", "stroke-width": 0.07, "stroke-linejoin": "round" }, g);
+      L.lobes.forEach(p => { const q = toScreen(p[0], p[1]); el("circle", { cx: q[0], cy: q[1], r: L.lobeR, fill: "#628A52" }, g); });
+      L.centers.forEach(p => { const q = toScreen(p[0], p[1]); el("circle", { cx: q[0], cy: q[1], r: L.centerR, fill: "#6A9459" }, g); });
     } else if (o.t === "tree") {
       const tr = G.trunkR(o);
       el("circle", { cx, cy, r: tr, fill: "#7A5636", stroke: "#5A3E26", "stroke-width": 0.07 }, g);
@@ -266,31 +384,17 @@
     // legend items (badges in use, then sun zones) wrap onto extra rows when the bed is narrow
     const used = new Set(); placements.forEach(p => badgeKinds(byId[p.id]).forEach(k => used.add(k)));
     const lgItems = [["nat", "Michigan native"], ["gar", "Garden favorite"], ["daisy", "Daisy family"], ["deer", "Deer eat it"], ["tox", "Toxic plant"]].filter(x => used.has(x[0])).map(x => ({ k: x[0], t: x[1] }));
-    if (sun && sun.show) ["full", "part", "shade"].forEach((z, i) => lgItems.push({ z, t: ZONE_LAB[z], br: i === 0 && lgItems.length > 0 }));
+    if (sun && sun.show) ["full", "part", "shade"].forEach((z, i) => lgItems.push({ z, t: ZONE_LAB[z] + " (" + ZONE_HRS[z] + ")", br: i === 0 && lgItems.length > 0 }));
     const lbr = fs * 0.4, itemW = it => lbr * 1.5 + it.t.length * fs * 0.5 + fs * 0.9;
     let rows = 0; { let lx = lbr; if (lgItems.length) rows = 1; lgItems.forEach(it => { if (lx > lbr && (it.br || lx + itemW(it) > bb.w + fs * 2)) { rows++; lx = lbr; } lx += itemW(it); }); }
     const mL = fs * 4.2, mR = fs * 1.6, mT = fs * 3.2, mB = fs * (5.7 + Math.max(1, rows) * 1.25);
     c.H = bb.h; c.ox = mL; c.oy = mT; c.fs = fs;
-    svg.setAttribute("viewBox", `0 0 ${(bb.w + mL + mR).toFixed(2)} ${(bb.h + mT + mB).toFixed(2)}`);
+    base = { w: bb.w + mL + mR, h: bb.h + mT + mB }; applyView(); if (zbar) zbar.hidden = false;
     svg.style.maxHeight = "640px";
     svg.innerHTML = ""; brushEl = null;
     const root = el("g", { transform: `translate(${mL.toFixed(2)} ${mT.toFixed(2)})` }, svg);
-    { // north arrow (compass), draggable — sized and positioned so the needle tip and "N" label
-      // never travel past the svg's top/left edge (which the plan-wrap container clips) at any rotation
-      const r = Math.min(mL, mT) * 0.3, cx = Math.max(mL * 0.5, r * 1.3), cy = Math.max(mT * 0.62, r * 1.3);
-      const ang = c.north || 0, rad = ang * Math.PI / 180;
-      northCenter = { x: cx, y: cy };
-      const cg = el("g", { class: "compass" }, svg);
-      el("circle", { cx, cy, r, fill: "#fff", stroke: "#8E7660", "stroke-width": r * 0.1 }, cg);
-      const tipx = cx + Math.sin(rad) * r * 0.78, tipy = cy - Math.cos(rad) * r * 0.78;
-      const bx1 = cx + Math.sin(rad + 2.6) * r * 0.42, by1 = cy - Math.cos(rad + 2.6) * r * 0.42;
-      const bx2 = cx + Math.sin(rad - 2.6) * r * 0.42, by2 = cy - Math.cos(rad - 2.6) * r * 0.42;
-      el("polygon", { points: `${tipx},${tipy} ${bx1},${by1} ${cx},${cy} ${bx2},${by2}`, fill: "#4b5244" }, cg);
-      el("text", { x: tipx, y: tipy, "font-size": r * 0.5, fill: "#4b5244", "text-anchor": "middle", "font-weight": 800, "font-family": "sans-serif", dy: ang > 90 && ang < 270 ? r * 0.5 : -r * 0.2 }, cg, "N");
-      el("circle", { class: "north-hit", cx, cy, r: r * 1.3, fill: "transparent", cursor: "grab" }, cg);
-    }
     const Y = y => bb.h - y;
-    const defs = el("defs", {}, svg);
+    const defs = el("defs", {}, svg); curDefs = defs;
     { const pat = el("pattern", { id: "gravel", patternUnits: "userSpaceOnUse", width: 0.6, height: 0.6 }, defs);
       el("rect", { x: 0, y: 0, width: 0.6, height: 0.6, fill: "#D9D0BE" }, pat);
       [[0.1, 0.12, 0.05], [0.38, 0.22, 0.04], [0.22, 0.45, 0.05], [0.5, 0.5, 0.035]].forEach(([x, y, r]) => el("circle", { cx: x, cy: y, r, fill: "#BFB39C" }, pat)); }
@@ -305,24 +409,25 @@
     }
     const poly = bed.poly.map(q => `${q[0].toFixed(3)},${Y(q[1]).toFixed(3)}`).join(" ");
     const clip = el("clipPath", { id: "bedclip" }, defs); el("polygon", { points: poly }, clip);
-    el("polygon", { points: poly, fill: "#8E7660", stroke: "#8E7660", "stroke-width": fs * 0.9, "stroke-linejoin": "round" }, root);
-    el("polygon", { points: poly, fill: SOIL }, root);
+    el("polygon", { class: "bedrim", points: poly, fill: "#8E7660", stroke: "#8E7660", "stroke-width": fs * 0.9, "stroke-linejoin": "round" }, root);
+    el("polygon", { class: "soil", points: poly, fill: SOIL }, root);
     // sun zones: the whole bed in its starting light, then the painted cells (runs of the same zone merged per row)
     if (sun && sun.show) {
-      const zg = el("g", { "clip-path": "url(#bedclip)", "pointer-events": "none" }, root), res = sun.res, cells = sun.cells || {};
+      const zg = el("g", { class: "zlayer", "clip-path": "url(#bedclip)" }, root), res = sun.res, cells = sun.cells || {}, zsub = {};
+      const zgrp = v => zsub[v] || (zsub[v] = el("g", { class: "ztip", "data-k": "sun", "data-tip": ZONE_TIP[v] }, zg));
       const nx = Math.ceil(bb.w / res), ny = Math.ceil(bb.h / res);
       for (let j = 0; j < ny; j++) {
         let i = 0;
         while (i < nx) {
           const v = cells[i + "," + j] || sun.base; let k = i + 1;
           while (k < nx && (cells[k + "," + j] || sun.base) === v) k++;
-          if (v && ZONE[v]) el("rect", { x: i * res, y: Y((j + 1) * res) - 0.01, width: (k - i) * res + 0.01, height: res + 0.02, fill: ZONE[v] }, zg);
+          if (v && ZONE[v]) el("rect", { x: i * res, y: Y((j + 1) * res) - 0.01, width: (k - i) * res + 0.01, height: res + 0.02, fill: ZONE[v] }, zgrp(v));
           i = k;
         }
       }
     }
     if (c.showGrid !== false) {
-      const grid = el("g", { "clip-path": "url(#bedclip)", stroke: sun && sun.show ? "rgba(70,55,40,.28)" : "#BBA388", "stroke-width": 0.035, "pointer-events": "none" }, root);
+      const grid = el("g", { class: "glayer", "clip-path": "url(#bedclip)", stroke: sun && sun.show ? "rgba(70,55,40,.28)" : "#BBA388", "stroke-width": 0.035, "pointer-events": "none" }, root);
       for (let x = 1; x < bb.w; x++) el("line", { x1: x, y1: 0, x2: x, y2: bb.h }, grid);
       for (let y = 1; y < bb.h; y++) el("line", { x1: 0, y1: Y(y), x2: bb.w, y2: Y(y) }, grid);
       el("text", { x: 0, y: bb.h + fs * 2.4, "font-size": fs * 0.78, fill: "#9A9480", "font-style": "italic", "font-family": "sans-serif" }, root, "Each grid square = 1 ft");
@@ -332,12 +437,21 @@
     for (let x = 0; x <= bb.w + 0.01; x += step) el("text", { x, y: bb.h + fs * 1.5, "font-size": fs * 0.85, fill: "#7A7F70", "text-anchor": "middle", "font-family": "sans-serif" }, root, x + " ft");
     const ystep = bb.h > 24 ? 5 : bb.h > 12 ? 2 : 1;
     for (let y = 0; y <= bb.h + 0.01; y += ystep) el("text", { x: -fs * 0.6, y: Y(y) + fs * 0.3, "font-size": fs * 0.85, fill: "#7A7F70", "text-anchor": "end", "font-family": "sans-serif" }, root, y + "");
-    el("text", { x: bb.w / 2, y: bb.h + fs * 3.4, "font-size": fs * 0.9, fill: "#4b5244", "text-anchor": "middle", "font-weight": 700, "font-family": "sans-serif" }, root,
-      bed.mode === "island" ? "ALL SIDES ARE THE FRONT · tall plants in the middle" : "FRONT EDGE (lawn / path side)");
-    if (bed.mode !== "island") el("text", { x: bb.w, y: -fs * 0.9, "font-size": fs * 0.9, fill: "#4b5244", "text-anchor": "end", "font-weight": 700, "font-family": "sans-serif" }, root, "BACK (fence / house / trees)");
+    { const L = frontLabels(bed);
+      el("text", { x: bb.w / 2, y: bb.h + fs * 3.4, "font-size": fs * 0.9, fill: "#4b5244", "text-anchor": "middle", "font-weight": 700, "font-family": "sans-serif" }, root, L.bottom);
+      if (L.top) el("text", { x: bb.w, y: -fs * 0.9, "font-size": fs * 0.9, fill: "#4b5244", "text-anchor": "end", "font-weight": 700, "font-family": "sans-serif" }, root, L.top);
+      // a small FRONT tag right on the front side when it isn't the bottom edge
+      if (bed.front && bed.front !== "s" && bed.front !== "c") {
+        const f = bed.front, tx = f.includes("w") ? 0 : f.includes("e") ? bb.w : bb.w / 2, ty = f.includes("s") ? 0 : f.includes("n") ? bb.h : bb.h / 2;
+        const g = el("g", { transform: `translate(${tx} ${Y(ty)})`, "pointer-events": "none" }, root);
+        el("rect", { x: -fs * 1.9, y: -fs * 0.62, width: fs * 3.8, height: fs * 1.24, rx: fs * 0.62, fill: "#3F6B3A" }, g);
+        el("text", { x: 0, y: fs * 0.3, "font-size": fs * 0.8, fill: "#fff", "text-anchor": "middle", "font-weight": 800, "font-family": "sans-serif" }, g, "FRONT");
+      }
+    }
 
-    // objects sit under the plants (plants may lean over a path or rock)
-    const olayer = el("g", { class: "olayer" }, root);
+    // objects sit under the plants (plants may lean over a path or rock), and are only drawn inside the bed;
+    // plants can spill over the edge, objects can't
+    const olayer = el("g", { class: "olayer", "clip-path": "url(#bedclip)" }, root);
     objects.forEach((o, i) => drawObject(o, i, olayer, Y));
 
     // overlaps: plants too close together, or sitting on an object
@@ -365,9 +479,12 @@
       if (selAll.includes(i)) { pcEl.setAttribute("style", `stroke:${HLC[hlKind(pl)]};stroke-width:.12`); }
       if (view !== "photos") el("text", { x: p.x, y: Y(p.y) + fs * 0.35, "font-size": Math.min(fs * 1.05, r * 0.95), fill: pl.txt }, g, pl.code);
       const kinds = badgeKinds(pl), br = Math.min(fs * 0.46, Math.max(r * 0.3, fs * 0.24)), step2 = br * 1.85;
-      kinds.forEach((k, bi) => { const ox = (bi - (kinds.length - 1) / 2) * step2, oy = -r * 0.86; drawBadge(k, g, br, "tx", ox, oy, p.x + ox, Y(p.y) + oy); });
+      // sun needs alone above the circle; the other badges (native/favorite/daisy/deer/toxic) below it, same offset
+      drawSunBadge(pl, g, br, "tx", 0, -r * 0.86, p.x, Y(p.y) - r * 0.86);
+      kinds.forEach((k, bi) => { const ox = (bi - (kinds.length - 1) / 2) * step2, oy = r * 0.86; drawBadge(k, g, br, "tx", ox, oy, p.x + ox, Y(p.y) + oy); });
       if (p.lock) {
-        const lr = Math.min(fs * 0.4, Math.max(r * 0.26, fs * 0.2)), ox = r * 0.72, oy = r * 0.72;
+        // to the right at mid-height (same distance from center as before) so it clears the sun badge above and the badge row below
+        const lr = Math.min(fs * 0.4, Math.max(r * 0.26, fs * 0.2)), ox = r * 1.02, oy = 0;
         const lg = el("g", { class: "tx", "data-ox": ox, "data-oy": oy, transform: `translate(${p.x + ox} ${Y(p.y) + oy})` }, g);
         el("circle", { cx: 0, cy: 0, r: lr, fill: "#5A5240", stroke: "#fff", "stroke-width": lr * 0.16 }, lg);
         const s = lr * 0.85 / 12;
@@ -375,10 +492,11 @@
       }
     });
     // tree canopies float over the plants (see-through, not clickable)
-    const canopy = el("g", { "pointer-events": "none", "clip-path": "url(#bedclip)" }, root);
+    const canopy = el("g", { class: "clayer", "pointer-events": "none", "clip-path": "url(#bedclip)" }, root);
     objects.forEach(o => { if (o.t === "tree") el("circle", { cx: o.x, cy: Y(o.y), r: o.w / 2, fill: "#2F5A2A", "fill-opacity": 0.1, stroke: "#2F5A2A", "stroke-width": 0.06, "stroke-dasharray": "0.35 0.2" }, canopy); });
     // spotlight: the selected plant gets a name tag above it while the others fade back
     svg.classList.toggle("hasSel", selAll.length > 0);
+    svg.classList.toggle("hasHover", !!(c.hoverId && !c.paint));
     if (selAll.length === 1 && placements[selAll[0]]) {
       const p = placements[selAll[0]], pl = byId[p.id], r = sp(pl) / 2 * 0.96;
       const txt = pl.name + (pl.native ? "" : " ◆") + (pl.fam === "daisy" ? " ✿" : ""), fsz = fs * 0.95, w = txt.length * fsz * 0.6 + fsz * 1.4, h = fsz * 1.9;
@@ -405,30 +523,47 @@
     }
     // paint brush outline
     if (c.paint) { brushEl = el("circle", { class: "brushc", cx: -99, cy: -99, r: Math.max(0.25, c.paint.size / 2), fill: "none", stroke: "#2E3A2C", "stroke-width": 0.06, "stroke-dasharray": "0.15 0.1", "pointer-events": "none", visibility: "hidden" }, root); }
-    svg.classList.toggle("placing", !!(c.armed || c.objArmed));
+    svg.classList.toggle("placing", !!(c.armed || c.objArmed || c.pathDraw));
     svg.classList.toggle("painting", !!c.paint);
     svg.classList.remove("drawing");
     removeDrawUI();
   }
 
+  // where the front and back are, in words, for the captions above and below the plan (and the PDF)
+  const SIDE = { s: "bottom edge", n: "top edge", w: "left side", e: "right side", sw: "bottom left corner", se: "bottom right corner", nw: "top left corner", ne: "top right corner" };
+  const OPP = { s: "n", n: "s", w: "e", e: "w", sw: "ne", ne: "sw", se: "nw", nw: "se" };
+  function frontLabels(bed) {
+    const f = bed.front || (bed.mode === "island" ? "c" : "s");
+    if (f === "c") return { bottom: "ALL SIDES ARE THE FRONT · tall plants in the middle", top: "" };
+    if (f === "s") return { bottom: "FRONT EDGE (lawn / path side)", top: "BACK (fence / house / trees)" };
+    return { bottom: "FRONT: " + SIDE[f].toUpperCase() + " (lawn / path side) · short plants there, tall toward the " + SIDE[OPP[f]], top: "BACK: " + SIDE[OPP[f]].toUpperCase() + " (fence / house / trees)" };
+  }
   // --------------- outline tool: click corners, close the shape, then drag, add or remove corners ---------------
   const SIZES = [[24, 14], [36, 20], [60, 34], [90, 50]];
-  function chaikin(pts, it) {
-    let p = pts;
+  // Corner-cutting curve. sharp[i] keeps corner i as a crisp point (the edges on each side stay straight
+  // into it), so one outline can mix curves with sharp corners, like a bed against a house.
+  function chaikin(pts, it, sharp) {
+    let p = pts.map((q, i) => ({ x: q[0], y: q[1], s: !!(sharp && sharp[i]) }));
     for (let k = 0; k < it; k++) {
       const q = [];
-      for (let i = 0; i < p.length; i++) { const a = p[i], b = p[(i + 1) % p.length]; q.push([a[0] * 0.75 + b[0] * 0.25, a[1] * 0.75 + b[1] * 0.25], [a[0] * 0.25 + b[0] * 0.75, a[1] * 0.25 + b[1] * 0.75]); }
+      for (let i = 0; i < p.length; i++) {
+        const a = p[i], b = p[(i + 1) % p.length];
+        if (a.s) q.push(a);
+        q.push({ x: a.x * 0.75 + b.x * 0.25, y: a.y * 0.75 + b.y * 0.25 }, { x: a.x * 0.25 + b.x * 0.75, y: a.y * 0.25 + b.y * 0.75 });
+      }
       p = q;
     }
-    return p.map(q => [Math.round(q[0] * 100) / 100, Math.round(q[1] * 100) / 100]);
+    return p.map(q => [Math.round(q.x * 100) / 100, Math.round(q.y * 100) / 100]);
   }
   function startDraw(callbacks, opts) {
     opts = opts || {};
-    draw = { pts: [], closed: false, cur: null, W: 36, H: 20, drag: -1, smooth: !!opts.smooth, hist: [], done: callbacks.onDone, cancel: callbacks.onCancel };
+    mainView = view; view = { z: 1, fx: 0.5, fy: 0.5 };
+    draw = { pts: [], sharp: [], closed: false, cur: null, W: 36, H: 20, drag: -1, smooth: !!opts.smooth, hist: [], done: callbacks.onDone, cancel: callbacks.onCancel };
     if (opts.pts && opts.pts.length >= 3) {
       const bb = window.Geo.bbox(opts.pts), need = [bb.w + 6, bb.h + 6], sz = SIZES.find(s => s[0] >= need[0] && s[1] >= need[1]) || [Math.ceil(need[0]), Math.ceil(need[1])];
       draw.W = sz[0]; draw.H = sz[1];
       draw.pts = opts.pts.map(q => [Math.round((q[0] - bb.x0 + 3) * 2) / 2, Math.round((q[1] - bb.y0 + 3) * 2) / 2]);
+      draw.sharp = draw.pts.map((_, i) => opts.sharp && opts.sharp.length === draw.pts.length ? !!opts.sharp[i] : !opts.smooth);
       draw.closed = true;
     }
     ctx = ctx || {};
@@ -438,7 +573,8 @@
   const snapv = v => Math.round(v * 2) / 2;
   function drawCoords(e) {
     const q = svgPt(e);
-    return { x: Math.max(0, Math.min(draw.W, snapv(q.x - 2))), y: Math.max(0, Math.min(draw.H, snapv(draw.H - (q.y - 1.2)))) };
+    const k = draw.W / 36;
+    return { x: Math.max(0, Math.min(draw.W, snapv(q.x - 2 * k))), y: Math.max(0, Math.min(draw.H, snapv(draw.H - (q.y - 1.2 * k)))) };
   }
   // hold Shift for straight lines: snap the new corner to 45-degree steps from the last one
   function straighten(p, e) {
@@ -447,51 +583,87 @@
     const dx = p.x - last[0], dy = p.y - last[1], len = Math.hypot(dx, dy), a = Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) * (Math.PI / 4);
     return { x: Math.max(0, Math.min(draw.W, snapv(last[0] + Math.cos(a) * len))), y: Math.max(0, Math.min(draw.H, snapv(last[1] + Math.sin(a) * len))) };
   }
-  const remember = () => { draw.hist.push({ pts: draw.pts.map(q => q.slice()), closed: draw.closed }); if (draw.hist.length > 60) draw.hist.shift(); };
+  const remember = () => { draw.hist.push({ pts: draw.pts.map(q => q.slice()), sharp: draw.sharp.slice(), closed: draw.closed }); if (draw.hist.length > 60) draw.hist.shift(); };
+  // click a dot (without dragging) to switch it between a sharp corner and a curve
+  function toggleCorner(i) { draw.sharp[i] = !draw.sharp[i]; }
+  const anyCurve = () => draw.sharp.some(v => !v);
   function drawDown(e) {
     const t = e.target, k = draw.W / 36;
     if (t.classList.contains("dv")) {
       const i = +t.dataset.i;
-      if (e.button === 2) { if (draw.closed && draw.pts.length > 3) { remember(); draw.pts.splice(i, 1); renderDraw(); } e.preventDefault(); return; }
+      if (e.button === 2) { if (draw.closed && draw.pts.length > 3) { remember(); draw.pts.splice(i, 1); draw.sharp.splice(i, 1); renderDraw(); } e.preventDefault(); return; }
       if (!draw.closed && i === 0 && draw.pts.length >= 3) { remember(); draw.closed = true; renderDraw(); return; }
-      remember(); draw.drag = i; svg.setPointerCapture(e.pointerId); e.preventDefault(); return;
+      remember(); draw.drag = i; draw.dragFrom = draw.pts[i].slice(); draw.dragMoved = false; svg.setPointerCapture(e.pointerId); e.preventDefault(); return;
     }
     if (t.classList.contains("dm")) {
       const i = +t.dataset.i, a = draw.pts[i], b = draw.pts[(i + 1) % draw.pts.length];
-      remember(); draw.pts.splice(i + 1, 0, [snapv((a[0] + b[0]) / 2), snapv((a[1] + b[1]) / 2)]); draw.drag = i + 1;
+      remember(); draw.pts.splice(i + 1, 0, [snapv((a[0] + b[0]) / 2), snapv((a[1] + b[1]) / 2)]); draw.sharp.splice(i + 1, 0, !!draw.sharp[i]); draw.drag = i + 1; draw.dragMoved = true;
       svg.setPointerCapture(e.pointerId); renderDraw(); e.preventDefault(); return;
     }
-    if (draw.closed || e.button !== 0) return;
-    const p = straighten(drawCoords(e), e);
+    if (e.button !== 0) return;
+    const p0 = drawCoords(e);
+    if (draw.closed && window.Geo.pip(finalPoly(), p0.x, p0.y)) {   // inside the outline: move the whole shape
+      remember(); draw.move = { from: p0, pts: draw.pts.map(q => q.slice()), moved: false };
+      svg.setPointerCapture(e.pointerId); svg.classList.add("movingshape"); e.preventDefault(); return;
+    }
+    const r = viewRect();
+    pan = { sx: e.clientX, sy: e.clientY, cx: r.cx, cy: r.cy, moved: false, click: draw.closed ? null : straighten(drawCoords(e), e) };
+    svg.setPointerCapture(e.pointerId); e.preventDefault();
+  }
+  function addCorner(p) {
+    const k = draw.W / 36;
     if (draw.pts.length >= 3 && Math.hypot(p.x - draw.pts[0][0], p.y - draw.pts[0][1]) < 0.9 * k) { remember(); draw.closed = true; renderDraw(); return; }
     const last = draw.pts[draw.pts.length - 1];
     if (last && last[0] === p.x && last[1] === p.y) return;
-    remember(); draw.pts.push([p.x, p.y]); renderDraw();
+    remember(); draw.pts.push([p.x, p.y]); draw.sharp.push(true); renderDraw();
   }
   function drawMove(e) {
-    if (draw.drag >= 0) { const p = drawCoords(e); draw.pts[draw.drag] = [p.x, p.y]; renderDraw(); return; }
+    if (draw.move) {
+      const m = draw.move, p = drawCoords(e), xs = m.pts.map(q => q[0]), ys = m.pts.map(q => q[1]);
+      const dx = Math.max(-Math.min(...xs), Math.min(draw.W - Math.max(...xs), p.x - m.from.x)), dy = Math.max(-Math.min(...ys), Math.min(draw.H - Math.max(...ys), p.y - m.from.y));
+      if (dx || dy) m.moved = true;
+      draw.pts = m.pts.map(q => [q[0] + dx, q[1] + dy]); renderDraw(); return;
+    }
+    if (pan) {
+      if (view.z <= 1.001) return;   // at 100% the grid stays put
+      if (!pan.moved && Math.hypot(e.clientX - pan.sx, e.clientY - pan.sy) < 4) return;
+      if (!pan.moved) { pan.moved = true; svg.classList.add("panning"); draw.cur = null; }
+      const m = svg.getScreenCTM();
+      view.fx = (pan.cx - (e.clientX - pan.sx) / m.a) / base.w; view.fy = (pan.cy - (e.clientY - pan.sy) / m.d) / base.h;
+      applyView(); return;
+    }
+    if (draw.drag >= 0) { const p = drawCoords(e); if (draw.dragFrom && (p.x !== draw.dragFrom[0] || p.y !== draw.dragFrom[1])) draw.dragMoved = true; if (draw.dragMoved) { draw.pts[draw.drag] = [p.x, p.y]; renderDraw(); } return; }
     draw.cur = draw.closed ? null : straighten(drawCoords(e), e); renderDraw();
   }
-  function drawUp(e) { if (draw.drag >= 0) { draw.drag = -1; try { svg.releasePointerCapture(e.pointerId); } catch (_) {} renderDraw(); } }
+  function drawUp(e) {
+    if (draw.move) { const m = draw.move; draw.move = null; try { svg.releasePointerCapture(e.pointerId); } catch (_) {} svg.classList.remove("movingshape"); if (!m.moved) draw.hist.pop(); renderDraw(); return; }
+    if (pan) { const p = pan; pan = null; try { svg.releasePointerCapture(e.pointerId); } catch (_) {} svg.classList.remove("panning"); if (!p.moved && p.click) addCorner(p.click); return; }
+    if (draw.drag >= 0) {
+      const i = draw.drag; draw.drag = -1; try { svg.releasePointerCapture(e.pointerId); } catch (_) {}
+      if (!draw.dragMoved && draw.closed) toggleCorner(i); else if (!draw.dragMoved) draw.hist.pop();
+      renderDraw();
+    }
+  }
   function drawDbl(e) {
     const t = e.target;
-    if (t.classList.contains("dv") && draw.closed) { if (draw.pts.length > 3) { remember(); draw.pts.splice(+t.dataset.i, 1); renderDraw(); } return; }
+    if (t.classList.contains("dv") && draw.closed) { if (draw.pts.length > 3) { const i = +t.dataset.i; remember(); draw.pts.splice(i, 1); draw.sharp.splice(i, 1); renderDraw(); } return; }
     if (!draw.closed && draw.pts.length >= 3) { draw.closed = true; renderDraw(); }
   }
-  function finalPoly() { return draw.smooth ? chaikin(draw.pts, 3) : draw.pts.map(q => q.slice()); }
+  function finalPoly() { return anyCurve() ? chaikin(draw.pts, 3, draw.sharp) : draw.pts.map(q => q.slice()); }
   function finishDraw() {
-    if (!draw || draw.pts.length < 3) { if (ui) ui.msg.textContent = "Click at least 3 corners first."; return; }
-    const out = { pts: draw.pts.map(q => q.slice()), poly: finalPoly(), smooth: draw.smooth }, done = draw.done;
-    draw = null; removeDrawUI(); svg.classList.remove("drawing");
+    if (!draw || draw.pts.length < 3) { if (ui) ui.msg.textContent = "Click at least 3 corners first."; return false; }
+    const out = { pts: draw.pts.map(q => q.slice()), poly: finalPoly(), smooth: anyCurve(), sharp: draw.sharp.slice() }, done = draw.done;
+    draw = null; removeDrawUI(); svg.classList.remove("drawing"); view = mainView || { z: 1, fx: 0.5, fy: 0.5 };
     done && done(out);
+    return true;
   }
-  function cancelDraw() { const c = draw && draw.cancel; draw = null; removeDrawUI(); svg.classList.remove("drawing"); c && c(); }
-  function undoDraw() { if (!draw) return; const h = draw.hist.pop(); if (h) { draw.pts = h.pts; draw.closed = h.closed; } else if (!draw.closed) draw.pts.pop(); renderDraw(); }
-  function clearDraw() { if (!draw) return; remember(); draw.pts = []; draw.closed = false; renderDraw(); }
+  function cancelDraw() { if (draw) view = mainView || { z: 1, fx: 0.5, fy: 0.5 }; const c = draw && draw.cancel; draw = null; removeDrawUI(); svg.classList.remove("drawing"); c && c(); }
+  function undoDraw() { if (!draw) return; const h = draw.hist.pop(); if (h) { draw.pts = h.pts; draw.sharp = h.sharp; draw.closed = h.closed; } else if (!draw.closed) { draw.pts.pop(); draw.sharp.pop(); } renderDraw(); }
+  function clearDraw() { if (!draw) return; remember(); draw.pts = []; draw.sharp = []; draw.closed = false; renderDraw(); }
   function renderDraw() {
-    svg.classList.add("drawing");
+    svg.classList.add("drawing"); if (zbar) zbar.hidden = false;
     const W = draw.W, H = draw.H, k = W / 36;
-    svg.setAttribute("viewBox", `0 0 ${W + 3 * k} ${H + 3.2 * k}`);
+    base = { w: W + 3 * k, h: H + 3.2 * k }; applyView();
     svg.innerHTML = "";
     const root = el("g", { transform: `translate(${2 * k} ${1.2 * k})` }, svg);
     const ruleStep = W > 60 ? 10 : 5;
@@ -500,43 +672,52 @@
     for (let y = 0; y <= H; y++) el("line", { x1: 0, y1: y, x2: W, y2: y, stroke: y % 5 === 0 ? "#D9D2BA" : "#EEE9D8", "stroke-width": (y % 5 === 0 ? 0.06 : 0.035) * k }, root);
     for (let x = 0; x <= W; x += ruleStep) el("text", { x, y: H + 1.1 * k, "font-size": 0.7 * k, fill: "#7A7F70", "text-anchor": "middle", "font-family": "sans-serif" }, root, x + " ft");
     for (let y = 0; y <= H; y += ruleStep) el("text", { x: -0.3 * k, y: H - y + 0.25 * k, "font-size": 0.7 * k, fill: "#7A7F70", "text-anchor": "end", "font-family": "sans-serif" }, root, y + "");
+    const kd = k / view.z;
     const Yd = q => [q[0], H - q[1]];
     const pts = draw.pts.map(Yd);
     if (draw.closed) {
       const shape = finalPoly().map(Yd);
-      el("polygon", { points: shape.map(q => q.join(",")).join(" "), fill: "rgba(166,140,114,.45)", stroke: "#3F6B3A", "stroke-width": 0.14 * k, "stroke-linejoin": "round" }, root);
-      if (draw.smooth) el("polygon", { points: pts.map(q => q.join(",")).join(" "), fill: "none", stroke: "#3F6B3A", "stroke-width": 0.05 * k, "stroke-dasharray": `${0.25 * k} ${0.18 * k}` }, root);
+      el("polygon", { class: "dshape dtip", "data-k": "draw", "data-tip": "Drag to move the whole shape", cursor: "move", points: shape.map(q => q.join(",")).join(" "), fill: "rgba(166,140,114,.45)", stroke: "#3F6B3A", "stroke-width": 0.14 * kd, "stroke-linejoin": "round" }, root);
+      if (anyCurve()) el("polygon", { points: pts.map(q => q.join(",")).join(" "), fill: "none", stroke: "#3F6B3A", "stroke-width": 0.05 * kd, "stroke-dasharray": `${0.25 * kd} ${0.18 * kd}` }, root);
     } else {
       const all = draw.cur ? pts.concat([Yd([draw.cur.x, draw.cur.y])]) : pts;
       if (pts.length >= 3) el("polygon", { points: pts.map(q => q.join(",")).join(" "), fill: "rgba(166,140,114,.3)", stroke: "none" }, root);
-      if (all.length > 1) el("polyline", { points: all.map(q => q.join(",")).join(" "), fill: "none", stroke: "#3F6B3A", "stroke-width": 0.14 * k, "stroke-linejoin": "round" }, root);
+      if (all.length > 1) el("polyline", { points: all.map(q => q.join(",")).join(" "), fill: "none", stroke: "#3F6B3A", "stroke-width": 0.14 * kd, "stroke-linejoin": "round" }, root);
     }
     // side lengths
     const ring = draw.closed ? pts.concat([pts[0]]) : (draw.cur ? pts.concat([Yd([draw.cur.x, draw.cur.y])]) : pts);
     for (let i = 1; i < ring.length; i++) {
       const a = ring[i - 1], b = ring[i], len = Math.hypot(a[0] - b[0], a[1] - b[1]);
-      if (len > 0.9 * k) el("text", { x: (a[0] + b[0]) / 2, y: (a[1] + b[1]) / 2 - 0.3 * k, "font-size": 0.62 * k, fill: "#3F6B3A", "text-anchor": "middle", "font-family": "sans-serif", "font-weight": 700, "pointer-events": "none" }, root, len.toFixed(1) + " ft");
+      if (len > 0.9 * kd) el("text", { x: (a[0] + b[0]) / 2, y: (a[1] + b[1]) / 2 - 0.3 * kd, "font-size": 0.62 * kd, fill: "#3F6B3A", "text-anchor": "middle", "font-family": "sans-serif", "font-weight": 700, "pointer-events": "none" }, root, len.toFixed(1) + " ft");
     }
     // midpoint + handles (closed shape only): click one to add a corner there
     if (draw.closed) pts.forEach((a, i) => {
-      const b = pts[(i + 1) % pts.length]; if (Math.hypot(a[0] - b[0], a[1] - b[1]) < 1.2 * k) return;
-      const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, r = 0.26 * k;
-      el("circle", { class: "dm", "data-i": i, cx: mx, cy: my, r, fill: "#fff", stroke: "#3F6B3A", "stroke-width": 0.05 * k, cursor: "copy" }, root);
-      el("path", { d: `M${mx - r * 0.55} ${my}H${mx + r * 0.55}M${mx} ${my - r * 0.55}V${my + r * 0.55}`, stroke: "#3F6B3A", "stroke-width": 0.06 * k, "pointer-events": "none" }, root);
+      const b = pts[(i + 1) % pts.length]; if (Math.hypot(a[0] - b[0], a[1] - b[1]) < 1.2 * kd) return;
+      const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, r = 0.26 * kd;
+      el("circle", { class: "dm dtip", "data-i": i, "data-k": "draw", "data-tip": "Click to add a corner here, or drag to pull one out", cx: mx, cy: my, r, fill: "#fff", stroke: "#3F6B3A", "stroke-width": 0.05 * kd, cursor: "copy" }, root);
+      el("path", { d: `M${mx - r * 0.55} ${my}H${mx + r * 0.55}M${mx} ${my - r * 0.55}V${my + r * 0.55}`, stroke: "#3F6B3A", "stroke-width": 0.06 * kd, "pointer-events": "none" }, root);
     });
     pts.forEach((q, i) => {
       const first = i === 0 && !draw.closed;
-      el("circle", { class: "dv", "data-i": i, cx: q[0], cy: q[1], r: (first ? 0.36 : draw.closed ? 0.3 : 0.22) * k, fill: first ? "#E58A00" : "#3F6B3A", stroke: "#fff", "stroke-width": 0.06 * k, cursor: draw.closed ? "move" : first && pts.length >= 3 ? "pointer" : "move" }, root);
+      const few = draw.pts.length <= 3;
+      const tip = draw.closed ? (draw.sharp[i] ? "Sharp corner · Drag to move · Click to make it a curve" : "Curve · Drag to move · Click to make it a sharp corner") + (few ? "" : " · Right-click to remove")
+        : first && pts.length >= 3 ? "Click to close the shape" : "Corner · Drag to move · Click the orange dot to close the shape";
+      if (draw.closed && draw.sharp[i]) {   // a sharp corner: a square dot (curves are round dots)
+        const r = 0.28 * kd;
+        el("rect", { class: "dv dtip", "data-i": i, "data-k": "draw", "data-tip": tip, x: q[0] - r, y: q[1] - r, width: 2 * r, height: 2 * r, fill: "#3F6B3A", stroke: "#fff", "stroke-width": 0.06 * kd, cursor: "move" }, root);
+        return;
+      }
+      el("circle", { class: "dv dtip", "data-i": i, "data-k": "draw", "data-tip": tip, cx: q[0], cy: q[1], r: (first ? 0.36 : draw.closed ? 0.3 : 0.22) * kd, fill: first ? "#E58A00" : "#3F6B3A", stroke: "#fff", "stroke-width": 0.06 * kd, cursor: draw.closed ? "move" : first && pts.length >= 3 ? "pointer" : "move" }, root);
     });
     if (ui) {
       let m;
       if (draw.closed) {
         const fp = finalPoly(), bb = window.Geo.bbox(fp), A = window.Geo.area(fp);
-        m = `About ${bb.w.toFixed(1)} × ${bb.h.toFixed(1)} ft, ${Math.round(A)} sq ft. Drag a dot to reshape, click a + to add a corner, double-click a dot to remove it. Then Save shape.`;
+        m = `About ${bb.w.toFixed(1)} × ${bb.h.toFixed(1)} ft, ${Math.round(A)} sq ft. Point at any dot for what it does: drag to move, click to switch between a curve (round dot) and a sharp corner (square dot), right-click to remove. Click a + to add a corner. Drag inside the shape to move all of it. Ctrl + scroll zooms. Then Save shape.`;
       } else m = pts.length < 3 ? "Click to place corners (they snap to the half foot). Hold Shift for straight lines." : "Keep clicking corners, then click the orange start point (or double-click) to close the shape.";
       ui.msg.textContent = m;
       ui.save.disabled = draw.pts.length < 3;
-      ui.smooth.checked = draw.smooth;
+      ui.curves.disabled = ui.corners.disabled = !draw.closed;
       ui.size.value = draw.W + "x" + draw.H;
     }
   }
@@ -546,20 +727,21 @@
     const mk = (t, f, cls) => { const b = document.createElement("button"); b.type = "button"; b.className = "btn small " + (cls || ""); b.textContent = t; b.onclick = f; return b; };
     const msg = document.createElement("span"); msg.className = "tip";
     const save = mk("Save shape", finishDraw, "primary");
-    const sm = document.createElement("label"); sm.className = "gridtoggle"; sm.innerHTML = '<input type="checkbox"> Smooth curves'; const smooth = sm.querySelector("input");
-    smooth.onchange = () => { draw.smooth = smooth.checked; renderDraw(); };
+    const allc = (t, v, title) => { const b = mk(t, () => { if (!draw.closed) return; remember(); draw.sharp = draw.pts.map(() => v); renderDraw(); }); b.title = title; return b; };
+    const curves = allc("All curves", false, "Make every corner a smooth curve"), corners = allc("All sharp", true, "Make every corner sharp");
     const size = document.createElement("select"); size.title = "Drawing area";
     SIZES.forEach(s => { const o = document.createElement("option"); o.value = s[0] + "x" + s[1]; o.textContent = `Area ${s[0]} × ${s[1]} ft`; size.appendChild(o); });
     size.onchange = () => { const [w, h] = size.value.split("x").map(Number); draw.W = w; draw.H = h; draw.pts = draw.pts.map(q => [Math.min(w, q[0]), Math.min(h, q[1])]); renderDraw(); };
-    bar.append(save, mk("Undo", undoDraw), mk("Clear", clearDraw), mk("Cancel", cancelDraw), sm, size, msg);
-    wrap.appendChild(bar); ui = { bar, msg, save, smooth, size };
+    bar.append(save, mk("Undo", undoDraw), (() => { const c = mk("Clear shape", clearDraw); c.title = "Erase the outline and draw a new one from scratch"; return c; })(), mk("Cancel", cancelDraw), curves, corners, size, msg);
+    wrap.appendChild(bar); ui = { bar, msg, save, curves, corners, size };
     if (!SIZES.some(s => s[0] === draw.W && s[1] === draw.H)) { const o = document.createElement("option"); o.value = draw.W + "x" + draw.H; o.textContent = `Area ${draw.W} × ${draw.H} ft`; size.appendChild(o); }
   }
   function removeDrawUI() { if (ui) { ui.bar.remove(); ui = null; } }
 
   function setHover(id) {
     if (!svg) return;
+    svg.classList.toggle("hasHover", !!id);   // the bed and objects fade back while a plant is pointed at
     svg.querySelectorAll(".pl").forEach(g => { g.classList.toggle("hl", !!id && g.dataset.id === id); g.classList.toggle("dim", !!id && g.dataset.id !== id && !g.classList.contains("sel")); });
   }
-  window.Plan = { init, render, startDraw, setHover, isDrawing: () => !!draw, ZONE, ZONE_LAB };
+  window.Plan = { init, render, startDraw, setHover, isDrawing: () => !!draw, resetView, zoomBy, cancelDraw, finishDraw, chaikin, frontLabels, ZONE, ZONE_LAB, ZONE_HRS, ZONE_TIP, sunNeed, sunTip };
 })();

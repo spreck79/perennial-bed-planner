@@ -23,7 +23,7 @@
     const gName = (data.name || "My Garden").trim() || "My Garden", prefs = data.prefs || { sun: ["part"] };
     const toxicPlants = plants.filter(p => p.toxic && p.toxic.length), TOX = "#A8423A";
     const toxLabel = window.toxLabel || (() => "");
-    const lightWords = (() => { const m = { full: "Full sun", part: "Part shade", shade: "Full shade" }; const have = ["full", "part", "shade"].filter(k => plants.some(p => p.sun && p.sun.includes(k)) && (prefs.sun || []).includes(k)); return (have.length ? have : prefs.sun || ["part"]).map(k => m[k]).join(" / "); })();
+    const lightWords = (() => { const m = { full: "Full sun", part: "Part shade", shade: "Shade" }; const have = ["full", "part", "shade"].filter(k => plants.some(p => p.sun && p.sun.includes(k)) && (prefs.sun || []).includes(k)); return (have.length ? have : prefs.sun || ["part"]).map(k => m[k]).join(" / "); })();
     const Ch = window.Charts, Geo = window.Geo;
     const fill = h => { const c = rgb(h); doc.setFillColor(c[0], c[1], c[2]); };
     const stroke = h => { const c = rgb(h); doc.setDrawColor(c[0], c[1], c[2]); };
@@ -267,11 +267,22 @@
       if (!list.length) return;
       list = list.slice().sort((a, b) => hMean(a) - hMean(b) || a.name.localeCompare(b.name));
       const startPage = (cont) => { newPage(); let t = cont ? title.replace(/ ◆$/, "") + " (continued)" : title; heading(t, 62, cont ? 18 : 20); if (!cont) { sf("s", 8.4); color(C.muted); const t0 = "Listed in planting order, from the front edge of the bed to the back."; text(t0, M, 78); drawKey(M, 91, 7.2, usedKinds); } return cont ? 80 : 102; };
-      let py = startPage(false); const ch = 129;
+      let py = startPage(false);
       list.forEach(p => {
+        const tx = M + 148, tw = W - M - tx;
+        const lt = p.light || "", soil = lt + (p.moisture && !/soil|moist|dry|wet/i.test(lt) ? "; " + p.moisture.toLowerCase() + " soil" : "");
+        // a printed card can't show a tooltip, so it says the hours of sun outright
+        const need = window.Plan && window.Plan.sunNeed ? window.Plan.sunNeed(p) : "";
+        const parts = [["Light & soil: ", true], [soil + (need ? (/[.]$/.test(soil) ? " " : ". ") + need + "." : ""), false]];
+        let note = p.notes; if (p.fam === "daisy") note += " Daisy family, like ragweed."; if (deerEats(p) && !/deer/i.test(p.notes)) note += " " + deerText(p);
+        const pf = data.prefs || {}, okPref = q => (!(q.toxic && q.toxic.length) || pf.toxic) && !(deerEats(q) && pf.deer === false) && !(q.fam === "daisy" && pf.daisy === false) && (!pf.sun || q.sun.some(s => pf.sun.includes(s))) && (!pf.origin || pf.origin.includes(q.native ? "nat" : "gar"));
+        const comps = (window.COMPANIONS && window.COMPANIONS[p.id] || []).filter(c => byId[c.id] && (counts[c.id] || okPref(byId[c.id])));
+        sf("s", 7.8); const nl = wrap(note, tw).slice(0, comps.length ? 2 : 3);
+        // the light line can wrap now that it gives the hours of sun, so each card is as tall as its text needs
+        // (at least the usual 129) instead of running into the next card
+        const ch = Math.max(129, 87 + (flow(parts, tx, 0, tw, 7.8, 10, C.muted, C.muted, false) + nl.length + (comps.length ? 1 : 0) - 1) * 10 + 12);
         if (py + ch > H - 50) py = startPage(true);
         photo(p.id, M, py + 2, 132, 105, 7);
-        const tx = M + 148, tw = W - M - tx;
         { // shrink a long name so it doesn't run into the count and row tags
           sf("sb", 6.2); const pwR = doc.getTextWidth(rowOf(p).toUpperCase() + " ROW") + 16; sf("sb", 6.8); const cntW = counts[p.id] ? doc.getTextWidth("In this bed: " + counts[p.id] + (p.clump ? " clumps, about " + counts[p.id] * p.clump + " bulbs" : "")) + 7 : 0;
           const icW = icKinds(p).length * 4.6 * 2.35 + 6, room = W - M - pwR - cntW - 10 - tx - icW; let fs = 14.5; sf("rb", fs); while (doc.getTextWidth(p.name) > room && fs > 10.5) { fs -= 0.5; sf("rb", fs); }
@@ -291,16 +302,11 @@
         lab("PLACE IN BED", c3, py + 41); val(rowOf(p) + " row", c3, py + 51, tw * 0.28);
         lab("BLOOMS", c1, py + 62); val(p.bloom ? Ch.bloomText(p) : "Foliage plant", c1, py + 72, tw * 0.38);
         lab("COLOR", c2, py + 62); fill(p.hex); stroke(Ch.shade(p.hex, 0.75)); doc.setLineWidth(0.4); doc.circle(c2 + 4, py + 69.6, 3.7, "FD"); val(p.color, c2 + 12, py + 72, tw * 0.58 - 12);
-        const lt = p.light || "", soil = lt + (p.moisture && !/soil|moist|dry|wet/i.test(lt) ? "; " + p.moisture.toLowerCase() + " soil" : "");
-        const parts = [["Light & soil: ", true], [soil, false]];
         const ln = flow(parts, tx, py + 87, tw, 7.8, 10, C.muted, C.muted, true);
-        let note = p.notes; if (p.fam === "daisy") note += " Daisy family, like ragweed."; if (deerEats(p) && !/deer/i.test(p.notes)) note += " " + deerText(p);
-        const pf = data.prefs || {}, okPref = q => (!(q.toxic && q.toxic.length) || pf.toxic) && !(deerEats(q) && pf.deer === false) && !(q.fam === "daisy" && pf.daisy === false) && (!pf.sun || q.sun.some(s => pf.sun.includes(s))) && (!pf.origin || pf.origin.includes(q.native ? "nat" : "gar"));
-        const comps = (window.COMPANIONS && window.COMPANIONS[p.id] || []).filter(c => byId[c.id] && (counts[c.id] || okPref(byId[c.id])));
         const inPlan = comps.filter(c => counts[c.id]).map(c => byId[c.id].name).slice(0, 4);
         const others = comps.filter(c => !counts[c.id]).map(c => byId[c.id].name).slice(0, Math.max(0, 4 - inPlan.length));
         const andJoin = a => a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1];
-        sf("s", 7.8); color(C.muted); const nl = wrap(note, tw).slice(0, comps.length ? 2 : 3);
+        sf("s", 7.8); color(C.muted);
         text(nl, tx, py + 87 + ln * 10, { lineHeightFactor: 10 / 7.8 });
         if (comps.length) {
           // one line only: add names while they fit
@@ -463,7 +469,7 @@
       fill("#8E7660"); stroke("#8E7660"); doc.setLineWidth(6); doc.setLineJoin("round"); drawPoly("FD", 1, 6);
       fill("#A68C72"); stroke("#8E7660"); doc.setLineJoin("miter"); drawPoly("F", 0, 0.5);
       // painted sun zones (fine cells, runs merged per row), then the outline again to tidy the curved edges
-      const ZC = (window.Plan && window.Plan.ZONE) || { full: "#C9AE66", part: "#B7AC8C", shade: "#7C7678" }, ZL = { full: "Full sun", part: "Part shade", shade: "Full shade" };
+      const ZC = (window.Plan && window.Plan.ZONE) || { full: "#C9AE66", part: "#B7AC8C", shade: "#7C7678" }, ZL = {}; ["full", "part", "shade"].forEach(z => (ZL[z] = window.Plan.ZONE_LAB[z] + " (" + window.Plan.ZONE_HRS[z] + ")"));
       if (SUNP) {
         const res = 0.25, nx = Math.ceil(bb.w / res), ny = Math.ceil(bb.h / res);
         for (let j = 0; j < ny; j++) {
@@ -491,6 +497,17 @@
       for (let gy = 1; gy < bb.h; gy++) segsAt(gy, false).forEach(s => doc.line(X(s[0]), Y(gy), X(s[1]), Y(gy)));
       // objects sit under the plants
       const polyO = pts => { const Q = pts.map(q => [X(q[0]), Y(q[1])]); doc.lines(pathLines(Q.concat([Q[0]])), Q[0][0], Q[0][1], [1, 1], "FD", true); };
+      // the round-shrub graphic, seen from above: a dark clump, 7 lighter lobes in a ring, and a bright center
+      // (same as the on-screen plan). The hedge reuses the same rosette via Geo.hedgeLayout.
+      const shrubBlob = (bx, by, br) => { fill("#557A47"); stroke("#3C5A32"); doc.circle(bx, by, br, "FD"); fill("#628A52"); for (let k = 0; k < 7; k++) { const a = k / 7 * Math.PI * 2 + 0.4; doc.circle(bx + Math.cos(a) * br * 0.52, by + Math.sin(a) * br * 0.52, br * 0.34, "F"); } fill("#6A9459"); doc.circle(bx, by, br * 0.3, "F"); };
+      // a hedge drawn from its layout; map turns hedge-frame feet into page points, k is points per foot
+      const hedgeArt = (L, map, k) => {
+        fill("#557A47"); stroke("#3C5A32");
+        const Q = L.outline.map(p => map(p[0], p[1]));
+        doc.lines(pathLines(Q.concat([Q[0]])), Q[0][0], Q[0][1], [1, 1], "FD", true);
+        fill("#628A52"); L.lobes.forEach(p => { const q = map(p[0], p[1]); doc.circle(q[0], q[1], L.lobeR * k, "F"); });
+        fill("#6A9459"); L.centers.forEach(p => { const q = map(p[0], p[1]); doc.circle(q[0], q[1], L.centerR * k, "F"); });
+      };
       const drawObj = (o, cx, cy, s2) => {
         const r = o.w / 2 * s2; doc.setLineWidth(0.7);
         if (o.t === "path") {
@@ -509,10 +526,23 @@
         else if (o.t === "stump") { fill("#A27A55"); stroke("#6E4F33"); doc.circle(cx, cy, r, "FD"); stroke("#7E5B3C"); doc.setLineWidth(0.4); doc.circle(cx, cy, r * 0.66, "S"); doc.circle(cx, cy, r * 0.36, "S"); }
         else if (o.t === "rock") { fill("#A19D93"); stroke("#6F6B62"); if (s2 === sc) polyO(Geo.objOutline(o, 24)); else doc.ellipse(cx, cy, r, r * 0.7, "FD"); }
         else if (o.t === "birdbath") { fill("#D4CFC4"); stroke("#8F8A7E"); doc.circle(cx, cy, r, "FD"); fill("#A9D0E3"); doc.circle(cx, cy, r * 0.72, "F"); }
-        else if (o.t === "shrub") { fill("#557A47"); stroke("#3C5A32"); doc.circle(cx, cy, r, "FD"); fill("#628A52"); for (let k = 0; k < 7; k++) { const a = k / 7 * Math.PI * 2 + 0.4; doc.circle(cx + Math.cos(a) * r * 0.52, cy + Math.sin(a) * r * 0.52, r * 0.32, "F"); } }
+        else if (o.t === "shrub") { shrubBlob(cx, cy, r); }
+        else if (o.t === "hedge") {
+          // several round shrubs grown together (same rosettes as the round shrub), same as the on-screen plan
+          if (s2 === sc) {
+            const rot = (o.rot || 0) * Math.PI / 180, c = Math.cos(rot), sn = Math.sin(rot);
+            hedgeArt(Geo.hedgeLayout(o.w / 2, o.h / 2), (lx, ly) => [X(o.x + lx * c - ly * sn), Y(o.y + lx * sn + ly * c)], sc);
+          } else {
+            // legend swatch: a short three-plant hedge in the same style
+            hedgeArt(Geo.hedgeLayout(r * 1.4, r * 0.6), (lx, ly) => [cx + lx, cy + ly], 1);
+          }
+        }
         else if (o.t === "tree") { const tr = (s2 === sc ? Geo.trunkR(o) : o.w / 2) * s2; fill("#7A5636"); stroke("#5A3E26"); doc.circle(cx, cy, tr, "FD"); }
       };
+      // objects are only drawn inside the bed (plants can spill over the edge)
+      doc.saveGraphicsState(); doc.lines(pathLines(P.concat([P[0]])), P[0][0], P[0][1], [1, 1], null, true); doc.clip(); doc.discardPath();
       OBJS.forEach(o => drawObj(o, X(o.x), Y(o.y), sc));
+      doc.restoreGraphicsState();
       // plants, big first
       placements.slice().sort((a, b) => byId[b.id].spacing - byId[a.id].spacing).forEach(p => {
         const pl = byId[p.id], r = (pl.spacing / 24) * sc * 0.96;
@@ -543,14 +573,7 @@
       const xs = bb.w > 30 ? 5 : bb.w > 16 ? 2 : 1; for (let gx = 0; gx <= bb.w + 0.01; gx += xs) text(gx + " ft", X(gx), byy + bh + 12, { align: "center" });
       const ys = bb.h > 24 ? 5 : bb.h > 12 ? 2 : 1; for (let gy = 0; gy <= bb.h + 0.01; gy += ys) text(String(gy), bx - 8, Y(gy) + 2, { align: "right" });
       font("helvetica", "bold", 7.2); color("#4b5244");
-      text(bed.mode === "island" ? "ALL SIDES ARE THE FRONT: tall plants in the middle" : "FRONT EDGE (lawn / path side)", bx, byy + bh + 24);
-      if (bed.mode !== "island") text("BACK (fence / house / trees)", bx + bw, byy - 8, { align: "right" });
-      // north arrow, bottom right
-      { const nx = bx + bw + 14, ny = byy + bh - 9, r = 8, a = (data.north || 0) * Math.PI / 180;
-        fill("#FFFFFF"); stroke("#8E7660"); doc.setLineWidth(0.8); doc.circle(nx, ny, r, "FD");
-        const tip = [nx + Math.sin(a) * r * 0.78, ny - Math.cos(a) * r * 0.78], b1 = [nx + Math.sin(a + 2.6) * r * 0.42, ny - Math.cos(a + 2.6) * r * 0.42], b2 = [nx + Math.sin(a - 2.6) * r * 0.42, ny - Math.cos(a - 2.6) * r * 0.42];
-        fill("#4b5244"); doc.lines([[b1[0] - tip[0], b1[1] - tip[1]], [nx - b1[0], ny - b1[1]], [b2[0] - nx, b2[1] - ny]], tip[0], tip[1], [1, 1], "F", true);
-        sf("sb", 6); color("#4b5244"); text("N", tip[0] + Math.sin(a) * 4.2, tip[1] - Math.cos(a) * 4.2 + 2, { align: "center" }); }
+      { const FL = window.Plan.frontLabels(bed); text(FL.bottom.replace(" · ", ": "), bx, byy + bh + 24); if (FL.top) text(FL.top, bx + bw, byy - 8, { align: "right" }); }
       // second legend row: sun zones and the kinds of objects in the bed
       const extra = [];
       if (SUNP) ["full", "part", "shade"].filter(z => SUNP.zones.has(z)).forEach(z => extra.push({ z, t: ZL[z] }));

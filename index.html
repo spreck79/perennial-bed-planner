@@ -13,6 +13,7 @@
     <div class="sub" id="hdrSub">All perennials · Zone 6B · Southern Michigan</div>
   </div>
   <div class="actions">
+    <button class="btn" id="btnTour" title="Walk through the steps one at a time">Guided tour</button>
     <button class="btn primary" id="btnPdf">Create PDF guide</button>
     <button class="btn" id="btnSave">Save plan</button>
     <span class="btn filebtn">Open plan<input type="file" id="fileOpen" accept=".json,application/json"></span>
@@ -22,43 +23,80 @@
 
 <div class="layout">
   <aside class="left">
-    <section class="card" id="bedPanel">
-      <h2>1. Name it and size your bed</h2>
-      <label class="field namefield">Garden name
-        <input type="text" id="gName" maxlength="60" placeholder="For example: Backyard Shade Garden" autocomplete="off">
-      </label>
-      <p class="lede">Pick a shape and size. Everything below updates to fit.</p>
-      <div class="shapes" id="shapes"></div>
-      <p class="hint" id="shapeHint"></p>
-      <div class="dims" id="dims"></div>
-      <div id="freeBox" style="display:none">
-        <div class="row" style="margin-top:10px">
-          <button class="btn small" id="btnDraw">Draw the outline</button>
-          <label class="field" style="flex:1;min-width:130px">Tall plants go
-            <select id="freeView"><option value="border">at the back (top)</option><option value="island">in the middle</option></select>
-          </label>
-        </div>
+    <section class="card namecard step" id="nameCard" data-step="name">
+      <div class="stephead"><h2><span class="stepck">✓</span>1. Name your garden</h2><button type="button" class="steptog"></button></div>
+      <div class="stepsum"></div>
+      <div class="stepbody">
+        <label class="field namefield"><span class="opt">Optional. It's shown at the top of the planner and on your PDF guide.</span>
+          <input type="text" id="gName" maxlength="60" placeholder="For example: Backyard Shade Garden" autocomplete="off" aria-label="Garden name">
+        </label>
+        <p class="examplenote">New here? <button type="button" class="whybtn" id="btnExample">Load an example garden</button> to see a finished plan right away.</p>
+        <div class="stepfoot"><button type="button" class="btn small primary stepdone">Done</button></div>
+      </div>
+    </section>
+    <section class="card step" id="bedPanel" data-step="bed">
+      <div class="stephead"><h2><span class="stepck">✓</span>2. Your bed</h2><button type="button" class="steptog"></button></div>
+      <div class="stepsum"></div>
+      <div class="stepbody">
+        <p class="lede">Choose a shape, then set the size. Everything below updates to fit.</p>
+        <div class="bp-lab">Shape</div>
+        <div class="shapes" id="shapes"></div>
+        <p class="hint" id="shapeHint"></p>
+        <div class="dims" id="dims"></div>
+        <div class="bp-summary" id="bedSummary"></div>
+        <div class="stepfoot"><button type="button" class="btn small primary stepdone">Done</button></div>
       </div>
     </section>
 
-    <section class="card" id="prefCard">
-      <h2>2. What kind of garden?</h2>
-      <p class="lede">Choose what fits your spot. The plant list in step 3 only shows plants that match.</p>
-      <div class="pgroup"><div class="plabel">Sunlight <small>(pick one or more)</small></div><div class="chips" id="pSun"></div></div>
-      <div class="pgroup"><div class="plabel">Where plants come from</div><div class="chips" id="pOrigin"></div></div>
-      <div class="pgroup"><div class="plabel">Kinds of plants</div><div class="chips" id="pKind"></div></div>
-      <div class="pgroup"><div class="plabel">Pets, people &amp; wildlife</div><div class="chips" id="pDaisy"></div><p class="hint" id="daisyHint"></p><div class="chips" id="pDeer"></div><p class="hint" id="deerHint"></p><div class="chips" id="pTox"></div><p class="hint" id="toxHint"></p></div>
+    <section class="card step" id="objCard" data-step="objects">
+      <div class="stephead"><h2><span class="stepck">✓</span>3. Add objects</h2><button type="button" class="steptog"></button></div>
+      <div class="stepsum"></div>
+      <div class="stepbody">
+        <p class="lede">Add what's in the bed or going into it before the plants, so they're laid out around it. Click one, then click the bed.</p>
+        <div class="objgrid" id="objGrid"></div>
+        <p class="objlist" id="objList"></p>
+        <div class="stepfoot"><button type="button" class="btn small primary stepdone">Done</button></div>
+      </div>
+    </section>
+
+    <section class="card step" id="sunCard" data-step="sun">
+      <div class="stephead"><h2><span class="stepck">✓</span>4. How much sun?</h2><button type="button" class="steptog"></button></div>
+      <div class="stepsum"></div>
+      <div class="stepbody">
+        <p class="lede">Pick every light your bed gets. Count only direct sun on the bed itself. Pick one or more.</p>
+        <div class="optlist" id="pSun"></div>
+        <button type="button" class="btn small sunpaintbtn" id="btnPaintSun">Map sunny and shady spots on the bed plan</button>
+        <div class="stepfoot"><button type="button" class="btn small primary stepdone">Done</button></div>
+      </div>
+    </section>
+
+    <section class="card step" id="prefCard" data-step="kind">
+      <div class="stephead"><h2><span class="stepck">✓</span>5. What kind of garden?</h2><button type="button" class="steptog"></button></div>
+      <div class="stepsum"></div>
+      <div class="stepbody">
+        <p class="lede">Pick what you'd like to grow. Step 6 shows only the plants that match.</p>
+        <div class="pc-count" id="prefCount"></div>
+        <div class="bp-lab">Include</div>
+        <div class="seg2" id="pOrigin"></div>
+        <div class="chips kchips" id="pKind"></div>
+        <div class="bp-lab">Plants to watch out for</div>
+        <div class="avoid" id="pAvoid"></div>
+        <div class="stepfoot"><button type="button" class="btn small primary stepdone">Done</button></div>
+      </div>
     </section>
 
     <section class="card" id="libCard">
-      <h2>3. Pick plants</h2>
+      <h2>6. Pick plants</h2>
       <p class="lede" id="libLede"></p>
+      <div class="libkey" id="libKey" hidden></div>
+      <div class="libtabs" id="libTabs"></div>
       <div class="filters">
-        <input type="search" id="q" placeholder="Search plants">
+        <input type="search" id="q" placeholder="Search by name">
         <div class="row tight">
-          <select id="fHeight" style="flex:1"><option value="">Any height</option><option value="low">Low (under 12 in)</option><option value="mid">Medium (12–30 in)</option><option value="tall">Tall (30 in and up)</option></select>
-          <select id="fMonth" style="flex:1"><option value="">Any bloom month</option></select>
+          <button type="button" class="btn small selbtn" id="fHeight" style="flex:1">Any height</button>
+          <button type="button" class="btn small selbtn" id="fMonth" style="flex:1">Any bloom month</button>
         </div>
+        <div class="libsort">Sort <button type="button" class="btn small selbtn" id="libSort">A to Z</button><span class="libn" id="libN"></span></div>
       </div>
       <div class="lib" id="lib"></div>
     </section>
@@ -67,25 +105,17 @@
   <main class="center">
     <section class="card" id="planCard">
       <h2>Bed plan</h2>
-      <p class="lede">Each plant is drawn at its full grown size, so the plan is also your spacing guide. Drag a plant to move it; right-click it for more choices. Ctrl+Z undoes your last change. Grid squares are 1 foot.</p>
+      <p class="lede">Each plant is drawn at its full grown size, so the plan doubles as your spacing guide. Grid squares are 1 foot.</p>
       <div class="plan-tools">
         <span class="undogrp"><button class="btn small ibtn" id="btnUndo" type="button" title="Undo (Ctrl+Z)" aria-label="Undo" disabled>↶</button><button class="btn small ibtn" id="btnRedo" type="button" title="Redo (Ctrl+Y)" aria-label="Redo" disabled>↷</button></span>
-        <div class="seg" id="viewSeg"><button data-v="codes" class="on">Letters</button><button data-v="photos">Photos</button></div>
-        <label class="gridtoggle" id="gridToggleWrap"><input type="checkbox" id="chkGrid" checked> Grid</label>
-        <label class="gridtoggle" id="sunToggleWrap" hidden><input type="checkbox" id="chkSun" checked> Sun zones</label>
+        <button class="btn small tmenu" id="mAdd" type="button" title="Add a plant, or a path, stone, birdbath, shrub, tree and more">+ Add <span class="caret">▾</span></button>
+        <button class="btn small tmenu" id="mSun" type="button" title="Map the spots that get full sun, part shade or shade">Sun <span class="caret">▾</span></button>
+        <button class="btn small tmenu" id="mPlan" type="button" title="Suggest a planting, re-arrange, fill gaps or clear the bed">Plan it <span class="caret">▾</span></button>
+        <button class="btn small tmenu" id="mView" type="button" title="Letters or photos, grid, sun colors">View <span class="caret">▾</span></button>
         <span class="armed" id="armed"></span>
-        <button class="btn small" id="btnSuggest" title="Chooses how many of each plant fills the bed, then arranges them">Suggest quantities</button>
-        <button class="btn small" id="btnArrange" title="Re-arranges the current plants in a new natural-looking layout">Re-arrange</button>
-        <button class="btn small" id="btnClear">Clear bed</button>
-        <span class="tools-right">
-          <button class="btn small" id="btnObj" type="button" title="Add a path, stepping stone, stump, rock, birdbath, shrub or tree">Add object ▾</button>
-          <button class="btn small" id="btnPaint" type="button" title="Paint the spots that get full sun, part shade or full shade">Paint sun</button>
-          <button class="btn small" id="btnFill" title="Fills the leftover gaps with a low groundcover, or with plants that go well with their neighbors">Fill gaps</button>
-        </span>
+        <span class="tools-hint" id="toolsHint">Tip: right-click any plant, object or empty spot on the bed</span>
       </div>
-      <div class="paintbar" id="paintBar" hidden></div>
-      <div class="planwrap"><svg id="plan" xmlns="http://www.w3.org/2000/svg"></svg></div>
-      <div class="fillpick" id="fillPick"></div>
+      <div class="planwrap" id="planWrap"><svg id="plan" xmlns="http://www.w3.org/2000/svg"></svg><div class="paintbar" id="paintBar" hidden></div><div class="selcard" id="selCard" hidden></div><div class="selcard addcard" id="addCard" hidden></div></div>
       <div class="statbar" id="stats"></div>
       <div class="notice" id="notice" style="display:none"></div>
     </section>
@@ -95,7 +125,7 @@
       <p class="lede">Click a row to highlight that plant on the bed plan and in Small to big; Shift- or Ctrl-click to highlight several. In "All plants", use + Add to choose a new plant. Striped bars are foliage plants that stay green and carry the bed between flowers. <span class="keyslot"></span></p>
       <div class="row tight" style="margin-bottom:10px">
         <div class="seg" id="bloomFilter"><button data-f="all" class="on">All plants</button><button data-f="sel">Chosen only</button></div>
-        <label class="field" style="flex-direction:row;align-items:center;gap:6px">Sort <select id="bloomSort" style="width:auto"><option value="start">by first bloom</option><option value="name">by name</option><option value="height">by height</option></select></label>
+        <div class="field" style="flex-direction:row;align-items:center;gap:6px">Sort <button type="button" class="btn small selbtn" id="bloomSort" style="width:auto">by first bloom</button></div>
       </div>
       <div class="bloom-head"><div></div><div class="months" id="monthsHead"></div></div>
       <div class="gcare" id="gardenCare"></div>
