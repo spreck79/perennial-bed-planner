@@ -30,7 +30,7 @@ Then create a PDF guide with a bloom calendar, care through the year, plant prof
 Plants are believed non-toxic to people, dogs and cats unless marked Toxic. Please check the [ASPCA plant list](https://www.aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants) before buying. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 ([poisonhelp.org](https://poisonhelp.org/)).
 
 ## Sources
-Photo credits, companion-plant sources and native/garden status sources are on the [Sources and photo credits](https://spreck79.github.io/perennial-bed-planner/credits.html) page. Research notes are in the `research` folder.
+Photo credits, companion-plant sources and native/garden status sources are on the [Sources and photo credits](https://spreck79.github.io/perennial-bed-planner/credits.html) page. Research notes are in the `research` folder. New plants are researched with the companion project [perennial-bed-planner-research](https://github.com/spreck79/perennial-bed-planner-research), then added by following `research/ADDING-A-PLANT.md`.
 
 ## License
 The planner's own text, plant notes, research and code are © 2026 spreck79, licensed under [Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/). Photos keep their own licenses (see the Sources and photo credits page); jsPDF is MIT licensed; the DejaVu fonts have their own free license. Details in `LICENSE.txt`.
