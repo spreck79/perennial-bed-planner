@@ -1928,6 +1928,51 @@
     return window.PDFExport.make({ plants: sel, bed, placements: S.placements, waiting: Object.assign({}, S.waiting || {}), byId, name: gardenName(), prefs: S.prefs,
       objects: S.objects, sun: sunActive() ? { res: S.sun.res, zoneAt, zones: zonesPresent() } : null }, (f, m) => { const bar = $("#busyBar"), txt = $("#busyText"); bar.style.width = Math.round(f * 100) + "%"; txt.textContent = m; });
   }
+  // ---------- PDF preview: look it over, then Download or Print (nothing is saved until asked) ----------
+  let pvUrl = null, pvBlob = null, pvName = "", pvFrame = null, pvPrev = null;
+  function loadScript(src) { return new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = () => no(new Error("Couldn't load " + src)); document.head.appendChild(s); }); }
+  function closePreview() {
+    const box = $("#pvw"); box.hidden = true; $("#pvBody").innerHTML = ""; pvFrame = null;
+    if (pvUrl) { URL.revokeObjectURL(pvUrl); pvUrl = null; } pvBlob = null;
+    document.body.style.overflow = ""; if (pvPrev && pvPrev.focus) pvPrev.focus();
+  }
+  function openPreview(doc, fname) {
+    pvBlob = doc.output("blob"); pvName = fname; if (pvUrl) URL.revokeObjectURL(pvUrl); pvUrl = URL.createObjectURL(pvBlob);
+    const box = $("#pvw"), body = $("#pvBody"); pvPrev = document.activeElement; body.innerHTML = ""; $("#pvName").textContent = fname; box.hidden = false; document.body.style.overflow = "hidden";
+    $("#pvSave").focus();
+    // computers: the browser's own PDF viewer; phones and tablets can't show a PDF inside a page, so draw the pages (PDF.js)
+    const phone = window.matchMedia("(pointer: coarse)").matches || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform));
+    if (!phone && navigator.pdfViewerEnabled !== false) { const f = document.createElement("iframe"); f.title = "PDF guide preview"; f.src = pvUrl; body.appendChild(f); pvFrame = f; return; }
+    const msg = document.createElement("div"); msg.className = "pvw-msg"; msg.textContent = "Getting your guide ready\u2026"; body.appendChild(msg);
+    const url = pvUrl;
+    (window.pdfjsLib ? Promise.resolve() : loadScript("lib/pdf.min.js")).then(() => {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "lib/pdf.worker.min.js";
+      return pvBlob.arrayBuffer();
+    }).then(buf => pdfjsLib.getDocument({ data: buf }).promise).then(async pdf => {
+      if (pvUrl !== url) return; body.innerHTML = "";
+      const w = Math.min(body.clientWidth - 16, 900), dpr = Math.min(window.devicePixelRatio || 1, 2);
+      for (let i = 1; i <= pdf.numPages; i++) {
+        if (pvUrl !== url) return;
+        const pg = await pdf.getPage(i), v0 = pg.getViewport({ scale: 1 }), sc = w / v0.width * dpr, v = pg.getViewport({ scale: sc });
+        const c = document.createElement("canvas"); c.width = Math.floor(v.width); c.height = Math.floor(v.height); c.style.width = Math.floor(v.width / dpr) + "px";
+        body.appendChild(c); await pg.render({ canvasContext: c.getContext("2d"), viewport: v }).promise;
+      }
+    }).catch(err => { console.error(err); if (pvUrl === url) body.innerHTML = '<div class="pvw-msg">Sorry, the preview could not be shown here. You can still use Download or Print.</div>'; });
+  }
+  function pvDownload() {
+    if (!pvBlob) return; const a = document.createElement("a"); a.href = pvUrl; a.download = pvName; document.body.appendChild(a); a.click(); a.remove();
+    toast("Saved \u201c" + pvName + "\u201d to your Downloads folder.", 4000);
+  }
+  function pvPrintIt() {
+    if (!pvBlob) return;
+    const viaFrame = f => { try { f.contentWindow.focus(); f.contentWindow.print(); return true; } catch (e) { return false; } };
+    if (pvFrame && viaFrame(pvFrame)) return;
+    // phones: print from a hidden copy; if the browser won't, open the PDF so its own Print/Share menu can be used
+    const h = document.createElement("iframe"); h.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:0;"; h.src = pvUrl; document.body.appendChild(h);
+    h.onload = () => { setTimeout(() => { if (!viaFrame(h)) window.open(pvUrl, "_blank"); setTimeout(() => h.remove(), 60000); }, 300); };
+  }
+  $("#pvBack").addEventListener("click", closePreview); $("#pvSave").addEventListener("click", pvDownload); $("#pvPrint").addEventListener("click", pvPrintIt);
+  window.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#pvw").hidden) { e.preventDefault(); e.stopImmediatePropagation(); closePreview(); } }, true);
   $("#btnPdf").addEventListener("click", () => {
     if (!S.placements.length) { toast("Add some plants to the bed first."); return; }
     const busy = $("#busy"), bar = $("#busyBar"), txt = $("#busyText"); busy.classList.add("on"); bar.style.width = "3%";
@@ -1936,10 +1981,10 @@
     Promise.all(ids.map(loadFull)).then(() => setTimeout(() => {
       try {
         const doc = buildPdf();
-        bar.style.width = "100%"; txt.textContent = "Saving…";
+        bar.style.width = "100%"; txt.textContent = "Opening the preview…";
         const fname = fileDate() + " " + safeFile(gardenName()) + ".pdf";
-        doc.save(fname);
-        setTimeout(() => { busy.classList.remove("on"); toast("Saved \u201c" + fname + "\u201d to your Downloads folder.", 4000); }, 400);
+        openPreview(doc, fname);
+        setTimeout(() => busy.classList.remove("on"), 300);
       } catch (err) { console.error(err); busy.classList.remove("on"); toast("Sorry, the PDF could not be made: " + err.message, 6000); }
     }, 60));
   });

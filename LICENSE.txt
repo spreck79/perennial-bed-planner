@@ -12,4 +12,6 @@ Not covered by this license (each keeps its own terms):
 - Plant photos from Wikimedia Commons: each photo's author and license are listed
   on the "Sources and photo credits" page (credits.html).
 - jsPDF (lib/jspdf.umd.min.js): MIT License.
+- PDF.js (lib/pdf.min.js, lib/pdf.worker.min.js): Apache License 2.0, (c) Mozilla and
+  contributors. See lib/pdfjs-LICENSE.txt.
 - DejaVu fonts (embedded in fonts.js): DejaVu Fonts License (free, Bitstream Vera based).

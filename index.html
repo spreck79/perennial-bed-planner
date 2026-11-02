@@ -155,6 +155,15 @@
   <a href="credits.html" target="_blank" rel="noopener">Sources and photo credits</a>
 </footer>
 
+<div class="pvw" id="pvw" role="dialog" aria-modal="true" aria-label="PDF guide preview" hidden>
+  <div class="pvw-bar">
+    <button type="button" class="btn" id="pvBack">&larr; Back to edit</button>
+    <span class="pvw-title" id="pvName"></span>
+    <button type="button" class="btn" id="pvPrint">Print</button>
+    <button type="button" class="btn primary" id="pvSave">Download</button>
+  </div>
+  <div class="pvw-body" id="pvBody"></div>
+</div>
 <div class="overlay" id="busy"><div class="modal"><h2 id="busyTitle">Making your PDF…</h2><div class="tip" id="busyText">Building pages</div><div class="progress"><i id="busyBar"></i></div></div></div>
 <div class="toast" id="toast"></div>
 
