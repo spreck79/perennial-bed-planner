@@ -35,7 +35,7 @@ Iowa State, Purdue, Illinois) or a Michigan nursery. For each plant you need:
 | Field | What it is |
 |---|---|
 | `id` | short lower-case name, letters only, for example `wildginger` (must be new) |
-| `code` | 2-letter label drawn on the plan, for example `Wg` (must be new) |
+| `code` | up to 4-letter label drawn on the plan, from the common name: one word = first 4 letters (`Foam`), two words = 2 letters of each (`WiGe`, `BuWe`), three or more = first letter of each word (`WBPh`). A vowel may be dropped (`Hsta`). Must be new; check_plants.py enforces the pattern and suggests one |
 | `name`, `latin` | common and botanical name |
 | `native` | `true` for a Michigan native, `false` for a garden favorite |
 | `kind` | `clump`, `fern`, `grass`, `mat` (groundcover) or `bulb` |

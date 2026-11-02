@@ -569,7 +569,9 @@
       placements.slice().sort((a, b) => byId[b.id].spacing - byId[a.id].spacing).forEach(p => {
         const pl = byId[p.id], r = (pl.spacing / 24) * sc * 0.96;
         fill(pl.hex); stroke("#FFFFFF"); doc.setLineWidth(0.9); doc.circle(X(p.x), Y(p.y), r, "FD");
-        font("helvetica", "bold", Math.min(8, Math.max(4.5, r * 0.8))); color(pl.txt); text(pl.code, X(p.x), Y(p.y) + Math.min(8, Math.max(4.5, r * 0.8)) * 0.35, { align: "center" });
+        let fz = Math.min(8, Math.max(4.5, r * 0.8)); font("helvetica", "bold", fz);
+        const tw = doc.getTextWidth(pl.code); if (tw > r * 1.7) { fz = Math.max(3.2, fz * r * 1.7 / tw); font("helvetica", "bold", fz); }   // up to 4 letters: shrink to fit the circle
+        color(pl.txt); text(pl.code, X(p.x), Y(p.y) + fz * 0.35, { align: "center" });
       });
       // tree canopies as dashed rings over the plants
       // (drawn as short dashes, keeping only the ones inside the bed)

@@ -21,6 +21,34 @@ console.log(JSON.stringify({ plants: window.PLANTS, photos: Object.keys(window.P
   comps: window.COMPANIONS || {}, status: window.STATUS_SOURCES || [] }));
 """
 KINDS = {"clump", "fern", "grass", "mat", "bulb"}
+
+# The code is the short label drawn on each plant in the bed plan. It must stay close to the common name:
+#   one word -> first 4 letters (Foam, Asti); two words -> 2 letters of each (WiGe, BuWe);
+#   three or more -> first letter of each word (WBPh, GBLo). A vowel may be dropped (Hsta); varieties may be used (Roza, SaMN).
+# The rule that's enforced: 2 to 4 letters, found in order in the name, starting at the start of a word,
+# and any capital letter is the first letter of a word. Never the same as another plant's code.
+def name_words(name):
+    return [w for w in re.split(r"[^A-Za-z]+", re.sub(r"['\u2019]s\b", "s", name)) if w]
+
+def code_fits(code, name):
+    if not code[:1].isupper() or not code.isalpha(): return False
+    flat = " ".join(name_words(name)); pos = 0
+    for k, ch in enumerate(code):
+        found = -1
+        for i in range(pos, len(flat)):
+            start = i == 0 or flat[i - 1] == " "
+            if flat[i].lower() == ch.lower() and (start if (k == 0 or ch.isupper()) else True):
+                found = i; break
+        if found < 0: return False
+        pos = found + 1
+    return True
+
+def suggest_code(name):
+    w = name_words(re.sub(r"'[^']*'", "", name)) or name_words(name)
+    if len(w) == 1: return w[0][:4].capitalize()
+    if len(w) == 2: return w[0][:2].capitalize() + w[1][:2].capitalize()
+    c = "".join(x[0].upper() for x in w[:4])
+    return c + (w[-1][1:2].lower() if len(c) < 4 else "")
 SUNS = {"full", "part", "shade"}
 
 def main():
@@ -44,9 +72,11 @@ def main():
         if not isinstance(pl.get("native"), bool): P("'native' must be true (Michigan native) or false (garden favorite)")
         c = pl.get("code", "")
         if c:
-            if c in codes: P(f"the 2-letter code '{c}' is also used by {codes[c]}")
-            codes[c] = name
-            if not (1 <= len(c) <= 3): P(f"the code '{c}' should be 2 letters, like 'Ho'")
+            if c.lower() in codes: P(f"the code '{c}' is also used by {codes[c.lower()]}")
+            codes[c.lower()] = name
+            if not (2 <= len(c) <= 4) or not code_fits(c, name):
+                P(f"the code '{c}' doesn't follow the pattern: up to 4 letters taken in order from the common name, "
+                  f"starting a word, with capitals only at the start of words (like Foam, WiGe, WBPh). Suggested: {suggest_code(name)}")
         if pl.get("kind") and pl["kind"] not in KINDS: P(f"kind must be one of {sorted(KINDS)}")
         lo, hi, sp = pl.get("hLo"), pl.get("hHi"), pl.get("spacing")
         if isinstance(lo, (int, float)) and isinstance(hi, (int, float)) and lo > hi: P("hLo is taller than hHi")

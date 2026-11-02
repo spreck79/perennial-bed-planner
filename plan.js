@@ -23,6 +23,8 @@
   const ZONE_HRS = { full: "6+ hrs", part: "3–6 hrs", shade: "under 3 hrs" };
   const ZONE_TIP = { full: "Full sun: 6 or more hours of direct sun a day", part: "Part shade: 3 to 6 hours of direct sun a day", shade: "Shade: little or no direct sun, under 3 hours a day" };
   // a plant's light range, in hours of direct sun a day
+  // width of a plant code in ems (bold capitals are wider than small letters), so up to 4 letters always fit the circle
+  function codeEm(c) { let w = 0; for (const ch of String(c || "")) w += /[A-Z]/.test(ch) ? (/[MW]/.test(ch) ? 0.9 : 0.74) : (/[mw]/.test(ch) ? 0.84 : 0.58); return Math.max(w, 1.3); }
   function sunNeed(p) {
     const k = ["full", "part", "shade"].filter(z => p && p.sun && p.sun.includes(z)).join(",");
     // shade plants lead with the shade, so "up to 6 hours" never reads as "needs 6 hours of sun"
@@ -575,7 +577,7 @@
       const fill = view === "photos" && window.PHOTOS[p.id] ? `url(#ph-${p.id})` : pl.hex;
       const pcEl = el("circle", { class: "pc", cx: p.x, cy: Y(p.y), r, fill }, g);
       if (selAll.includes(i)) { pcEl.setAttribute("style", `stroke:${HLC[hlKind(pl)]};stroke-width:.12`); }
-      if (view !== "photos") el("text", { x: p.x, y: Y(p.y) + fs * 0.35, "font-size": Math.min(fs * 1.05, r * 0.95), fill: pl.txt }, g, pl.code);
+      if (view !== "photos") el("text", { x: p.x, y: Y(p.y) + fs * 0.35, "font-size": Math.min(fs * 1.05, r * 0.95, r * 1.7 / codeEm(pl.code)), fill: pl.txt }, g, pl.code);
       const kinds = badgeKinds(pl), br = Math.min(fs * 0.46, Math.max(r * 0.3, fs * 0.24)), step2 = br * 1.85;
       // sun needs alone above the circle; the other badges (native/favorite/daisy/deer/toxic) below it, same offset
       drawSunBadge(pl, g, br, "tx", 0, -r * 0.86, p.x, Y(p.y) - r * 0.86);
