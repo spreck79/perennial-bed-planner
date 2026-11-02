@@ -133,6 +133,31 @@
   // opposite side. Each value is the direction from front to back on the plan (+y is up on screen);
   // "c" means seen from all sides, tallest in the middle.
   const FRONTS = { s: [0, 1], n: [0, -1], w: [1, 0], e: [-1, 0], sw: [1, 1], se: [-1, 1], nw: [1, -1], ne: [-1, -1] };
+  // The parts of the bed's outline people see it from: for each viewing side, the edges that face that way
+  // and sit near that side (for a corner, just the stretch near the corner). Pieces are at most half a foot,
+  // so a long edge is lit only where it should be. Returns [[x1, y1, x2, y2], ...] in bed feet.
+  function viewEdges(bed) {
+    const vs = (bed.views || []).filter(v => FRONTS[v]), P = bed.poly, n = P.length, out = [];
+    if (!vs.length || n < 3) return out;
+    let a2 = 0; for (let i = 0; i < n; i++) { const a = P[i], b = P[(i + 1) % n]; a2 += a[0] * b[1] - b[0] * a[1]; }
+    const ccw = a2 > 0;
+    vs.forEach(v => {
+      const d = FRONTS[v], L = Math.hypot(d[0], d[1]), bx = d[0] / L, by = d[1] / L, corner = !!(d[0] && d[1]);
+      let lo = Infinity, hi = -Infinity; P.forEach(q => { const t = q[0] * bx + q[1] * by; lo = Math.min(lo, t); hi = Math.max(hi, t); });
+      const depth = (x, y) => ((x * bx + y * by) - lo) / ((hi - lo) || 1), near = corner ? 0.3 : 0.5;
+      for (let i = 0; i < n; i++) {
+        const a = P[i], b = P[(i + 1) % n], dx = b[0] - a[0], dy = b[1] - a[1], len = Math.hypot(dx, dy); if (len < 1e-6) continue;
+        const nx = (ccw ? dy : -dy) / len, ny = (ccw ? -dx : dx) / len;   // outward normal
+        if (-(nx * bx + ny * by) < 0.45) continue;                       // doesn't face the viewer
+        const k = Math.max(1, Math.ceil(len / 0.5));
+        for (let j = 0; j < k; j++) {
+          const x1 = a[0] + dx * j / k, y1 = a[1] + dy * j / k, x2 = a[0] + dx * (j + 1) / k, y2 = a[1] + dy * (j + 1) / k;
+          if (depth((x1 + x2) / 2, (y1 + y2) / 2) <= near) out.push([x1, y1, x2, y2]);
+        }
+      }
+    });
+    return out;
+  }
   function buildBed(state) {
     const sh = SHAPES[state.shape] || SHAPES.rect;
     const p = {};
@@ -145,17 +170,53 @@
       bed.poly = bed.poly.map(q => [q[0] - dx, q[1] - dy]);
       bed.depth = (x, y) => old(x + dx, y + dy);
     }
-    const f = state.front || (state.shape === "free" && state.freeView === "island" ? "c" : null);
-    if (f === "c") { if (bed.mode !== "island") { bed.depth = islandDepth(bed.poly); bed.mode = "island"; } }
-    else if (f && FRONTS[f]) {
-      const v = FRONTS[f], L = Math.hypot(v[0], v[1]), bx = v[0] / L, by = v[1] / L, pr = (x, y) => x * bx + y * by;
-      let lo = Infinity, hi = -Infinity; bed.poly.forEach(q => { const t = pr(q[0], q[1]); lo = Math.min(lo, t); hi = Math.max(hi, t); });
-      bed.depth = (x, y) => clamp01((pr(x, y) - lo) / ((hi - lo) || 1)); bed.mode = "border"; bed.depthFt = hi - lo;
+    // where people see the bed from: one or more edges or corners, or "c" for all sides (an island)
+    const views = Array.isArray(state.front) ? state.front.filter(v => v === "c" || FRONTS[v])
+      : state.front ? [state.front] : (state.shape === "free" && state.freeView === "island" ? ["c"] : null);
+    if (views && views.includes("c")) { if (bed.mode !== "island") { bed.depth = islandDepth(bed.poly); bed.mode = "island"; } }
+    else if (views && views.length) {
+      // for each side: 0 at that side's edge, 1 at the far side. Seen from several sides, a spot is as
+      // "front" as it is close to the nearest of them, so the tallest plants end up farthest from all.
+      const one = v => { const d = FRONTS[v], L = Math.hypot(d[0], d[1]), bx = d[0] / L, by = d[1] / L, pr = (x, y) => x * bx + y * by;
+        let lo = Infinity, hi = -Infinity; bed.poly.forEach(q => { const t = pr(q[0], q[1]); lo = Math.min(lo, t); hi = Math.max(hi, t); });
+        return { f: (x, y) => clamp01((pr(x, y) - lo) / ((hi - lo) || 1)), ext: hi - lo }; };
+      const fs = views.map(one);
+      if (fs.length === 1) { bed.depth = fs[0].f; bed.depthFt = fs[0].ext; }
+      else {
+        const raw = (x, y) => Math.min(...fs.map(o => o.f(x, y))), b0 = bbox(bed.poly); let mx = 0;
+        for (let i = 0; i <= 40; i++) for (let j = 0; j <= 40; j++) { const x = b0.x0 + b0.w * i / 40, y = b0.y0 + b0.h * j / 40; if (pip(bed.poly, x, y)) mx = Math.max(mx, raw(x, y)); }
+        mx = mx || 1;
+        bed.depth = (x, y) => clamp01(raw(x, y) / mx); bed.depthFt = mx * Math.min(...fs.map(o => o.ext));
+      }
+      bed.mode = "border";
     }
-    bed.front = bed.mode === "island" ? "c" : (f && FRONTS[f] ? f : "s");
+    bed.views = bed.mode === "island" ? ["c"] : (views && views.length ? views : ["s"]);
+    bed.front = bed.views.length === 1 ? bed.views[0] : "multi";
     bed.bb = bbox(bed.poly);
     if (bed.depthFt == null) bed.depthFt = bed.mode === "island" ? Math.min(bed.bb.w, bed.bb.h) / 2 : bed.bb.h;
     bed.area = area(bed.poly);
+    // Paths people walk on are viewing sides too (unless a path is marked as a work path, view: false): plants
+    // are short beside them and taller farther away. The paths are read from the plan as it is now, so moving
+    // or adding a path changes the depth without rebuilding the bed.
+    { const base = bed.depth, depthFt0 = bed.depthFt; let pKey = NaN, pFn = null, pFt = depthFt0;
+      const viewPaths = () => (state.objects || []).filter(o => o.t === "path" && o.view !== false);
+      const keyOf = ps => ps.reduce((k, o, i) => k + (i + 1) * (o.x * 3 + o.y * 7 + o.w * 11 + (o.h || 0) * 13 + (o.rot || 0) * 17 + (o.pts ? o.pts.reduce((s, q) => s + q[0] * 19 + q[1] * 23, 0) : 0)), ps.length * 1e6);
+      const make = ps => {
+        if (!ps.length) return null;
+        const blocks = ps.map(objBlock).filter(Boolean), D = Math.max(2, depthFt0 || 4);
+        const dist = (x, y) => { let m = Infinity; blocks.forEach(b => (m = Math.min(m, objDist(b, x, y)))); return Math.max(0, m); };
+        const raw = (x, y) => Math.min(base(x, y), clamp01(dist(x, y) / D)), b0 = bed.bb; let mx = 0, ft = 0;
+        for (let i = 0; i <= 40; i++) for (let j = 0; j <= 40; j++) {
+          const x = b0.x0 + b0.w * i / 40, y = b0.y0 + b0.h * j / 40; if (!pip(bed.poly, x, y)) continue;
+          mx = Math.max(mx, raw(x, y)); ft = Math.max(ft, Math.min(base(x, y) * depthFt0, dist(x, y)));   // the farthest any spot is from where people look
+        }
+        mx = mx || 1; pFt = ft || depthFt0; return (x, y) => clamp01(raw(x, y) / mx);
+      };
+      const sync = () => { const ps = viewPaths(), k = keyOf(ps); if (k !== pKey) { pKey = k; pFt = depthFt0; pFn = make(ps); } };
+      bed.depth = (x, y) => { sync(); return pFn ? pFn(x, y) : base(x, y); };
+      bed.viewDepthFt = () => { sync(); return pFn ? pFt : depthFt0; };   // how deep the bed really is from the viewer's side, paths included
+      bed.viewPaths = viewPaths;
+    }
     bed.label = sh.label;
     return bed;
   }
@@ -490,5 +551,5 @@
     return out;
   }
 
-  window.Geo = { OBJ, pathPts, segDist, objBlock, objDist, objHit, objOutline, trunkR, hedgeLayout, fillCompanions, refillCarpet, SHAPES, buildBed, autoLayout, placeOne, placeAt, placeBeside, suggestQuantities, depthTargets, mulberry32, pip, edgeDist, area, bbox, hMean, spFt };
+  window.Geo = { viewEdges, OBJ, pathPts, segDist, objBlock, objDist, objHit, objOutline, trunkR, hedgeLayout, fillCompanions, refillCarpet, SHAPES, buildBed, autoLayout, placeOne, placeAt, placeBeside, suggestQuantities, depthTargets, mulberry32, pip, edgeDist, area, bbox, hMean, spFt };
 })();

@@ -14,5 +14,18 @@ for s in st:
 none=[names[k] for k,v in comp.items() if not v]
 L+=["","## Still to research","","No published companion pairing found yet for: "+", ".join(none)+"."]
 os.makedirs(f'{SITE}/research',exist_ok=True)
-open(f'{SITE}/research/research-notes.md','w').write("\n".join(L)+"\n")
+# Keep the hand-written sections (deer ratings, early-dormant plants, spring bulbs, and any you add later):
+# every "## " section of the old file that this script does not write itself is copied back, in order.
+OUT=f'{SITE}/research/research-notes.md'
+made={l for l in L if l.startswith('## ')}
+if os.path.exists(OUT):
+    old=open(OUT).read().split('\n'); keep=[]; cur=None
+    for l in old:
+        if l.startswith('## '): cur = None if l in made else []; 
+        if cur is not None: cur.append(l)
+        if l.startswith('## ') and cur is not None: keep.append(cur)
+    for sec in keep:
+        while sec and sec[-1]=='': sec.pop()
+        L+=['']+sec
+open(OUT,'w').write("\n".join(L)+"\n")
 print("notes written; none:", none)

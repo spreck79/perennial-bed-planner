@@ -25,6 +25,25 @@
   }
   const TOUCH = window.Plan.touch;   // phone or tablet: "press and hold" in place of right-click
   if (TOUCH) $("#toolsHint").textContent = "Tip: press and hold any plant, object or empty spot on the bed. Pinch to zoom.";
+  // How full the bed is once grown. 100% = every plant at its recommended spacing in offset rows (circles as
+  // wide as the spacing cover about 90.7% of the ground that way), so fewer plants read lower and plants set
+  // closer than recommended read over 100%. Suggest a planting and Re-arrange aim for 100%.
+  const FULL_AT = 0.907;
+  // the ground there is to plant: the bed minus what paths, stones, birdbaths, shrubs and the like take up
+  // (trees only take their trunk). Worked out on a half-foot grid and kept until the bed or objects change.
+  let plantKey = "", plantArea = 0;
+  function plantableArea() {
+    const key = JSON.stringify([bed.poly.length, bed.area, S.objects]);
+    if (key !== plantKey) {
+      const res = 0.5, bb = bed.bb; let a = 0;
+      for (let x = bb.x0 + res / 2; x < bb.x1; x += res) for (let y = bb.y0 + res / 2; y < bb.y1; y += res)
+        if (Geo.pip(bed.poly, x, y) && !Geo.objHit(S.objects, x, y, 0.01, 1)) a += res * res;
+      plantKey = key; plantArea = a || bed.area;
+    }
+    return plantArea;
+  }
+  const fullnessNow = () => Math.round(S.placements.reduce((s, p) => s + Math.PI * Math.pow(byId[p.id].spacing / 24, 2), 0) / (plantableArea() || 1) / FULL_AT * 100);
+  const fullGoal = () => 100;   // Suggest a planting and Re-arrange always aim for a full bed
   const imgSrc = id => window.PHOTOS[id] || "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
   // The starter garden shown on first visit and after "Start over": a drawn (not rectangular) border that
@@ -308,7 +327,7 @@
       b.onclick = () => { shapeClicked(k); };
       box.appendChild(b);
     });
-    $("#shapeHint").textContent = window.Plan.isDrawing() ? "Reshape your bed on the plan: drag the dots, click a + to add a corner, or drag inside to move it. \"Clear shape\" starts from scratch." : S.shape === "free" ? (S.freePoly ? "Your own outline. Edit it any time to drag its corners." : "Click points to outline any shape you like.") : Geo.SHAPES[S.shape].hint;
+    $("#shapeHint").textContent = window.Plan.isDrawing() ? "Reshape your bed on the plan: drag the dots, click a + to add a corner, or drag inside to move it. \"Clear shape\" starts from scratch." : S.shape === "free" ? (S.freePoly ? "Your own outline. Click Edit the outline to reshape it on the plan." : "Click points to outline any shape you like.") : Geo.SHAPES[S.shape].hint;
   }
   // what's on the bed right now, for the shape-change question
   function bedContents() {
@@ -411,32 +430,36 @@
     renderFront(box);
     renderBedSummary();
   }
-  // Which side is the front: a 3 x 3 pad around a little bed. The edge or corner you pick is where people
-  // see it from, so the short plants go there and they get taller toward the opposite side; the middle
-  // means seen from all sides, tallest in the middle.
+  // Where the bed is seen from: a 3 x 3 pad around a little bed, with arrows pointing in from each edge and
+  // corner. Pick one or more: short plants go along every side people look from, getting taller toward the
+  // spot farthest from all of them. The middle means seen from all sides (an island), tallest in the middle.
   const FRONT_NAME = { s: "the bottom edge", n: "the top edge", w: "the left side", e: "the right side", sw: "the bottom left corner", se: "the bottom right corner", nw: "the top left corner", ne: "the top right corner" };
+  const viewWords = vs => window.Plan.sidesList(vs);   // "bottom edge and left side"
   function renderFront(box) {
-    const cur = bed ? bed.front : "s";
-    const lab = document.createElement("div"); lab.className = "bp-lab"; lab.innerHTML = "Front of the bed <small>where you see it from</small>"; box.appendChild(lab);
+    const cur = bed ? (bed.views || [bed.front]) : ["s"];
+    const lab = document.createElement("div"); lab.className = "bp-lab"; lab.innerHTML = "Seen from <small>pick one or more sides</small>"; box.appendChild(lab);
     const row = document.createElement("div"); row.className = "frontrow";
-    const pad = document.createElement("div"); pad.className = "frontpad"; pad.setAttribute("role", "radiogroup"); pad.setAttribute("aria-label", "Front of the bed");
-    const ARROW = { nw: "↖", n: "↑", ne: "↗", w: "←", c: "", e: "→", sw: "↙", s: "↓", se: "↘" };
+    const pad = document.createElement("div"); pad.className = "frontpad"; pad.setAttribute("role", "group"); pad.setAttribute("aria-label", "Where the bed is seen from");
+    const ARROW = { nw: "↘", n: "↓", ne: "↙", w: "→", c: "", e: "←", sw: "↗", s: "↑", se: "↖" };   // pointing in toward the bed
     ["nw", "n", "ne", "w", "c", "e", "sw", "s", "se"].forEach(v => {
-      const b = document.createElement("button"); b.type = "button"; b.className = "fp-" + v + (cur === v ? " on" : "");
+      const on = cur.includes(v), b = document.createElement("button"); b.type = "button"; b.className = "fp-" + v + (on ? " on" : "");
       b.innerHTML = v === "c" ? "<span>All<br>sides</span>" : ARROW[v];
-      b.title = v === "c" ? "Seen from all sides: tallest plants in the middle" : "Front is " + FRONT_NAME[v] + ": short plants there, tall toward the opposite side";
-      b.setAttribute("role", "radio"); b.setAttribute("aria-checked", cur === v ? "true" : "false");
+      b.title = v === "c" ? "Seen from all sides: tallest plants in the middle" : (on ? "Seen from " : "Also seen from ") + FRONT_NAME[v] + (on ? " (click to drop it)" : "");
+      b.setAttribute("aria-pressed", on ? "true" : "false");
       b.onclick = () => {
-        if (cur === v) return;
-        S.front = v; S.freeView = v === "c" ? "island" : "border";
+        let next;
+        if (v === "c") { if (on) return; next = ["c"]; }
+        else if (on) { next = cur.filter(x => x !== v); if (!next.length) { toast("Keep at least one side the bed is seen from."); return; } }
+        else next = cur.filter(x => x !== "c").concat(v);
+        S.front = next.length === 1 ? next[0] : next; S.freeView = next[0] === "c" ? "island" : "border";
         rebuildBed(); refresh(); renderDims();
-        if (S.placements.some(p => !p.c)) toast("Plants re-arranged short to tall from the new front. Undo takes it back.", 3500);
+        if (S.placements.some(p => !p.c)) toast("Plants re-arranged short to tall for the new view. Undo takes it back.", 3500);
       };
       pad.appendChild(b);
     });
     const say = document.createElement("p"); say.className = "frontsay";
-    say.innerHTML = cur === "c" ? "<b>Seen from all sides.</b> Short plants around the edge, the tallest in the middle. Good for an island in the lawn." :
-      `<b>Front: ${FRONT_NAME[cur]}.</b> Short plants there, getting taller toward ${FRONT_NAME[{ s: "n", n: "s", w: "e", e: "w", sw: "ne", ne: "sw", se: "nw", nw: "se" }[cur]]}, like a bed against a house or fence.`;
+    say.innerHTML = cur[0] === "c" ? "Short plants around the edge, the tallest in the middle."
+      : "Short plants go along the sides it's seen from (green on the plan), the tallest farthest from them.";
     row.append(pad, say); box.appendChild(row);
   }
   // e.g. "22 × 7 ft · 154 sq ft": straight from the numbers for a rectangle or island, so it updates as you click
@@ -534,7 +557,7 @@
   function stepSummary(k) {
     const pr = S.prefs, lab = window.Plan.ZONE_LAB;
     if (k === "name") return (S.name || "").trim() ? "<b>" + esc(S.name.trim()) + "</b>" : "No name yet";
-    if (k === "bed") { const t = $("#bedSummary"); return "<b>" + esc(Geo.SHAPES[S.shape].label) + "</b>" + (t && t.textContent ? " · " + t.innerHTML.replace(/<\/?b>/g, "").replace("</span>", "").replace("<span>", " · ") : "") + (bed ? " · " + (bed.front === "c" ? "seen from all sides" : "front: " + FRONT_NAME[bed.front].replace("the ", "")) : ""); }
+    if (k === "bed") { const t = $("#bedSummary"); return "<b>" + esc(Geo.SHAPES[S.shape].label) + "</b>" + (t && t.textContent ? " · " + t.innerHTML.replace(/<\/?b>/g, "").replace("</span>", "").replace("<span>", " · ") : "") + (bed ? " · seen from " + (bed.front === "c" ? "all sides" : viewWords(bed.views || [bed.front])) : ""); }
     if (k === "objects") { const c = {}; S.objects.forEach(o => (c[o.t] = (c[o.t] || 0) + 1)); const l = Object.keys(c).map(t => objPlural(t, c[t])); return l.length ? "<b>" + l.join(", ") + "</b>" : "None"; }
     if (k === "sun") return "<b>" + pr.sun.map(z => lab[z]).join(", ") + "</b>" + (Object.keys(S.sun.cells).length ? " · sun zones mapped" : "");
     const org = pr.origin.length === 2 ? "Natives and garden favorites" : pr.origin[0] === "nat" ? "Michigan natives" : "Garden favorites";
@@ -567,9 +590,25 @@
   function completeStep(k, scroll) {
     if (k === "bed" && !settleBed()) return false;
     if (k === "objects") settleObjects2();
+    if (k === "sun") endSunStep();
     S.done = S.done || {}; S.done[k] = true; openSteps.delete(k); save(); renderSteps();
-    if (scroll) { const next = Object.keys(STEPS_UI).find(n => !S.done[n]); const el = next ? $(STEPS_UI[next]) : $("#libCard"); if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" }); }
+    if (scroll) {
+      const next = Object.keys(STEPS_UI).find(n => !S.done[n]); const el = next ? $(STEPS_UI[next]) : $("#libCard"); if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      if (next === "sun") startSunStep();   // moving on to step 4 opens the sun palette on the plan
+    }
     return true;
+  }
+  // Step 4 works on the plan: opening it opens the sun palette ("Map sun zones"), and its Done (or the
+  // palette's Done) saves the zones, ticks any light you mapped in step 4's list, and closes the palette.
+  function startSunStep() {
+    if (paint || window.Plan.isDrawing()) return;
+    togglePaint(true); if (paint) paint.fromStep = true;
+    toast("Map where the sun falls: pick a light on the palette above the plan and drag across the bed. Press Done when you're finished.", 5000);
+  }
+  function endSunStep() {
+    if (!paint) return;
+    paint = null; save(); renderPaintBar(); renderPlan(); syncSunPrefs();
+    toast("Sun zones saved.", 2000);
   }
   // step 3: objects to place before the plants go in
   const objPlural = (t, n) => { const l = Geo.OBJ[t].label.toLowerCase().replace("hedge / shrub row", "hedge"); return n + " " + (n === 1 ? l : l + "s"); };
@@ -591,7 +630,16 @@
   Object.keys(STEPS_UI).forEach(k => {
     const card = $(STEPS_UI[k]);
     card.querySelector(".stepdone").onclick = () => completeStep(k, true);
-    const toggle = () => { if (!(S.done && S.done[k])) return; if (openSteps.has(k)) openSteps.delete(k); else openSteps.add(k); renderSteps(); };
+    const toggle = () => {
+      if (!(S.done && S.done[k])) return;
+      if (openSteps.has(k)) { if (k === "bed" && !settleBed()) return; openSteps.delete(k); if (k === "sun") endSunStep(); }
+      else {
+        // opening a finished step closes any other one you reopened, as if you'd pressed its Done
+        for (const o of [...openSteps]) if (o !== k && STEPS_UI[o] && !completeStep(o)) return;
+        openSteps.add(k); if (k === "sun" && !Tour.on) startSunStep();
+      }
+      renderSteps();
+    };
     card.querySelector(".steptog").onclick = e => { e.stopPropagation(); toggle(); };
     card.querySelector(".stephead").onclick = toggle;
     card.querySelector(".stepsum").onclick = toggle;
@@ -882,10 +930,11 @@
     markSel();
     const cv = S.placements.reduce((s, p) => s + Math.PI * Math.pow(byId[p.id].spacing / 24, 2), 0) / (bed.area || 1);
     const bb = bed.bb, kinds = Object.keys(counts()).length;
-    $("#stats").innerHTML = `<span><b>${bed.label}</b> · ${bb.w.toFixed(1).replace(/\.0$/, "")} × ${bb.h.toFixed(1).replace(/\.0$/, "")} ft</span><span><b>${Math.round(bed.area)}</b> sq ft</span><span><b>${S.placements.length}</b> plants, ${kinds} kinds</span>` + (S.objects.length ? `<span><b>${S.objects.length}</b> object${S.objects.length > 1 ? "s" : ""}</span>` : "") + `<span>Full-grown coverage <b>${Math.round(cv * 100)}%</b></span>`;
+    $("#stats").innerHTML = `<span><b>${bed.label}</b> · ${bb.w.toFixed(1).replace(/\.0$/, "")} × ${bb.h.toFixed(1).replace(/\.0$/, "")} ft</span><span><b>${Math.round(bed.area)}</b> sq ft</span><span><b>${S.placements.length}</b> plants, ${kinds} kinds</span>` + (S.objects.length ? `<span><b>${S.objects.length}</b> object${S.objects.length > 1 ? "s" : ""}</span>` : "") + `<span><span title="100% means every plant is at its recommended spacing, so the bed fills in once grown"${fullnessNow() > 100 ? ' class="overfull"' : ""}>Full when grown <b>${fullnessNow()}%</b></span>`;
     const bad = window.Plan.lastBad || 0;
     const msgs = [];
     if (notice) msgs.push(notice);
+    { const fn = fullnessNow(); if (fn > 102) msgs.push(`The bed is ${fn}% full once grown: some plants are closer than their recommended spacing, so expect crowding, more mildew and earlier dividing. Remove a few plants, or use Re-arrange (in Plan it) to bring it back to about 100%.`); }
     const n = document.querySelector("#plan .pl.bad") ? document.querySelectorAll("#plan .pl.bad").length : 0;
     if (n) msgs.push(`${n} plant${n > 1 ? "s are" : " is"} drawn with a dashed red edge because ${n > 1 ? "they are" : "it is"} closer to another plant than the spacing allows, or sitting on an object. Drag ${n > 1 ? "them" : "it"} clear, or remove one.`);
     const box = $("#notice"); box.style.display = msgs.length ? "block" : "none"; box.innerHTML = msgs.map(esc).join("<br>");
@@ -1133,7 +1182,7 @@
     const c = counts(true), mine = PL.filter(p => c[p.id] > 0);   // the gap-filler carpet doesn't count as a pick
     if (!mine.length) { doSuggestPlanting(false); return; }
     askChoice("Suggest a planting", [
-      "I'll pick plants for each part of the bed, matched to its light, and lay them out: plants that go well together, flowers from spring into fall, and short, middle and tall plants in the right places. Only plants that fit your step 4 and 5 choices are used.",
+      "I'll pick plants for each part of the bed, matched to its light, and lay them out so the bed is full once grown (every plant at its recommended spacing): plants that go well together, flowers from spring into fall, and short, middle and tall plants in the right places. Only plants that fit your step 4 and 5 choices are used.",
       `Build around the ${mine.length} kind${mine.length === 1 ? "" : "s"} of plant you have now, adding others that suit them, or start fresh with a whole new mix. Locked plants always stay. Each click gives a different planting, and you can undo it.`],
       [["Build around my plants", () => doSuggestPlanting(true)], ["Start fresh", () => doSuggestPlanting(false)]]);
   }
@@ -1279,7 +1328,10 @@
     sel.value = sunBase(); sel.onchange = () => { S.sunBase = sel.value; save(); renderPaintBar(); renderPlan(); syncSunPrefs(); }; bar.appendChild(sel);
     const sp = document.createElement("span"); sp.className = "pb-grow"; bar.appendChild(sp);
     const clr = btn("Clear", "btn small", "Clear all mapped sun zones", () => { S.sun.cells = {}; S.sunBase = null; save(); renderPaintBar(); renderPlan(); toast("Sun zones cleared. Undo brings them back."); }); clr.disabled = !sunActive();
-    btn("Done", "btn small primary", "Stop mapping sun (Esc)", () => { paint = null; renderPaintBar(); renderPlan(); });
+    btn("Done", "btn small primary", "Save the sun zones and stop mapping (Esc)", () => {
+      if (paint.fromStep && !Tour.on && !(S.done && S.done.sun)) { completeStep("sun", true); return; }   // step 4's palette: Done finishes the step too
+      endSunStep(); if (S.done && S.done.sun) { openSteps.delete("sun"); renderSteps(); }
+    });
   }
 
   // ---------- plan callbacks ----------
@@ -1295,7 +1347,7 @@
       if (selIdx >= 0) optMode = "idle";
       renderPlan();
     },
-    onMoved() { save(); renderPlan(); },
+    onMoved() { save(); renderPlan(); if (sunActive()) renderBloom(); },   // a plant dragged into another sun zone moves to that zone's section of the Garden Timeline
     isMulti() { return multiTap; },
     // the card beside a selection follows the plant when the plan is zoomed or moved around
     onPanStart() { const c = $("#selCard"); if (c) c.style.visibility = "hidden"; },
@@ -1526,6 +1578,16 @@
     f.textContent = o.pts ? "Drag it to move it, the white dots to reshape it, the orange dot to change its width." : "Drag it to move it" + (d.shape === "circ" && o.t !== "tree" ? "" : "") + ", a white dot to resize it" + (d.rot && !o.pts ? ", the orange dot to turn it." : ".");
     card.appendChild(f);
     card.appendChild(objFields(o));
+    if (o.t === "path") {   // a path people walk on counts as a side the bed is seen from; a work path doesn't
+      const lab = document.createElement("label"); lab.className = "sc-check";
+      lab.innerHTML = `<input type="checkbox"${o.view !== false ? " checked" : ""}> People walk and look here <small>short plants beside it, taller farther away</small>`;
+      lab.querySelector("input").onchange = e => {
+        if (e.target.checked) delete o.view; else o.view = false;
+        relayout(false); refresh();
+        toast(e.target.checked ? "Plants re-arranged: short beside the path, taller farther away. Undo takes it back." : "Work path: plants just stay off it now. Undo takes it back.", 3500);
+      };
+      card.appendChild(lab);
+    }
     cardActs(card, objActions(objSel));
   }
   // set a floating card beside a rectangle on screen (or a point), inside the plan area
@@ -1623,7 +1685,7 @@
     } else {
       title = "Re-arrange";
       lines = [
-        `I will keep the same ${have} plants and the same number of each kind, and set them out again in a new natural-looking layout.`,
+        `I will keep the same kinds of plants and set them out again in a new natural-looking layout, adding or taking out a few of them so the bed is about 100% full once grown (every plant at its recommended spacing). Locked plants stay where they are.`,
         "Where each plant sits now will be replaced" + (hasFill ? ", and any groundcover filler will be cleared (you can fill the gaps again afterward)." : "."),
         "Not happy with the result? Click Re-arrange again for a different layout."
       ];
@@ -1705,7 +1767,7 @@
     if (e.key !== "Escape" || document.getElementById("modalOverlay") || window.Plan.isDrawing()) return;
     if (document.getElementById("plantMenu")) { closePlantMenu(); return; }
     if (!$("#addCard").hidden) { closeAddCard(); return; }
-    if (paint) { paint = null; renderPaintBar(); renderPlan(); return; }
+    if (paint) { endSunStep(); return; }
     if (armed || objArmed || pathDraw) { armed = null; objArmed = null; pathDraw = null; renderPlan(); return; }
     if (multiTap) { multiTap = false; renderPlan(); return; }
     if (selAll().length || objSel >= 0) { if (/INPUT|SELECT|TEXTAREA/.test((e.target && e.target.tagName) || "")) e.target.blur(); deselect(); }
@@ -1719,7 +1781,14 @@
   $("#plan").addEventListener("pointerdown", e => { if (e.target.closest(".pl, .ob, .obh")) { const c = $("#selCard"); if (c) c.hidden = true; } }, true);
   $("#btnUndo").addEventListener("click", undo);
   $("#btnRedo").addEventListener("click", redo);
-  function doArrange() { relayout(true); refresh(); toast("New arrangement. Click Re-arrange again for another."); }
+  // Re-arrange: the same kinds of plants in a new layout, with a few more or fewer of them so the bed ends
+  // up about 100% full once grown. Locked plants stay where they are.
+  function doArrange() {
+    const q = counts(true), lockN = {}; S.placements.forEach(p => { if (p.lock && !p.c) lockN[p.id] = (lockN[p.id] || 0) + 1; });
+    const items = () => Object.keys(q).filter(id => q[id] > 0 && byId[id]).map(id => ({ plant: byId[id], n: q[id] }));
+    relayout(true, items()); fitToFull(q, items, lockN); refresh();
+    toast("New arrangement, " + fullnessNow() + "% full once grown. Click Re-arrange again for another.", 3500);
+  }
   // ---------- Suggest a planting ----------
   // Picks the plants as well as how many of each, the way the starter garden was put together: plants matched
   // to the light in each part of the bed (more kinds where there is more room), favoring real "goes well with"
@@ -1741,13 +1810,14 @@
   const tierOf = p => { const h = Geo.hMean(p); return h < 14 ? 0 : h < 30 ? 1 : 2; };   // front, middle, back
   // how many of each in one light zone: the room is shared out with bigger plants getting a bit more of it;
   // small and medium plants go in odd-numbered groups of at least 3 so they read as drifts, big ones can
-  // stand alone; aims for about 70-80% of the ground covered once grown
+  // stand alone; aims for a full bed once grown (100% = every plant at its recommended spacing)
   function zoneQuantities(area, plants) {
     const fp = p => Math.PI * Math.pow(Geo.spFt(p) / 2, 2), big = p => p.spacing >= 24;
-    const w = plants.map(p => Math.sqrt(fp(p))), tw = w.reduce((a, b) => a + b, 0), budget = area * 0.72, out = {};
+    const goal = FULL_AT * fullGoal() / 100;
+    const w = plants.map(p => Math.sqrt(fp(p))), tw = w.reduce((a, b) => a + b, 0), budget = area * goal * 1.1, out = {};
     plants.forEach((p, i) => { const n = budget * w[i] / tw / fp(p); out[p.id] = Math.max(big(p) ? 1 : 3, n < 1.5 ? 1 : Math.round((n - 1) / 2) * 2 + 1); });
     const cov = () => plants.reduce((s, p) => s + out[p.id] * fp(p), 0) / area;
-    for (let guard = 60; cov() > 0.8 && guard--;) {
+    for (let guard = 60; cov() > goal + 0.1 && guard--;) {
       const c = plants.filter(p => out[p.id] > (big(p) ? 1 : 3)).sort((a, b) => out[b.id] * fp(b) - out[a.id] * fp(a))[0];
       if (!c) break; out[c.id] -= out[c.id] > 3 ? 2 : 1;
     }
@@ -1758,7 +1828,7 @@
     const zones = ["full", "part", "shade"].filter(z => areas[z] >= 2);
     if (!zones.length) return null;
     // tallest plant should be no more than about the bed's depth (a border) or half its width (an island)
-    const depthIn = (bed.depthFt || (bed.mode === "island" ? Math.min(bed.bb.w, bed.bb.h) / 2 : bed.bb.h)) * 12;
+    const depthIn = ((bed.viewDepthFt && bed.viewDepthFt()) || bed.depthFt || (bed.mode === "island" ? Math.min(bed.bb.w, bed.bb.h) / 2 : bed.bb.h)) * 12;
     const picks = {}; zones.forEach(z => (picks[z] = []));
     const target = z => Math.max(2, Math.min(9, Math.round(Math.sqrt(areas[z]))));
     // plants to build around go to the light that suits them (the zone with the most room left)
@@ -1802,6 +1872,23 @@
     zones.forEach(z => { if (!picks[z].length) return; const qz = zoneQuantities(areas[z], picks[z]); picks[z].forEach(p => (q[p.id] = (q[p.id] || 0) + qz[p.id])); });
     return { q, zones, picks };
   }
+  // Bring the bed to about 100% full once grown: if it came out short, add more of the plants that still
+  // fit (smallest first); if it came out over, take a couple out of the biggest groups. q is how many of
+  // each, items() turns it into what relayout lays out, lockN the locked plants that must stay.
+  function fitToFull(q, items, lockN) {
+    const fp = id => Math.PI * Math.pow(byId[id].spacing / 24, 2), full = new Set();
+    for (let g = 0; g < 16 && fullnessNow() < fullGoal() - 4; g++) {
+      const ok = Object.keys(q).filter(k => q[k] > 0 && !full.has(k)).sort((a, b) => fp(a) - fp(b)), id = ok[g % 3] || ok[0];
+      if (!id) break;
+      const add = byId[id].spacing >= 24 ? 1 : 2; q[id] += add; relayout(false, items());
+      if ((lastUnplaced[id] || 0) > 0 || lightBadIdx().some(i => S.placements[i].id === id)) { q[id] -= add; full.add(id); relayout(false, items()); }
+    }
+    for (let g = 0; g < 14 && fullnessNow() > fullGoal() + 2; g++) {
+      const id = Object.keys(q).filter(k => q[k] - (lockN[k] || 0) > (byId[k].spacing >= 24 ? 1 : 3)).sort((a, b) => q[b] * fp(b) - q[a] * fp(a))[0];
+      if (!id) break;
+      q[id] -= q[id] > 3 ? 2 : 1; relayout(false, items());
+    }
+  }
   function doSuggestPlanting(build) {
     const locked = [...new Set(S.placements.filter(p => p.lock && !p.c).map(p => p.id))];
     const mine = counts(true), keep = [...new Set((build ? PL.filter(p => mine[p.id] > 0).map(p => p.id) : []).concat(locked))];
@@ -1826,6 +1913,7 @@
       ids.forEach(id => { const cut = Math.min(over[id], q[id] - (lockN[id] || 0)); if (cut > 0) { q[id] -= cut; changed = true; } });
       if (!changed) break;
     }
+    fitToFull(q, items, lockN);
     notice = ""; noFit = []; selIdx = -1; extraSel = [];
     refresh();
     const kinds = Object.keys(q).filter(id => q[id] > 0).length, n = S.placements.filter(p => !p.c).length;

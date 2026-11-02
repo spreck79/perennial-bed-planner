@@ -483,6 +483,8 @@
         }
         stroke("#8E7660"); doc.setLineWidth(5); doc.setLineJoin("round"); doc.lines(pathLines(P.concat([P[0]])), P[0][0], P[0][1], [1, 1], "S", true); doc.setLineJoin("miter");
       }
+      // the sides the bed is seen from: green along the rim, as on the screen
+      { const VS = Geo.viewEdges(bed); if (VS.length) { stroke("#4E8C3A"); doc.setLineWidth(4.5); doc.setLineCap("round"); VS.forEach(q => doc.line(X(q[0]), Y(q[1]), X(q[2]), Y(q[3]))); doc.setLineCap("butt"); } }
       // grid lines clipped to polygon by scan intersection
       stroke("#BBA388"); doc.setLineWidth(0.35);
       const segsAt = (c, vertical) => {
@@ -508,6 +510,24 @@
         fill("#628A52"); L.lobes.forEach(p => { const q = map(p[0], p[1]); doc.circle(q[0], q[1], L.lobeR * k, "F"); });
         fill("#6A9459"); L.centers.forEach(p => { const q = map(p[0], p[1]); doc.circle(q[0], q[1], L.centerR * k, "F"); });
       };
+      // footprints (ball and heel) like the screen's, as small filled shapes
+      const footPDF = (x, y, ang, L, left) => {
+        const c = Math.cos(ang), sn = Math.sin(ang), m = left ? -1 : 1;
+        const ell = (ex, ey, rx, ry) => { const pts = []; for (let k = 0; k < 14; k++) { const a = k / 14 * Math.PI * 2, lx = (ex + rx * Math.cos(a)) * m, ly = ey + ry * Math.sin(a); pts.push([x + lx * c - ly * sn, y + lx * sn + ly * c]); }
+          doc.lines(pts.slice(1).map((q, k) => [q[0] - pts[k][0], q[1] - pts[k][1]]), pts[0][0], pts[0][1], [1, 1], "F", true); };
+        ell(L * 0.03, -L * 0.06, L * 0.17, L * 0.24); ell(0, L * 0.3, L * 0.13, L * 0.16);
+        [[-0.13, -0.38, 0.075], [-0.03, -0.43, 0.06], [0.06, -0.42, 0.052], [0.13, -0.37, 0.046], [0.18, -0.3, 0.04]].forEach(t => ell(L * t[0], L * t[1], L * t[2], L * t[2]));
+      };
+      const walkFeet = (pts, w) => {   // pts in page units along the middle of a path
+        const len = Math.min(0.75, w * 0.34) * sc, stride = len * 1.55, side = Math.min(w * 0.16 * sc, len * 0.42); let acc = stride / 2, n = 0;
+        fill("#8A806C");
+        for (let i = 0; i + 1 < pts.length; i++) {
+          const a = pts[i], b = pts[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy); if (!L) continue;
+          while (acc <= L) { const t = acc / L, left = n % 2 === 0, off = left ? -side : side, nx = -dy / L, ny = dx / L;
+            footPDF(a[0] + dx * t + nx * off, a[1] + dy * t + ny * off, Math.atan2(dy, dx) + Math.PI / 2, len, left); acc += stride; n++; }
+          acc -= L;
+        }
+      };
       const drawObj = (o, cx, cy, s2) => {
         const r = o.w / 2 * s2; doc.setLineWidth(0.7);
         if (o.t === "path") {
@@ -515,14 +535,16 @@
             const sm = Geo.pathPts(o).map(q => [X(q[0]), Y(q[1])]), wpt = o.w * sc;
             doc.setLineCap(1); doc.setLineJoin(1);
             const strokeLine = (col, lw) => { doc.setDrawColor(col); doc.setLineWidth(lw); for (let k = 0; k + 1 < sm.length; k++) doc.line(sm[k][0], sm[k][1], sm[k + 1][0], sm[k + 1][1]); };
+            if (o.view !== false) strokeLine("#4E8C3A", wpt + 0.3 * sc);   // a path people walk on: green edges, as on the screen
             strokeLine("#AFA28A", wpt); strokeLine("#D9D0BE", Math.max(0.5, wpt - 1.4));
             fill("#BFB39C"); const sd = Geo.objBlock(o); for (let u = 0; u + 1 < sd.pts.length; u += 2) { const q = sd.pts[u], nx = sd.pts[u + 1], L = Math.hypot(nx[0] - q[0], nx[1] - q[1]) || 1, px = -(nx[1] - q[1]) / L, py = (nx[0] - q[0]) / L, off = ((u * 7) % 9 / 9 - 0.5) * (o.w - 0.4); doc.circle(X(q[0] + px * off), Y(q[1] + py * off), 0.05 * sc, "F"); }
             doc.setLineCap(0); doc.setLineJoin(0);
+            walkFeet(sm, o.w);
           } else {
           fill("#D9D0BE"); stroke("#AFA28A"); if (s2 === sc) polyO(Geo.objOutline(o)); else doc.roundedRect(cx - r * 1.4, cy - r * 0.7, r * 2.8, r * 1.4, 1, 1, "FD");
           if (s2 === sc) { fill("#BFB39C"); const rot = (o.rot || 0) * Math.PI / 180, c = Math.cos(rot), sn = Math.sin(rot); for (let u = -o.w / 2 + 0.25; u < o.w / 2; u += 0.5) for (let v = -o.h / 2 + 0.25; v < o.h / 2; v += 0.5) { const jx = ((u * 7 + v * 13) % 1) * 0.12, gx = o.x + (u + jx) * c - v * sn, gy = o.y + (u + jx) * sn + v * c; doc.circle(X(gx), Y(gy), 0.05 * sc, "F"); } }
           }
-        } else if (o.t === "stone") { fill("#BDB8AC"); stroke("#8F8A7E"); doc.circle(cx, cy, r, "FD"); }
+        } else if (o.t === "stone") { fill("#BDB8AC"); stroke("#8F8A7E"); doc.circle(cx, cy, r, "FD"); if (s2 === sc) { fill("#8A806C"); footPDF(cx, cy, -20 * Math.PI / 180, r * 1.05, false); } }
         else if (o.t === "stump") { fill("#A27A55"); stroke("#6E4F33"); doc.circle(cx, cy, r, "FD"); stroke("#7E5B3C"); doc.setLineWidth(0.4); doc.circle(cx, cy, r * 0.66, "S"); doc.circle(cx, cy, r * 0.36, "S"); }
         else if (o.t === "rock") { fill("#A19D93"); stroke("#6F6B62"); if (s2 === sc) polyO(Geo.objOutline(o, 24)); else doc.ellipse(cx, cy, r, r * 0.7, "FD"); }
         else if (o.t === "birdbath") { fill("#D4CFC4"); stroke("#8F8A7E"); doc.circle(cx, cy, r, "FD"); fill("#A9D0E3"); doc.circle(cx, cy, r * 0.72, "F"); }
@@ -573,15 +595,16 @@
       const xs = bb.w > 30 ? 5 : bb.w > 16 ? 2 : 1; for (let gx = 0; gx <= bb.w + 0.01; gx += xs) text(gx + " ft", X(gx), byy + bh + 12, { align: "center" });
       const ys = bb.h > 24 ? 5 : bb.h > 12 ? 2 : 1; for (let gy = 0; gy <= bb.h + 0.01; gy += ys) text(String(gy), bx - 8, Y(gy) + 2, { align: "right" });
       font("helvetica", "bold", 7.2); color("#4b5244");
-      { const FL = window.Plan.frontLabels(bed); text(FL.bottom.replace(" · ", ": "), bx, byy + bh + 24); if (FL.top) text(FL.top, bx + bw, byy - 8, { align: "right" }); }
       // second legend row: sun zones and the kinds of objects in the bed
       const extra = [];
       if (SUNP) ["full", "part", "shade"].filter(z => SUNP.zones.has(z)).forEach(z => extra.push({ z, t: ZL[z] }));
+      if ((bed.views || []).some(v => v !== "c")) extra.push({ v: true, t: "Seen from" });
       const OL = Geo.OBJ; [...new Set(OBJS.map(o => o.t))].forEach(t => extra.push({ o: t, t: OL[t].label }));
       if (extra.length) {
         let lx = bx + 4; const ly = byy + bh + 38;
         extra.forEach(it => {
           if (it.z) { fill(ZC[it.z]); stroke("#8E7660"); doc.setLineWidth(0.5); doc.roundedRect(lx - 4, ly - 4, 8, 8, 1.5, 1.5, "FD"); }
+          else if (it.v) { stroke("#4E8C3A"); doc.setLineWidth(3); doc.setLineCap("round"); doc.line(lx - 4, ly, lx + 4, ly); doc.setLineCap("butt"); }
           else drawObj({ t: it.o, x: 0, y: 0, w: 8, h: 8, rot: 0 }, lx, ly, 1);
           sf("sb", 6.8); color(C.muted); text(it.t, lx + 7, ly + 2.4); lx += 7 + doc.getTextWidth(it.t) + 12;
         });

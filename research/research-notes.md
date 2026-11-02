@@ -189,6 +189,12 @@ Each entry: the plant the source is about, what the source says, the partners in
 - **Michigan Wildflower Farm: Wetland species list** (native check) – Same grower, wetland list.  
   Plants: Wild Bergamot, Culver's Root, New England Aster, Blazing Star, Swamp Milkweed, Cardinal Flower, Great Blue Lobelia, Black-eyed Susan, Mountain Mint, Sneezeweed, Spiderwort  
   https://www.michiganwildflowerfarm.com/seed-species-and-pricing/wetland-species/
+- **Black Cap Plants (Onekama, Michigan): Species list of native plants** (native check) – Michigan native nursery; marks the few species it sells that have no natural Michigan range (none of these are marked). Checked November 2026.  
+  Plants: Pennsylvania Sedge, Foamflower, Wild Blue Phlox, Maidenhair Fern, Zigzag Goldenrod, Heart-leaved Aster, White Turtlehead, Ostrich Fern, Christmas Fern, Lady Fern, Cinnamon Fern, Obedient Plant, Wild Strawberry, Mayapple, Jack-in-the-Pulpit, Wild Ginger  
+  https://www.blackcapplants.com/species-list
+- **Michigan Tech KISMA: Native species table** (native check) – Michigan Technological University table of plants native to the Upper Peninsula or the northern Great Lakes region (Heart-leaved Aster is not in it). Checked November 2026.  
+  Plants: Pennsylvania Sedge, Foamflower, Wild Blue Phlox, Maidenhair Fern, Zigzag Goldenrod, White Turtlehead, Ostrich Fern, Christmas Fern, Lady Fern, Cinnamon Fern, Obedient Plant, Wild Strawberry, Mayapple, Jack-in-the-Pulpit, Wild Ginger  
+  https://www.mtu.edu/kisma/native-alternatives/native-species-table/
 - **Wild Cherry Farm (Michigan native nursery): Solomon's Seal** (native check) – Called a Michigan native plant.  
   Plants: Solomon's Seal  
   https://www.wildcherryfarm.com/shop-native-plants/p/solomons-seal-polygonatum-biflorum

@@ -735,7 +735,7 @@ body.touring .step .stepfoot { display: none; }
 #objCard .objbtn span { font-size: 11px; color: var(--muted); }
 #objCard .objlist { margin: 10px 0 0; font-size: 12px; color: var(--muted); line-height: 1.45; }
 #objCard .objlist b { color: var(--ink); }
-#bedPanel.isdrawing #dims, #bedPanel.isdrawing #bedSummary { display: none; }
+#bedPanel.isdrawing #dims .dimrow, #bedPanel.isdrawing #btnDraw, #bedPanel.isdrawing #bedSummary { display: none; }   /* while drawing: no size boxes, but the front-of-bed pad stays */
 
 /* ---------- step 2: front of the bed ---------- */
 #bedPanel .frontrow { display: flex; gap: 12px; align-items: center; }
@@ -778,18 +778,19 @@ body.touring .step .stepfoot { display: none; }
   .planwrap .zoombar button { min-width: 34px; height: 32px; }
 }
 .selcard .sc-head { touch-action: none; }   /* the card can be dragged by its top with a finger too */
-/* ---------- phones and tablets: nothing sits on top of the plan ----------
-   The outline editor's buttons and the sun palette dock in a strip right above the plan, the zoom
-   buttons right below it, and the card for a plant slides up from the bottom of the screen, so the
-   whole plan stays free for fingers. The header scrolls away to give the plan more room. */
+/* ---------- nothing sits on top of the plan ----------
+   The outline editor's buttons and the sun palette dock in a strip right above the plan and the zoom
+   buttons right below it, on every screen. On phones and tablets the card for a plant also slides up
+   from the bottom of the screen, and the header scrolls away to give the plan more room. */
+/* every screen size: the editor's buttons and the sun palette dock above the plan, the zoom buttons below */
+.planwrap { display: flex; flex-direction: column; }
+.planwrap > #plan { order: 1; }
+.planwrap .drawbar, .planwrap .paintbar { position: static; order: 0; margin: 0; max-width: none; left: auto; right: auto; top: auto;
+  border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; box-shadow: none; }
+.planwrap .zoombar { position: static; order: 2; align-self: flex-end; margin: 4px 6px 6px; box-shadow: none; }
+.planwrap .zoombar[hidden] { display: none; }
 @media (max-width: 1050px) {
   .top { position: static; }
-  .planwrap { display: flex; flex-direction: column; }
-  .planwrap > #plan { order: 1; }
-  .planwrap .drawbar, .planwrap .paintbar { position: static; order: 0; margin: 0; max-width: none; left: auto; right: auto; top: auto;
-    border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; box-shadow: none; }
-  .planwrap .zoombar { position: static; order: 2; align-self: flex-end; margin: 4px 6px 6px; box-shadow: none; }
-  .planwrap .zoombar[hidden] { display: none; }
   .planwrap .selcard { position: fixed; top: auto !important; bottom: 8px; left: 50% !important; right: auto; transform: translateX(-50%);
     width: min(520px, calc(100vw - 16px)); max-height: 62vh; z-index: 40; box-shadow: 0 -4px 30px rgba(40,40,20,.28); }
   .planwrap .selcard .sc-head { cursor: default; }
@@ -803,3 +804,19 @@ body.touring .step .stepfoot { display: none; }
   .planwrap .paintbar .zhrs, .planwrap .paintbar .pb-sep { display: none; }
   .planwrap .paintbar select { font-size: 12px; padding: 4px 6px; }
 }
+#ictip.k-view { background: #4E8C3A; color: #fff; }
+
+/* the plan's legend: a row under the plan, outside the picture */
+.planlegend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 8px 2px 0; font-size: 12px; font-weight: 700; color: #4b5244; }
+.planlegend[hidden] { display: none; }
+.planlegend .lg { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.planlegend .lg-tox { color: #B8392E; }
+.planlegend .lgic { width: 15px; height: 15px; }
+.planlegend .lgsq { width: 13px; height: 13px; border-radius: 3px; border: 1px solid #8E7660; box-sizing: border-box; }
+.planlegend .lgline { width: 16px; height: 4px; border-radius: 2px; }
+
+#stats .overfull b { color: var(--warn); }
+#stats small { color: var(--muted); font-weight: 500; }
+.selcard .sc-check { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; margin: 8px 0 2px; font-weight: 700; font-size: 12.5px; cursor: pointer; }
+.selcard .sc-check small { flex-basis: 100%; padding-left: 22px; font-weight: 500; color: var(--muted); }
+.selcard .sc-check input { accent-color: #4E8C3A; }

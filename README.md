@@ -10,11 +10,11 @@ Plan a perennial flower bed for Michigan (zone 6B): pick a bed shape, choose Mic
 A guided tour walks first-time visitors through six steps, lighting up one at a time. Each finished step folds down to a one-line summary and can be opened again to change it. Or load the example garden to see a finished plan right away.
 
 1. **Name your garden.** The PDF guide is saved as the date and name, like "26-10-28 Backyard Garden.pdf".
-2. **Your bed.** A rectangle, a round island, or draw your own: drag the dots, click a dot to switch between a sharp corner and a curve (crisp corners against a house, a curved front), and drag inside to move the shape. Pick the front of the bed (any edge or corner, or all sides) and plants run short to tall from there.
-3. **Add objects.** Paths, stepping stones, rocks, a birdbath, shrubs, a hedge or trees, placed before the plants so they're laid out around them.
+2. **Your bed.** A rectangle, a round island, or draw your own: drag the dots, click a dot to switch between a sharp corner and a curve (crisp corners against a house, a curved front), and drag inside to move the shape (a drawn bed can be changed any time with "Edit the outline"). Choose where the bed is seen from, one side or several or all the way around: those edges are outlined in green and plants run short to tall away from them.
+3. **Add objects.** Paths, stepping stones, rocks, a birdbath, shrubs, a hedge or trees, placed before the plants so they're laid out around them. Paths and stepping stones show footprints, and a path where people walk and look counts as a viewing edge too, so plants beside it stay low.
 4. **How much sun?** Full sun (6+ hours of direct sun a day), part shade (3 to 6) or shade (under 3), and map sunny and shady spots right on the bed plan.
 5. **What kind of garden?** Michigan natives and/or garden favorites, kinds of plants (including spring bulbs), and whether to leave out plants that are toxic, that deer eat, or in the daisy family (ragweed allergies).
-6. **Pick plants,** or let **Suggest a planting** choose plants that suit each part of the bed and go well together.
+6. **Pick plants,** or let **Suggest a planting** choose plants that suit each part of the bed and go well together. Suggestions and Re-arrange aim for a bed that's about 100% full once the plants are grown.
 
 On the bed plan:
 - Right-click any plant, object or empty spot for a menu; click one for a card with what it is, its sun needs and plants that go well with it (each pairing from a published source).
@@ -22,7 +22,10 @@ On the bed plan:
 - Zoom with Ctrl + scroll or the buttons in the corner.
 - Works on phones and tablets: press and hold for the menus, pinch to zoom, and "Select more plants" to pick several.
 - Small icons show sun needs, native, garden favorite, daisy family, toxic and deer-eaten plants; hover one for what it means.
+- A legend under the plan explains the colors and markings.
 - Early-dormant plants (Virginia Bluebells, Mayapple, Bleeding Heart, spring bulbs) may share space with later plants.
+
+The Garden Timeline shows when everything blooms, grouped by sun area when the bed has more than one; drag a plant into another sun area and it moves to that section.
 
 Then create a PDF guide with a bloom calendar, care through the year, plant profiles, a side view with spacing, the bed plan and a shopping list. Save and open plans as files; your work is also remembered in your own browser, and nothing is sent anywhere.
 

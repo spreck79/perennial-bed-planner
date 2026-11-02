@@ -15,6 +15,7 @@
 
   // sun-zone colors: match the per-plant sun-badge icon colors, so the painted zones and the badges read as the same system
   const SOIL = "#A68C72";
+  const VIEWC = "#4E8C3A";   // the green of the rim along the sides the bed is seen from
   const ZONE = { full: "#F2C40C", part: "#B5A153", shade: "#6E6E6E" };
   const ZONE_LAB = { full: "Full sun", part: "Part shade", shade: "Shade" };
   // How much direct sun each light level means. One wording, shared with app.js (tooltips, timeline,
@@ -350,6 +351,29 @@
     for (let k = 0; k < 7; k++) { const a = k / 7 * Math.PI * 2 + 0.4; el("circle", { cx: cx + Math.cos(a) * r * 0.52, cy: cy + Math.sin(a) * r * 0.52, r: r * 0.34, fill: "#628A52" }, parent); }
     el("circle", { cx, cy, r: r * 0.3, fill: "#6A9459" }, parent);
   }
+  // a footprint (sole and heel) at screen point x, y, pointing along angle deg (0 = up the screen), len feet long
+  function footprint(parent, x, y, deg, len, left) {
+    const g = el("g", { transform: `translate(${x.toFixed(3)} ${y.toFixed(3)}) rotate(${deg.toFixed(1)}) scale(${left ? -1 : 1} 1)` }, parent), L = len;
+    el("ellipse", { cx: L * 0.03, cy: -L * 0.06, rx: L * 0.17, ry: L * 0.24 }, g);   // ball of the foot
+    el("ellipse", { cx: 0, cy: L * 0.3, rx: L * 0.13, ry: L * 0.16 }, g);            // heel
+    [[-0.13, -0.38, 0.075], [-0.03, -0.43, 0.06], [0.06, -0.42, 0.052], [0.13, -0.37, 0.046], [0.18, -0.3, 0.04]].forEach(t => el("circle", { cx: L * t[0], cy: L * t[1], r: L * t[2] }, g));   // toes
+  }
+  // footprints walking along a path: left, right, left... down the middle of it
+  function pathFootprints(o, parent, Y) {
+    const G = window.Geo, P = G.pathPts(o).map(q => [q[0], Y(q[1])]); if (P.length < 2) return;
+    const fg = el("g", { class: "feet", fill: "#5F5747", opacity: 0.55, "pointer-events": "none" }, parent);
+    const len = Math.min(0.75, o.w * 0.34), stride = len * 1.55, side = Math.min(o.w * 0.16, len * 0.42);
+    let acc = stride / 2, n = 0;
+    for (let i = 0; i + 1 < P.length; i++) {
+      const a = P[i], b = P[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], segL = Math.hypot(dx, dy); if (!segL) continue;
+      while (acc <= segL) {
+        const t = acc / segL, x = a[0] + dx * t, y = a[1] + dy * t, nx = -dy / segL, ny = dx / segL, left = n % 2 === 0, off = left ? -side : side;
+        footprint(fg, x + nx * off, y + ny * off, Math.atan2(dy, dx) * 180 / Math.PI + 90, len, left);
+        acc += stride; n++;
+      }
+      acc -= segL;
+    }
+  }
   function drawObject(o, i, parent, Y) {
     const G = window.Geo, d = G.OBJ[o.t]; if (!d) return;
     const g = el("g", { class: "ob" + (window.Geo.pip(ctx.bed.poly, o.x, o.y) ? "" : " out"), "data-oi": i }, parent);
@@ -358,13 +382,20 @@
     const polyStr = pts => pts.map(q => `${q[0].toFixed(3)},${Y(q[1]).toFixed(3)}`).join(" ");
     if (o.t === "path" && o.pts) {
       const dstr = "M" + G.pathPts(o).map(q => `${q[0].toFixed(3)},${Y(q[1]).toFixed(3)}`).join("L"), cap = { fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" };
+      if (o.view !== false) el("path", Object.assign({ class: "pathview ztip", "data-k": "view", "data-tip": "People walk and look here: short plants beside the path, taller farther away", d: dstr, stroke: VIEWC, "stroke-width": o.w + 0.3 }, cap), g);
       el("path", Object.assign({ d: dstr, stroke: "#AFA28A", "stroke-width": o.w }, cap), g);
       el("path", Object.assign({ d: dstr, stroke: "url(#gravel)", "stroke-width": Math.max(0.1, o.w - 0.14) }, cap), g);
+      pathFootprints(o, g, Y);
     } else if (o.t === "path") {
-      el("polygon", { points: polyStr(G.objOutline(o)), fill: "url(#gravel)", stroke: "#AFA28A", "stroke-width": 0.06, "stroke-linejoin": "round" }, g);
+      const pa = { points: polyStr(G.objOutline(o)), fill: "url(#gravel)", stroke: "#AFA28A", "stroke-width": 0.06, "stroke-linejoin": "round" };
+      if (o.view !== false) Object.assign(pa, { class: "pathview ztip", "data-k": "view", "data-tip": "People walk and look here: short plants beside the path, taller farther away", stroke: VIEWC, "stroke-width": 0.15 });
+      el("polygon", pa, g);
+      { const t = (o.rot || 0) * Math.PI / 180, hx = -Math.sin(t) * o.h / 2, hy = Math.cos(t) * o.h / 2;   // footprints down its length
+        pathFootprints({ w: o.w, pts: [[o.x - hx, o.y - hy], [o.x + hx, o.y + hy]] }, g, Y); }
     } else if (o.t === "stone") {
       el("circle", { cx, cy, r, fill: "#BDB8AC", stroke: "#8F8A7E", "stroke-width": 0.05 }, g);
       el("circle", { cx: cx - r * 0.22, cy: cy - r * 0.22, r: r * 0.45, fill: "#CDC9BF" }, g);
+      { const fg = el("g", { class: "feet", fill: "#5F5747", opacity: 0.5, "pointer-events": "none" }, g); footprint(fg, cx, cy, -20, r * 1.05, i % 2 === 0); }   // a step on each stone
     } else if (o.t === "stump") {
       el("circle", { cx, cy, r, fill: "#A27A55", stroke: "#6E4F33", "stroke-width": 0.07 }, g);
       [0.68, 0.38].forEach(k => el("circle", { cx, cy, r: r * k, fill: "none", stroke: "#7E5B3C", "stroke-width": 0.035 }, g));
@@ -458,9 +489,10 @@
     const used = new Set(); placements.forEach(p => badgeKinds(byId[p.id]).forEach(k => used.add(k)));
     const lgItems = [["nat", "Michigan native"], ["gar", "Garden favorite"], ["daisy", "Daisy family"], ["deer", "Deer eat it"], ["tox", "Toxic plant"]].filter(x => used.has(x[0])).map(x => ({ k: x[0], t: x[1] }));
     if (sun && sun.show) ["full", "part", "shade"].forEach((z, i) => lgItems.push({ z, t: ZONE_LAB[z] + " (" + ZONE_HRS[z] + ")", br: i === 0 && lgItems.length > 0 }));
+    if ((bed.views || []).some(v => v !== "c") || objects.some(o => o.t === "path" && o.view !== false)) lgItems.push({ v: true, t: "Seen from" });
     const lbr = fs * 0.4, itemW = it => lbr * 1.5 + it.t.length * fs * 0.5 + fs * 0.9;
     let rows = 0; { let lx = lbr; if (lgItems.length) rows = 1; lgItems.forEach(it => { if (lx > lbr && (it.br || lx + itemW(it) > bb.w + fs * 2)) { rows++; lx = lbr; } lx += itemW(it); }); }
-    const mL = fs * 4.2, mR = fs * 1.6, mT = fs * 3.2, mB = fs * (5.7 + Math.max(1, rows) * 1.25);
+    const mL = fs * 4.2, mR = fs * 1.6, mT = fs * 1.4, mB = fs * 2.4;   // the legend sits under the plan, outside the picture
     c.H = bb.h; c.ox = mL; c.oy = mT; c.fs = fs;
     base = { w: bb.w + mL + mR, h: bb.h + mT + mB }; applyView(); if (zbar) zbar.hidden = false;
     svg.style.maxHeight = "640px";
@@ -483,6 +515,10 @@
     const poly = bed.poly.map(q => `${q[0].toFixed(3)},${Y(q[1]).toFixed(3)}`).join(" ");
     const clip = el("clipPath", { id: "bedclip" }, defs); el("polygon", { points: poly }, clip);
     el("polygon", { class: "bedrim", points: poly, fill: "#8E7660", stroke: "#8E7660", "stroke-width": fs * 0.9, "stroke-linejoin": "round" }, root);
+    // the sides people see the bed from: that part of the rim turns green (point at it for what it means)
+    { const segs = window.Geo.viewEdges(bed);
+      if (segs.length) el("path", { class: "bedrim viewedge ztip", "data-k": "view", "data-tip": "Seen from this side: short plants here, getting taller toward the back",
+        d: segs.map(q => `M${q[0].toFixed(3)} ${Y(q[1]).toFixed(3)}L${q[2].toFixed(3)} ${Y(q[3]).toFixed(3)}`).join(""), fill: "none", stroke: VIEWC, "stroke-width": fs * 0.9, "stroke-linecap": "round", "pointer-events": "stroke" }, root); }
     el("polygon", { class: "soil", points: poly, fill: SOIL }, root);
     // sun zones: the whole bed in its starting light, then the painted cells (runs of the same zone merged per row)
     if (sun && sun.show) {
@@ -503,24 +539,13 @@
       const grid = el("g", { class: "glayer", "clip-path": "url(#bedclip)", stroke: sun && sun.show ? "rgba(70,55,40,.28)" : "#BBA388", "stroke-width": 0.035, "pointer-events": "none" }, root);
       for (let x = 1; x < bb.w; x++) el("line", { x1: x, y1: 0, x2: x, y2: bb.h }, grid);
       for (let y = 1; y < bb.h; y++) el("line", { x1: 0, y1: Y(y), x2: bb.w, y2: Y(y) }, grid);
-      el("text", { x: 0, y: bb.h + fs * 2.4, "font-size": fs * 0.78, fill: "#9A9480", "font-style": "italic", "font-family": "sans-serif" }, root, "Each grid square = 1 ft");
+
     }
     // axis labels
     const step = bb.w > 30 ? 5 : bb.w > 16 ? 2 : 1;
     for (let x = 0; x <= bb.w + 0.01; x += step) el("text", { x, y: bb.h + fs * 1.5, "font-size": fs * 0.85, fill: "#7A7F70", "text-anchor": "middle", "font-family": "sans-serif" }, root, x + " ft");
     const ystep = bb.h > 24 ? 5 : bb.h > 12 ? 2 : 1;
     for (let y = 0; y <= bb.h + 0.01; y += ystep) el("text", { x: -fs * 0.6, y: Y(y) + fs * 0.3, "font-size": fs * 0.85, fill: "#7A7F70", "text-anchor": "end", "font-family": "sans-serif" }, root, y + "");
-    { const L = frontLabels(bed);
-      el("text", { x: bb.w / 2, y: bb.h + fs * 3.4, "font-size": fs * 0.9, fill: "#4b5244", "text-anchor": "middle", "font-weight": 700, "font-family": "sans-serif" }, root, L.bottom);
-      if (L.top) el("text", { x: bb.w, y: -fs * 0.9, "font-size": fs * 0.9, fill: "#4b5244", "text-anchor": "end", "font-weight": 700, "font-family": "sans-serif" }, root, L.top);
-      // a small FRONT tag right on the front side when it isn't the bottom edge
-      if (bed.front && bed.front !== "s" && bed.front !== "c") {
-        const f = bed.front, tx = f.includes("w") ? 0 : f.includes("e") ? bb.w : bb.w / 2, ty = f.includes("s") ? 0 : f.includes("n") ? bb.h : bb.h / 2;
-        const g = el("g", { transform: `translate(${tx} ${Y(ty)})`, "pointer-events": "none" }, root);
-        el("rect", { x: -fs * 1.9, y: -fs * 0.62, width: fs * 3.8, height: fs * 1.24, rx: fs * 0.62, fill: "#3F6B3A" }, g);
-        el("text", { x: 0, y: fs * 0.3, "font-size": fs * 0.8, fill: "#fff", "text-anchor": "middle", "font-weight": 800, "font-family": "sans-serif" }, g, "FRONT");
-      }
-    }
 
     // objects sit under the plants (plants may lean over a path or rock), and are only drawn inside the bed;
     // plants can spill over the edge, objects can't
@@ -582,18 +607,8 @@
     rubberEl = null;
     if (c.pathDraw) drawPathPreview(root, Y, fs);
     if (c.objSel >= 0 && objects[c.objSel]) objSelection(objects[c.objSel], c.objSel, root, Y, fs);
-    // legend
-    if (lgItems.length) {
-      const lgd = el("g", { "pointer-events": "none" }, root); root.insertBefore(lgd, olayer);
-      let lx = lbr, ly = bb.h + fs * 5.7;
-      lgItems.forEach(it => {
-        if (lx > lbr && (it.br || lx + itemW(it) > bb.w + fs * 2)) { lx = lbr; ly += fs * 1.25; }
-        if (it.k) drawBadge(it.k, lgd, lbr, "lgb", 0, 0, lx, ly);
-        else el("rect", { x: lx - lbr, y: ly - lbr, width: lbr * 2, height: lbr * 2, rx: lbr * 0.3, fill: ZONE[it.z], stroke: "#8E7660", "stroke-width": lbr * 0.12 }, lgd);
-        el("text", { x: lx + lbr * 1.5, y: ly + fs * 0.3, "font-size": fs * 0.8, fill: it.k === "tox" ? "#B8392E" : "#4b5244", "font-weight": 700, "font-family": "sans-serif" }, lgd, it.t);
-        lx += itemW(it);
-      });
-    }
+    // legend: a row of HTML under the plan (so the plan window holds just the bed), same badges and colors
+    renderLegend(lgItems);
     // paint brush outline
     if (c.paint) { brushEl = el("circle", { class: "brushc", cx: -99, cy: -99, r: Math.max(0.25, c.paint.size / 2), fill: "none", stroke: "#2E3A2C", "stroke-width": 0.06, "stroke-dasharray": "0.15 0.1", "pointer-events": "none", visibility: "hidden" }, root); }
     svg.classList.toggle("placing", !!(c.armed || c.objArmed || c.pathDraw));
@@ -605,9 +620,11 @@
   // where the front and back are, in words, for the captions above and below the plan (and the PDF)
   const SIDE = { s: "bottom edge", n: "top edge", w: "left side", e: "right side", sw: "bottom left corner", se: "bottom right corner", nw: "top left corner", ne: "top right corner" };
   const OPP = { s: "n", n: "s", w: "e", e: "w", sw: "ne", ne: "sw", se: "nw", nw: "se" };
+  const sidesList = vs => { const w = vs.map(v => SIDE[v]); return w.length < 3 ? w.join(" and ") : w.slice(0, -1).join(", ") + " and " + w[w.length - 1]; };
   function frontLabels(bed) {
-    const f = bed.front || (bed.mode === "island" ? "c" : "s");
+    const vs = bed.views || [bed.front || (bed.mode === "island" ? "c" : "s")], f = vs[0];
     if (f === "c") return { bottom: "ALL SIDES ARE THE FRONT · tall plants in the middle", top: "" };
+    if (vs.length > 1) return { bottom: "SEEN FROM THE " + sidesList(vs).toUpperCase() + " · short plants there, tallest farthest from them", top: "" };
     if (f === "s") return { bottom: "FRONT EDGE (lawn / path side)", top: "BACK (fence / house / trees)" };
     return { bottom: "FRONT: " + SIDE[f].toUpperCase() + " (lawn / path side) · short plants there, tall toward the " + SIDE[OPP[f]], top: "BACK: " + SIDE[OPP[f]].toUpperCase() + " (fence / house / trees)" };
   }
@@ -734,7 +751,7 @@
   function undoDraw() { if (!draw) return; const h = draw.hist.pop(); if (h) { draw.pts = h.pts; draw.sharp = h.sharp; draw.closed = h.closed; } else if (!draw.closed) { draw.pts.pop(); draw.sharp.pop(); } renderDraw(); }
   function clearDraw() { if (!draw) return; remember(); draw.pts = []; draw.sharp = []; draw.closed = false; renderDraw(); }
   function renderDraw() {
-    svg.classList.add("drawing"); if (zbar) zbar.hidden = false;
+    svg.classList.add("drawing"); { const lg = document.getElementById("planLegend"); if (lg) lg.hidden = true; } if (zbar) zbar.hidden = false;
     const W = draw.W, H = draw.H, k = W / 36;
     base = { w: W + 3 * k, h: H + 3.2 * k }; applyView();
     svg.innerHTML = "";
@@ -812,10 +829,21 @@
   }
   function removeDrawUI() { if (ui) { ui.bar.remove(); ui = null; } }
 
+  function renderLegend(items) {
+    const box = document.getElementById("planLegend"); if (!box) return;
+    box.innerHTML = ""; box.hidden = !items.length;
+    items.forEach(it => {
+      const span = document.createElement("span"); span.className = "lg" + (it.k === "tox" ? " lg-tox" : "");
+      if (it.k) { const sv = document.createElementNS(NS, "svg"); sv.setAttribute("viewBox", "-1.1 -1.1 2.2 2.2"); sv.setAttribute("class", "lgic"); drawBadge(it.k, sv, 1, "lgb", 0, 0, 0, 0); span.appendChild(sv); }
+      else if (it.v) span.insertAdjacentHTML("beforeend", `<i class="lgline" style="background:${VIEWC}"></i>`);
+      else span.insertAdjacentHTML("beforeend", `<i class="lgsq" style="background:${ZONE[it.z]}"></i>`);
+      span.appendChild(document.createTextNode(it.t)); box.appendChild(span);
+    });
+  }
   function setHover(id) {
     if (!svg) return;
     svg.classList.toggle("hasHover", !!id);   // the bed and objects fade back while a plant is pointed at
     svg.querySelectorAll(".pl").forEach(g => { g.classList.toggle("hl", !!id && g.dataset.id === id); g.classList.toggle("dim", !!id && g.dataset.id !== id && !g.classList.contains("sel")); });
   }
-  window.Plan = { init, render, startDraw, setHover, isDrawing: () => !!draw, touch: TOUCH, resetView, zoomBy, cancelDraw, finishDraw, chaikin, frontLabels, ZONE, ZONE_LAB, ZONE_HRS, ZONE_TIP, sunNeed, sunTip };
+  window.Plan = { init, render, startDraw, setHover, isDrawing: () => !!draw, touch: TOUCH, sidesList, resetView, zoomBy, cancelDraw, finishDraw, chaikin, frontLabels, ZONE, ZONE_LAB, ZONE_HRS, ZONE_TIP, sunNeed, sunTip };
 })();
