@@ -778,14 +778,28 @@ body.touring .step .stepfoot { display: none; }
   .planwrap .zoombar button { min-width: 34px; height: 32px; }
 }
 .selcard .sc-head { touch-action: none; }   /* the card can be dragged by its top with a finger too */
-@media (max-width: 700px) {
-  /* phones: the card for a selection (or "Add a plant here") is a sheet along the bottom of the screen */
-  .planwrap .selcard { position: fixed; left: 8px !important; right: 8px; top: auto !important; bottom: 8px; width: auto; max-height: 62vh; z-index: 40; box-shadow: 0 -4px 30px rgba(40,40,20,.28); }
+/* ---------- phones and tablets: nothing sits on top of the plan ----------
+   The outline editor's buttons and the sun palette dock in a strip right above the plan, the zoom
+   buttons right below it, and the card for a plant slides up from the bottom of the screen, so the
+   whole plan stays free for fingers. The header scrolls away to give the plan more room. */
+@media (max-width: 1050px) {
+  .top { position: static; }
+  .planwrap { display: flex; flex-direction: column; }
+  .planwrap > #plan { order: 1; }
+  .planwrap .drawbar, .planwrap .paintbar { position: static; order: 0; margin: 0; max-width: none; left: auto; right: auto; top: auto;
+    border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; box-shadow: none; }
+  .planwrap .zoombar { position: static; order: 2; align-self: flex-end; margin: 4px 6px 6px; box-shadow: none; }
+  .planwrap .zoombar[hidden] { display: none; }
+  .planwrap .selcard { position: fixed; top: auto !important; bottom: 8px; left: 50% !important; right: auto; transform: translateX(-50%);
+    width: min(520px, calc(100vw - 16px)); max-height: 62vh; z-index: 40; box-shadow: 0 -4px 30px rgba(40,40,20,.28); }
   .planwrap .selcard .sc-head { cursor: default; }
 }
-/* tablets (portrait): keep the steps beside the plan, with a slimmer left column and a header that scrolls away */
-@media (min-width: 801px) and (max-width: 1050px) {
-  .top { position: static; }
-  .layout { grid-template-columns: 300px minmax(0, 1fr); }
-  .left { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow: auto; }
+@media (max-width: 700px) {
+  .planwrap .drawbar { gap: 4px; padding: 6px; }
+  .planwrap .drawbar .btn { padding: 5px 8px; font-size: 12px; }
+  .planwrap .drawbar .tip { font-size: 11px; line-height: 1.35; }
+  .planwrap .paintbar { gap: 4px; padding: 6px; }
+  .planwrap .paintbar .pb-btn { padding: 4px 7px; font-size: 12px; }
+  .planwrap .paintbar .zhrs, .planwrap .paintbar .pb-sep { display: none; }
+  .planwrap .paintbar select { font-size: 12px; padding: 4px 6px; }
 }

@@ -458,7 +458,7 @@
   function startDraw(opts) {
     opts = opts || {};
     armed = null; selIdx = -1; extraSel = []; objSel = -1; objArmed = null; pathDraw = null; paint = null; renderPaintBar();
-    $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" });
+    if (innerWidth > 1050) $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" });
     let seed = null, seedSharp = null, smooth = !!S.freeSmooth;
     if (!opts.fresh) {
       if (S.shape === "free" && S.freePoly) { seed = S.freeCtrl || S.freePoly; if (S.freeCtrl) seedSharp = S.freeSharp; }
@@ -481,6 +481,7 @@
     renderShapesPanel();
     // the line under the plan describes the outline being drawn, not the old bed
     $("#stats").innerHTML = "<span><b>Drawing your own outline</b> · Save shape when you're done (or press Done in step 2)</span>";
+    showPlanTools();
     $("#notice").style.display = "none";
   }
 
@@ -607,7 +608,7 @@
   }
   $("#btnExample").addEventListener("click", loadExample);
   $("#gName").addEventListener("keydown", e => { if (e.key === "Enter" && !document.body.classList.contains("touring")) { e.preventDefault(); e.target.blur(); completeStep("name", true); } });
-  $("#btnPaintSun").addEventListener("click", () => { if (!paint) togglePaint(); $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  $("#btnPaintSun").addEventListener("click", () => { if (!paint) togglePaint(); if (innerWidth > 1050) $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" }); });
   // ---------- steps 4 and 5: how much sun, and what kind of garden ----------
   // Sun as three rows in the planner's sun colors, what to include as tiles and chips, and what to leave out as
   // plain switches (with the full explanation one click away). A counter shows how many plants match.
@@ -1116,10 +1117,16 @@
   }
   // ---------- the toolbar menus above the plan ----------
   function toggleMenu(id, open) { return e => { e.stopPropagation(); const m = document.getElementById("plantMenu"); if (m && m.dataset.for === id) { closePlantMenu(); return; } open(); }; }
+  // phones and tablets: the editor's buttons or the sun palette sit just above the plan; bring them into view
+  function showPlanTools() {
+    if (innerWidth > 1050) return;
+    requestAnimationFrame(() => { const w = $("#planWrap"); if (!w) return; const y = w.getBoundingClientRect().top + scrollY - 8; scrollTo({ top: y, behavior: "smooth" }); });
+  }
   function togglePaint(quiet) {
     paint = paint ? null : { brush: sunBase() === "shade" ? "full" : "shade", size: 2 };
     objArmed = null; pathDraw = null; armed = null; clearSel(); objSel = -1; closeAddCard(); renderPaintBar(); renderPlan();
-    if (paint && !quiet) toast("Pick a light, then drag across the bed to map where it falls. Press Done or Esc when you're finished.", 4500);
+    if (paint) showPlanTools();
+    if (paint && !quiet) toast("Pick a light, then drag across the bed to map where it falls. Press Done " + (TOUCH ? "" : "or Esc ") + "when you're finished.", 4500);
   }
   function suggestClicked() {
     clearSel(); objSel = -1; renderPlan();
@@ -1534,7 +1541,7 @@
     const card = $("#selCard"); if (!card) return;
     const isObj = objSel >= 0 && S.objects[objSel], idxs = selAll();
     const ctxOpen = document.getElementById("plantMenu"), busy = paint || armed || objArmed || pathDraw || window.Plan.isDrawing() || !$("#addCard").hidden || (ctxOpen && ctxOpen.dataset.ctx)
-      || (multiTap && innerWidth <= 700);   // on a phone the card would cover the plants you're tapping
+      || (multiTap && innerWidth <= 1050);   // on a phone the card would cover the plants you're tapping
     if (busy || (!isObj && !idxs.length)) { card.hidden = true; card.innerHTML = ""; if (!isObj && !idxs.length) delete card.dataset.pin; return; }
     card.innerHTML = ""; card.hidden = false;
     if (isObj) buildObjCard(card); else buildPlantCard(card, idxs);
