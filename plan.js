@@ -117,7 +117,7 @@
     zbar.querySelector(".zin").onclick = () => zoomBy(1.4);
     zbar.querySelector(".zout").onclick = () => zoomBy(1 / 1.4);
     zbar.querySelector(".zfit").onclick = resetView;
-    zhint = document.createElement("div"); zhint.className = "zoomhint"; zhint.textContent = "Hold Ctrl and scroll to zoom. Drag an empty spot to move around.";
+    zhint = document.createElement("div"); zhint.className = "zoomhint"; zhint.textContent = TOUCH ? "Pinch with two fingers to zoom." : "Hold Ctrl and scroll to zoom. Once zoomed in, drag an empty spot to move around.";
     wrap.append(zbar, zhint);
     svg.addEventListener("wheel", e => {
       if (e.ctrlKey || e.metaKey) { e.preventDefault(); zoomBy(Math.exp(-e.deltaY * 0.0025), e.clientX, e.clientY); }
@@ -127,10 +127,10 @@
 
   function init(svgEl, callbacks) {
     svg = svgEl; wrap = svg.parentElement; cb = callbacks; makeZoomBar();
-    svg.addEventListener("pointerdown", onDown);
-    svg.addEventListener("pointermove", onMove);
-    svg.addEventListener("pointerup", onUp);
-    svg.addEventListener("pointercancel", onUp);
+    svg.addEventListener("pointerdown", tDown);
+    svg.addEventListener("pointermove", tMove);
+    svg.addEventListener("pointerup", tUp);
+    svg.addEventListener("pointercancel", tUp);
     svg.addEventListener("dblclick", onDbl);
     svg.addEventListener("pointerover", e => { if (draw || (ctx && ctx.paint)) return; const g = near(e, ".pl"); cb.onHover && cb.onHover(g ? g.dataset.id : null); });
     svg.addEventListener("pointerleave", () => { cb.onHover && cb.onHover(null); if (brushEl) brushEl.setAttribute("visibility", "hidden"); });
@@ -151,6 +151,79 @@
     }, true);
   }
 
+  // --------------- touch: press and hold = right-click, two fingers = zoom and move around ---------------
+  // Mouse and pen go straight to onDown/onMove/onUp. A finger does too, but holding it still for half a
+  // second turns the press into a right-click (the same menus), and a second finger turns the gesture into
+  // a pinch that zooms around the fingers and follows them as they move.
+  // a phone or tablet: no mouse to hover or right-click with, so the wording changes too
+  const TOUCH = !!(window.matchMedia && window.matchMedia("(hover: none) and (pointer: coarse)").matches);
+  let clickEat = 0;
+  window.addEventListener("click", e => { if (clickEat && Date.now() - clickEat < 1500) { e.preventDefault(); e.stopPropagation(); clickEat = 0; } }, true);
+  const fingers = new Map(); let hold = null, pinch = null, afterPinch = false;
+  const HOLD_MS = 520;
+  function quietGesture() {   // drop whatever the first finger started, without treating it as a click
+    if (draw) {
+      if (draw.drag >= 0) { if (!draw.dragMoved) draw.hist.pop(); draw.drag = -1; }
+      if (draw.move) { if (!draw.move.moved) draw.hist.pop(); draw.move = null; svg.classList.remove("movingshape"); }
+      pan = null; renderDraw(); return;
+    }
+    if (pan) { pan = null; svg.classList.remove("panning"); }
+    if (drag) { const d = drag; drag = null; if (d.moved) cb.onMoved && cb.onMoved(d.idx); }
+    if (objDrag) { const d = objDrag; objDrag = null; if (d.moved) cb.onObjDone && cb.onObjDone(d.oi); }
+    if (paintDrag) { paintDrag = false; cb.onPaintEnd && cb.onPaintEnd(); }
+  }
+  function fakeRight(h) {
+    return { button: 2, buttons: 2, target: h.target, clientX: h.x, clientY: h.y, pointerId: h.id, pointerType: "touch", ctrlKey: false, metaKey: false, shiftKey: false, preventDefault() {}, stopPropagation() {} };
+  }
+  function tDown(e) {
+    if (e.pointerType !== "touch") { onDown(e); return; }
+    fingers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (fingers.size === 2) {
+      if (hold) { clearTimeout(hold.t); hold = null; }
+      quietGesture();
+      const [a, b] = [...fingers.values()];
+      pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 };
+      e.preventDefault(); return;
+    }
+    if (fingers.size > 2 || pinch) return;
+    afterPinch = false;
+    onDown(e);
+    const busy = ctx && (ctx.paint || ctx.pathDraw || ctx.objArmed || ctx.armed);
+    if (!busy) hold = { id: e.pointerId, x: e.clientX, y: e.clientY, target: e.target, t: setTimeout(() => {
+      const h = hold; hold = null; if (!h) return;
+      quietGesture(); try { svg.releasePointerCapture(h.id); } catch (_) {}
+      if (navigator.vibrate) try { navigator.vibrate(12); } catch (_) {}
+      onDown(fakeRight(h));
+      clickEat = Date.now();   // lifting the finger sends a click that would close the menu again
+      afterPinch = true;   // the rest of this touch does nothing more (the menu is open)
+    }, HOLD_MS) };
+  }
+  function tMove(e) {
+    if (e.pointerType !== "touch") { onMove(e); return; }
+    const f = fingers.get(e.pointerId); if (!f) return;
+    f.x = e.clientX; f.y = e.clientY;
+    if (hold && Math.hypot(e.clientX - hold.x, e.clientY - hold.y) > 10) { clearTimeout(hold.t); hold = null; }
+    if (pinch && fingers.size >= 2) {
+      const [a, b] = [...fingers.values()], d = Math.hypot(a.x - b.x, a.y - b.y) || 1, mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+      if (base) {
+        zoomBy(d / pinch.d, mx, my);
+        const m = svg.getScreenCTM(); view.fx -= (mx - pinch.mx) / m.a / base.w; view.fy -= (my - pinch.my) / m.d / base.h; applyView();
+        if (draw) renderDraw();
+      }
+      pinch.d = d; pinch.mx = mx; pinch.my = my; e.preventDefault(); return;
+    }
+    if (afterPinch) return;
+    onMove(e);
+  }
+  function tUp(e) {
+    if (e.pointerType !== "touch") { onUp(e); return; }
+    fingers.delete(e.pointerId);
+    if (hold) { clearTimeout(hold.t); hold = null; }
+    if (pinch) { if (fingers.size < 2) { pinch = null; afterPinch = true; cb.onView && cb.onView(); } return; }
+    if (afterPinch) { if (!fingers.size) afterPinch = false; return; }
+    onUp(e);
+  }
+
   function onDown(e) {
     if (!ctx) return;
     if (e.button === 2 && (draw || near(e, ".pl") || near(e, ".ob"))) ctxEat = Date.now();
@@ -169,7 +242,7 @@
     if (g && e.button === 2) { cb.onSelect && cb.onSelect(+g.dataset.idx, false); cb.onContextMenu && cb.onContextMenu(+g.dataset.idx, e.clientX, e.clientY); e.preventDefault(); return; }
     if (g) {
       const idx = +g.dataset.idx, p = ctx.placements[idx];
-      cb.onSelect && cb.onSelect(idx, e.ctrlKey || e.metaKey || e.shiftKey);
+      cb.onSelect && cb.onSelect(idx, e.ctrlKey || e.metaKey || e.shiftKey || !!(cb.isMulti && cb.isMulti()));
       drag = { idx, dx: p.x - pt.x, dy: p.y - pt.y, moved: false, g: svg.querySelector(`.pl[data-idx="${idx}"]`) || g, sx: e.clientX, sy: e.clientY };
       svg.setPointerCapture(e.pointerId);
       e.preventDefault(); return;
@@ -188,7 +261,7 @@
       return;
     }
     if (ctx.armed) { cb.onPlace && cb.onPlace(pt.x, pt.y); return; }
-    if (e.button === 0) { const r = viewRect(); pan = { sx: e.clientX, sy: e.clientY, cx: r.cx, cy: r.cy, moved: false, add: e.ctrlKey || e.metaKey || e.shiftKey }; svg.setPointerCapture(e.pointerId); e.preventDefault(); }
+    if (e.button === 0) { const r = viewRect(); pan = { sx: e.clientX, sy: e.clientY, cx: r.cx, cy: r.cy, moved: false, add: e.ctrlKey || e.metaKey || e.shiftKey || !!(cb.isMulti && cb.isMulti()) }; svg.setPointerCapture(e.pointerId); e.preventDefault(); }
   }
   function onMove(e) {
     if (draw) { drawMove(e); return; }
@@ -700,7 +773,7 @@
     pts.forEach((q, i) => {
       const first = i === 0 && !draw.closed;
       const few = draw.pts.length <= 3;
-      const tip = draw.closed ? (draw.sharp[i] ? "Sharp corner · Drag to move · Click to make it a curve" : "Curve · Drag to move · Click to make it a sharp corner") + (few ? "" : " · Right-click to remove")
+      const tip = draw.closed ? (draw.sharp[i] ? "Sharp corner · Drag to move · Click to make it a curve" : "Curve · Drag to move · Click to make it a sharp corner") + (few ? "" : TOUCH ? " · Press and hold to remove" : " · Right-click to remove")
         : first && pts.length >= 3 ? "Click to close the shape" : "Corner · Drag to move · Click the orange dot to close the shape";
       if (draw.closed && draw.sharp[i]) {   // a sharp corner: a square dot (curves are round dots)
         const r = 0.28 * kd;
@@ -713,7 +786,8 @@
       let m;
       if (draw.closed) {
         const fp = finalPoly(), bb = window.Geo.bbox(fp), A = window.Geo.area(fp);
-        m = `About ${bb.w.toFixed(1)} × ${bb.h.toFixed(1)} ft, ${Math.round(A)} sq ft. Point at any dot for what it does: drag to move, click to switch between a curve (round dot) and a sharp corner (square dot), right-click to remove. Click a + to add a corner. Drag inside the shape to move all of it. Ctrl + scroll zooms. Then Save shape.`;
+        m = TOUCH ? `About ${bb.w.toFixed(1)} × ${bb.h.toFixed(1)} ft, ${Math.round(A)} sq ft. Drag a dot to move it, tap it to switch between a curve (round dot) and a sharp corner (square dot), press and hold it to remove it. Tap a + to add a corner. Drag inside the shape to move all of it. Pinch to zoom. Then Save shape.`
+          : `About ${bb.w.toFixed(1)} × ${bb.h.toFixed(1)} ft, ${Math.round(A)} sq ft. Point at any dot for what it does: drag to move, click to switch between a curve (round dot) and a sharp corner (square dot), right-click to remove. Click a + to add a corner. Drag inside the shape to move all of it. Ctrl + scroll zooms. Then Save shape.`;
       } else m = pts.length < 3 ? "Click to place corners (they snap to the half foot). Hold Shift for straight lines." : "Keep clicking corners, then click the orange start point (or double-click) to close the shape.";
       ui.msg.textContent = m;
       ui.save.disabled = draw.pts.length < 3;
@@ -743,5 +817,5 @@
     svg.classList.toggle("hasHover", !!id);   // the bed and objects fade back while a plant is pointed at
     svg.querySelectorAll(".pl").forEach(g => { g.classList.toggle("hl", !!id && g.dataset.id === id); g.classList.toggle("dim", !!id && g.dataset.id !== id && !g.classList.contains("sel")); });
   }
-  window.Plan = { init, render, startDraw, setHover, isDrawing: () => !!draw, resetView, zoomBy, cancelDraw, finishDraw, chaikin, frontLabels, ZONE, ZONE_LAB, ZONE_HRS, ZONE_TIP, sunNeed, sunTip };
+  window.Plan = { init, render, startDraw, setHover, isDrawing: () => !!draw, touch: TOUCH, resetView, zoomBy, cancelDraw, finishDraw, chaikin, frontLabels, ZONE, ZONE_LAB, ZONE_HRS, ZONE_TIP, sunNeed, sunTip };
 })();

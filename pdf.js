@@ -67,7 +67,7 @@
     // photo with rounded corners, cropped to fill the frame
     const photo = (id, x, y, w, h, r) => {
       r = r == null ? 6 : r;
-      const d = window.PHOTOS[id];
+      const d = (window.PHOTO_FULL && window.PHOTO_FULL[id]) || window.PHOTOS[id];   // full-size when loaded, else the preview
       if (d) {
         try {
           doc.saveGraphicsState(); doc.roundedRect(x, y, w, h, r, r, null); doc.clip(); doc.discardPath();

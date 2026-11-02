@@ -759,3 +759,33 @@ body.touring .step .stepfoot { display: none; }
 .planwrap .zoomhint { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 12; background: rgba(46,58,44,.88); color: #fff; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 999px; pointer-events: none; opacity: 0; transition: opacity .2s; white-space: nowrap; }
 .planwrap .zoomhint.on { opacity: 1; }
 #plan.panning, #plan.drawing.panning { cursor: grabbing; }
+
+/* ---------- touch screens: the plan takes every finger gesture itself (hold for menus, pinch to zoom) ---------- */
+#plan { touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+
+/* ---------- phones: a header that scrolls away, smaller buttons, the tour card along the bottom ---------- */
+@media (max-width: 700px) {
+  .top { position: static; padding: 10px 14px; gap: 8px; backdrop-filter: none; }
+  .top h1 { font-size: 19px; }
+  .top .sub { font-size: 11px; }
+  .actions { gap: 6px; }
+  .actions .btn { padding: 6px 10px; font-size: 12px; }
+  .layout { padding: 12px 10px 40px; gap: 12px; }
+  .card { padding: 14px 14px; }
+  .selcard { width: min(300px, calc(100% - 12px)); }
+  #tourCoach { width: calc(100vw - 20px); }
+  .plan-tools .tools-hint { flex-basis: 100%; }
+  .planwrap .zoombar button { min-width: 34px; height: 32px; }
+}
+.selcard .sc-head { touch-action: none; }   /* the card can be dragged by its top with a finger too */
+@media (max-width: 700px) {
+  /* phones: the card for a selection (or "Add a plant here") is a sheet along the bottom of the screen */
+  .planwrap .selcard { position: fixed; left: 8px !important; right: 8px; top: auto !important; bottom: 8px; width: auto; max-height: 62vh; z-index: 40; box-shadow: 0 -4px 30px rgba(40,40,20,.28); }
+  .planwrap .selcard .sc-head { cursor: default; }
+}
+/* tablets (portrait): keep the steps beside the plan, with a slimmer left column and a header that scrolls away */
+@media (min-width: 801px) and (max-width: 1050px) {
+  .top { position: static; }
+  .layout { grid-template-columns: 300px minmax(0, 1fr); }
+  .left { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow: auto; }
+}

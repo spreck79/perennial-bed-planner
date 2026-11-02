@@ -9,6 +9,22 @@
   // steps 1 to 4 fold down to a one-line summary once they're done; openSteps holds the ones opened again
   const STEPS_UI = { name: "#nameCard", bed: "#bedPanel", objects: "#objCard", sun: "#sunCard", kind: "#prefCard" };
   const openSteps = new Set();
+  // Full-size photos live in the photos folder, one small script per plant, and load only when needed
+  // (enlarging a photo, making the PDF). Everywhere else uses the quick 240 x 180 previews in images.js.
+  const fullWait = {};
+  function loadFull(id) {
+    window.PHOTO_FULL = window.PHOTO_FULL || {};
+    if (window.PHOTO_FULL[id]) return Promise.resolve(window.PHOTO_FULL[id]);
+    if (fullWait[id]) return fullWait[id];
+    return (fullWait[id] = new Promise(res => {
+      const sc = document.createElement("script"); sc.src = "photos/" + encodeURIComponent(id) + ".js";
+      sc.onload = () => res(window.PHOTO_FULL[id] || null);
+      sc.onerror = () => { delete fullWait[id]; sc.remove(); res(null); };   // missing file: the preview is used instead
+      document.head.appendChild(sc);
+    }));
+  }
+  const TOUCH = window.Plan.touch;   // phone or tablet: "press and hold" in place of right-click
+  if (TOUCH) $("#toolsHint").textContent = "Tip: press and hold any plant, object or empty spot on the bed. Pinch to zoom.";
   const imgSrc = id => window.PHOTOS[id] || "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
   // The starter garden shown on first visit and after "Start over": a drawn (not rectangular) border that
@@ -167,7 +183,10 @@
   function isGroundcover(p) { return !!p.c || !!(byId[p.id] && byId[p.id].filler); }
   // every selected plant: the main one plus any added with shift/ctrl
   function selAll() { const out = []; [selIdx].concat(extraSel).forEach(i => { if (i >= 0 && S.placements[i] && !out.includes(i)) out.push(i); }); return out; }
-  function clearSel() { selIdx = -1; extraSel = []; }
+  // "Select more plants" (from a plant's menu) makes every tap add or remove a plant, for touch screens
+  // where there's no Ctrl or Shift key. It ends with Done, Esc, or when nothing is selected any more.
+  let multiTap = false;
+  function clearSel() { selIdx = -1; extraSel = []; multiTap = false; }
   // kinds of plant in the current selection, and selecting every planted one of some kinds
   const selIds = () => { const s = []; selAll().forEach(i => { const id = S.placements[i] && S.placements[i].id; if (id && !s.includes(id)) s.push(id); }); return s; };
   function selectIds(ids) {
@@ -460,6 +479,9 @@
       onCancel: () => { if (S.shape === "free" && !S.freePoly) { S.shape = "rect"; S.dims = { w: 16, d: 6 }; rebuildBed(); } fullRender(); }
     }, { pts: seed, smooth, sharp: seedSharp });
     renderShapesPanel();
+    // the line under the plan describes the outline being drawn, not the old bed
+    $("#stats").innerHTML = "<span><b>Drawing your own outline</b> · Save shape when you're done (or press Done in step 2)</span>";
+    $("#notice").style.display = "none";
   }
 
   // does a plant fit the step-2 choices?
@@ -903,11 +925,13 @@
       a.innerHTML = `Drawing a <b>path</b>: click along the bed to lay it out${n >= 2 ? "" : " (at least 2 points)"}. <button class="btn small primary" id="pdDone" type="button"${n >= 2 ? "" : " disabled"}>Finish</button> <button class="btn small" id="pdUndo" type="button"${n ? "" : " disabled"}>Undo point</button> <button class="btn small" id="pdOff" type="button">Cancel</button>`;
       $("#pdDone").onclick = finishPath; $("#pdUndo").onclick = () => { pathDraw.pts.pop(); renderPlan(); }; $("#pdOff").onclick = () => { pathDraw = null; renderPlan(); };
     }
+    else if (multiTap && selAll().length) { a.classList.add("on"); a.innerHTML = `Selecting <b>${selAll().length} plant${selAll().length > 1 ? "s" : ""}</b>: tap plants to add or drop them <button class="btn small primary" id="mtDone" type="button">Done</button>`; $("#mtDone").onclick = () => { multiTap = false; renderPlan(); }; }
     else if (objArmed) { a.classList.add("on"); a.innerHTML = `Placing a <b>${esc(Geo.OBJ[objArmed].label.toLowerCase())}</b>: click the bed where it goes <button class="btn small" id="armOff" type="button">Stop</button>`; $("#armOff").onclick = () => { objArmed = null; pathDraw = null; refreshPlanOnly(); }; }
     else a.classList.remove("on");
     undoUI();
     $("#mSun").classList.toggle("on", !!paint);
-    $("#toolsHint").hidden = !!(armed || pathDraw || objArmed);
+    if (multiTap && !selAll().length) multiTap = false;
+    $("#toolsHint").hidden = !!(armed || pathDraw || objArmed || (multiTap && selAll().length));
   }
   function refreshPlanOnly() { renderPlan(); }
   // plants closer together than their spacing allows (early-dormant plants may tuck in among later ones)
@@ -1039,7 +1063,8 @@
     if (!selAll().includes(idx)) { selIdx = idx; extraSel = []; }
     optMode = "idle"; renderPlan();
     const group = selAll().map(i => S.placements[i]).filter(Boolean), n = group.length;
-    const m = showMenu((n > 1 ? [{ head: n + " plants selected" }] : [{ head: byId[group[0].id].name }]).concat(plantActions(group)), { x: cx, y: cy });
+    const more = { label: multiTap ? "Stop selecting more" : "Select more plants…", hint: multiTap || TOUCH ? "" : "or Ctrl-click", fn: () => { multiTap = !multiTap; renderPlan(); if (multiTap) toast("Tap other plants to add them to the selection. Tap one again to drop it. Done when finished.", 4000); } };
+    const m = showMenu((n > 1 ? [{ head: n + " plants selected" }] : [{ head: byId[group[0].id].name }]).concat([more, { sep: true }], plantActions(group)), { x: cx, y: cy });
     m.dataset.ctx = "1"; renderSelCard();   // just the menu while it's open, not the card as well
   }
   // what you can do with a placed object
@@ -1264,6 +1289,7 @@
       renderPlan();
     },
     onMoved() { save(); renderPlan(); },
+    isMulti() { return multiTap; },
     // the card beside a selection follows the plant when the plan is zoomed or moved around
     onPanStart() { const c = $("#selCard"); if (c) c.style.visibility = "hidden"; },
     onView() { const c = $("#selCard"); if (c) c.style.visibility = ""; renderSelCard(); },
@@ -1276,7 +1302,7 @@
     onContextMenu(idx, x, y) { openPlantMenu(idx, x, y); },
     onObjSelect(i) { objSel = i; clearSel(); optMode = "idle"; renderPlan(); },
     onObjMenu(i, x, y) { openObjMenu(i, x, y); },
-    onLockedDrag() { toast("Locked in place. Right-click it and choose Unlock to move it.", 2500); },
+    onLockedDrag() { toast("Locked in place. " + (TOUCH ? "Press and hold it" : "Right-click it") + " and choose Unlock to move it.", 2500); },
     onObjChange() { renderPlanOnly(); },
     onObjDone() { const r = settleObjects(); refresh(); if (r.moved || r.stuck) toast(settleNote(r).trim(), 3500); },
     onPathPoint(x, y) {
@@ -1446,7 +1472,7 @@
       card.appendChild(f);
       cardActs(card, plantActions(group));
       cardCompanions(card, idxs[0]);
-      cardTip(card, "Ctrl- or Shift-click more plants to select several.");
+      cardTip(card, TOUCH ? "To pick several, press and hold a plant and choose Select more plants." : "Ctrl- or Shift-click more plants to select several.");
     } else {
       cardHead(card, `<div><div class="sc-name">${idxs.length} plants selected</div><div class="sc-sub">${ids.length} kind${ids.length > 1 ? "s" : ""}. Click a name to remove it from the selection.</div></div>`, deselect);
       const chips = document.createElement("div"); chips.className = "sc-chips";
@@ -1454,7 +1480,7 @@
         b.onclick = e => { e.stopPropagation(); const rest = idxs.filter(i => S.placements[i].id !== id); if (!rest.length) clearSel(); else { selIdx = rest[rest.length - 1]; extraSel = rest.slice(0, -1); } renderPlan(); }; chips.appendChild(b); });
       card.appendChild(chips);
       cardActs(card, plantActions(group));
-      cardTip(card, "Hold Ctrl or Shift and click plants to add or remove them. While you hold the key this card fades, so you can click plants under it. You can also drag the card by its top.");
+      cardTip(card, TOUCH || multiTap ? "Tap plants to add or remove them" + (multiTap ? "" : " (press and hold one, then Select more plants)") + ". Drag the card by its top to move it out of the way." : "Hold Ctrl or Shift and click plants to add or remove them. While you hold the key this card fades, so you can click plants under it. You can also drag the card by its top.");
     }
   }
   // researched good neighbors for the selected plant; click one to plant it right beside
@@ -1507,7 +1533,8 @@
   function renderSelCard() {
     const card = $("#selCard"); if (!card) return;
     const isObj = objSel >= 0 && S.objects[objSel], idxs = selAll();
-    const ctxOpen = document.getElementById("plantMenu"), busy = paint || armed || objArmed || pathDraw || window.Plan.isDrawing() || !$("#addCard").hidden || (ctxOpen && ctxOpen.dataset.ctx);
+    const ctxOpen = document.getElementById("plantMenu"), busy = paint || armed || objArmed || pathDraw || window.Plan.isDrawing() || !$("#addCard").hidden || (ctxOpen && ctxOpen.dataset.ctx)
+      || (multiTap && innerWidth <= 700);   // on a phone the card would cover the plants you're tapping
     if (busy || (!isObj && !idxs.length)) { card.hidden = true; card.innerHTML = ""; if (!isObj && !idxs.length) delete card.dataset.pin; return; }
     card.innerHTML = ""; card.hidden = false;
     if (isObj) buildObjCard(card); else buildPlantCard(card, idxs);
@@ -1584,7 +1611,7 @@
       title = "Clear bed";
       lines = [
         `I will remove all ${S.placements.length} plants from the bed, including any groundcover filler.`,
-        "The plant list on the left stays as it is, so you can add plants again afterward." + (S.objects.length ? " Objects like paths and birdbaths stay; right-click one to remove it." : "")
+        "The plant list on the left stays as it is, so you can add plants again afterward." + (S.objects.length ? " Objects like paths and birdbaths stay; " + (TOUCH ? "press and hold" : "right-click") + " one to remove it." : "")
       ];
     } else {
       title = "Re-arrange";
@@ -1673,6 +1700,7 @@
     if (!$("#addCard").hidden) { closeAddCard(); return; }
     if (paint) { paint = null; renderPaintBar(); renderPlan(); return; }
     if (armed || objArmed || pathDraw) { armed = null; objArmed = null; pathDraw = null; renderPlan(); return; }
+    if (multiTap) { multiTap = false; renderPlan(); return; }
     if (selAll().length || objSel >= 0) { if (/INPUT|SELECT|TEXTAREA/.test((e.target && e.target.tagName) || "")) e.target.blur(); deselect(); }
   });
   { const passThru = on => { const c = $("#selCard"), a = document.activeElement; if (c) c.classList.toggle("passthru", on && !(a && c.contains(a) && a.tagName === "INPUT")); };
@@ -1808,7 +1836,9 @@
   $("#btnPdf").addEventListener("click", () => {
     if (!S.placements.length) { toast("Add some plants to the bed first."); return; }
     const busy = $("#busy"), bar = $("#busyBar"), txt = $("#busyText"); busy.classList.add("on"); bar.style.width = "3%";
-    setTimeout(() => {
+    txt.textContent = "Getting the photos…";
+    const ids = [...new Set(S.placements.map(p => p.id))];
+    Promise.all(ids.map(loadFull)).then(() => setTimeout(() => {
       try {
         const doc = buildPdf();
         bar.style.width = "100%"; txt.textContent = "Saving…";
@@ -1816,7 +1846,7 @@
         doc.save(fname);
         setTimeout(() => { busy.classList.remove("on"); toast("Saved \u201c" + fname + "\u201d to your Downloads folder.", 4000); }, 400);
       } catch (err) { console.error(err); busy.classList.remove("on"); toast("Sorry, the PDF could not be made: " + err.message, 6000); }
-    }, 60);
+    }, 60));
   });
   window.addEventListener("keydown", e => {
     if (e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
@@ -1865,8 +1895,9 @@
     function hideMag() { hideT = setTimeout(() => { mag.classList.remove("on"); cur = null; }, 120); }
     function open(img) {
       const id = idOf(img.src), p = byId[id]; if (!p) return;
-      lb.querySelector("img").src = img.src; lb.querySelector("figcaption").textContent = p.name + " · " + p.latin;
+      const big = lb.querySelector("img"); big.src = img.src; big.dataset.id = id; lb.querySelector("figcaption").textContent = p.name + " · " + p.latin;
       lb.classList.add("on");
+      loadFull(id).then(u => { if (u && big.dataset.id === id && lb.classList.contains("on")) big.src = u; });   // sharpen to the full photo
     }
     function close() { lb.classList.remove("on"); }
     document.addEventListener("mouseover", e => { if (zoomable(e.target)) showMag(e.target); else if (e.target !== mag && !mag.contains(e.target)) { if (cur) hideMag(); } });
@@ -1888,7 +1919,7 @@
         text: "Give your garden a name, like <i>Backyard Shade Garden</i>. It goes at the top of the planner and on your PDF guide. It's optional, so you can skip it.<br><br>Just looking around? Load the example garden to see a finished plan and skip the other steps.",
         enter() { setTimeout(() => { const i = $("#gName"); if (i) i.focus(); }, 350); } },
       { key: "bed", title: "Build your bed", holes: [["#bedPanel"], ["#planWrap"]],
-        text: "Pick a shape: a rectangle, a round island, or draw your own. Then set the size with <b>−</b> and <b>+</b>. The bed plan on the right changes as you go." },
+        text: "Pick a shape: a rectangle, a round island, or draw your own. Then set the size with <b>−</b> and <b>+</b>. The bed plan changes as you go." },
       { key: "objects", title: "Add objects", holes: [["#objCard"], ["#planWrap"]],
         text: "Add anything that's in the bed or going into it: a path, stepping stones, rocks, a birdbath, shrubs, a hedge or trees. Plants are then laid out around them. Click one, then click the bed. Drag it to move it, and drag the white dots to resize. Nothing to add? Just click Next." },
       { key: "sun", title: "Add the sun", holes: [["#planWrap"], ["#sunCard"]], primary: 0,
@@ -1934,6 +1965,7 @@
     }
     // the coach card sits beside the main hole, on whichever side has room and doesn't cover another hole
     function place(r, all) {
+      if (innerWidth < 640) { coach.style.left = "10px"; coach.style.top = Math.round(innerHeight - coach.offsetHeight - 10) + "px"; return; }   // phone: along the bottom
       const cw = coach.offsetWidth, ch = coach.offsetHeight, W = innerWidth, H = innerHeight, g = 14, top0 = ($(".top") ? $(".top").getBoundingClientRect().bottom : 0) + 8;
       const clampY = y => Math.max(top0, Math.min(H - ch - 10, y)), clampX = x => Math.max(10, Math.min(W - cw - 10, x));
       let pos = null;
@@ -1959,8 +1991,9 @@
       coach.querySelector(".tc-skip").onclick = () => end(false);
       // bring the step into view
       const first = document.querySelector(st.holes[st.primary || 0][0]);
-      if (first) first.scrollIntoView({ behavior: "smooth", block: first.closest(".left") ? "nearest" : "center" });
-      if (st.holes.some(h => h[0] === "#planWrap" || h[0] === "#planCard") && !st.holes.every(h => /plan/.test(h[0]))) {
+      const phone = innerWidth < 640;
+      if (first) first.scrollIntoView({ behavior: "smooth", block: phone ? "start" : first.closest(".left") ? "nearest" : "center" });
+      if (!phone && st.holes.some(h => h[0] === "#planWrap" || h[0] === "#planCard") && !st.holes.every(h => /plan/.test(h[0]))) {
         const sideEl = document.querySelector(st.holes.find(h => !/plan/.test(h[0]))[0]); if (sideEl) sideEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
       if (S.done && S.done[st.key]) openStep(st.key);
