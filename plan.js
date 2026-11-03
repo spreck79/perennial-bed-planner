@@ -6,11 +6,11 @@
   const sp = p => p.spacing / 12;
   const LEAFD = "M10.6 1.4C5.2 1.2 1.6 3.9 1.7 8c0 .9.3 1.7.7 2.3.5-2.6 2.3-4.6 4.9-5.8-2.1 1.5-3.6 3.4-4.2 6 .5.2 1.1.3 1.7.3 4 0 6-3.4 5.8-9.4z";
   const DEERD = "M6 11V6.2M6 6.2 3.2 2M4.3 3.7 2 4.2M6 6.2 8.8 2M7.7 3.7 10 4.2";
-  const BAD = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: ["#B8392E", "#FFFFFF"] };
+  const BAD = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: ["#B8392E", "#FFFFFF"], cold: ["#4F7FB4", "#FFFFFF"] };
   const HLC = { tox: "#B8392E", deer: "#7A5230", daisy: "#C99A1E", nat: "#5E8F4A", gar: "#B8629B" };
   const HLT = { tox: "#B8392E", deer: "#7A5230", daisy: "#8A6410", nat: "#3F6B3A", gar: "#8A3F72" };
   const deerEats = p => p.deer === "C" || p.deer === "D";
-  const badgeKinds = pl => { const k = [pl.native ? "nat" : "gar"]; if (pl.fam === "daisy") k.push("daisy"); if (deerEats(pl)) k.push("deer"); if (pl.toxic && pl.toxic.length) k.push("tox"); return k; };
+  const badgeKinds = pl => { const k = [pl.native ? "nat" : "gar"]; if (pl.fam === "daisy") k.push("daisy"); if (deerEats(pl)) k.push("deer"); if (pl.toxic && pl.toxic.length) k.push("tox"); if (window.isTender && window.isTender(pl)) k.push("cold"); return k; };
   const hlKind = pl => pl.toxic && pl.toxic.length ? "tox" : deerEats(pl) ? "deer" : pl.fam === "daisy" ? "daisy" : pl.native ? "nat" : "gar";
 
   // sun-zone colors: match the per-plant sun-badge icon colors, so the painted zones and the badges read as the same system
@@ -40,6 +40,7 @@
     const s = br * 1.25 / 12;
     if (k === "nat") el("path", { d: LEAFD, fill: c[1], transform: `translate(${-br * 0.62} ${-br * 0.62}) scale(${s})` }, g);
     else if (k === "deer") el("path", { d: DEERD, fill: "none", stroke: c[1], "stroke-width": 1.5, "stroke-linecap": "round", transform: `translate(${-br * 0.62} ${-br * 0.62}) scale(${s})` }, g);
+    else if (k === "cold") [0, 60, 120].forEach(a => el("line", { x1: 0, y1: -br * 0.62, x2: 0, y2: br * 0.62, stroke: c[1], "stroke-width": br * 0.17, "stroke-linecap": "round", transform: `rotate(${a})` }, g));
     else el("text", { x: 0, y: br * 0.36, "font-size": br * (k === "gar" ? 1.05 : k === "tox" ? 1.4 : 1.25), fill: c[1], "text-anchor": "middle", "font-weight": 800, "font-family": "sans-serif" }, g, k === "gar" ? "◆" : k === "daisy" ? "✿" : "!");
     return g;
   }
@@ -489,7 +490,7 @@
     const bb = bed.bb, fs = Math.max(0.26, Math.max(bb.w, bb.h) / 46);
     // legend items (badges in use, then sun zones) wrap onto extra rows when the bed is narrow
     const used = new Set(); placements.forEach(p => badgeKinds(byId[p.id]).forEach(k => used.add(k)));
-    const lgItems = [["nat", "Michigan native"], ["gar", "Garden favorite"], ["daisy", "Daisy family"], ["deer", "Deer eat it"], ["tox", "Toxic plant"]].filter(x => used.has(x[0])).map(x => ({ k: x[0], t: x[1] }));
+    const lgItems = [["nat", "Michigan native"], ["gar", "Garden favorite"], ["daisy", "Daisy family"], ["deer", "Deer eat it"], ["tox", "Toxic plant"], ["cold", "Needs winter care"]].filter(x => used.has(x[0])).map(x => ({ k: x[0], t: x[1] }));
     if (sun && sun.show) ["full", "part", "shade"].forEach((z, i) => lgItems.push({ z, t: ZONE_LAB[z] + " (" + ZONE_HRS[z] + ")", br: i === 0 && lgItems.length > 0 }));
     if ((bed.views || []).some(v => v !== "c") || objects.some(o => o.t === "path" && o.view !== false)) lgItems.push({ v: true, t: "Seen from" });
     const lbr = fs * 0.4, itemW = it => lbr * 1.5 + it.t.length * fs * 0.5 + fs * 0.9;
