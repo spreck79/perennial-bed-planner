@@ -5,6 +5,8 @@
   python add_plants.py plant-research-2026-11-02.zip dahlia   only the plants named (by id)
   python add_plants.py <zip> --force                          also add plants flagged as not hardy in zone 6B,
                                                               or with no Michigan native / garden-center source
+  python add_plants.py plant-updates-2026-11-03.zip --update  add hardiness zones and winter care to plants already
+                                                              on the website (nothing else in their entries changes)
 
 The zip comes from Plant Research (github.com/spreck79/perennial-bed-planner-research): "Make zip for Claude".
 Each plant in it has a website/ folder with everything already prepared: the finished plants.js entry, the full-size
@@ -55,6 +57,84 @@ def js_entry(e):
         parts = [f"{k}: {val(e[k])}" for k in g if k in e and (e[k] is not None or k == "bloom")]
         if parts: lines.append(", ".join(parts))
     return "  { " + ",\n    ".join(lines) + " },\n"
+
+def js_val(v):
+    if isinstance(v, bool): return "true" if v else "false"
+    if v is None: return "null"
+    if isinstance(v, (int, float)): return f"{v:g}" if isinstance(v, float) else str(v)
+    if isinstance(v, list): return "[" + ", ".join(js_val(x) for x in v) + "]"
+    if isinstance(v, dict): return "{ " + ", ".join(f"{k}: {js_val(x)}" for k, x in v.items()) + " }"
+    return json.dumps(v, ensure_ascii=False)
+
+def entry_span(t, pid):
+    """(start, end) of a plant's { ... } in plants.js."""
+    m = re.search(r'\{\s*id:\s*"' + re.escape(pid) + r'"', t)
+    if not m: return None
+    i, depth, q = m.start(), 0, None
+    for j in range(i, len(t)):
+        c = t[j]
+        if q:
+            if c == "\\": continue
+            if c == q and t[j - 1] != "\\": q = None
+        elif c in "\"'": q = c
+        elif c == "{": depth += 1
+        elif c == "}":
+            depth -= 1
+            if depth == 0: return (i, j + 1)
+    return None
+
+def update_entry(pid, fields):
+    """Add or replace only these fields in one plant's entry; everything else stays exactly as it is."""
+    t = rd("plants.js"); sp = entry_span(t, pid)
+    if not sp: return False
+    body = t[sp[0]:sp[1]]
+    for k in fields:                     # take out any earlier value of these fields
+        m = re.search(r"\s" + k + r":\s*", body)
+        if m:
+            v0 = m.end()
+            if body[v0] in "[{":
+                depth = 0
+                for j in range(v0, len(body)):
+                    if body[j] in "[{": depth += 1
+                    elif body[j] in "]}":
+                        depth -= 1
+                        if depth == 0: end = j + 1; break
+            else: end = re.search(r"[,}]", body[v0:]).start() + v0
+            k0 = m.start() + 1
+            tail = body[end:]; tail = tail[1:] if tail.startswith(",") else tail
+            body = body[:k0] + tail.lstrip(" ")
+    add = "".join(f"{k}: {js_val(v)}, " for k, v in fields.items() if v is not None)
+    body = re.sub(r'(\{\s*id:\s*"' + re.escape(pid) + r'",\s*)', lambda m: m.group(1) + add, body, count=1)
+    wr("plants.js", t[:sp[0]] + body + t[sp[1]:])
+    return True
+
+def apply_updates(root):
+    ups = []
+    for d, _, files in os.walk(root):
+        for f in files:
+            if f.endswith(".json") and f != "packets.json":
+                try:
+                    u = json.load(open(os.path.join(d, f), encoding="utf-8"))
+                    if isinstance(u, dict) and "set" in u and "id" in u: ups.append(u)
+                except ValueError: pass
+    if not ups: sys.exit("No updates found (looking for updates/<id>.json). Is this a Plant Research update zip?")
+    ids = {p["id"] for p in site_plants()}
+    done, skipped, diffs = [], [], []
+    for u in sorted(ups, key=lambda u: u["name"]):
+        if u["id"] not in ids: skipped.append(f"{u['name']}: not on the website"); continue
+        f = {k: u["set"].get(k) for k in ("zones", "winter")}
+        if not f["zones"]: skipped.append(f"{u['name']}: no zones found"); continue
+        update_entry(u["id"], {"zones": f["zones"], "winter": f["winter"]})
+        done.append(f"{u['name']}: zones {f['zones'][0]:g} to {f['zones'][1]:g}" + (f", winter: {f['winter']['how']}" if f["winter"] else ""))
+        for k, v in (u.get("differences") or {}).items(): diffs.append(f"{u['name']} {k}: website {v['website']}, sources {v['sources']}")
+    for x in done: print("UPDATED", x)
+    for x in skipped: print("SKIPPED", x)
+    if diffs:
+        print(f"\n{len(diffs)} differences between the website and the sources (not changed; look them over):")
+        for x in diffs: print("  -", x)
+    if done:
+        print(); r = subprocess.run([sys.executable, os.path.join(HERE, "check_plants.py")], cwd=HERE)
+        if r.returncode: sys.exit(r.returncode)
 
 def unique_code(code, name, taken):
     if code and code.lower() not in taken and check_plants.code_fits(code, name): return code
@@ -126,6 +206,7 @@ def main():
     if zipfile.is_zipfile(src):
         tmp = tempfile.mkdtemp(); zipfile.ZipFile(src).extractall(tmp); root = tmp
     else: root = src
+    if "--update" in sys.argv: apply_updates(root); return
     pkgs = []
     for d, _, files in os.walk(root):
         if os.path.basename(d) == "website" and "plant.json" in files:

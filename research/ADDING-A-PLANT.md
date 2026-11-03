@@ -16,7 +16,11 @@ and Node.js.
    rebuilds companions.js and research-notes.md and runs check_plants.py.
 3. It skips (and says why) any plant already in the planner, any plant **not hardy in zone 6B**, and any plant with no
    Michigan native or garden-center source. `--force` adds those last two anyway.
-4. Open index.html, add a new plant to a bed and check its card, photo and the PDF. Companion pairings can be added later
+4. Open index.html, add a new plant to a bed and check its card, photo and the PDF.
+5. **Plants already on the website** get hardiness zones and winter care the same way: in Plant Research, "On the website"
+   tab, **Update all** (or select plants and **Update selected**), then **Make update zip for Claude**, and run
+   `python add_plants.py plant-updates-<date>.zip --update`. Only `zones` and `winter` are added; differences between the
+   sources and the website are listed, not changed. Companion pairings can be added later
    (step 5 below); the checker lists plants with none under TO DO.
 
 The steps below are the same work done by hand, for anything the quick way can't do.
@@ -53,6 +57,8 @@ Iowa State, Purdue, Illinois) or a Michigan nursery. For each plant you need:
 | `dormant` | `true` if it dies back by early summer (spring ephemerals, bulbs) |
 | `filler` | `true` if it works as a low groundcover filler |
 | `credit` | the photo credit: `{ file, by, lic }` (same as step 4) |
+| `zones` | USDA hardiness zones `[coldest, warmest]`, `.5` = the "b" half (`[3, 8]`, `[7, 10.5]`); Michigan here is 6B (6.5) |
+| `winter` | only for plants not fully hardy here: `{ how: "dig" }` (dig up after frost, replant in May), `"pot"` (bring indoors), `"annual"` (plant new each year) or `"mulch"` (hardy only to 6B); optional `text`, `lift`, `replant`, `mulch` windows. The planner shows the ❄ icon, timeline marks and PDF notes from this |
 
 ## 3. Add it to plants.js
 Copy an existing plant of the same kind as a pattern and put the new one in the right group
