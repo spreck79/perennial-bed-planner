@@ -229,6 +229,8 @@ table.list tfoot td { font-weight: 800; border-bottom: 0; }
 .lightbox figure { margin: 0; max-width: min(92vw, 1000px); text-align: center; }
 .lightbox img { max-width: 100%; max-height: 80vh; border-radius: 10px; box-shadow: 0 8px 40px rgba(0,0,0,.5); background: #fff; }
 .lightbox figcaption { color: #fff; margin-top: 10px; font-size: 15px; }
+.lightbox .lbmore { display: inline-block; margin-top: 12px; text-decoration: none; cursor: pointer; font-size: 14px; padding: 8px 18px; }
+.lightbox .lbmore[hidden] { display: none; }
 .lbx { position: absolute; top: 14px; right: 18px; background: none; border: 0; color: #fff; font-size: 34px; line-height: 1; cursor: pointer; }
 
 .namefield { display: flex; flex-direction: column; gap: 4px; margin: 4px 0 12px; font-size: 12px; font-weight: 700; color: var(--muted); }

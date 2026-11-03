@@ -238,42 +238,42 @@ window.COMPANION_SOURCES = [
 },
 {
 "url": "https://bwsr.state.mn.us/sites/default/files/2023-09/featured_plant_october_2023_bottlebrush_grass.pdf",
-"title": "https://bwsr.state.mn.us/sites/default/files/2023-09/featured_plant_october_2023_bottlebrush_grass.pdf",
+"title": "Minnesota Board of Water and Soil Resources: featured plant, Bottlebrush Grass",
 "about": "bottlebrush"
 },
 {
 "url": "https://bwsr.state.mn.us/sites/default/files/2026-08/featured_plant_september_2026_virginia_mountain_mint.pdf",
-"title": "https://bwsr.state.mn.us/sites/default/files/2026-08/featured_plant_september_2026_virginia_mountain_mint.pdf",
+"title": "Minnesota Board of Water and Soil Resources: featured plant, Mountain Mint",
 "about": "mtnmint"
 },
 {
 "url": "https://ndsu.edu/agriculture/sites/default/files/2024-10/h2245.pdf",
-"title": "https://ndsu.edu/agriculture/sites/default/files/2024-10/h2245.pdf",
+"title": "NDSU Extension (North Dakota State University): Peonies",
 "about": "peony"
 },
 {
 "url": "https://newmoonnursery.com/plant/Carex-muskingumensis",
-"title": "https://newmoonnursery.com/plant/Carex-muskingumensis",
+"title": "New Moon Nursery: Palm Sedge",
 "about": "palmsedge"
 },
 {
 "url": "https://newmoonnursery.com/plant/Solidago-flexicaulis",
-"title": "https://newmoonnursery.com/plant/Solidago-flexicaulis",
+"title": "New Moon Nursery: Zigzag Goldenrod",
 "about": "goldenrod"
 },
 {
 "url": "https://newmoonnursery.com/plant/Helianthus-divaricatus",
-"title": "https://newmoonnursery.com/plant/Helianthus-divaricatus",
+"title": "New Moon Nursery: Woodland Sunflower",
 "about": "sunflower"
 },
 {
 "url": "https://www.izelplants.com/fragaria-virginiana-wild-strawberry/",
-"title": "https://www.izelplants.com/fragaria-virginiana-wild-strawberry/",
+"title": "Izel Native Plants: Wild Strawberry",
 "about": "strawberry"
 },
 {
 "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
-"title": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+"title": "Purdue Extension: Gardening with Bulbs",
 "about": "daffodil"
 }
 ];

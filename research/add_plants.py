@@ -22,7 +22,7 @@ This script puts each piece in the right file:
   care.js      the plant's id added to its cutting group (unless it gets the standard spring cleanup)
   pairs_log.py its good neighbors, each with the source sentence that names the two plants together
 
-then rebuilds companions.js and research-notes.md, and runs check_plants.py. A plant whose id is already in the planner is never
+then rebuilds companions.js, research-notes.md and every plant's page (plants/<id>.html), and runs check_plants.py. A plant whose id is already in the planner is never
 overwritten. Needs Python 3 and Node.js (for the checker), the same as the other research scripts.
 """
 import json, os, re, subprocess, sys, tempfile, zipfile
@@ -148,6 +148,7 @@ def apply_updates(root):
         for x in diffs: print("  -", x)
     if done:
         if newpairs: subprocess.run([sys.executable, os.path.join(HERE, "build_companions.py")], cwd=HERE)
+        subprocess.run(["node", os.path.join(HERE, "make_plant_pages.js"), "--all"], cwd=HERE)
         print(); r = subprocess.run([sys.executable, os.path.join(HERE, "check_plants.py")], cwd=HERE)
         if r.returncode: sys.exit(r.returncode)
 
@@ -276,6 +277,7 @@ def main():
     if added:
         subprocess.run([sys.executable, os.path.join(HERE, "build_companions.py")], cwd=HERE)   # the new plants' good neighbors
         subprocess.run([sys.executable, os.path.join(HERE, "make_notes.py")], cwd=HERE)
+        subprocess.run(["node", os.path.join(HERE, "make_plant_pages.js"), "--all"], cwd=HERE)   # every plant's page, so pages match the data
         print()
         r = subprocess.run([sys.executable, os.path.join(HERE, "check_plants.py")], cwd=HERE)
         if r.returncode: sys.exit(r.returncode)

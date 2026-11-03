@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lenten Rose · Perennial Bed Planner</title>
+<meta name="description" content="Lenten Rose (Helleborus × hybridus): The first flowers of the year, often open in March, with evergreen leaves. Long-lived and deer resistant.">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .pp { max-width: 1040px; margin: 18px auto 40px; padding: 0 16px; display: grid; gap: 16px; }
+  .pp-hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+  .pp-photo { margin: 0; }
+  .pp-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; background: var(--soft); border: 1px solid var(--rule); }
+  .pp-photo figcaption { color: var(--muted); font-size: 11.5px; margin-top: 6px; }
+  .pp-photo figcaption a, .pp a { color: var(--forest); }
+  .pp h1 { font-size: 30px; line-height: 1.1; }
+  .pp .latin { font-family: var(--serif); font-style: italic; color: var(--muted); font-size: 16px; margin: 4px 0 12px; }
+  .pp .notes { font-size: 15px; line-height: 1.55; margin: 12px 0 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+  .chip svg { width: 12px; height: 12px; }
+  .c-nat { background: #E1EBCB; color: #3F6B3A; } .c-gar { background: #F3DDEA; color: #8A3F72; } .c-daisy { background: #FBEBC4; color: #8A6410; }
+  .c-deer { background: #EFE2D3; color: #6A4526; } .c-tox { background: #F6D9D5; color: #9A2E24; } .c-cold { background: #DCE7F3; color: #2F5D8C; }
+  .pp h2 { font-size: 19px; margin-bottom: 10px; }
+  .facts { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .facts th, .facts td { text-align: left; vertical-align: top; padding: 7px 10px; border-top: 1px solid var(--rule); }
+  .facts tr:first-child th, .facts tr:first-child td { border-top: 0; }
+  .facts th { width: 170px; color: var(--muted); font-weight: 600; }
+  .muted { color: var(--muted); font-size: 12.5px; }
+  .sw, .dot { display: inline-block; width: 14px; height: 14px; border-radius: 50%; vertical-align: -2px; margin-right: 7px; border: 1px solid rgba(0,0,0,.15); }
+  .dot { width: 10px; height: 10px; vertical-align: 0; margin-right: 5px; }
+  .code { display: inline-block; min-width: 46px; text-align: center; font-weight: 800; padding: 3px 10px; border-radius: 999px; font-size: 13px; }
+  .pp-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  .pp ul { margin: 0; padding-left: 18px; } .pp li { margin: 0 0 10px; line-height: 1.5; }
+  .yr { margin: 4px 0 14px; font-size: 12px; }
+  .yr-row { display: grid; grid-template-columns: 96px 1fr; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .yr-lab { color: var(--muted); font-weight: 600; }
+  .yr-months { display: grid; grid-template-columns: repeat(8, 1fr); color: var(--muted); font-size: 11px; }
+  .yr-track { position: relative; height: 14px; background: repeating-linear-gradient(90deg, var(--soft) 0 calc(12.5% - 1px), #fff calc(12.5% - 1px) 12.5%); border-radius: 7px; }
+  .yr-bar { position: absolute; top: 0; bottom: 0; border-radius: 7px; }
+  .nb { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+  .nbp { display: inline-flex; align-items: center; background: var(--soft); border-radius: 999px; padding: 2px 10px; font-weight: 600; font-size: 13px; }
+  .pp q { font-style: italic; color: var(--ink); }
+  .back { text-decoration: none; }
+  @media print {
+    @page { size: letter portrait; margin: .45in; }
+    body { background: #fff; font-size: 12px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .top { display: flex !important; position: static; border: 0; padding: 0 0 10px; background: #fff; box-shadow: none; }
+    .top .actions { display: none; }
+    .pp { display: block; margin: 0; padding: 0; max-width: none; }
+    .card { box-shadow: none; padding: 10px 14px; margin: 0 0 10px; break-inside: avoid; }
+    .pp-hero { grid-template-columns: 1.2fr 1fr; gap: 14px; }
+    .pp-two { display: block; }
+    .pp h1 { font-size: 24px; } .pp h2 { font-size: 16px; margin-bottom: 6px; }
+    .facts th, .facts td { padding: 4px 8px; }
+    .pp li { margin-bottom: 6px; }
+    .pp a { color: var(--ink); text-decoration: none; }
+  }
+  @media (max-width: 760px) { .pp-hero, .pp-two { grid-template-columns: 1fr; } .facts th { width: 120px; } .pp h1 { font-size: 26px; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div>
+    <div class="ttl"><h1>Perennial Bed Planner</h1><span class="beta" title="Early test version: things may still change">Beta</span></div>
+    <div class="sub">All perennials · Zone 6B · Southern Michigan</div>
+  </div>
+  <div class="actions"><button class="btn primary" type="button" id="btnPdf">Print this plant</button><a class="btn back" href="../index.html">← Back to the planner</a></div>
+</header>
+<main class="pp">
+  <section class="card pp-hero">
+    <figure class="pp-photo">
+      <img id="photo" alt="Lenten Rose (Helleborus × hybridus)">
+      <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Lenteroos_(Helleborus_orientalis)_03.JPG" target="_blank" rel="noopener">Dominicus Johannes Bergsma</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>, Wikimedia Commons</figcaption>
+    </figure>
+    <div>
+      <h1>Lenten Rose</h1>
+      <div class="latin">Helleborus × hybridus</div>
+      <div class="chips"><span class="chip c-gar">◆ Garden favorite</span><span class="chip c-tox">! Toxic to people, dogs and cats</span></div>
+      <p class="notes">The first flowers of the year, often open in March, with evergreen leaves. Long-lived and deer resistant.</p>
+    </div>
+  </section>
+  <section class="card">
+    <h2>At a glance</h2>
+    <table class="facts"><tr><th>Height</th><td>12–18 in</td></tr><tr><th>Spacing</th><td>18 in apart (center to center)</td></tr><tr><th>Place in the bed</th><td>Middle row</td></tr><tr><th>Blooms</th><td>Apr</td></tr><tr><th>Color</th><td><span class="sw" style="background:#9E5A7D"></span>Plum, pink, cream or white</td></tr><tr><th>Light</th><td>Part shade to shade<br><span class="muted">Grows in shade, or with up to 6 hours of direct sun a day</span></td></tr><tr><th>Soil moisture</th><td>Average to moist</td></tr><tr><th>Plant type</th><td>Clump-forming perennial</td></tr><tr><th>Hardiness zones</th><td>Not recorded yet</td></tr><tr><th>Deer</th><td>Rarely damaged (Rutgers rating A)</td></tr><tr><th>Toxic</th><td>Toxic to people, dogs and cats<br><span class="muted">ASPCA lists hellebore as toxic</span></td></tr><tr><th>Code on the plan</th><td><span class="code" style="background:#9E5A7D;color:#FFFFFF">LeRo</span></td></tr></table>
+  </section>
+  <div class="pp-two">
+    <section class="card">
+      <h2>Through the year</h2>
+      <div class="yr"><div class="yr-row yr-head"><span class="yr-lab"></span><span class="yr-months"><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span></span></div><div class="yr-row"><span class="yr-lab">Bloom</span><span class="yr-track"><span class="yr-bar" style="left:0%;width:12.5%;background:#9E5A7D" title="Apr"></span></span></div><div class="yr-row"><span class="yr-lab">Cut back</span><span class="yr-track"><span class="yr-bar" style="left:0%;width:5.625000000000002%;background:#A68C72" title="Early Apr: cut off last year's leaves"></span></span></div></div>
+      <ul><li><b>Cut back</b> <span class="muted">Early Apr: cut off last year's leaves</span><br>Evergreen: no fall cutting. In early spring, as the flower buds rise, cut off last year's leaves at the base so the flowers and new leaves show.</li><li><b>Divide</b> <span class="muted">Late Aug to Sep</span><br>Divide in late August to September, if the clump is crowded or flowers less. Allow 4 to 6 weeks before the ground freezes.</li></ul>
+    </section>
+    <section class="card">
+      <h2>Goes well with</h2>
+      <ul><li><div class="nb"><span class="nbp"><span class="dot" style="background:#F0C75E"></span>Barrenwort</span><span class="nbp"><span class="dot" style="background:#D86AA8"></span>Bigroot Geranium</span><span class="nbp"><span class="dot" style="background:#8F86DA"></span>Geranium 'Rozanne'</span><span class="nbp"><span class="dot" style="background:#B3A6D9"></span>Hosta</span></div><q>Combines with barrenwort in spring; later a backdrop for hostas; shown among hardy geranium.</q> <a href="https://hort.extension.wisc.edu/articles/lenten-rose-helleborus-xhybridus/" target="_blank" rel="noopener">Wisconsin Horticulture (UW–Madison Extension): Lenten Rose article</a></li><li><div class="nb"><span class="nbp"><span class="dot" style="background:#B07AB8"></span>Toad Lily</span></div><q>Combines well with anemone, astilbe, ferns, hellebores, hosta and lungwort.</q> <a href="https://hort.extension.wisc.edu/articles/hairy-toad-lily-tricyrtis-hirta/" target="_blank" rel="noopener">Wisconsin Horticulture (UW–Madison Extension): Toad Lily article</a></li><li><div class="nb"><span class="nbp"><span class="dot" style="background:#B7C2EE"></span>Wild Blue Phlox</span></div><q>Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.</q> <a href="https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/" target="_blank" rel="noopener">Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article</a></li></ul>
+    </section>
+  </div>
+  <section class="card">
+    <h2>Sources</h2>
+    <ul><li><b>Sold in Michigan:</b> <a href="https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf" target="_blank" rel="noopener">Bordine's (Michigan garden center): perennials by bloom time, 2026</a></li><li><b>Deer:</b> <a href="https://njaes.rutgers.edu/deer-resistant-plants/" target="_blank" rel="noopener">Rutgers NJAES deer-resistant plant list</a> <span class="muted">rating A: rarely damaged</span></li><li><b>Toxic:</b> ASPCA lists hellebore as toxic</li><li><b>Photo:</b> <a href="https://commons.wikimedia.org/wiki/File:Lenteroos_(Helleborus_orientalis)_03.JPG" target="_blank" rel="noopener">Lenteroos (Helleborus orientalis) 03.JPG</a> by Dominicus Johannes Bergsma, <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>, Wikimedia Commons</li></ul>
+  </section>
+</main>
+<div class="pvw" id="pvw" role="dialog" aria-modal="true" aria-label="Plant page PDF preview" hidden>
+  <div class="pvw-bar">
+    <button type="button" class="btn" id="pvBack">&larr; Back to the plant</button>
+    <span class="pvw-title" id="pvName"></span>
+    <button type="button" class="btn" id="pvPrint">Print</button>
+    <button type="button" class="btn primary" id="pvSave">Download</button>
+  </div>
+  <div class="pvw-body" id="pvBody"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script type="application/json" id="plant-data">{"id":"hellebore","entry":{"id":"hellebore","deer":"A","code":"LeRo","name":"Lenten Rose","latin":"Helleborus × hybridus","native":false,"kind":"clump","hLo":12,"hHi":18,"spacing":18,"bloom":[4,5],"color":"Plum, pink, cream or white","hex":"#9E5A7D","txt":"#FFFFFF","light":"Part shade to shade","moisture":"Average to moist","sun":["part","shade"],"toxic":["people","dogs","cats"],"toxSrc":"ASPCA lists hellebore as toxic","notes":"The first flowers of the year, often open in March, with evergreen leaves. Long-lived and deer resistant.","credit":{"file":"Lenteroos (Helleborus orientalis) 03.JPG","by":"Dominicus Johannes Bergsma","lic":"CC BY-SA 3.0"}},"care":{"cat":"hellebore","divide":"Divide in late August to September, if the clump is crowded or flowers less. Allow 4 to 6 weeks before the ground freezes.","divideShort":"Late Aug to Sep","cut":{"a":4,"b":4.45,"text":"Evergreen: no fall cutting. In early spring, as the flower buds rise, cut off last year's leaves at the base so the flowers and new leaves show.","sum":"Early Apr: cut off last year's leaves"}},"sheet":{"name":"Lenten Rose","latin":"Helleborus × hybridus","notes":"The first flowers of the year, often open in March, with evergreen leaves. Long-lived and deer resistant.","hex":"#9E5A7D","txt":"#FFFFFF","code":"LeRo","marks":[["gar","Garden favorite"],["tox","Toxic to people, dogs and cats"]],"facts":[["Height","12–18 in"],["Spacing","18 in apart (center to center)"],["Place in the bed","Middle row"],["Blooms","Apr"],["Color","Plum, pink, cream or white","","#9E5A7D"],["Light","Part shade to shade","Grows in shade, or with up to 6 hours of direct sun a day"],["Soil moisture","Average to moist"],["Plant type","Clump-forming perennial"],["Hardiness zones","Not recorded yet"],["Deer","Rarely damaged (Rutgers rating A)"],["Toxic","Toxic to people, dogs and cats","ASPCA lists hellebore as toxic"]],"year":[["Bloom",4,5,"#9E5A7D"],["Cut back",4,4.45,"#A68C72"]],"care":[["Cut back","Evergreen: no fall cutting. In early spring, as the flower buds rise, cut off last year's leaves at the base so the flowers and new leaves show."],["Divide","Divide in late August to September, if the clump is crowded or flowers less. Allow 4 to 6 weeks before the ground freezes."]],"neighbors":[{"plants":[["Barrenwort","#F0C75E"],["Bigroot Geranium","#D86AA8"],["Geranium 'Rozanne'","#8F86DA"],["Hosta","#B3A6D9"]],"why":"Combines with barrenwort in spring; later a backdrop for hostas; shown among hardy geranium.","src":["Wisconsin Horticulture (UW–Madison Extension): Lenten Rose article"]},{"plants":[["Toad Lily","#B07AB8"]],"why":"Combines well with anemone, astilbe, ferns, hellebores, hosta and lungwort.","src":["Wisconsin Horticulture (UW–Madison Extension): Toad Lily article"]},{"plants":[["Wild Blue Phlox","#B7C2EE"]],"why":"Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.","src":["Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article"]}],"sources":[["Sold in Michigan","Bordine's (Michigan garden center): perennials by bloom time, 2026"],["Deer","Rutgers NJAES deer-resistant plant list (rating A)"],["Toxic","ASPCA lists hellebore as toxic"],["Photo","Dominicus Johannes Bergsma, CC BY-SA 3.0, Wikimedia Commons"]]},"neighbors":[{"id":"epimedium","why":"Combines with barrenwort in spring; later a backdrop for hostas; shown among hardy geranium.","sources":[{"url":"https://hort.extension.wisc.edu/articles/lenten-rose-helleborus-xhybridus/","title":"Wisconsin Horticulture (UW–Madison Extension): Lenten Rose article","about":"hellebore"}]},{"id":"bigroot","why":"Combines with barrenwort in spring; later a backdrop for hostas; shown among hardy geranium.","sources":[{"url":"https://hort.extension.wisc.edu/articles/lenten-rose-helleborus-xhybridus/","title":"Wisconsin Horticulture (UW–Madison Extension): Lenten Rose article","about":"hellebore"}]},{"id":"rozanne","why":"Combines with barrenwort in spring; later a backdrop for hostas; shown among hardy geranium.","sources":[{"url":"https://hort.extension.wisc.edu/articles/lenten-rose-helleborus-xhybridus/","title":"Wisconsin Horticulture (UW–Madison Extension): Lenten Rose article","about":"hellebore"}]},{"id":"hosta","why":"Combines with barrenwort in spring; later a backdrop for hostas; shown among hardy geranium.","sources":[{"url":"https://hort.extension.wisc.edu/articles/lenten-rose-helleborus-xhybridus/","title":"Wisconsin Horticulture (UW–Madison Extension): Lenten Rose article","about":"hellebore"}]},{"id":"toad","why":"Combines well with anemone, astilbe, ferns, hellebores, hosta and lungwort.","sources":[{"url":"https://hort.extension.wisc.edu/articles/hairy-toad-lily-tricyrtis-hirta/","title":"Wisconsin Horticulture (UW–Madison Extension): Toad Lily article","about":"toad"}]},{"id":"phlox","why":"Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.","sources":[{"url":"https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/","title":"Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article","about":"phlox"}]}],"status":[{"title":"Bordine's (Michigan garden center): perennials by bloom time, 2026","url":"https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf","kind":"garden","note":"Current perennial list from a Michigan garden center.","plants":["coral","brunnera","rozanne","astilbe","epimedium","toad","bergenia","ladysmantle","salvia","creepphlox","coneflower","daylily","peony","iris","lavender","shasta","yarrow","catmint","hosta","bleeding","hellebore","foxglove","goatsbeard","cohosh","baptisia","hyssop","sedum","caradonna","siberianiris","lungwort","gardenphlox","anemone","veronica","seaholly","ligularia"]}],"credit":{"file":"Lenteroos (Helleborus orientalis) 03.JPG","by":"Dominicus Johannes Bergsma","lic":"CC BY-SA 3.0","licUrl":"https://creativecommons.org/licenses/by-sa/3.0/"},"made":"2026-11-03"}</script>
+<script src="../photos/hellebore.js"></script>
+<script src="plant-page.js"></script>
+<script>
+  // Back to the planner: go back in the browser's history when we came from it, so it returns exactly as it was
+  document.querySelector("a.back").addEventListener("click", function (e) {
+    var base = (document.referrer || "").split("?")[0].split("#")[0];
+    if (history.length > 1 && base && base.indexOf("/plants/") < 0 && (base.slice(-1) === "/" || base.slice(-10) === "index.html")) { e.preventDefault(); history.back(); }
+  });
+</script>
+<script>
+  (function () { var f = window.PHOTO_FULL && window.PHOTO_FULL["hellebore"]; if (f) document.getElementById("photo").src = f; })();
+</script>
+</body>
+</html>

@@ -2027,7 +2027,7 @@
     mag.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21M10.5 7.5v6M7.5 10.5h6"/></svg>';
     document.body.appendChild(mag);
     const lb = document.createElement("div"); lb.className = "lightbox";
-    lb.innerHTML = '<figure><img alt=""><figcaption></figcaption></figure><button class="lbx" type="button" aria-label="Close">×</button>';
+    lb.innerHTML = '<figure><img alt=""><figcaption></figcaption><a class="btn primary lbmore" hidden>More info</a></figure><button class="lbx" type="button" aria-label="Close">×</button>';
     document.body.appendChild(lb);
     let cur = null, hideT = 0;
     const idOf = src => Object.keys(window.PHOTOS).find(k => window.PHOTOS[k] === src);
@@ -2039,9 +2039,13 @@
       mag.style.left = (r.right - 24) + "px"; mag.style.top = (r.top + 4) + "px"; mag.classList.add("on");
     }
     function hideMag() { hideT = setTimeout(() => { mag.classList.remove("on"); cur = null; }, 120); }
-    function open(img) {
-      const id = idOf(img.src), p = byId[id]; if (!p) return;
-      const big = lb.querySelector("img"); big.src = img.src; big.dataset.id = id; lb.querySelector("figcaption").textContent = p.name + " · " + p.latin;
+    function open(img) { openId(idOf(img.src), img.src); }
+    function openId(id, src) {
+      const p = byId[id]; if (!p) return;
+      const big = lb.querySelector("img"); big.src = src || window.PHOTOS[id]; big.dataset.id = id; lb.querySelector("figcaption").textContent = p.name + " · " + p.latin;
+      // plants with their own page (plants/<id>.html) get a More info button
+      const more = lb.querySelector(".lbmore"), hasPage = (window.PLANT_PAGES || []).includes(id);
+      more.hidden = !hasPage; if (hasPage) { more.href = "plants/" + id + ".html"; more.setAttribute("aria-label", "More info about " + p.name); }
       lb.classList.add("on");
       loadFull(id).then(u => { if (u && big.dataset.id === id && lb.classList.contains("on")) big.src = u; });   // sharpen to the full photo
     }
@@ -2050,6 +2054,23 @@
     mag.addEventListener("mouseenter", () => clearTimeout(hideT)); mag.addEventListener("mouseleave", hideMag);
     mag.addEventListener("click", e => { e.stopPropagation(); if (cur) open(cur); });
     document.addEventListener("click", e => { if (zoomable(e.target)) { e.stopPropagation(); e.preventDefault(); open(e.target); } }, true);
+    // More info: remember where the planner was scrolled and which photo was open, so "Back to the planner" returns to the same spot
+    const RET = "perennialBedPlanner.return";
+    lb.querySelector(".lbmore").addEventListener("click", e => {
+      e.stopPropagation();
+      try { sessionStorage.setItem(RET, JSON.stringify({ x: window.scrollX, y: window.scrollY, id: lb.querySelector("img").dataset.id, t: Date.now() })); } catch (err) { /* private mode: just go */ }
+    });
+    const restore = () => {
+      let r = null;
+      try { r = JSON.parse(sessionStorage.getItem(RET) || "null"); sessionStorage.removeItem(RET); } catch (err) { r = null; }
+      if (!r || Date.now() - r.t > 2 * 3600 * 1000) return;
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      // after the planner has drawn itself, so the page is its full height again
+      requestAnimationFrame(() => setTimeout(() => { window.scrollTo(r.x || 0, r.y || 0); if (r.id && window.PHOTOS[r.id]) openId(r.id); }, 60));
+    };
+    if (document.readyState === "complete") restore(); else window.addEventListener("load", restore);
+    // coming back through the browser's Back (page kept in memory): the spot is already right; just forget the note
+    window.addEventListener("pageshow", e => { if (e.persisted) { try { sessionStorage.removeItem(RET); } catch (err) { /* ignore */ } } });
     lb.addEventListener("click", close);
     document.addEventListener("keydown", e => { if (e.key === "Escape" && lb.classList.contains("on")) { close(); e.stopPropagation(); } }, true);
     window.addEventListener("scroll", () => { mag.classList.remove("on"); }, true);

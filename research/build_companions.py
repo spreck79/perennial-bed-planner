@@ -10,6 +10,11 @@ def title(u, about=None):
     if "perennials.com" in u: return f"Perennials.com: {n} profile"
     if "missouribotanicalgarden.org" in u: return f"Missouri Botanical Garden Plant Finder: {n}"
     if "plants.ces.ncsu.edu" in u: return f"NC State Extension Plant Toolbox: {n}"
+    if "bwsr.state.mn.us" in u: return f"Minnesota Board of Water and Soil Resources: featured plant, {n}"
+    if "ndsu.edu" in u: return "NDSU Extension (North Dakota State University): Peonies"
+    if "newmoonnursery.com" in u: return f"New Moon Nursery: {n}"
+    if "izelplants.com" in u: return f"Izel Native Plants: {n}"
+    if "extension.purdue.edu" in u: return "Purdue Extension: Gardening with Bulbs"
     if "longfield-gardens.com" in u: return f"Longfield Gardens (bulb company, New Jersey): what to plant with {n.lower() + 's' if n else 'it'}"
     return u
 def _old_title(u):

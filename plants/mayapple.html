@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mayapple · Perennial Bed Planner</title>
+<meta name="description" content="Mayapple (Podophyllum peltatum): Umbrella-like leaves that carpet the woodland floor in spring, then die back by midsummer. Spreads into colonies.">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .pp { max-width: 1040px; margin: 18px auto 40px; padding: 0 16px; display: grid; gap: 16px; }
+  .pp-hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+  .pp-photo { margin: 0; }
+  .pp-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; background: var(--soft); border: 1px solid var(--rule); }
+  .pp-photo figcaption { color: var(--muted); font-size: 11.5px; margin-top: 6px; }
+  .pp-photo figcaption a, .pp a { color: var(--forest); }
+  .pp h1 { font-size: 30px; line-height: 1.1; }
+  .pp .latin { font-family: var(--serif); font-style: italic; color: var(--muted); font-size: 16px; margin: 4px 0 12px; }
+  .pp .notes { font-size: 15px; line-height: 1.55; margin: 12px 0 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+  .chip svg { width: 12px; height: 12px; }
+  .c-nat { background: #E1EBCB; color: #3F6B3A; } .c-gar { background: #F3DDEA; color: #8A3F72; } .c-daisy { background: #FBEBC4; color: #8A6410; }
+  .c-deer { background: #EFE2D3; color: #6A4526; } .c-tox { background: #F6D9D5; color: #9A2E24; } .c-cold { background: #DCE7F3; color: #2F5D8C; }
+  .pp h2 { font-size: 19px; margin-bottom: 10px; }
+  .facts { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .facts th, .facts td { text-align: left; vertical-align: top; padding: 7px 10px; border-top: 1px solid var(--rule); }
+  .facts tr:first-child th, .facts tr:first-child td { border-top: 0; }
+  .facts th { width: 170px; color: var(--muted); font-weight: 600; }
+  .muted { color: var(--muted); font-size: 12.5px; }
+  .sw, .dot { display: inline-block; width: 14px; height: 14px; border-radius: 50%; vertical-align: -2px; margin-right: 7px; border: 1px solid rgba(0,0,0,.15); }
+  .dot { width: 10px; height: 10px; vertical-align: 0; margin-right: 5px; }
+  .code { display: inline-block; min-width: 46px; text-align: center; font-weight: 800; padding: 3px 10px; border-radius: 999px; font-size: 13px; }
+  .pp-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  .pp ul { margin: 0; padding-left: 18px; } .pp li { margin: 0 0 10px; line-height: 1.5; }
+  .yr { margin: 4px 0 14px; font-size: 12px; }
+  .yr-row { display: grid; grid-template-columns: 96px 1fr; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .yr-lab { color: var(--muted); font-weight: 600; }
+  .yr-months { display: grid; grid-template-columns: repeat(8, 1fr); color: var(--muted); font-size: 11px; }
+  .yr-track { position: relative; height: 14px; background: repeating-linear-gradient(90deg, var(--soft) 0 calc(12.5% - 1px), #fff calc(12.5% - 1px) 12.5%); border-radius: 7px; }
+  .yr-bar { position: absolute; top: 0; bottom: 0; border-radius: 7px; }
+  .nb { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+  .nbp { display: inline-flex; align-items: center; background: var(--soft); border-radius: 999px; padding: 2px 10px; font-weight: 600; font-size: 13px; }
+  .pp q { font-style: italic; color: var(--ink); }
+  .back { text-decoration: none; }
+  @media print {
+    @page { size: letter portrait; margin: .45in; }
+    body { background: #fff; font-size: 12px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .top { display: flex !important; position: static; border: 0; padding: 0 0 10px; background: #fff; box-shadow: none; }
+    .top .actions { display: none; }
+    .pp { display: block; margin: 0; padding: 0; max-width: none; }
+    .card { box-shadow: none; padding: 10px 14px; margin: 0 0 10px; break-inside: avoid; }
+    .pp-hero { grid-template-columns: 1.2fr 1fr; gap: 14px; }
+    .pp-two { display: block; }
+    .pp h1 { font-size: 24px; } .pp h2 { font-size: 16px; margin-bottom: 6px; }
+    .facts th, .facts td { padding: 4px 8px; }
+    .pp li { margin-bottom: 6px; }
+    .pp a { color: var(--ink); text-decoration: none; }
+  }
+  @media (max-width: 760px) { .pp-hero, .pp-two { grid-template-columns: 1fr; } .facts th { width: 120px; } .pp h1 { font-size: 26px; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div>
+    <div class="ttl"><h1>Perennial Bed Planner</h1><span class="beta" title="Early test version: things may still change">Beta</span></div>
+    <div class="sub">All perennials · Zone 6B · Southern Michigan</div>
+  </div>
+  <div class="actions"><button class="btn primary" type="button" id="btnPdf">Print this plant</button><a class="btn back" href="../index.html">← Back to the planner</a></div>
+</header>
+<main class="pp">
+  <section class="card pp-hero">
+    <figure class="pp-photo">
+      <img id="photo" alt="Mayapple (Podophyllum peltatum)">
+      <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Podophyllum_peltatum_Arkansas.jpg" target="_blank" rel="noopener">Eric Hunt</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>, Wikimedia Commons</figcaption>
+    </figure>
+    <div>
+      <h1>Mayapple</h1>
+      <div class="latin">Podophyllum peltatum</div>
+      <div class="chips"><span class="chip c-nat"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 10C2 5 5 2 10 2c0 5-3 8-8 8Zm0 0 5-5" fill="currentColor" stroke="currentColor" stroke-width=".6"/></svg> Michigan native</span><span class="chip c-tox">! Toxic to people, dogs and cats</span></div>
+      <p class="notes">Umbrella-like leaves that carpet the woodland floor in spring, then die back by midsummer. Spreads into colonies.</p>
+    </div>
+  </section>
+  <section class="card">
+    <h2>At a glance</h2>
+    <table class="facts"><tr><th>Height</th><td>12–18 in</td></tr><tr><th>Spacing</th><td>18 in apart (center to center)</td></tr><tr><th>Place in the bed</th><td>Middle row</td></tr><tr><th>Blooms</th><td>May</td></tr><tr><th>Color</th><td><span class="sw" style="background:#F4F1EA"></span>White flower hidden under the leaves</td></tr><tr><th>Light</th><td>Part shade to shade<br><span class="muted">Grows in shade, or with up to 6 hours of direct sun a day</span></td></tr><tr><th>Soil moisture</th><td>Average to moist</td></tr><tr><th>Plant type</th><td>Low, spreading groundcover (goes dormant in summer)</td></tr><tr><th>Hardiness zones</th><td>3a to 8b (hardy in Michigan zone 6B)</td></tr><tr><th>Deer</th><td>Rarely damaged (Rutgers rating A)</td></tr><tr><th>Toxic</th><td>Toxic to people, dogs and cats<br><span class="muted">ASPCA lists mayapple as toxic</span></td></tr><tr><th>Code on the plan</th><td><span class="code" style="background:#F4F1EA;color:#2E3A2C">Maya</span></td></tr></table>
+  </section>
+  <div class="pp-two">
+    <section class="card">
+      <h2>Through the year</h2>
+      <div class="yr"><div class="yr-row yr-head"><span class="yr-lab"></span><span class="yr-months"><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span></span></div><div class="yr-row"><span class="yr-lab">Bloom</span><span class="yr-track"><span class="yr-bar" style="left:12.5%;width:8.750000000000004%;background:#F4F1EA" title="May"></span></span></div><div class="yr-row"><span class="yr-lab">Spring prep</span><span class="yr-track"><span class="yr-bar" style="left:0%;width:3.749999999999998%;background:#7FA66A" title="Early Apr: mark the spot, don't rake"></span></span></div><div class="yr-row"><span class="yr-lab">Cut back</span><span class="yr-track"><span class="yr-bar" style="left:27.500000000000004%;width:8.750000000000004%;background:#A68C72" title="Jun to early Jul: clear leaves once yellow"></span></span></div></div>
+      <ul><li><b>Spring prep</b> <span class="muted">Early Apr: mark the spot, don't rake</span><br>Comes up very early: mark the spot and don't rake or mulch over the shoots.</li><li><b>Cut back</b> <span class="muted">Jun to early Jul: clear leaves once yellow</span><br>Goes dormant in summer. Let the leaves yellow and fade on their own (they feed the roots), then clear them away. Nearby ferns or hostas fill the gap.</li><li><b>Divide</b> <span class="muted">Late Aug to Sep</span><br>Divide in late August to September, if the clump is crowded or flowers less. Allow 4 to 6 weeks before the ground freezes.</li></ul>
+    </section>
+    <section class="card">
+      <h2>Goes well with</h2>
+      <ul><li><div class="nb"><span class="nbp"><span class="dot" style="background:#CDBEE3"></span>Virginia Waterleaf</span></div><q>Commonly found with wild columbine, wild ginger, wild geranium, woodland phlox and mayapple.</q> <a href="https://hort.extension.wisc.edu/articles/virginia-waterleaf-hydrophyllum-virginianum/" target="_blank" rel="noopener">Wisconsin Horticulture (UW–Madison Extension): Virginia Waterleaf article</a></li><li><div class="nb"><span class="nbp"><span class="dot" style="background:#D3A2D3"></span>Wild Geranium</span></div><q>Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.</q> <a href="https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/" target="_blank" rel="noopener">Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article</a></li></ul>
+    </section>
+  </div>
+  <section class="card">
+    <h2>Sources</h2>
+    <ul><li><b>Michigan native:</b> <a href="https://www.blackcapplants.com/species-list" target="_blank" rel="noopener">Black Cap Plants (Onekama, Michigan): Species list of native plants</a></li><li><b>Michigan native:</b> <a href="https://www.mtu.edu/kisma/native-alternatives/native-species-table/" target="_blank" rel="noopener">Michigan Tech KISMA: Native species table</a></li><li><b>Deer:</b> <a href="https://njaes.rutgers.edu/deer-resistant-plants/" target="_blank" rel="noopener">Rutgers NJAES deer-resistant plant list</a> <span class="muted">rating A: rarely damaged</span></li><li><b>Toxic:</b> ASPCA lists mayapple as toxic</li><li><b>Photo:</b> <a href="https://commons.wikimedia.org/wiki/File:Podophyllum_peltatum_Arkansas.jpg" target="_blank" rel="noopener">Podophyllum peltatum Arkansas.jpg</a> by Eric Hunt, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>, Wikimedia Commons</li></ul>
+  </section>
+</main>
+<div class="pvw" id="pvw" role="dialog" aria-modal="true" aria-label="Plant page PDF preview" hidden>
+  <div class="pvw-bar">
+    <button type="button" class="btn" id="pvBack">&larr; Back to the plant</button>
+    <span class="pvw-title" id="pvName"></span>
+    <button type="button" class="btn" id="pvPrint">Print</button>
+    <button type="button" class="btn primary" id="pvSave">Download</button>
+  </div>
+  <div class="pvw-body" id="pvBody"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script type="application/json" id="plant-data">{"id":"mayapple","entry":{"id":"mayapple","zones":[3,8.5],"deer":"A","dormant":true,"code":"Maya","name":"Mayapple","latin":"Podophyllum peltatum","native":true,"kind":"mat","hLo":12,"hHi":18,"spacing":18,"bloom":[5,5.7],"color":"White flower hidden under the leaves","hex":"#F4F1EA","txt":"#2E3A2C","light":"Part shade to shade","moisture":"Average to moist","sun":["part","shade"],"toxic":["people","dogs","cats"],"toxSrc":"ASPCA lists mayapple as toxic","notes":"Umbrella-like leaves that carpet the woodland floor in spring, then die back by midsummer. Spreads into colonies.","credit":{"file":"Podophyllum_peltatum_Arkansas.jpg","by":"Eric Hunt","lic":"CC BY-SA 4.0"}},"care":{"cat":"ephemeral","divide":"Divide in late August to September, if the clump is crowded or flowers less. Allow 4 to 6 weeks before the ground freezes.","divideShort":"Late Aug to Sep","prep":{"a":4,"b":4.3,"text":"Comes up very early: mark the spot and don't rake or mulch over the shoots.","sum":"Early Apr: mark the spot, don't rake"},"cut":{"a":6.2,"b":6.9,"text":"Goes dormant in summer. Let the leaves yellow and fade on their own (they feed the roots), then clear them away. Nearby ferns or hostas fill the gap.","sum":"Jun to early Jul: clear leaves once yellow"}},"sheet":{"name":"Mayapple","latin":"Podophyllum peltatum","notes":"Umbrella-like leaves that carpet the woodland floor in spring, then die back by midsummer. Spreads into colonies.","hex":"#F4F1EA","txt":"#2E3A2C","code":"Maya","marks":[["nat","Michigan native"],["tox","Toxic to people, dogs and cats"]],"facts":[["Height","12–18 in"],["Spacing","18 in apart (center to center)"],["Place in the bed","Middle row"],["Blooms","May"],["Color","White flower hidden under the leaves","","#F4F1EA"],["Light","Part shade to shade","Grows in shade, or with up to 6 hours of direct sun a day"],["Soil moisture","Average to moist"],["Plant type","Low, spreading groundcover (goes dormant in summer)"],["Hardiness zones","3a to 8b (hardy in Michigan zone 6B)"],["Deer","Rarely damaged (Rutgers rating A)"],["Toxic","Toxic to people, dogs and cats","ASPCA lists mayapple as toxic"]],"year":[["Bloom",5,5.7,"#F4F1EA"],["Spring prep",4,4.3,"#7FA66A"],["Cut back",6.2,6.9,"#A68C72"]],"care":[["Spring prep","Comes up very early: mark the spot and don't rake or mulch over the shoots."],["Cut back","Goes dormant in summer. Let the leaves yellow and fade on their own (they feed the roots), then clear them away. Nearby ferns or hostas fill the gap."],["Divide","Divide in late August to September, if the clump is crowded or flowers less. Allow 4 to 6 weeks before the ground freezes."]],"neighbors":[{"plants":[["Virginia Waterleaf","#CDBEE3"]],"why":"Commonly found with wild columbine, wild ginger, wild geranium, woodland phlox and mayapple.","src":["Wisconsin Horticulture (UW–Madison Extension): Virginia Waterleaf article"]},{"plants":[["Wild Geranium","#D3A2D3"]],"why":"Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.","src":["Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article"]}],"sources":[["Michigan native","Black Cap Plants (Onekama, Michigan): Species list of native plants"],["Michigan native","Michigan Tech KISMA: Native species table"],["Deer","Rutgers NJAES deer-resistant plant list (rating A)"],["Toxic","ASPCA lists mayapple as toxic"],["Photo","Eric Hunt, CC BY-SA 4.0, Wikimedia Commons"]]},"neighbors":[{"id":"waterleaf","why":"Commonly found with wild columbine, wild ginger, wild geranium, woodland phlox and mayapple.","sources":[{"url":"https://hort.extension.wisc.edu/articles/virginia-waterleaf-hydrophyllum-virginianum/","title":"Wisconsin Horticulture (UW–Madison Extension): Virginia Waterleaf article","about":"waterleaf"}]},{"id":"geranium","why":"Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.","sources":[{"url":"https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/","title":"Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article","about":"geranium"}]}],"status":[{"title":"Black Cap Plants (Onekama, Michigan): Species list of native plants","url":"https://www.blackcapplants.com/species-list","kind":"native","note":"Michigan native nursery; marks the few species it sells that have no natural Michigan range (none of these are marked). Checked November 2026.","plants":["sedge","foam","phlox","fern","goldenrod","aster","turtle","ostrich","christmas","lady","cinnamon","obedient","strawberry","mayapple","jack","ginger"]},{"title":"Michigan Tech KISMA: Native species table","url":"https://www.mtu.edu/kisma/native-alternatives/native-species-table/","kind":"native","note":"Michigan Technological University table of plants native to the Upper Peninsula or the northern Great Lakes region (Heart-leaved Aster is not in it). Checked November 2026.","plants":["sedge","foam","phlox","fern","goldenrod","turtle","ostrich","christmas","lady","cinnamon","obedient","strawberry","mayapple","jack","ginger"]}],"credit":{"file":"Podophyllum peltatum Arkansas.jpg","by":"Eric Hunt","lic":"CC BY-SA 4.0","licUrl":"https://creativecommons.org/licenses/by-sa/4.0/"},"made":"2026-11-03"}</script>
+<script src="../photos/mayapple.js"></script>
+<script src="plant-page.js"></script>
+<script>
+  // Back to the planner: go back in the browser's history when we came from it, so it returns exactly as it was
+  document.querySelector("a.back").addEventListener("click", function (e) {
+    var base = (document.referrer || "").split("?")[0].split("#")[0];
+    if (history.length > 1 && base && base.indexOf("/plants/") < 0 && (base.slice(-1) === "/" || base.slice(-10) === "index.html")) { e.preventDefault(); history.back(); }
+  });
+</script>
+<script>
+  (function () { var f = window.PHOTO_FULL && window.PHOTO_FULL["mayapple"]; if (f) document.getElementById("photo").src = f; })();
+</script>
+</body>
+</html>
