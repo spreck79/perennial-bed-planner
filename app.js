@@ -106,13 +106,13 @@
     return '<span class="ics">' + h + "</span>";
   }
   const SUNKEY = ["full", "part", "shade"].map(k => '<span class="ic ic-sun" data-k="sun" style="background:' + SUNCOL[k] + '" data-tip="' + window.Plan.ZONE_TIP[k] + '">' + SUNGLYPH + "</span> " + { full: "full sun", part: "part shade", shade: "shade" }[k]).join(" ");
-  const KEY = () => '<span class="ickey">' + SUNKEY + " (blended if it takes more than one) " + icons({ native: true }).replace(/<\/?span class="ics">/g, "").replace(/<span class="ic ic-sun".*?<\/span>/, "") + ' native ' + icons({}).replace(/<\/?span class="ics">/g, "").replace(/<span class="ic ic-sun".*?<\/span>/, "") + ' garden favorite <span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span> daisy family <span class="ic ic-deer" data-k="deer" data-tip="Deer often or sometimes eat this">' + DEER + '</span> deer often eat <span class="ic ic-tox" data-k="tox" data-tip="Toxic plant">!</span> toxic</span>' + ' <span class="ic ic-cold">❄</span> needs winter care';
+  const KEY = () => '<span class="ickey">' + SUNKEY + " (blended if it takes more than one) " + icons({ native: true }).replace(/<\/?span class="ics">/g, "").replace(/<span class="ic ic-sun".*?<\/span>/, "") + ' native ' + icons({}).replace(/<\/?span class="ics">/g, "").replace(/<span class="ic ic-sun".*?<\/span>/, "") + ' garden favorite <span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span> daisy family <span class="ic ic-deer" data-k="deer" data-tip="Deer often or sometimes eat this">' + DEER + '</span> deer often eat <span class="ic ic-tox" data-k="tox" data-tip="Toxic plant">!</span> toxic <span class="ic ic-cold" data-k="cold" data-tip="Not winter-hardy here: needs winter care">❄</span> needs winter care</span>';
   window.plannerKey = KEY;
   document.querySelectorAll(".keyslot").forEach(e => (e.innerHTML = KEY()));
   { const tip = document.createElement("div"); tip.id = "ictip"; document.body.appendChild(tip);
     const SEL = ".ic, .cpill, .sunb, .ztip, .dtip";
     const place = (x, y) => { const tw = tip.offsetWidth; tip.style.left = Math.max(6, Math.min(window.innerWidth - tw - 6, x - tw / 2)) + "px"; tip.style.top = Math.max(6, y - tip.offsetHeight - 6) + "px"; };
-    const show = (el, e) => { tip.textContent = el.dataset.tip; tip.className = "on k-" + el.dataset.k;
+    const show = (el, e) => { if (!el.dataset.tip) { tip.className = ""; return; } tip.textContent = el.dataset.tip; tip.className = "on k-" + el.dataset.k;
       // a painted sun zone is a big area, so its label sits by the pointer instead of above the whole zone
       if (el.classList.contains("ztip") && e) place(e.clientX, e.clientY - 12); else { const r = el.getBoundingClientRect(); place(r.left + r.width / 2, r.top); } };
     // no tips mid-drag or while painting sun, where they would just get in the way
