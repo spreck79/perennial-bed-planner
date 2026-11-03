@@ -43,11 +43,12 @@ def js_entry(e):
         if isinstance(v, list): return "[" + ", ".join(val(x) for x in v) + "]"
         if isinstance(v, dict): return "{ " + ", ".join(f"{k}: {val(x)}" for k, x in v.items()) + " }"
         return q(v)
-    groups = [["id", "deer", "code", "name", "latin", "native", "kind", "fam", "filler", "dormant"],
+    groups = [["id", "deer", "code", "name", "latin", "native", "kind", "fam", "filler", "dormant", "zones"],
               ["hLo", "hHi", "spacing", "bloom", "color", "hex", "txt"],
               ["light", "sun", "moisture"],
               ["notes"],
               ["toxic", "toxSrc"],
+              ["winter"],
               ["credit"]]
     lines = []
     for g in groups:
@@ -141,7 +142,7 @@ def main():
         if pid in ids: why.append(f"the id '{pid}' is already in the planner")
         if check_plants_norm(e.get("latin", "")) in latins: why.append(f"already in the planner as {latins[check_plants_norm(e['latin'])]}")
         if not force:
-            if any("NOT hardy" in w for w in pkg.get("warn", [])): why.append("not hardy in Michigan zone 6B (use --force to add anyway)")
+            if any("NOT hardy" in w for w in pkg.get("warn", [])) and not e.get("winter"): why.append("not hardy in Michigan zone 6B and no winter care given (use --force to add anyway)")
             if not pkg.get("status"): why.append("no Michigan native or garden-center source (use --force to add anyway)")
         if not os.path.exists(os.path.join(d, "photo-full.txt")): why.append("no prepared photo in the zip")
         if why: skipped.append((name, why)); continue

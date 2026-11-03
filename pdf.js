@@ -176,7 +176,7 @@
           sf("s", 6); color("#5E7A52"); text("foliage all season", x0 + cw / 2, ry + 14, { align: "center" });
         }
         { const cr = window.Care.careFor(p);
-          [["prep", "#7FA86A"], ["cut", "#9C7B5B"], ["trim", null]].forEach(([k, col]) => { const w = cr[k]; if (!w) return; const xa = x0 + Ch.pct(w.a) / 100 * cw, wd = Math.max(4, (Ch.pct(w.b) - Ch.pct(w.a)) / 100 * cw);
+          [["prep", "#7FA86A"], ["cut", "#9C7B5B"], ["trim", null], ["lift", "#4F7FB4"], ["replant", "#6F9AC9"], ["mulch", "#A68C72"]].forEach(([k, col]) => { const w = cr[k]; if (!w) return; const xa = x0 + Ch.pct(w.a) / 100 * cw, wd = Math.max(4, (Ch.pct(w.b) - Ch.pct(w.a)) / 100 * cw);
             if (col) { fill(col); stroke("#FFFFFF"); doc.setLineWidth(0.8); doc.roundedRect(xa, ry + 9.2, wd, 5.6, 2.8, 2.8, "FD"); }
             else { fill("#FFFFFF"); stroke("#9C7B5B"); doc.setLineWidth(0.6); doc.setLineDashPattern([1.2, 1], 0); doc.roundedRect(xa, ry + 9.2, wd, 5.6, 2.8, 2.8, "FD"); doc.setLineDashPattern([], 0); } }); }
       });
@@ -223,18 +223,18 @@
     // ================= Care through the year =================
     {
       progress && progress(0.22, "Care calendar");
-      const CC = { prep: "#7FA86A", cut: "#9C7B5B", divide: "#8C7FC0", bulbs: "#7FA86A", mulch: "#A68C72" };
+      const CC = { prep: "#7FA86A", cut: "#9C7B5B", divide: "#8C7FC0", bulbs: "#7FA86A", mulch: "#A68C72", lift: "#4F7FB4", replant: "#6F9AC9" };
       newPage(); heading("Care through the year", 62, 20);
       let cy = 72;
       cy += para("Timing for Michigan zone 6B, based on university extension advice. Most plants are best cut back in spring, not fall: seed heads feed birds over winter, and native bees and butterflies spend the winter in the hollow stems and fallen leaves.", M, cy + 4, W - 2 * M, 8.4, 11, C.muted) + 10;
-      const x0 = M + labW, cw = W - M - x0, mw = cw / 8, tasks = window.Care.gardenTasks(plants);
+      const x0 = M + labW, cw = W - M - x0, mw = cw / 8, tasks = window.Care.gardenTasks(plants), lanes = tasks.some(t => t.lane === 2) ? 3 : 2, gh = lanes * 19 + 6;
       sf("sb", 7.2); color(C.muted); Ch.MONTHS.forEach((m, i) => text(m, x0 + mw * i + mw / 2, cy + 8, { align: "center" })); cy += 13;
-      stripe(M, cy, W - 2 * M, 44);
-      stroke("#DDD6C3"); doc.setLineWidth(0.4); for (let i = 0; i <= 8; i++) doc.line(x0 + mw * i, cy, x0 + mw * i, cy + 44);
+      stripe(M, cy, W - 2 * M, gh);
+      stroke("#DDD6C3"); doc.setLineWidth(0.4); for (let i = 0; i <= 8; i++) doc.line(x0 + mw * i, cy, x0 + mw * i, cy + gh);
       sf("sb", 9); color(C.ink); text("Whole garden", M + 6, cy + 18); sf("s", 6.5); color(C.muted); text("Michigan zone 6B", M + 6, cy + 28);
       tasks.forEach(t => { const xa = x0 + Ch.pct(t.a) / 100 * cw, wd = (Ch.pct(t.b) - Ch.pct(t.a)) / 100 * cw, yy = cy + 5 + t.lane * 19;
         fill(CC[t.k]); doc.roundedRect(xa, yy, wd, 14, 7, 7, "F"); sf("sb", 6.8); color("#FFFFFF"); text(t.label, xa + wd / 2, yy + 9.6, { align: "center" }); });
-      cy += 56;
+      cy += gh + 12;
       tasks.forEach(t => {
         const parts = [[t.label + ": ", true], [t.text, false]];
         const n = flow(parts, 0, 0, W - 2 * M - 14, 8, 10.6, C.muted, C.ink, false);
@@ -251,7 +251,7 @@
       plants.slice().sort((p, q) => (p.bloom ? p.bloom[0] : 99) - (q.bloom ? q.bloom[0] : 99) || p.name.localeCompare(q.name)).forEach((p, i) => {
         const cr = window.Care.careFor(p);
         sf("s", 7.2);
-        const cells = [wrap(p.name, cols[0][2] - 10), wrap(cr.prep ? cr.prep.sum : "Same time as cut back", cols[1][2] - 10), wrap(cr.cut.sum + (cr.trim ? ". " + cr.trim.sum : ""), cols[2][2] - 10), wrap(cr.divideShort, cols[3][2] - 10)];
+        const cells = [wrap(p.name, cols[0][2] - 10), wrap(cr.prep ? cr.prep.sum : "Same time as cut back", cols[1][2] - 10), wrap(cr.cut.sum + (cr.trim ? ". " + cr.trim.sum : "") + (cr.lift ? ". " + cr.lift.sum : "") + (cr.replant ? ". " + cr.replant.sum : "") + (cr.mulch ? ". " + cr.mulch.sum : ""), cols[2][2] - 10), wrap(cr.divideShort, cols[3][2] - 10)];
         const nl = Math.max(...cells.map(c => c.length)), rhh = nl * 9 + 7;
         if (cy + rhh > H - 56) { newPage(); cy = 66; th(); }
         if (i % 2 === 0) stripe(M, cy, W - 2 * M, rhh);
@@ -274,7 +274,8 @@
         // a printed card can't show a tooltip, so it says the hours of sun outright
         const need = window.Plan && window.Plan.sunNeed ? window.Plan.sunNeed(p) : "";
         const parts = [["Light & soil: ", true], [soil + (need ? (/[.]$/.test(soil) ? " " : ". ") + need + "." : ""), false]];
-        let note = p.notes; if (p.fam === "daisy") note += " Daisy family, like ragweed."; if (deerEats(p) && !/deer/i.test(p.notes)) note += " " + deerText(p);
+        let note = p.notes; if (p.fam === "daisy") note += " Daisy family, like ragweed.";
+        { const wc = window.winterCare && window.winterCare(p); if (wc) note += " Winter: " + wc.text; } if (deerEats(p) && !/deer/i.test(p.notes)) note += " " + deerText(p);
         const pf = data.prefs || {}, okPref = q => (!(q.toxic && q.toxic.length) || pf.toxic) && !(deerEats(q) && pf.deer === false) && !(q.fam === "daisy" && pf.daisy === false) && (!pf.sun || q.sun.some(s => pf.sun.includes(s))) && (!pf.origin || pf.origin.includes(q.native ? "nat" : "gar"));
         const comps = (window.COMPANIONS && window.COMPANIONS[p.id] || []).filter(c => byId[c.id] && (counts[c.id] || okPref(byId[c.id])));
         sf("s", 7.8); const nl = wrap(note, tw).slice(0, comps.length ? 2 : 3);
@@ -292,7 +293,8 @@
         fill(rowOf(p) === "Front" ? C.leaf2 : C.leaf); doc.roundedRect(W - M - pw, py + 3, pw, 13, 6.5, 6.5, "F"); color("#FFFFFF"); text(row, W - M - pw / 2, py + 12, { align: "center" });
         { let px = W - M; const tag = (t, bg, fg) => { sf("sb", 6); const tw3 = doc.getTextWidth(t) + 14; fill(bg); doc.roundedRect(px - tw3, py + 19.5, tw3, 12, 6, 6, "F"); color(fg); text(t, px - tw3 / 2, py + 27.6, { align: "center" }); px -= tw3 + 5; };
           if (p.toxic && p.toxic.length) tag(toxLabel(p).toUpperCase(), "#F6D9D5", "#9A2E24");
-          if (deerEats(p)) tag(p.deer === "D" ? "DEER OFTEN EAT IT" : "DEER SOMETIMES EAT IT", "#EFE2D3", "#6A4526"); }
+          if (deerEats(p)) tag(p.deer === "D" ? "DEER OFTEN EAT IT" : "DEER SOMETIMES EAT IT", "#EFE2D3", "#6A4526");
+          if (window.winterCare && window.winterCare(p)) tag(window.isTender(p) ? "NOT WINTER-HARDY HERE" : "MULCH FOR WINTER", "#DCE7F3", "#2F5D8C"); }
         if (counts[p.id]) { sf("sb", 6.8); color(C.forest); text("In this bed: " + counts[p.id] + (p.clump ? " clumps, about " + counts[p.id] * p.clump + " bulbs" : ""), W - M - pw - 7, py + 12.2, { align: "right" }); }
         const c1 = tx, c2 = tx + tw * 0.40, c3 = tx + tw * 0.72;
         const lab = (t, x, y) => { sf("sb", 5.8); color(C.muted); text(t, x, y); };

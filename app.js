@@ -101,11 +101,12 @@
     if (p.fam === "daisy") h += '<span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span>';
     if (deerEats(p)) h += '<span class="ic ic-deer" data-k="deer" data-tip="' + esc(deerTip(p)) + '">' + DEER + "</span>";
     if (p.toxic && p.toxic.length) h += '<span class="ic ic-tox" data-k="tox" data-tip="' + esc(window.toxLabel(p)) + '">!</span>';
+    if (p.id && window.isTender(p)) h += '<span class="ic ic-cold" data-k="cold" data-tip="Not winter-hardy here: ' + esc(window.winterCare(p).short) + '">❄</span>';
     if (off) h += '<span class="ic ic-off" data-k="off" data-tip="Outside your step 4 and 5 choices">–</span>';
     return '<span class="ics">' + h + "</span>";
   }
   const SUNKEY = ["full", "part", "shade"].map(k => '<span class="ic ic-sun" data-k="sun" style="background:' + SUNCOL[k] + '" data-tip="' + window.Plan.ZONE_TIP[k] + '">' + SUNGLYPH + "</span> " + { full: "full sun", part: "part shade", shade: "shade" }[k]).join(" ");
-  const KEY = () => '<span class="ickey">' + SUNKEY + " (blended if it takes more than one) " + icons({ native: true }).replace(/<\/?span class="ics">/g, "").replace(/<span class="ic ic-sun".*?<\/span>/, "") + ' native ' + icons({}).replace(/<\/?span class="ics">/g, "").replace(/<span class="ic ic-sun".*?<\/span>/, "") + ' garden favorite <span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span> daisy family <span class="ic ic-deer" data-k="deer" data-tip="Deer often or sometimes eat this">' + DEER + '</span> deer often eat <span class="ic ic-tox" data-k="tox" data-tip="Toxic plant">!</span> toxic</span>';
+  const KEY = () => '<span class="ickey">' + SUNKEY + " (blended if it takes more than one) " + icons({ native: true }).replace(/<\/?span class="ics">/g, "").replace(/<span class="ic ic-sun".*?<\/span>/, "") + ' native ' + icons({}).replace(/<\/?span class="ics">/g, "").replace(/<span class="ic ic-sun".*?<\/span>/, "") + ' garden favorite <span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span> daisy family <span class="ic ic-deer" data-k="deer" data-tip="Deer often or sometimes eat this">' + DEER + '</span> deer often eat <span class="ic ic-tox" data-k="tox" data-tip="Toxic plant">!</span> toxic</span>' + ' <span class="ic ic-cold">❄</span> needs winter care';
   window.plannerKey = KEY;
   document.querySelectorAll(".keyslot").forEach(e => (e.innerHTML = KEY()));
   { const tip = document.createElement("div"); tip.id = "ictip"; document.body.appendChild(tip);
@@ -128,7 +129,7 @@
   function freshState() {
     return { shape: "rect", dims: {}, freePoly: null, freeView: "border", placements: [], seed: 7, fill: true, view: "codes",
       filter: { q: "", height: "", month: "" }, bloomFilter: "sel", bloomSort: "start",
-      name: "", prefs: { sun: ["full", "part", "shade"], origin: ["nat", "gar"], kinds: ["clump", "fern", "grass", "mat", "bulb"], toxic: true, daisy: true, deer: true, v2: true }, waiting: {}, showGrid: true,
+      name: "", prefs: { sun: ["full", "part", "shade"], origin: ["nat", "gar"], kinds: ["clump", "fern", "grass", "mat", "bulb"], toxic: true, daisy: true, deer: true, tender: false, v2: true }, waiting: {}, showGrid: true,
       objects: [], sun: { res: 0.5, cells: {} }, sunBase: null, showSun: true, fillMode: "ground", compSkip: [], freeCtrl: null, freeSmooth: true, done: {} };
   }
   // The example garden ("Load an example garden" in step 1): the drawn border described above, finished.
@@ -187,7 +188,7 @@
   // counts include plants that are chosen but didn't fit in the bed ("waiting"), so they stay on the shopping list
   function counts(real) { const c = {}; S.placements.forEach(p => { if (real && p.c) return; c[p.id] = (c[p.id] || 0) + 1; }); const w = S.waiting || {}; Object.keys(w).forEach(id => { if (byId[id] && w[id] > 0) c[id] = (c[id] || 0) + w[id]; }); return c; }
   // plans saved before spring bulbs and the deer option existed: turn the new choices on
-  function migratePrefs(raw) { const pr = S.prefs; if (!(raw && raw.v2)) { if (Array.isArray(pr.kinds) && !pr.kinds.includes("bulb")) pr.kinds.push("bulb"); if (pr.deer == null) pr.deer = true; pr.v2 = true; } }
+  function migratePrefs(raw) { const pr = S.prefs; if (!(raw && raw.v2)) { if (Array.isArray(pr.kinds) && !pr.kinds.includes("bulb")) pr.kinds.push("bulb"); if (pr.deer == null) pr.deer = true; pr.v2 = true; } if (pr.tender == null) pr.tender = false; }
   function cleanWaiting(w) { const o = {}; if (w && typeof w === "object") Object.keys(w).forEach(k => { const n = Math.floor(+w[k]); if (byId[k] && n > 0 && n < 500) o[k] = n; }); return o; }
   function placedCounts() { const c = {}; S.placements.forEach(p => { c[p.id] = (c[p.id] || 0) + 1; }); return c; }
   const waitTotal = () => Object.keys(S.waiting || {}).reduce((s, k) => s + (S.waiting[k] > 0 ? S.waiting[k] : 0), 0);
@@ -517,6 +518,7 @@
     if (p.toxic && !pr.toxic) return false;
     if (p.fam === "daisy" && pr.daisy === false) return false;
     if (deerEats(p) && pr.deer === false) return false;
+    if (window.isTender(p) && pr.tender === false) return false;
     return true;
   }
   function passes(p) {
@@ -668,6 +670,8 @@
       const pl = document.createElement("a"); pl.href = "https://poisonhelp.org/"; pl.target = "_blank"; pl.rel = "noopener"; pl.textContent = "poisonhelp.org";
       th.append(pl, "). If someone is unconscious, having trouble breathing or having a seizure, call 911 first."); } },
     { key: "deer", label: "Plants deer like to eat", why: "If deer visit your yard", icon: () => '<span class="ic ic-deer">' + DEER + "</span>", more: th => th.append("Plants marked with the antler icon are ones deer often or sometimes eat, based on the Rutgers University deer-resistance ratings. No plant is deer-proof: hungry deer eat almost anything, and rabbits nibble many young plants too. If deer visit your yard, leave these out or plan on fencing or repellent.") },
+    { key: "tender", label: "Plants that need winter care here", why: "Not hardy in zone 6B: they're dug up in fall, brought indoors, or replanted each year", icon: '<span class="ic ic-cold">❄</span>',
+      more: th => th.append("These plants (marked ❄) can't survive a Michigan zone 6B winter in the ground on their own. Each one's card and the Garden Timeline say what it needs: dig up and store it after the first frost and replant in May, bring it indoors in a pot, or plant a new one each year. Plants hardy only to 6B itself get a winter-mulch reminder instead, and aren't left out here.") },
     { key: "daisy", label: "Daisy-family plants", why: "If someone has ragweed allergies", icon: '<span class="ic ic-df">✿</span>', more: th => th.append("Daisy-family plants (marked ✿) are related to ragweed. Most are pollinated by insects, so they shed far less pollen than ragweed, but people with ragweed allergies can still react, often to handling them. If allergies are a concern, leave them out or check with a doctor.") }
   ];
   const whyOpen = new Set();
@@ -839,8 +843,8 @@
 
   // ---------- care timing ----------
   const SPROUT = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 11V6.5M6 6.8C6 4.2 4.2 2.8 1.6 3c0 2.4 1.8 3.8 4.4 3.8zM6 6.2c0-2.6 1.8-4 4.4-3.8 0 2.4-1.8 3.8-4.4 3.8z" fill="currentColor" stroke="currentColor" stroke-width=".8" stroke-linejoin="round"/></svg>';
-  const CARE_ICON = { prep: SPROUT, cut: "✂", trim: "✂", divide: "↔", bulbs: "●", mulch: "≋" };
-  const CARE_LAB = { prep: "Prep", cut: "Cut back", trim: "Optional trim" };
+  const CARE_ICON = { prep: SPROUT, cut: "✂", trim: "✂", divide: "↔", bulbs: "●", mulch: "≋", lift: "↑", replant: "↓", dig: "↑" };
+  const CARE_LAB = { prep: "Prep", cut: "Cut back", trim: "Optional trim", lift: "Dig up", replant: "Replant", mulch: "Winter mulch" };
   function pill(k, w, tip, label) {
     const a = Ch.pct(w.a), b = Ch.pct(w.b);
     return `<span class="cpill k-${k}${label ? " big" : ""}" data-k="${k}" data-tip="${esc(tip)}" style="left:${a}%;width:${Math.max(1.2, b - a)}%"><i>${CARE_ICON[k]}</i>${label ? "<b>" + esc(label) + "</b>" : ""}</span>`;
@@ -848,14 +852,15 @@
   function carePills(p) {
     const c = window.Care.careFor(p); let h = "";
     ["prep", "cut", "trim"].forEach(k => { if (c[k]) h += pill(k, c[k], CARE_LAB[k] + ": " + c[k].text + (k === "prep" || (k === "cut" && !c.prep) ? " " + c.divide : "")); });
+    ["lift", "replant", "mulch"].forEach(k => { if (c[k]) h += pill(k, c[k], (c.winter.how === "annual" && k === "replant" ? "Plant new" : c.winter.how === "pot" && k === "lift" ? "Bring indoors" : CARE_LAB[k]) + ": " + c[k].text); });
     return h;
   }
   function renderGardenCare() {
     const box = $("#gardenCare"); if (!box) return;
     const tasks = window.Care.gardenTasks(selected());
     const lane = n => tasks.filter(t => t.lane === n).map(t => pill(t.k, t, t.label + ": " + t.text, t.label)).join("");
-    box.innerHTML = `<div class="gc-lab"><b>Whole garden</b><small>Michigan zone 6B. Hover or tap for details.</small></div><div class="gc-track"><div class="gc-lane">${lane(0)}</div><div class="gc-lane">${lane(1)}</div></div>`
-      + `<div class="gc-key"><span class="cpill k-prep"><i>${SPROUT}</i></span> prep <span class="cpill k-cut"><i>✂</i></span> cut back <span class="cpill k-trim"><i>✂</i></span> optional trim for more flowers <span class="cpill k-divide"><i>↔</i></span> divide <span class="cpill k-bulbs"><i>●</i></span> plant bulbs</div>`;
+    box.innerHTML = `<div class="gc-lab"><b>Whole garden</b><small>Michigan zone 6B. Hover or tap for details.</small></div><div class="gc-track"><div class="gc-lane">${lane(0)}</div><div class="gc-lane">${lane(1)}</div>${tasks.some(t => t.lane === 2) ? `<div class="gc-lane">${lane(2)}</div>` : ""}</div>`
+      + `<div class="gc-key"><span class="cpill k-prep"><i>${SPROUT}</i></span> prep <span class="cpill k-cut"><i>✂</i></span> cut back <span class="cpill k-trim"><i>✂</i></span> optional trim for more flowers <span class="cpill k-divide"><i>↔</i></span> divide <span class="cpill k-bulbs"><i>●</i></span> plant bulbs${tasks.some(t => t.lane === 2) ? ' <span class="cpill k-lift"><i>↑</i></span> dig up / bring in <span class="cpill k-replant"><i>↓</i></span> replant' : ""}</div>`;
   }
 
   // ---------- small to big chart ----------
@@ -1527,7 +1532,8 @@
       const f = document.createElement("div"); f.className = "sc-facts";
       f.innerHTML = `<span>${esc(Ch.heightText(pl))} tall</span><span>${pl.spacing} in apart</span><span>${cnt[pl.id] || 0} in the bed</span>` +
         `<div class="sc-sun"><i class="zsw" style="background:${window.Plan.sunTip ? (pl.sun.length > 1 ? "linear-gradient(90deg," + ["full", "part", "shade"].filter(z => pl.sun.includes(z)).map(z => window.Plan.ZONE[z]).join(",") + ")" : window.Plan.ZONE[pl.sun[0]]) : ""}"></i>${esc(window.Plan.sunNeed(pl))}</div>` +
-        (tox ? `<div class="sc-tox">${esc(tox)}</div>` : "") + (p0.lock ? '<div class="sc-lock">Locked in place</div>' : "");
+        (tox ? `<div class="sc-tox">${esc(tox)}</div>` : "") +
+        (window.winterCare(pl) ? `<div class="sc-cold">${window.isTender(pl) ? "❄ Not winter-hardy here: " : "Winter: "}${esc(window.winterCare(pl).short)}</div>` : "") + (p0.lock ? '<div class="sc-lock">Locked in place</div>' : "");
       card.appendChild(f);
       cardActs(card, plantActions(group));
       cardCompanions(card, idxs[0]);

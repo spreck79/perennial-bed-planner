@@ -354,6 +354,8 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 .ic-gar { background: #F3DDEA; color: #8A3F72; font-size: 8px; }
 .ic-df { background: #FBEBC4; color: #8A6410; font-size: 10px; }
 .ic-tox { background: #B8392E; color: #fff; }
+.ic-cold { background: #4F7FB4; color: #fff; }
+.sc-cold { color: #2F5D8C; font-weight: 600; margin-top: 2px; }
 .ic-off { background: #EEE; color: #777; }
 .ickey { white-space: normal; }
 .ickey .ic { margin: 0 2px 0 6px; vertical-align: -2px; }
@@ -418,6 +420,8 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 .cpill.k-divide { background: #8C7FC0; }
 .cpill.k-bulbs { background: #7FA86A; }
 .cpill.k-mulch { background: #A68C72; }
+.cpill.k-lift { background: #4F7FB4; }
+.cpill.k-replant { background: #6F9AC9; }
 .cpill.big { position: absolute; top: 3px; height: 18px; border-radius: 9px; font-size: 10.5px; padding: 0 6px; }
 .cpill.big i { width: 11px; height: 11px; font-size: 10px; }
 .cpill.big i svg { width: 11px; height: 11px; }

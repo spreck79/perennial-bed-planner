@@ -78,6 +78,19 @@ def main():
                 P(f"the code '{c}' doesn't follow the pattern: up to 4 letters taken in order from the common name, "
                   f"starting a word, with capitals only at the start of words (like Foam, WiGe, WBPh). Suggested: {suggest_code(name)}")
         if pl.get("kind") and pl["kind"] not in KINDS: P(f"kind must be one of {sorted(KINDS)}")
+        z, wn = pl.get("zones"), pl.get("winter")
+        if z is not None:
+            if not (isinstance(z, list) and len(z) == 2 and all(isinstance(x, (int, float)) for x in z) and 1 <= z[0] <= z[1] <= 13.5 and all((x * 2) % 1 == 0 for x in z)):
+                P("zones must be [coldest, warmest] like [3, 8] (use .5 for the b half: 6.5 = 6b)")
+            elif z[0] > 6.5 and not wn: P(f"not hardy in zone 6B (zones {z[0]:g} to {z[1]:g}): add 'winter' care (how: dig, pot, annual)")
+            elif z[1] < 6: P(f"zones {z[0]:g} to {z[1]:g} don't reach 6B: it won't grow well here")
+        if wn is not None:
+            if not isinstance(wn, dict) or wn.get("how") not in ("dig", "pot", "annual", "mulch"): P("winter.how must be dig, pot, annual or mulch")
+            else:
+                for k in ("lift", "replant", "mulch"):
+                    v = wn.get(k)
+                    if v is not None and not (isinstance(v, list) and len(v) == 2 and 1 <= v[0] < v[1] <= 12.99): P(f"winter.{k} must be [start, end] months")
+        elif z is None: G("Hardiness zones not recorded yet (Plant Research's update mode fills them in)", name)
         lo, hi, sp = pl.get("hLo"), pl.get("hHi"), pl.get("spacing")
         if isinstance(lo, (int, float)) and isinstance(hi, (int, float)) and lo > hi: P("hLo is taller than hHi")
         if isinstance(sp, (int, float)) and sp <= 0: P("spacing must be more than 0 inches")
@@ -113,7 +126,9 @@ def main():
     if todo or groups:
         print("TO DO, allowed, but worth finishing:")
         for m in todo: print("  - " + m)
-        for k, names in groups.items(): print(f"  - {k}: {len(names)} plant{'s' if len(names) > 1 else ''}: " + ", ".join(names))
+        for k, names in groups.items():
+            shown = ", ".join(names) if len(names) <= 12 or details else ", ".join(names[:8]) + f" and {len(names) - 8} more (--details lists them all)"
+            print(f"  - {k}: {len(names)} plant{'s' if len(names) > 1 else ''}: " + shown)
         print()
     if not probs: print("No problems found." + ("" if todo or groups else " Nothing left to do."))
     sys.exit(1 if probs else 0)

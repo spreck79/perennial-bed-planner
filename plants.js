@@ -5,6 +5,10 @@
 // dormant: dies back by early summer, so it may share space with later-growing plants
 // clump: for bulbs, how many bulbs go in each spot on the plan
 // photo: key into window.PHOTOS (images.js). credit: Wikimedia Commons file, author, license.
+// zones: [coldest, warmest] USDA hardiness zones it survives, .5 = the "b" half (6.5 = 6b). Michigan here is 6B.
+// winter: care a plant needs to make it through a zone 6B winter (only for plants that aren't fully hardy here):
+//   { how: "dig" | "pot" | "annual" | "mulch", text: "plain instructions", lift: [a, b], replant: [a, b], mulch: [a, b] }
+//   (month numbers like bloom; any window left out gets the usual timing for that "how").
 window.PLANTS = [
   // ---------------- Michigan natives ----------------
   { id: "sedge", deer: "A", code: "PeSe", name: "Pennsylvania Sedge", latin: "Carex pensylvanica", native: true, kind: "grass", filler: true,
@@ -481,6 +485,33 @@ window.PLANTS.forEach(p => {
   if (!p.sun) { const l = p.light.toLowerCase(); p.sun = []; if (/\bsun\b/.test(l)) p.sun.push("full"); if (/part|light shade/.test(l)) p.sun.push("part"); if (/shade/.test(l.replace(/part shade|light shade/g, ""))) p.sun.push("shade"); }
   if (!p.toxic) p.toxic = null;
 });
+// Winter care for zone 6B: null for plants that are fully hardy here (or whose zones aren't recorded yet).
+// status "tender" = won't survive the winter in the ground without help; "edge" = hardy only to 6B, so mulch it.
+window.HOME_ZONE = 6.5;
+window.winterCare = p => {
+  const z = p.zones, w = p.winter || null;
+  const lo = Array.isArray(z) ? z[0] : null;
+  let status = null;
+  if (lo != null && lo > window.HOME_ZONE) status = "tender";
+  else if (lo != null && lo === window.HOME_ZONE) status = "edge";
+  if (w && !status) status = w.how === "mulch" ? "edge" : "tender";
+  if (!status) return null;
+  const how = (w && w.how) || (status === "edge" ? "mulch" : p.kind === "bulb" ? "dig" : "annual");
+  const zoneTxt = z ? "hardy to zone " + Math.floor(z[0]) + (z[0] % 1 ? "b" : "a") : "not fully hardy here";
+  const D = {
+    dig: { lift: [10.45, 11.0], replant: [5.4, 5.95], short: "dig up in fall, replant in May",
+           text: "Not winter-hardy here (" + zoneTxt + "). After the first frost blackens the leaves (usually mid to late October), dig it up, let it dry, and store it somewhere cool and frost-free (35 to 45°F) over winter. Replant after the last frost, usually mid to late May." },
+    pot: { lift: [9.8, 10.3], replant: [5.4, 5.95], short: "bring indoors before frost",
+           text: "Not winter-hardy here (" + zoneTxt + "). Grow it in a pot sunk in the bed, and bring it indoors before the first frost (usually early October). Set it back out after the last frost, usually mid to late May." },
+    annual: { replant: [5.4, 5.95], short: "grows as an annual here",
+           text: "Not winter-hardy here (" + zoneTxt + "), so treat it as an annual: plant a new one each year after the last frost, usually mid to late May." },
+    mulch: { mulch: [11.35, 12.0], short: "mulch the crown for winter",
+           text: "Hardy only to zone 6B, the edge of what it can take. Once the ground freezes (usually late November), cover the crown with about 4 to 6 in of shredded leaves or straw, and pull it back in early April." }
+  }[how] || {};
+  return Object.assign({ status, how, short: D.short, text: (w && w.text) || D.text }, ...["lift", "replant", "mulch"].map(k => (w && w[k]) || D[k] ? { [k]: (w && w[k]) || D[k] } : {}));
+};
+window.isTender = p => { const w = window.winterCare(p); return !!(w && w.status === "tender"); };
+
 // "Toxic to people, dogs and cats" style label, or "" for plants believed non-toxic
 window.toxLabel = p => { if (!p.toxic || !p.toxic.length) return ""; const t = p.toxic.slice(); const last = t.pop(); return "Toxic to " + (t.length ? t.join(", ") + " and " + last : last); };
 

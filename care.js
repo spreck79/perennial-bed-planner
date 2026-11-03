@@ -122,6 +122,19 @@
         out.prep = W(4.0, 4.45, PREP_EARLY, "Early Apr: pull mulch off the crown");
         out.cut = W(4.55, 5.5, SPRING_CUT, "Mid-Apr to mid-May: cut to 8 to 24 in");
     }
+    const wc = window.winterCare ? window.winterCare(p) : null;     // dig up / replant / winter mulch for plants not fully hardy here
+    if (wc) {
+      out.winter = wc;
+      if (wc.lift) out.lift = W(wc.lift[0], wc.lift[1], wc.text, wc.how === "pot" ? "Before frost: bring the pot indoors" : "After first frost: dig up and store");
+      if (wc.replant) out.replant = W(wc.replant[0], wc.replant[1], wc.text, wc.how === "annual" ? "After last frost: plant a new one" : "After last frost: replant");
+      if (wc.mulch) out.mulch = W(wc.mulch[0], wc.mulch[1], wc.text, "When the ground freezes: mulch the crown");
+      if (wc.status === "tender") {      // it comes out of the ground (or is replaced) each fall, so no spring cleanup or fall planting
+        delete out.prep;
+        const at = wc.lift || [10.45, 11.0];
+        out.cut = wc.how === "annual" ? W(10.45, 11.0, "After frost kills the top, pull it out (it won't come back).", "After frost: pull it out")
+                : W(at[0], at[1], "Cut the stems down to a few inches when you dig it up or bring it in.", "Cut stems when you dig it up");
+      }
+    }
     if (TRIM.includes(p.id) && p.bloom) {
       const long = p.bloom[1] - p.bloom[0] > 2.2, a = long ? p.bloom[0] + 1.3 : p.bloom[1], b = a + 0.45;
       out.trim = W(a, Math.min(11.9, b), long ? "Optional: if it gets floppy or flowering slows in midsummer, shear it back by about half for fresh growth and more flowers." : "Optional: once the first flowers fade, shear the old stems back to the new leaves at the base. Many rebloom in 5 to 6 weeks.", long ? "Optional: shear by half in midsummer" : "Optional: shear after first flowers");
@@ -130,15 +143,21 @@
   }
 
   // whole-garden calendar (two lanes)
-  function gardenTasks() {
-    return [
+  function gardenTasks(plants) {
+    const tender = (plants || []).filter(p => window.isTender && window.isTender(p));
+    const dig = tender.filter(p => window.winterCare(p).lift), edge = (plants || []).filter(p => { const w = window.winterCare && window.winterCare(p); return w && w.status === "edge"; });
+    const extra = [];
+    if (dig.length) extra.push({ lane: 2, k: "lift", a: 10.35, b: 11.1, label: "Dig up", text: "After the first frost (usually mid to late October): dig up, dry and store " + dig.map(p => p.name).join(", ") + " somewhere cool and frost-free. Replant after the last frost in May." });
+    if (tender.length) extra.push({ lane: 2, k: "replant", a: 5.3, b: 6.05, label: "Replant", text: "After the last frost (usually mid to late May): plant " + tender.map(p => p.name).join(", ") + " back out." });
+    if (edge.length) extra.push({ lane: 2, k: "mulch", a: 11.35, b: 12.0, label: "Mulch tender crowns", text: "Before the ground freezes: mulch the crowns of " + edge.map(p => p.name).join(", ") + ", which are hardy only to zone 6B." });
+    return extra.concat([
       { lane: 0, k: "prep", a: 4.0, b: 5.5, label: "Spring prep", text: "Early April: pull winter mulch off the crowns as the top layer thaws, and cut back any evergreen or early-growing plants before new growth starts (check each plant's own entry below for which ones). Mid-April to mid-May, once days stay around 50°F: cut the rest of last year's stems to 8 to 24 in. Waiting lets bees and butterflies that spent the winter in the stems and leaves get out first. Don't work the soil while it is wet." },
       { lane: 1, k: "divide", a: 4.3, b: 5.6, label: "Divide", text: "Divide summer- and fall-blooming plants as their shoots come up, if a clump is crowded or dying in the middle." },
       { lane: 1, k: "divide", a: 8.6, b: 9.7, label: "Divide", text: "Late August to September: divide spring-blooming plants, giving them 4 to 6 weeks to root before the ground freezes. Check each plant's own entry below for whether and when it actually needs dividing." },
       { lane: 1, k: "bulbs", a: 9.8, b: 10.95, label: "Plant bulbs", text: "October: plant spring bulbs if you want early color, 6 to 8 in deep in clumps of 5 to 8." },
       { lane: 0, k: "cut", a: 10.15, b: 11.35, label: "Fall cleanup", text: "After a few hard frosts (usually late October to November): cut back any plants prone to leaf blight, mushy foliage or overwintering pests, and bag their leaves instead of composting (check each plant's own entry below for which ones). Leave the rest standing: seed heads feed goldfinches and other birds, and hollow stems shelter overwintering insects. Leave fallen leaves around the plants too." },
       { lane: 0, k: "mulch", a: 11.35, b: 12.0, label: "Mulch", text: "Once the ground freezes (usually late November): add about 4 in of shredded leaves or straw over the crowns of new or less hardy plants. Mulching earlier can delay dormancy." }
-    ];
+    ]);
   }
 
   window.Care = { careFor, gardenTasks };
