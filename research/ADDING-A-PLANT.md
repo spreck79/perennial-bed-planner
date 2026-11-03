@@ -4,22 +4,22 @@ Follow these steps in order, every time, so each plant is researched, pictured a
 Run the commands from inside this `research` folder. You need Python 3 (with Pillow: `pip install pillow`)
 and Node.js.
 
-## 0. Gather the research (the quick way)
-Use the separate research program, [perennial-bed-planner-research](https://github.com/spreck79/perennial-bed-planner-research).
-Download it into a folder next to this website folder (`perennial-bed-planner-research`), list the plants in a
-text file, one per line (botanical name, then `|` and the common name if you like), and run, from that folder:
+## The quick way: Plant Research + add_plants.py (use this)
+1. Adam runs **Plant Research** ([perennial-bed-planner-research](https://github.com/spreck79/perennial-bed-planner-research)):
+   types the plants, presses Start, picks each plant's photo with **Choose photos…**, then **Make zip for Claude**.
+2. With the zip, run from this folder:
 
-    python gather_plants.py new-plants.txt
+        python add_plants.py plant-research-<date>.zip
 
-It needs only Python 3, takes a few seconds per plant, and fills its `inbox` folder with:
-- `report.md`: what each source says (height, spread, bloom, sun, water, Rutgers deer rating, ASPCA dogs and cats,
-  Michigan native lists), a draft plants.js entry, and what's still missing
-- `<id>/photo-1.jpg` to `photo-3.jpg`: free-licensed Commons photos, with their credits in the report
-- `<id>/pages/`: the text of every source page it read, with the link, so the facts can be checked without the web
+   It adds every prepared plant: the plant entry in plants.js, the photo (photos/<id>.js and the preview in images.js),
+   the credit in credits.js, the native / garden-favorite source in sources.js and the care group in care.js. Then it
+   rebuilds companions.js and research-notes.md and runs check_plants.py.
+3. It skips (and says why) any plant already in the planner, any plant **not hardy in zone 6B**, and any plant with no
+   Michigan native or garden-center source. `--force` adds those last two anyway.
+4. Open index.html, add a new plant to a bed and check its card, photo and the PDF. Companion pairings can be added later
+   (step 5 below); the checker lists plants with none under TO DO.
 
-Zip the `inbox` folder and give it to Claude with the plants you want added; Claude checks the facts against
-the saved pages and does steps 1 to 8. If a site couldn't be reached, the report says so and that part is
-researched by hand.
+The steps below are the same work done by hand, for anything the quick way can't do.
 
 ## 1. Check it belongs
 - It is a **perennial (or spring bulb) that grows in Michigan zone 6B**.
