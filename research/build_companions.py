@@ -10,6 +10,7 @@ def title(u, about=None):
     if "perennials.com" in u: return f"Perennials.com: {n} profile"
     if "missouribotanicalgarden.org" in u: return f"Missouri Botanical Garden Plant Finder: {n}"
     if "plants.ces.ncsu.edu" in u: return f"NC State Extension Plant Toolbox: {n}"
+    if "longfield-gardens.com" in u: return f"Longfield Gardens (bulb company, New Jersey): what to plant with {n.lower() + 's' if n else 'it'}"
     return u
 def _old_title(u):
     if "hort.extension.wisc.edu" in u:

@@ -28,7 +28,9 @@ and Node.js.
 
 Where Plant Research finds good neighbors: the plant's Missouri Botanical Garden and NC State pages, Wisconsin
 Horticulture (UW–Madison Extension) and Mt. Cuba Center articles (the plant's own, and articles about website plants
-that name it), and Perennials.com. A pairing counts only when a source sentence names both plants together
+that name it), and Perennials.com. Only when none of those pairs it (tender plants such as dahlias), a garden
+company's companion guide (Longfield Gardens, a bulb company), where every website plant named in the article counts
+except ones it warns against. A pairing counts only when a source sentence names both plants together
 ("combines well with ..."), and only partners already on the website are kept. A group word ("grasses", "salvias")
 keeps only the members that grow in the plant's main light.
 
