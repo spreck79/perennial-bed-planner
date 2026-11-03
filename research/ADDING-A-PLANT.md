@@ -12,16 +12,25 @@ and Node.js.
         python add_plants.py plant-research-<date>.zip
 
    It adds every prepared plant: the plant entry in plants.js, the photo (photos/<id>.js and the preview in images.js),
-   the credit in credits.js, the native / garden-favorite source in sources.js and the care group in care.js. Then it
-   rebuilds companions.js and research-notes.md and runs check_plants.py.
-3. It skips (and says why) any plant already in the planner, any plant **not hardy in zone 6B**, and any plant with no
-   Michigan native or garden-center source. `--force` adds those last two anyway.
+   the credit in credits.js, the native / garden-favorite source in sources.js, the care group in care.js and its
+   good neighbors in pairs_log.py. Then it rebuilds companions.js and research-notes.md and runs check_plants.py.
+3. Plant Research researches everything the website shows, so nothing goes on with a gap. A plant it couldn't finish
+   is marked **NOT READY** with what's missing (for example "good neighbors" when no source names a partner that's
+   on the website), and add_plants.py skips it. It also skips (and says why) any plant already in the planner, any plant
+   **not hardy in zone 6B** without winter care, and any plant with no Michigan native or garden-center source.
+   `--force` adds them anyway.
 4. Open index.html, add a new plant to a bed and check its card, photo and the PDF.
 5. **Plants already on the website** get hardiness zones and winter care the same way: in Plant Research, "On the website"
    tab, **Update all** (or select plants and **Update selected**), then **Make update zip for Claude**, and run
-   `python add_plants.py plant-updates-<date>.zip --update`. Only `zones` and `winter` are added; differences between the
-   sources and the website are listed, not changed. Companion pairings can be added later
-   (step 5 below); the checker lists plants with none under TO DO.
+   `python add_plants.py plant-updates-<date>.zip --update`. Besides `zones` and `winter`, an update fills in a deer
+   rating or good neighbors only where the website has none. Differences between the sources and the website are
+   listed, not changed.
+
+Where Plant Research finds good neighbors: the plant's Missouri Botanical Garden and NC State pages, Wisconsin
+Horticulture (UW–Madison Extension) and Mt. Cuba Center articles (the plant's own, and articles about website plants
+that name it), and Perennials.com. A pairing counts only when a source sentence names both plants together
+("combines well with ..."), and only partners already on the website are kept. A group word ("grasses", "salvias")
+keeps only the members that grow in the plant's main light.
 
 The steps below are the same work done by hand, for anything the quick way can't do.
 

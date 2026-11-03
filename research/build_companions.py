@@ -8,6 +8,8 @@ def title(u, about=None):
     if "waltersgardens.com" in u: return f"Walters Gardens, Zeeland, Michigan: {n} companions" if "photo_essay" not in u else "Walters Gardens, Zeeland, Michigan: Plants to Pair with Hostas"
     if "mtcubacenter.org" in u: return f"Mt. Cuba Center: {n}"
     if "perennials.com" in u: return f"Perennials.com: {n} profile"
+    if "missouribotanicalgarden.org" in u: return f"Missouri Botanical Garden Plant Finder: {n}"
+    if "plants.ces.ncsu.edu" in u: return f"NC State Extension Plant Toolbox: {n}"
     return u
 def _old_title(u):
     if "hort.extension.wisc.edu" in u:

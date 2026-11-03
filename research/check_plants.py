@@ -7,7 +7,7 @@
 It loads the planner's own data files (plants.js, images.js, the photos folder, credits.js, companions.js,
 sources.js and care.js) and reports:
   PROBLEMS  things that would break or mislead in the planner (missing fields, no photo, no credit, ...)
-  TO DO     things that are allowed but should be finished (no researched companions yet, no native/garden check, ...)
+  TO DO     things that are allowed but should be finished (no native/garden check, ...)
 It exits with an error code when there are problems, so nothing half-done gets published by accident.
 Needs Node.js (the same as build_companions.py and make_notes.py).
 """
@@ -114,7 +114,7 @@ def main():
         if cr and pid in d["credits"] and cr.get("lic") and d["credits"][pid].get("lic") and cr["lic"].split()[0:2] != d["credits"][pid]["lic"].split()[0:2]:
             T(f"the license in plants.js ({cr['lic']}) differs from credits.js ({d['credits'][pid]['lic']})")
         if pid not in d["comps"]: P("not in companions.js: add its pairings to pairs_log.py and run build_companions.py")
-        elif not d["comps"][pid]: G("No researched companion pairings yet (add them to pairs_log.py, then run build_companions.py)", name)
+        elif not d["comps"][pid]: P("no good neighbors: every plant needs at least one pairing from a source (Plant Research finds them; they go in pairs_log.py)")
         if pid not in in_status: G("Native / garden-favorite check not recorded in sources.js (add the plant to the source it was checked against)", name)
         if f'"{pid}"' not in care and details: G("Standard spring cleanup (not named in care.js; add it there only if it needs fall cutting or other special care)", name)
     for pid in d["photos"]:

@@ -3,22 +3,26 @@
 
   python add_plants.py plant-research-2026-11-02.zip          add every plant in the zip
   python add_plants.py plant-research-2026-11-02.zip dahlia   only the plants named (by id)
-  python add_plants.py <zip> --force                          also add plants flagged as not hardy in zone 6B,
-                                                              or with no Michigan native / garden-center source
+  python add_plants.py <zip> --force                          also add plants Plant Research marked as not ready
+                                                              (something missing), not hardy in zone 6B, or with no
+                                                              Michigan native / garden-center source
   python add_plants.py plant-updates-2026-11-03.zip --update  add hardiness zones and winter care to plants already
-                                                              on the website (nothing else in their entries changes)
+                                                              on the website, and fill in a deer rating or good
+                                                              neighbors where the website has none
 
 The zip comes from Plant Research (github.com/spreck79/perennial-bed-planner-research): "Make zip for Claude".
 Each plant in it has a website/ folder with everything already prepared: the finished plants.js entry, the full-size
 photo and small preview (the photo Adam chose), the photo credit, where the native / garden-favorite check came from,
-and its care group. This script puts each piece in the right file:
+its care group and its good neighbors. A plant goes on only when Plant Research found everything (nothing missing).
+This script puts each piece in the right file:
 
   plants.js    the entry (natives and garden favorites in "Added with Plant Research", bulbs with the other bulbs)
   photos/<id>.js, images.js, credits.js   the photo, preview and credit (same sizes as make_photos.py)
   sources.js   the plant's id added to the native / garden-favorite source it was checked against
   care.js      the plant's id added to its cutting group (unless it gets the standard spring cleanup)
+  pairs_log.py its good neighbors, each with the source sentence that names the two plants together
 
-then rebuilds companions.js (new plants start with no pairings) and research-notes.md, and runs check_plants.py. A plant whose id is already in the planner is never
+then rebuilds companions.js and research-notes.md, and runs check_plants.py. A plant whose id is already in the planner is never
 overwritten. Needs Python 3 and Node.js (for the checker), the same as the other research scripts.
 """
 import json, os, re, subprocess, sys, tempfile, zipfile
@@ -120,12 +124,22 @@ def apply_updates(root):
     if not ups: sys.exit("No updates found (looking for updates/<id>.json). Is this a Plant Research update zip?")
     ids = {p["id"] for p in site_plants()}
     done, skipped, diffs = [], [], []
+    newpairs = False
     for u in sorted(ups, key=lambda u: u["name"]):
         if u["id"] not in ids: skipped.append(f"{u['name']}: not on the website"); continue
         f = {k: u["set"].get(k) for k in ("zones", "winter")}
-        if not f["zones"]: skipped.append(f"{u['name']}: no zones found"); continue
-        update_entry(u["id"], {"zones": f["zones"], "winter": f["winter"]})
-        done.append(f"{u['name']}: zones {f['zones'][0]:g} to {f['zones'][1]:g}" + (f", winter: {f['winter']['how']}" if f["winter"] else ""))
+        what = []
+        if f["zones"]:
+            update_entry(u["id"], {"zones": f["zones"], "winter": f["winter"]})
+            what.append(f"zones {f['zones'][0]:g} to {f['zones'][1]:g}" + (f", winter: {f['winter']['how']}" if f["winter"] else ""))
+        cur = next((p for p in site_plants() if p["id"] == u["id"]), {})
+        if u["set"].get("deer") and not cur.get("deer"):
+            update_entry(u["id"], {"deer": u["set"]["deer"]}); what.append(f"deer rating {u['set']['deer']}")
+        pairs = [pr for pr in u.get("pairs") or [] if pr["about"] in ids and all(i in ids for i in pr["partners"])]
+        if pairs and not has_pairs(u["id"]):
+            what.append(f"good neighbors ({add_pairs(pairs)} source sentences)"); newpairs = True
+        if not what: skipped.append(f"{u['name']}: nothing new found"); continue
+        done.append(f"{u['name']}: " + "; ".join(what))
         for k, v in (u.get("differences") or {}).items(): diffs.append(f"{u['name']} {k}: website {v['website']}, sources {v['sources']}")
     for x in done: print("UPDATED", x)
     for x in skipped: print("SKIPPED", x)
@@ -133,8 +147,15 @@ def apply_updates(root):
         print(f"\n{len(diffs)} differences between the website and the sources (not changed; look them over):")
         for x in diffs: print("  -", x)
     if done:
+        if newpairs: subprocess.run([sys.executable, os.path.join(HERE, "build_companions.py")], cwd=HERE)
         print(); r = subprocess.run([sys.executable, os.path.join(HERE, "check_plants.py")], cwd=HERE)
         if r.returncode: sys.exit(r.returncode)
+
+def has_pairs(pid):
+    """Does the plant already have good neighbors on the website?"""
+    m = re.search(r"window\.COMPANIONS = (\{.*\});", rd("companions.js"), re.S)
+    try: return bool(json.loads(m.group(1)).get(pid)) if m else False
+    except ValueError: return False
 
 def unique_code(code, name, taken):
     if code and code.lower() not in taken and check_plants.code_fits(code, name): return code
@@ -198,6 +219,19 @@ def add_care(pid, group):
     t = t[:m.start(2)] + (inner + ", " if inner else "") + json.dumps(pid) + t[m.end(2):]
     wr("care.js", t)
 
+PAIRS_MARK = "# ---- Added with Plant Research: each line is a source sentence naming the two plants together"
+
+def add_pairs(pairs):
+    """Append good-neighbor pairings to pairs_log.py (skipping any already there)."""
+    if not pairs: return 0
+    t = rd(os.path.join("research", "pairs_log.py")); n = 0
+    if PAIRS_MARK not in t: t = t.rstrip("\n") + "\n" + PAIRS_MARK + "\n"
+    for pr in pairs:
+        line = f"add({json.dumps(pr['about'])}, {json.dumps(pr['partners'])}, {json.dumps(pr['url'])}, {json.dumps(pr['note'], ensure_ascii=False)})"
+        if line not in t: t = t.rstrip("\n") + "\n" + line + "\n"; n += 1
+    wr(os.path.join("research", "pairs_log.py"), t)
+    return n
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]; force = "--force" in sys.argv
     if not args: print(__doc__); return
@@ -223,6 +257,8 @@ def main():
         if pid in ids: why.append(f"the id '{pid}' is already in the planner")
         if check_plants_norm(e.get("latin", "")) in latins: why.append(f"already in the planner as {latins[check_plants_norm(e['latin'])]}")
         if not force:
+            if "incomplete" not in pkg: why.append("made by an older Plant Research that didn't check everything: research it again (use --force to add anyway)")
+            elif pkg["incomplete"]: why.append("not ready, still missing: " + ", ".join(pkg["incomplete"]) + " (use --force to add anyway)")
             if any("NOT hardy" in w for w in pkg.get("warn", [])) and not e.get("winter"): why.append("not hardy in Michigan zone 6B and no winter care given (use --force to add anyway)")
             if not pkg.get("status"): why.append("no Michigan native or garden-center source (use --force to add anyway)")
         if not os.path.exists(os.path.join(d, "photo-full.txt")): why.append("no prepared photo in the zip")
@@ -233,11 +269,12 @@ def main():
         add_photo(pid, open(os.path.join(d, "photo-full.txt")).read().strip(), open(os.path.join(d, "photo-preview.txt")).read().strip(), pkg.get("credit"))
         if pkg.get("status"): add_status(pid, pkg["status"])
         add_care(pid, pkg.get("care"))
+        add_pairs([pr for pr in pkg.get("pairs") or [] if pr["about"] in ids | {pid} and all(i in ids | {pid} for i in pr["partners"])])
         ids.add(pid); codes.add(e["code"].lower()); added.append((name, pid, e["code"]))
     for name, why in skipped: print(f"SKIPPED {name}: " + "; ".join(why))
     for name, pid, code in added: print(f"ADDED   {name} (id {pid}, code {code})")
     if added:
-        subprocess.run([sys.executable, os.path.join(HERE, "build_companions.py")], cwd=HERE)   # lists the new plants (no pairings yet)
+        subprocess.run([sys.executable, os.path.join(HERE, "build_companions.py")], cwd=HERE)   # the new plants' good neighbors
         subprocess.run([sys.executable, os.path.join(HERE, "make_notes.py")], cwd=HERE)
         print()
         r = subprocess.run([sys.executable, os.path.join(HERE, "check_plants.py")], cwd=HERE)
