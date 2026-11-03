@@ -258,6 +258,9 @@ Each entry: the plant the source is about, what the source says, the partners in
 - **Ray Wiegand's Nursery: Ice Dance Sedge** (garden-center check) – Sold at Wiegand's.  
   Plants: Morrow's Sedge  
   http://plants.wiegandsnursery.com/12150006/Plant/3385/Ice_Dance_Sedge/
+- **English Gardens (Michigan garden center) plant finder: Dalina Midi Fiji Dahlia** (garden-center check) – Sold at a Michigan garden center; checked by Plant Research.  
+  Plants: Dahlia  
+  https://plants.englishgardens.com/12150001/Plant/24395/Dalina_Midi_Fiji_Dahlia
 - **English Gardens (Detroit-area garden centers): Fall is for planting** (garden-center check) – Michigan garden center; names tulips and daffodils among the fall bulbs to plant.  
   Plants: Daffodil, Darwin Hybrid Tulip  
   https://www.englishgardens.com/fall-is-for-planting/
@@ -270,7 +273,7 @@ Each entry: the plant the source is about, what the source says, the partners in
 
 ## Still to research
 
-No published companion pairing found yet for: .
+No published companion pairing found yet for: Dahlia.
 
 ## Deer ratings (added October 2026)
 Source: Rutgers NJAES "Landscape Plants Rated by Deer Resistance" (https://extension.rutgers.edu/deer-resistant-plants). A = rarely damaged, B = seldom severely damaged, C = occasionally severely damaged, D = frequently severely damaged. Plants rated C or D get the antler icon and the "Also show plants deer like to eat" option.

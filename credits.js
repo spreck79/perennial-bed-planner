@@ -551,5 +551,11 @@ window.CREDITS = {
   "by": "David J. Stang",
   "lic": "CC BY-SA 4.0",
   "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+ },
+ "dahlia": {
+  "file": "00 0804 Großfiedrige Dahlie (Dahlia pinnata).jpg",
+  "by": "W. Bulach",
+  "lic": "CC BY-SA 4.0",
+  "licUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  }
 };

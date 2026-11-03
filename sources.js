@@ -35,7 +35,9 @@ window.STATUS_SOURCES = [
   { title: "Ray Wiegand's Nursery (Macomb, Michigan): Masterwort", url: "http://plants.wiegandsnursery.com/12150006/Plant/23731/Star_Of_Billion_Masterwort/", kind: "garden", note: "Sold at Wiegand's.", plants: ["astrantia"] },
   { title: "Ray Wiegand's Nursery: Bigroot Geranium", url: "http://plants.wiegandsnursery.com/12150006/Plant/6460/Bevans_Variety_Cranesbill", kind: "garden", note: "Sold at Wiegand's.", plants: ["bigroot"] },
   { title: "Ray Wiegand's Nursery: Autumn Fern", url: "http://plants.wiegandsnursery.com/12150006/Plant/3498/Autumn_Fern/", kind: "garden", note: "Sold at Wiegand's.", plants: ["autumn"] },
-  { title: "Ray Wiegand's Nursery: Ice Dance Sedge", url: "http://plants.wiegandsnursery.com/12150006/Plant/3385/Ice_Dance_Sedge/", kind: "garden", note: "Sold at Wiegand's.", plants: ["morrows"] }
+  { title: "Ray Wiegand's Nursery: Ice Dance Sedge", url: "http://plants.wiegandsnursery.com/12150006/Plant/3385/Ice_Dance_Sedge/", kind: "garden", note: "Sold at Wiegand's.", plants: ["morrows"] },
+  { title: "English Gardens (Michigan garden center) plant finder: Dalina Midi Fiji Dahlia", url: "https://plants.englishgardens.com/12150001/Plant/24395/Dalina_Midi_Fiji_Dahlia", kind: "garden",
+    note: "Sold at a Michigan garden center; checked by Plant Research.", plants: ["dahlia"] }
 ];
 
 // Spring bulbs: garden favorites checked against Michigan garden centers (October 2026).

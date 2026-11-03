@@ -460,6 +460,14 @@ window.PLANTS = [
     light: "Part shade to shade; sheltered from wind", moisture: "Moist to wet", sun: ["part", "shade"], toxic: ["people", "dogs", "cats"], toxSrc: "Contains pyrrolizidine alkaloids (general references; not on the ASPCA list)",
     notes: "Bold leaves and tall yellow spires for a damp, shady back row. Wilts in afternoon sun or dry soil, so keep it moist.",
     credit: { file: "Ligularia_stenocephala_Little_Lantern_1zz.jpg", by: "David J. Stang", lic: "CC BY-SA 4.0" } },
+  // ---------------- Added with Plant Research ----------------
+  { id: "dahlia", deer: "C", code: "Dahl", name: "Dahlia", latin: "Dahlia pinnata", native: false, kind: "clump", fam: "daisy", zones: [7, 10.5],
+    hLo: 12, hHi: 72, spacing: 24, bloom: [6, 10.5], color: "Many colors (red shown)", hex: "#CC3D3F", txt: "#FFFFFF",
+    light: "Sun to part shade; rich, moist, well-drained soil", sun: ["full", "part"], moisture: "Average to moist",
+    notes: "Big, showy flowers from midsummer until frost, in almost every color, and great for cutting. Not winter-hardy here: dig the tubers after the first frost and replant them in May.",
+    toxic: ["people", "dogs", "cats"], toxSrc: "ASPCA lists it as toxic to dogs and cats; NC State notes low-severity poison",
+    winter: { how: "dig" },
+    credit: { file: "00_0804_Großfiedrige_Dahlie_(Dahlia_pinnata).jpg", by: "W. Bulach", lic: "CC BY-SA 4.0" } },
   // ---------------- Spring bulbs (garden favorites) ----------------
   // Each spot on the plan is one clump of bulbs planted together in fall.
   { id: "daffodil", zones: [3, 8.5], deer: "A", dormant: true, clump: 6, code: "Daff", name: "Daffodil", latin: "Narcissus, garden hybrids", native: false, kind: "bulb",
