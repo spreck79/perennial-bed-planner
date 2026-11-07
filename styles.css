@@ -939,5 +939,5 @@ body.planner input, body.planner textarea, body.planner select { -webkit-user-se
 
 
 /* the page background: the site's own flowering-plant photos blended together and softly blurred (credited on credits.html), behind every card */
-body { background: url(img/site-bg.jpg) center / cover fixed, var(--cream); }
-@media (max-width: 1050px) { body { background-attachment: scroll; background-size: 100% auto; background-repeat: repeat-y; } }
+body { background: linear-gradient(rgba(246,243,234,.35), rgba(246,243,234,.35)) fixed, url(img/site-bg.jpg) center / cover fixed, var(--cream); }   /* a light cream wash over the blurred flowers */
+@media (max-width: 1050px) { body { background-attachment: scroll; background-size: auto, 100% auto; background-repeat: no-repeat, repeat-y; } }
