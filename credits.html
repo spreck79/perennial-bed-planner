@@ -4,16 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sources and photo credits · Perennial Bed Planner</title>
+<link rel="stylesheet" href="styles.css">
 <style>
   :root { --forest:#3F6B3A; --ink:#2E3A2C; --muted:#6F7667; --cream:#F6F3EA; --rule:#DDD7C4; --soft:#EEF0E4; }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--cream); color: var(--ink); font: 15px/1.5 "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif; }
   main { max-width: 980px; margin: 0 auto; padding: 28px 20px 60px; }
-  h1, h2 { font-family: Georgia, "Times New Roman", serif; color: var(--forest); margin: 0; }
-  h1 { font-size: 30px; } h2 { font-size: 21px; margin: 34px 0 8px; }
+  main h1, main h2 { font-family: var(--serif); font-weight: 400; letter-spacing: -.01em; color: var(--forest); margin: 0; }
+  main h1 { font-size: 30px; } main h2 { font-size: 21px; margin: 34px 0 8px; }
   p { margin: 8px 0; } .muted { color: var(--muted); }
   a { color: var(--forest); } a:hover { color: #2F5430; }
-  .back { display: inline-block; margin-bottom: 14px; font-weight: 600; text-decoration: none; }
+  .top .btn { text-decoration: none; color: var(--ink); }
   .card { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 6px 16px 14px; }
   table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
   th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding: 10px 8px 6px; border-bottom: 2px solid var(--rule); }
@@ -29,8 +30,14 @@
 </style>
 </head>
 <body>
+<header class="top">
+  <div>
+    <div class="ttl"><svg class="logo" viewBox="0 0 32 32" fill="none" stroke="#4F6B45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 29V14"/><path d="M16 18c-6 0-9-3-9-8 6 0 9 3 9 8z"/><path d="M16 14c0-5 3-8 9-8 0 5-3 8-9 8z"/></svg><h1>Perennial Bed Planner</h1><span class="beta" title="Early test version: things may still change">Beta</span></div>
+    <div class="sub">All perennials · Zone 6B · Southern Michigan</div>
+  </div>
+  <div class="actions"><a class="btn" href="index.html">← Back to the planner</a></div>
+</header>
 <main>
-  <a class="back" href="index.html">← Back to the planner</a>
   <h1>Sources and photo credits</h1>
   <p class="muted">Perennial Bed Planner (beta) · Zone 6B · Southern Michigan</p>
   <p class="muted">The planner's own text, plant notes, research and code are © 2026 <a href="https://github.com/spreck79" target="_blank" rel="noopener">spreck79</a> and shared under <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0)</a>: you may share and adapt them for non-commercial use with credit. Photos keep their own licenses, listed below. The PDF library jsPDF is MIT licensed and the DejaVu fonts have their own free license.</p>
@@ -38,6 +45,7 @@
   <h2>Photos</h2>
   <p>Every plant photo comes from <a href="https://commons.wikimedia.org/" target="_blank" rel="noopener">Wikimedia Commons</a>. Each one is shown under its own license, listed below with the photographer and a link to the original file page. The photos are cropped to a 4:3 shape and shrunk to fit this planner; nothing else was changed.</p>
   <div class="note">Pictures marked "Public domain" or "CC0" can be used by anyone. Pictures marked "CC BY" or "CC BY-SA" may be reused with credit to the photographer and a link to the license (CC BY-SA also asks that changed versions use the same license).</div>
+  <p><b>Page background:</b> the photos of the flowering plants below, blended together in different sizes and softly blurred. Each one keeps the credit and license listed in the table.</p>
   <div class="card"><table id="photos"><thead><tr><th>Plant</th><th>Photographer</th><th>License</th><th>Original photo</th></tr></thead><tbody></tbody></table></div>
 
   <h2>Pet and people safety information</h2>

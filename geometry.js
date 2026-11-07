@@ -315,9 +315,13 @@
       const pl = byId[id], ok = (lightOf && lightOf[id]) || (pl && pl.sun); if (!ok || !ok.some(z => zones.has(z))) return 0;
       const z = bed.lightAt(x, y); return z && !ok.includes(z) ? 1 : 0;
     }
+    // the depth (front 0 .. back 1) a plant should sit at, at this spot: when the bed has sun zones, plants are
+    // ranked by height within the zone and spread over that zone's own front-to-back range
+    function tg(id, x, y, t) { return bed.targetAt ? bed.targetAt(id, x, y, t) : t; }
     function valid(id, x, y, factor) {
       const r = spFt(byId[id]) / 2;
       if (!pip(bed.poly, x, y)) return false;
+      if (lightPen(id, x, y)) return false;   // painted sun zones are a rule, not a wish: a plant only goes where the light suits it
       if (edgeDist(bed.poly, x, y) < r * 0.75) return false;
       for (let i = 0; i < blocks.length; i++) if (objDist(blocks[i], x, y) < r * 0.7) return false;
       for (let i = 0; i < placed.length; i++) {
@@ -335,7 +339,7 @@
         for (let i = 0; i < 260; i++) {
           const [x, y] = randPoint();
           if (!valid(id, x, y, factor)) continue;
-          let s = Math.abs(bed.depth(x, y) - target) * 3 + rng() * 0.4 + lightPen(id, x, y) * 8;
+          let s = Math.abs(bed.depth(x, y) - tg(id, x, y, target)) * 3 + rng() * 0.4 + lightPen(id, x, y) * 8;
           anchorsSame.forEach(a => { s -= Math.min(Math.hypot(a[0] - x, a[1] - y), 7) * 0.12; });
           if (s < bs) { bs = s; best = [x, y]; }
         }
@@ -345,7 +349,7 @@
       let bestG = null, bsG = 1e9;
       for (let y = bb.y0; y <= bb.y0 + bb.h; y += 0.2) for (let x = bb.x0; x <= bb.x0 + bb.w; x += 0.2) {
         if (!valid(id, x, y, 0.78)) continue;
-        let s = Math.abs(bed.depth(x, y) - target) * 3 + rng() * 0.4 + lightPen(id, x, y) * 8;
+        let s = Math.abs(bed.depth(x, y) - tg(id, x, y, target)) * 3 + rng() * 0.4 + lightPen(id, x, y) * 8;
         anchorsSame.forEach(a => { s -= Math.min(Math.hypot(a[0] - x, a[1] - y), 7) * 0.12; });
         if (s < bsG) { bsG = s; bestG = [x, y]; }
       }
@@ -359,7 +363,7 @@
           const a = rng() * TAU, rr = i === 0 ? 0 : Math.abs(gauss(rng)) * 0.45 * s;
           const x = tx + Math.cos(a) * rr, y = ty + Math.sin(a) * rr;
           if (!valid(id, x, y, factor)) continue;
-          const sc = Math.hypot(x - tx, y - ty) + Math.abs(bed.depth(x, y) - target) * 1.2 * s + lightPen(id, x, y) * 6 * s;
+          const sc = Math.hypot(x - tx, y - ty) + Math.abs(bed.depth(x, y) - tg(id, x, y, target)) * 1.2 * s + lightPen(id, x, y) * 6 * s;
           if (sc < bs) { bs = sc; best = [x, y]; }
         }
         if (best && !lightPen(id, best[0], best[1])) return best;
@@ -368,7 +372,7 @@
       // only wrong-light spots nearby: let the caller look across the whole bed instead (when sun zones are painted)
       return zones ? null : wrongLight;
     }
-    return { valid, randPoint, pickAnchor, placeNear, lightPen };
+    return { valid, randPoint, pickAnchor, placeNear, lightPen, tg };
   }
   function gauss(rng) { return Math.sqrt(-2 * Math.log(rng() + 1e-9)) * Math.cos(TAU * rng()); }
 
@@ -449,7 +453,7 @@
       for (let i = 0; i < 400; i++) {
         const [x, y] = eng.randPoint();
         if (!eng.valid(id, x, y, factor)) continue;
-        let s = Math.abs(bed.depth(x, y) - target) * 3 + rng() * 0.3 + eng.lightPen(id, x, y) * 8;
+        let s = Math.abs(bed.depth(x, y) - eng.tg(id, x, y, target)) * 3 + rng() * 0.3 + eng.lightPen(id, x, y) * 8;
         if (same.length) { const d = Math.min(...same.map(q => Math.hypot(q.x - x, q.y - y))); s += Math.min(d, 6) * 0.35; }
         if (s < bs) { bs = s; best = [x, y]; }
       }

@@ -200,7 +200,7 @@ function page(p) {
 <body>
 <header class="top">
   <div>
-    <div class="ttl"><h1>Perennial Bed Planner</h1><span class="beta" title="Early test version: things may still change">Beta</span></div>
+    <div class="ttl"><svg class="logo" viewBox="0 0 32 32" fill="none" stroke="#4F6B45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 29V14"/><path d="M16 18c-6 0-9-3-9-8 6 0 9 3 9 8z"/><path d="M16 14c0-5 3-8 9-8 0 5-3 8-9 8z"/></svg><h1>Perennial Bed Planner</h1><span class="beta" title="Early test version: things may still change">Beta</span></div>
     <div class="sub">All perennials · Zone 6B · Southern Michigan</div>
   </div>
   <div class="actions"><button class="btn primary" type="button" id="btnPdf">Print this plant</button><a class="btn back" href="../index.html">← Back to the planner</a></div>

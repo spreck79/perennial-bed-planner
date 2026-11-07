@@ -135,6 +135,18 @@
                 : W(at[0], at[1], "Cut the stems down to a few inches when you dig it up or bring it in.", "Cut stems when you dig it up");
       }
     }
+    // when to divide this plant (its own window, not a whole-garden one); none for plants that shouldn't be divided
+    if (!(wc && wc.status === "tender")) {
+      const id = p.id, k = catOf[id];
+      let dw = null;
+      if (id === "baptisia" || id === "butterflyweed" || k === "bulb") dw = null;
+      else if (id === "peony" || id === "siberianiris") dw = [8.6, 9.7];
+      else if (id === "iris") dw = [7.6, 8.3];
+      else if (id === "hosta") dw = [4.3, 4.75];
+      else if (k === "grass" || k === "sedge" || k === "fern" || k === "evfern" || !p.bloom || p.bloom[0] >= 6) dw = [4.3, 5.0];
+      else dw = [8.6, 9.7];
+      if (dw) out.divideW = W(dw[0], dw[1], out.divide, out.divideShort);
+    }
     if (TRIM.includes(p.id) && p.bloom) {
       const long = p.bloom[1] - p.bloom[0] > 2.2, a = long ? p.bloom[0] + 1.3 : p.bloom[1], b = a + 0.45;
       out.trim = W(a, Math.min(11.9, b), long ? "Optional: if it gets floppy or flowering slows in midsummer, shear it back by about half for fresh growth and more flowers." : "Optional: once the first flowers fade, shear the old stems back to the new leaves at the base. Many rebloom in 5 to 6 weeks.", long ? "Optional: shear by half in midsummer" : "Optional: shear after first flowers");

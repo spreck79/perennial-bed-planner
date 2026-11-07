@@ -2,13 +2,14 @@
   --forest: #3F6B3A; --forest-d: #2F5430; --leaf: #5E8F4E; --ink: #2E3A2C; --muted: #6F7667;
   --cream: #F6F3EA; --card: #FFFFFF; --rule: #DDD7C4; --soft: #EEF0E4; --berry: #A8578A; --warn: #C2543A;
   --shadow: 0 1px 2px rgba(46,58,44,.06), 0 6px 18px rgba(46,58,44,.06);
-  --serif: Georgia, "Times New Roman", serif; --sans: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; --sans: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--cream); color: var(--ink); font: 14px/1.45 var(--sans); }
 button { font: inherit; cursor: pointer; }
-h1, h2, h3 { font-family: var(--serif); color: var(--forest); margin: 0; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -.01em; color: var(--forest); margin: 0; }
+.top .logo { width: 28px; height: 28px; flex: none; }
 
 .top { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
   padding: 10px max(20px, calc((100% - 1700px) / 2 + 20px)); background: rgba(246,243,234,.95); backdrop-filter: blur(6px); border-bottom: 1px solid var(--rule); }
@@ -304,7 +305,7 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 .fillpick .fp-hint { display: block; font-size: 11.5px; color: #5E7A52; font-weight: 400; margin-top: 2px; }
 .fillpick .po-acts .btn { font-weight: 600; }
 
-.sitefoot { max-width: 1400px; margin: 10px auto 0; padding: 18px 20px 30px; display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; border-top: 1px solid var(--rule); color: var(--muted); font-size: 12.5px; }
+.sitefoot { margin: 24px 0 0; padding: 14px max(20px, calc((100% - 1700px) / 2 + 20px)); display: flex; gap: 16px; flex-wrap: wrap; align-items: center; justify-content: space-between; background: rgba(246,243,234,.95); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border-top: 1px solid var(--rule); color: var(--muted); font-size: 12.5px; }   /* a bar like the top bar, so it reads over the flower background */
 .sitefoot a { color: var(--forest); font-weight: 600; }
 @media print { .sitefoot { display: none; } }
 .fillpick .fp-desc { flex-basis: 100%; font-size: 13px; color: #2E3A2C; }
@@ -429,7 +430,7 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 .cpill.big i { width: 11px; height: 11px; font-size: 10px; }
 .cpill.big i svg { width: 11px; height: 11px; }
 .cpill.big b { font-weight: 700; overflow: hidden; text-overflow: ellipsis; }
-.gcare { display: grid; grid-template-columns: var(--label) 1fr; align-items: center; border-bottom: 2px solid #e4dcc4; padding: 4px 0 6px; margin-bottom: 2px; }
+.gcare { border-bottom: 2px solid #e4dcc4; padding: 0 0 8px; margin-bottom: 2px; }
 .gc-lab { padding: 0 6px; font-size: 12.5px; line-height: 1.2; }
 .gc-lab small { display: block; color: var(--muted); font-size: 10.5px; }
 .gc-track { background-image: linear-gradient(to right, #ece7d4 1px, transparent 1px); background-size: 12.5% 100%; border-right: 1px solid #ece7d4; }
@@ -447,8 +448,8 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 .cpill.big.k-mulch { justify-content: center; padding: 0 3px; }
 
 /* bloom bars: nearly full row height, care marks centered on the same line */
-.brow .track { height: 34px; }
-.brow .bar { top: 4px; height: 26px; border-radius: 13px; }
+.brow .track { height: 38px; }
+.brow .bar { top: 4px; height: 30px; border-radius: 15px; }
 .brow .cpill { top: 11.5px; height: 11px; box-shadow: 0 0 0 1px #fff; }
 
 #shop tr[data-id] { cursor: pointer; }
@@ -683,6 +684,10 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 .libtab:hover { background: #F7F7F0; }
 .libtab.on { background: #EAF2DF; color: var(--forest-d); }
 .libtab.on span { background: var(--forest); color: #fff; }
+.qrow { flex-wrap: nowrap; }
+.qrow #q { flex: 1; min-width: 0; }
+.qrow #fReset { flex: none; white-space: nowrap; }
+#fReset:disabled { opacity: .45; cursor: default; }
 .libsort { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); font-weight: 600; }
 .libsort .selbtn { width: auto; }
 .libsort .libn { margin-left: auto; font-weight: 500; }
@@ -731,11 +736,11 @@ body.touring .toast { z-index: 60; }
 .step .steptog { background: none; border: 0; padding: 2px 0; color: var(--forest); font-size: 12px; font-weight: 700; text-decoration: underline; cursor: pointer; white-space: nowrap; }
 .step .stepsum { display: none; font-size: 12.5px; color: var(--muted); margin: 4px 0 0 27px; line-height: 1.45; cursor: pointer; }
 .step .stepsum b { color: var(--ink); font-weight: 700; }
-.step.done:not(.open) { padding-top: 12px; padding-bottom: 12px; }
-.step.done:not(.open) .stephead { cursor: pointer; }
-.step.done:not(.open) .stepbody { display: none; }
-.step.done:not(.open) .stepsum { display: block; }
-.step.done:not(.open):hover { border-color: #c9c2a8; }
+.step:not(.open) { padding-top: 12px; padding-bottom: 12px; }
+.step:not(.open), .step:not(.open) .stephead { cursor: pointer; }
+.step:not(.open) .stepbody { display: none; }
+.step:not(.open) .stepsum { display: block; }
+.step:not(.open):hover { border-color: #c9c2a8; }
 .step .stepfoot { display: flex; justify-content: flex-end; margin-top: 12px; }
 body.touring .step .stepfoot { display: none; }
 #nameCard .examplenote { margin: 10px 0 0; font-size: 12px; color: var(--muted); }
@@ -837,3 +842,102 @@ body.touring .step .stepfoot { display: none; }
 .selcard .sc-check { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; margin: 8px 0 2px; font-weight: 700; font-size: 12.5px; cursor: pointer; }
 .selcard .sc-check small { flex-basis: 100%; padding-left: 22px; font-weight: 500; color: var(--muted); }
 .selcard .sc-check input { accent-color: #4E8C3A; }
+
+/* Edit / Done in each step's header look like the buttons in the top bar */
+.step .steptog.btn { font-size: 13px; font-weight: 600; padding: 3px 11px; line-height: 1.35; border: 1px solid var(--rule); border-radius: 8px; background: #fff; color: var(--ink); text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.step .steptog.btn:hover { background: var(--soft); border-color: #c9c2a8; }
+.step .steptog.btn.primary { background: var(--forest); border-color: var(--forest); color: #fff; }
+.step .steptog.btn.primary:hover { background: var(--forest-d); }
+.step.done.open .stepfoot { display: none; }   /* a reopened step already has Done in its header */
+.step .stephead { align-items: center; }
+.step .stepdone.btn { padding: 3px 11px; line-height: 1.35; }
+/* no check marks on finished steps: the Edit button and the summary already show a step is done */
+.step.done .stepck { display: none; }
+.step .stepsum { margin-left: 0; }
+
+/* a plant in the wrong light on the bed plan: its timeline row is grayed and edged in the same dotted gold */
+.brow.badlight { background: #FFF8E1; box-shadow: inset 0 0 0 2px #E2B93B; border-radius: 8px; }
+.brow.badlight .track .bar { opacity: .45; outline: 2px dotted #C9971A; outline-offset: 1px; }
+.brow.badlight .lab img { filter: grayscale(.7); opacity: .7; }
+.brow .badl { display: block; font-style: normal; font-size: 10.5px; font-weight: 700; color: #9A6B00; margin-top: 1px; }
+
+/* dragging a plant on the bed plan: the sun zones that suit it stay bright, the rest fade */
+#plan.zdrag .zlayer .ztip { opacity: .28; transition: opacity .15s; }
+#plan.zdrag .zlayer .ztip.zok { opacity: 1; }
+/* dragging a plant's row between the sun sections of the Garden Timeline */
+.brow.canmove .lab { cursor: grab; touch-action: none; }
+body.rowdragging, body.rowdragging * { cursor: grabbing !important; user-select: none; }
+.brow.dragsrc { opacity: .4; }
+#bloomRows.tl-drag .zone-head { opacity: .45; }
+#bloomRows.tl-drag .zone-head.zok { opacity: 1; }
+#bloomRows.tl-drag .zone-head.zok::after { content: "Drop here"; margin-left: auto; font-size: 10.5px; letter-spacing: 0; text-transform: none; color: #3F6B3A; background: #E1EBCB; border-radius: 999px; padding: 1px 8px; }
+#bloomRows .zhover { background: #EAF2DF !important; }
+#bloomRows .zone-head.zhover { box-shadow: inset 0 0 0 2px #7FA86A; border-radius: 6px; }
+.rowghost { position: fixed; z-index: 9999; pointer-events: none; display: grid; grid-template-columns: 36px auto; gap: 7px; align-items: center; padding: 4px 10px 4px 4px; background: #fff; border: 1px solid var(--rule); border-radius: 10px; box-shadow: 0 8px 22px rgba(0,0,0,.2); font-size: 12.5px; max-width: 260px; }
+.rowghost img { width: 36px; height: 27px; object-fit: cover; border-radius: 4px; }
+.rowghost .nm { font-weight: 700; line-height: 1.1; } .rowghost .nm small { display: block; font-weight: 400; color: var(--muted); font-size: 10.5px; }
+.rowghost .addbtn, .rowghost .badl, .rowghost .chipic, .rowghost svg { display: none; }
+
+/* shopping list: the botanical name under the common name */
+#shop td.shp { display: flex; align-items: center; }
+#shop td.shp .shn { display: block; line-height: 1.25; }
+#shop td.shp .lat { display: block; font-style: italic; color: var(--muted); font-size: 11.5px; }
+
+/* steps 1 to 6 sit above the bed plan in three columns (1 and 2, 3 and 4, 5 and 6); the Plants list sits to the
+   left of the bed plan and scrolls on its own */
+.stepgrid { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; }
+.stepcol { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+@media (max-width: 1050px) { .stepgrid { grid-template-columns: 1fr; } }
+@media print { .stepgrid { display: none !important; } }
+
+/* an open step floats over the page instead of pushing it down: its slot keeps the folded size */
+.stepgrid { position: relative; z-index: 20; }   /* above the bed plan, below the sticky top bar */
+@media (min-width: 1051px) {
+  .stepslot { position: relative; }
+  .stepslot.open { z-index: 2; }
+  .stepslot.open > .step { position: absolute; top: 0; left: 0; right: 0; box-shadow: 0 22px 50px -12px rgba(31,42,30,.35), 0 2px 6px rgba(31,42,30,.12); }
+  /* while the sun is being painted on the bed plan, step 4 folds back so it doesn't cover the plan */
+  body.painting .stepslot.open > #sunCard .stepbody { display: none; }
+  body.painting .stepslot.open > #sunCard .stepsum { display: block; }
+}
+.step:not(.done) .stepsum { font-style: italic; }
+
+/* bed, objects and sun open in the left column beside the bed plan; a marker holds their place in the grid */
+#sideStep { display: flex; flex-direction: column; gap: 16px; }
+#sideStep:empty { display: none; }
+#libCard[hidden] { display: none; }
+.step-ph { padding: 12px 22px; border: 2px solid var(--forest); background: #EEF3E8; cursor: pointer; }
+.step-ph .ph-tag { font-size: 12.5px; font-weight: 700; color: var(--forest); margin-top: 2px; }
+.step-ph .ph-tag::before { content: "← "; }
+
+/* dragging a plant in from the Plants list: the pointer becomes the plant's circle */
+#lib .pcard { cursor: grab; touch-action: pan-y; }
+body.libdragging, body.libdragging * { cursor: none !important; user-select: none; }
+.libghost { position: fixed; z-index: 9999; pointer-events: none; transform: translate(-50%, -50%); border-radius: 50%; display: grid; place-items: center; font-weight: 800; border: 2px solid #fff; box-shadow: 0 6px 18px rgba(0,0,0,.3); opacity: .92; transition: width .08s, height .08s; }
+.libghost.nowhere { opacity: .6; }
+#bloomCard.dropok { outline: 3px dashed #7FA86A; outline-offset: 3px; }
+
+/* the planner is something you click and drag, not read: no accidental text highlighting (typing boxes still work) */
+body.planner { -webkit-user-select: none; user-select: none; }
+body.planner input, body.planner textarea, body.planner select { -webkit-user-select: text; user-select: text; }
+
+
+/* all six steps in one row, every box the same height; a box opens with a click and closes with Done at its bottom */
+@media (min-width: 1051px) {
+  .stepgrid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
+  .stepcol { display: contents; }
+  .stepslot > .step:not(.open), .stepslot > .step-ph { height: 100%; }
+  .stepgrid .step:not(.open), .stepgrid .step-ph { padding: 12px 14px; }
+  .stepgrid .step .stephead h2, .stepgrid .step-ph h2 { font-size: 16.5px; line-height: 1.2; }
+  .stepgrid .step:not(.open) .stepsum { margin-left: 0; font-size: 11.5px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .stepslot.open > .step { width: max(100%, 420px); right: auto; }
+  .stepcol:last-child .stepslot.open > .step { left: auto; right: 0; }
+}
+.step .steptog, .step .steptog.btn { display: none !important; }
+.step.done.open .stepfoot { display: flex; }
+.step:not(.open):hover { border-color: var(--forest); }
+
+
+/* the page background: the site's own flowering-plant photos blended together and softly blurred (credited on credits.html), behind every card */
+body { background: url(img/site-bg.jpg) center / cover fixed, var(--cream); }
+@media (max-width: 1050px) { body { background-attachment: scroll; background-size: 100% auto; background-repeat: repeat-y; } }

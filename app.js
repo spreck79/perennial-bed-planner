@@ -7,7 +7,7 @@
   const LS = "shadeGardenPlanner.v1";
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   // steps 1 to 4 fold down to a one-line summary once they're done; openSteps holds the ones opened again
-  const STEPS_UI = { name: "#nameCard", bed: "#bedPanel", objects: "#objCard", sun: "#sunCard", kind: "#prefCard" };
+  const STEPS_UI = { name: "#nameCard", kind: "#prefCard", avoid: "#avoidCard", bed: "#bedPanel", objects: "#objCard", sun: "#sunCard" };
   const openSteps = new Set();
   // Full-size photos live in the photos folder, one small script per plant, and load only when needed
   // (enlarging a photo, making the PDF). Everywhere else uses the quick 240 x 180 previews in images.js.
@@ -102,7 +102,7 @@
     if (deerEats(p)) h += '<span class="ic ic-deer" data-k="deer" data-tip="' + esc(deerTip(p)) + '">' + DEER + "</span>";
     if (p.toxic && p.toxic.length) h += '<span class="ic ic-tox" data-k="tox" data-tip="' + esc(window.toxLabel(p)) + '">!</span>';
     if (p.id && window.isTender(p)) h += '<span class="ic ic-cold" data-k="cold" data-tip="Not winter-hardy here: ' + esc(window.winterCare(p).short) + '">❄</span>';
-    if (off) h += '<span class="ic ic-off" data-k="off" data-tip="Outside your step 4 and 5 choices">–</span>';
+    if (off) h += '<span class="ic ic-off" data-k="off" data-tip="Outside your garden choices">–</span>';
     return '<span class="ics">' + h + "</span>";
   }
   const SUNKEY = ["full", "part", "shade"].map(k => '<span class="ic ic-sun" data-k="sun" style="background:' + SUNCOL[k] + '" data-tip="' + window.Plan.ZONE_TIP[k] + '">' + SUNGLYPH + "</span> " + { full: "full sun", part: "part shade", shade: "shade" }[k]).join(" ");
@@ -128,14 +128,14 @@
   // A new garden (first visit, Start over) is an empty rectangle with nothing on it; the steps build it up.
   function freshState() {
     return { shape: "rect", dims: {}, freePoly: null, freeView: "border", placements: [], seed: 7, fill: true, view: "codes",
-      filter: { q: "", height: "", month: "" }, bloomFilter: "sel", bloomSort: "start",
+      filter: { q: "", height: "", month: "", sun: "" }, bloomFilter: "sel", bloomSort: "start",
       name: "", prefs: { sun: ["full", "part", "shade"], origin: ["nat", "gar"], kinds: ["clump", "fern", "grass", "mat", "bulb"], toxic: true, daisy: true, deer: true, tender: false, v2: true }, waiting: {}, showGrid: true,
       objects: [], sun: { res: 0.5, cells: {} }, sunBase: null, showSun: true, fillMode: "ground", compSkip: [], freeCtrl: null, freeSmooth: true, done: {} };
   }
   // The example garden ("Load an example garden" in step 1): the drawn border described above, finished.
   function exampleState() {
     return Object.assign(freshState(), { name: "Example Garden", shape: "free", freePoly: DEFAULT_FREEPOLY.map(q => q.slice()), freeCtrl: DEFAULT_FREECTRL.map(q => q.slice()),
-      objects: DEFAULT_OBJECTS.map(o => Object.assign({}, o)), sun: { res: 0.5, cells: starterSunCells() }, sunBase: "part", done: { name: true, bed: true, objects: true, sun: true, kind: true } });
+      objects: DEFAULT_OBJECTS.map(o => Object.assign({}, o)), sun: { res: 0.5, cells: starterSunCells() }, sunBase: "part", done: { name: true, bed: true, objects: true, sun: true, kind: true, avoid: true } });
   }
   function load() { try { const t = localStorage.getItem(LS); return t ? JSON.parse(t) : null; } catch (e) { return null; } }
   let saveT = 0;
@@ -161,6 +161,7 @@
 
   // objects and sun zones: make sure saved plans have them in a usable shape, and hand them to the layout engine
   function normalizeExtras() {
+    if (S.done && S.done.kind && S.done.avoid === undefined) S.done.avoid = true;   // plans saved before "Plants to watch out for" became its own step
     S.objects = Array.isArray(S.objects) ? S.objects.filter(o => o && Geo.OBJ[o.t] && isFinite(o.x) && isFinite(o.y) && o.w > 0).map(o => Object.assign({ t: o.t, x: +o.x, y: +o.y, w: +o.w, h: +(o.h || o.w), rot: +(o.rot || 0) }, Array.isArray(o.pts) && o.pts.length >= 2 && o.pts.every(q => Array.isArray(q) && isFinite(q[0]) && isFinite(q[1])) ? { pts: o.pts.map(q => [+q[0], +q[1]]) } : {})) : [];
     if (!S.sun || typeof S.sun !== "object" || !S.sun.cells) S.sun = { res: 0.5, cells: {} };
     S.sun.res = 0.5;
@@ -178,6 +179,132 @@
     const zs = zonesPresent(), out = [];
     S.placements.forEach((p, i) => { const pl = byId[p.id]; if (p.c || !pl.sun.some(z => zs.has(z))) return; if (!pl.sun.includes(zoneAt(p.x, p.y))) out.push(i); });
     return out;
+  }
+  let dragOrig = null;   // where every plant stood when the current drag on the bed plan began
+  // ---------- making room: neighbors step aside for a plant ----------
+  // Starting from where every plant was (orig), the plants in `fixed` stay where they are and any plant they
+  // crowd steps out of the way, and so on outward, but only as far as needed. Plants that were never crowded
+  // stay exactly where they were, so while dragging, neighbors slide back once the plant moves past them.
+  // Pushed plants stay inside the bed, off objects and in light that suits them; locked plants never move.
+  // Returns the indexes of plants whose spot changed since the last call.
+  function makeRoom(fixed, orig) {
+    const P = S.placements, before = P.map(p => [p.x, p.y]);
+    P.forEach((p, i) => { if (!fixed.has(i) && orig[i]) { p.x = orig[i].x; p.y = orig[i].y; } });
+    const blocks = (S.objects || []).map(Geo.objBlock).filter(Boolean), zs = sunActive() ? zonesPresent() : null;
+    const sp = i => Geo.spFt(byId[P[i].id]);
+    const can = i => !fixed.has(i) && !P[i].lock && !P[i].c;
+    const okAt = (i, x, y) => {
+      const r = sp(i) / 2, pl = byId[P[i].id];
+      if (!Geo.pip(bed.poly, x, y) || Geo.edgeDist(bed.poly, x, y) < r * 0.5) return false;
+      for (const b of blocks) if (Geo.objDist(b, x, y) < r * 0.6) return false;
+      if (zs && pl.sun && pl.sun.some(z => zs.has(z))) {      // never push a plant out of light it likes
+        const was = orig[i] ? zoneAt(orig[i].x, orig[i].y) : null;
+        if (pl.sun.includes(was) && !pl.sun.includes(zoneAt(x, y))) return false;
+      }
+      return true;
+    };
+    const need = (i, j) => { const A = byId[P[i].id], B = byId[P[j].id]; return (sp(i) + sp(j)) / 2 * (!!A.dormant !== !!B.dormant ? 0.3 : 0.85); };
+    const active = new Set(fixed);
+    for (let it = 0; it < 24; it++) {
+      let any = false;
+      for (const a of [...active]) {
+        if (P[a].c) continue;
+        for (let j = 0; j < P.length; j++) {
+          if (j === a || P[j].c) continue;
+          const dx = P[j].x - P[a].x, dy = P[j].y - P[a].y, d = Math.hypot(dx, dy), n = need(a, j);
+          if (d >= n - 1e-3) continue;
+          const m = can(j) ? j : can(a) ? a : -1; if (m < 0) continue;
+          let ux = m === j ? dx : -dx, uy = m === j ? dy : -dy, L = Math.hypot(ux, uy);
+          if (L < 1e-6) { ux = 1; uy = 0; L = 1; }
+          ux /= L; uy /= L;
+          const step = n - d + 0.02;
+          for (const rot of [0, 0.5, -0.5, 1, -1, 1.5, -1.5]) {   // straight away first, then angled, to slip past edges and objects
+            const c = Math.cos(rot), s = Math.sin(rot), x = P[m].x + (ux * c - uy * s) * step, y = P[m].y + (ux * s + uy * c) * step;
+            if (okAt(m, x, y)) { P[m].x = x; P[m].y = y; active.add(m); any = true; break; }
+          }
+        }
+      }
+      if (!any) break;
+    }
+    const out = []; P.forEach((p, i) => { if (p.x !== before[i][0] || p.y !== before[i][1]) out.push(i); });
+    return out;
+  }
+  // the best open spot for plant k inside sun zone z: as little crowding as possible, close to where the plant
+  // was, at the right depth for its height
+  function bestSpotIn(k, z) {
+    const P = S.placements, q = P[k], pl = byId[q.id], r = Geo.spFt(pl) / 2;
+    const blocks = (S.objects || []).map(Geo.objBlock).filter(Boolean), t = Geo.depthTargets(selected())[q.id];
+    const bb = bed.bb, st = Math.max(0.25, r / 2);
+    let best = null, bs = 1e9;
+    for (let x = bb.x0 + st / 2; x < bb.x0 + bb.w; x += st) for (let y = bb.y0 + st / 2; y < bb.y0 + bb.h; y += st) {
+      if (zoneAt(x, y) !== z || !Geo.pip(bed.poly, x, y) || Geo.edgeDist(bed.poly, x, y) < r * 0.75) continue;
+      if (blocks.some(b => Geo.objDist(b, x, y) < r * 0.7)) continue;
+      let crowd = 0;
+      P.forEach((o, j) => {
+        if (j === k || o.c) return;
+        const B = byId[o.id], n = (Geo.spFt(pl) + Geo.spFt(B)) / 2 * (!!pl.dormant !== !!B.dormant ? 0.3 : 0.85), d = Math.hypot(o.x - x, o.y - y);
+        if (d < n) crowd += (n - d) * (o.lock ? 4 : 1);
+      });
+      const sc = crowd * 4 + Math.hypot(x - q.x, y - q.y) * 0.15 + (t != null && bed.depth ? Math.abs(bed.depth(x, y) - t) * 2 : 0);
+      if (sc < bs) { bs = sc; best = [x, y]; }
+    }
+    return best;
+  }
+  const ZONE_WORD = { full: "full sun", part: "part shade", shade: "shade" };
+  // a plant's row dragged into another sun section of the Garden Timeline: move those plants into that light on
+  // the bed plan, and let their new neighbors step aside
+  function moveToZone(id, from, to) {
+    const pl = byId[id]; notice = ""; noFit = [];
+    S.placements = S.placements.filter(q => !q.c);
+    const idxs = S.placements.map((q, i) => i).filter(i => S.placements[i].id === id && zoneAt(S.placements[i].x, S.placements[i].y) === from);
+    const locked = idxs.filter(i => S.placements[i].lock).length;
+    let moved = 0, failed = 0;
+    idxs.filter(i => !S.placements[i].lock).forEach(k => {
+      const spot = bestSpotIn(k, to); if (!spot) { failed++; return; }
+      const orig = S.placements.map(p => ({ x: p.x, y: p.y }));
+      S.placements[k].x = spot[0]; S.placements[k].y = spot[1];
+      makeRoom(new Set([k]), orig); moved++;
+    });
+    recarpet(); refresh();
+    const n = moved > 1 ? moved + " " : "";
+    let msg = moved ? `Moved ${n}${pl.name} into ${ZONE_WORD[to]}. Nearby plants stepped aside to make room.` : `There's no open spot in ${ZONE_WORD[to]} for ${pl.name}.`;
+    if (moved && !pl.sun.includes(to)) msg += ` ${pl.name} doesn't like that light, though.`;
+    if (failed && moved) msg += ` ${failed} couldn't fit.`;
+    if (locked) msg += ` ${locked} locked ${locked > 1 ? "ones stay" : "one stays"} put.`;
+    toast(msg, 4000);
+  }
+  // dragging a plant's row between the sun sections of the Garden Timeline
+  let rowDrag = null, eatRowClick = 0;
+  function rowDragDown(e, r, p, zone) {
+    if (e.button !== 0 || e.target.closest("button, a")) return;
+    rowDrag = { r, p, zone, sx: e.clientX, sy: e.clientY, on: false, id: e.pointerId };
+    const move = ev => {
+      if (!rowDrag || ev.pointerId !== rowDrag.id) return;
+      if (!rowDrag.on) {
+        if (Math.hypot(ev.clientX - rowDrag.sx, ev.clientY - rowDrag.sy) < 6) return;
+        rowDrag.on = true;
+        const gh = document.createElement("div"); gh.className = "rowghost";
+        gh.innerHTML = r.querySelector(".lab").innerHTML; document.body.appendChild(gh); rowDrag.gh = gh;
+        r.classList.add("dragsrc"); document.body.classList.add("rowdragging");
+        document.querySelectorAll("#bloomRows .zone-head").forEach(h => h.classList.toggle("zok", p.sun.includes(h.dataset.zone)));
+        $("#bloomRows").classList.add("tl-drag");
+      }
+      ev.preventDefault();
+      rowDrag.gh.style.left = ev.clientX + 12 + "px"; rowDrag.gh.style.top = ev.clientY + 8 + "px";
+      const under = document.elementFromPoint(ev.clientX, ev.clientY), hit = under && under.closest("#bloomRows [data-zone]"), z = hit ? hit.dataset.zone : null;
+      rowDrag.over = z;
+      document.querySelectorAll("#bloomRows [data-zone]").forEach(el => el.classList.toggle("zhover", !!z && el.dataset.zone === z && z !== rowDrag.zone));
+    };
+    const up = ev => {
+      document.removeEventListener("pointermove", move); document.removeEventListener("pointerup", up); document.removeEventListener("pointercancel", up);
+      const d = rowDrag; rowDrag = null; if (!d || !d.on) return;
+      eatRowClick = Date.now();
+      if (d.gh) d.gh.remove();
+      document.body.classList.remove("rowdragging"); $("#bloomRows").classList.remove("tl-drag");
+      document.querySelectorAll("#bloomRows .zhover, #bloomRows .zok, #bloomRows .dragsrc").forEach(el => el.classList.remove("zhover", "zok", "dragsrc"));
+      if (ev.type === "pointerup" && d.over && d.over !== d.zone) moveToZone(d.p.id, d.zone, d.over);
+    };
+    document.addEventListener("pointermove", move, { passive: false }); document.addEventListener("pointerup", up); document.addEventListener("pointercancel", up);
   }
   // how much of the bed the objects take up (trees only count their trunk)
   const polyLen = P => P.reduce((s, q, i) => s + (i ? Math.hypot(q[0] - P[i - 1][0], q[1] - P[i - 1][1]) : 0), 0);
@@ -227,7 +354,6 @@
   function markSel() { const ids = selIds(); document.querySelectorAll(".brow,.ocol,#shop tr[data-id]").forEach(e => { const on = ids.includes(e.dataset.id); e.classList.toggle("sel", on); HLK.forEach(k => e.classList.remove("hl-" + k)); if (on) { const p = PL.find(x => x.id === e.dataset.id); if (p) e.classList.add("hl-" + hlKind(p)); } }); }
   function stripFiller() { S.placements = S.placements.filter(p => !isGroundcover(p)); selIdx = -1; }
   function selected() { const c = counts(); return PL.filter(p => c[p.id] > 0); }
-  const defaultQty = p => (p.spacing >= 24 ? 1 : p.spacing >= 15 ? 3 : 5);
 
   // ---------- layout actions ----------
   function relayout(seedBump, items) {
@@ -241,6 +367,7 @@
     const avoidPlants = []; const seen = {}; locked.forEach(p => { if (!seen[p.id]) { seen[p.id] = 1; avoidPlants.push(byId[p.id]); } });
     const remaining = items.map(it => ({ plant: it.plant, n: it.n - (lockedCount[it.plant.id] || 0), zones: it.zones })).filter(it => it.n > 0);
     if (!remaining.length) { S.placements = locked; S.waiting = {}; notice = ""; noFit = []; lastUnplaced = {}; selIdx = -1; return; }
+    setZoneTargets(remaining.map(it => it.plant).concat(avoidPlants));
     // try several arrangements and keep the one that fits the most plants
     let r = null, seed = S.seed;
     for (let t = 0; t < 8; t++) {
@@ -252,11 +379,130 @@
     S.seed = r.seed;
     S.placements = locked.concat(r.placements); selIdx = -1;
     // painted sun zones: give any plant that still landed in the wrong light one more try somewhere that suits it
-    lightBadIdx().map(i => S.placements[i]).forEach(pl => { if (!pl.lock) moveToLight(pl); });
+    // painted sun zones: any plant still in the wrong light gets one more try somewhere that suits it; if there's
+    // no room in its light, it waits on the shopping list instead of going in the wrong spot
+    lightBadIdx().map(i => S.placements[i]).forEach(pl => {
+      if (pl.lock || moveToLight(pl)) return;
+      S.placements.splice(S.placements.indexOf(pl), 1); r.unplaced[pl.id] = (r.unplaced[pl.id] || 0) + 1;
+    });
+    heightSort();
     lastUnplaced = r.unplaced;
     const missing = Object.keys(r.unplaced).reduce((s, k) => s + r.unplaced[k], 0);
     const before = waitTotal(); S.waiting = Object.assign({}, r.unplaced); if (missing && missing !== before) S.waitAck = false;
     notice = ""; noFit = [];
+  }
+  // Where each plant should sit front to back, by sun zone: plants that can grow in a zone are ranked by height
+  // among themselves and spread over that zone's own front-to-back range (a shade zone that only covers the
+  // back half of the bed still gets its short plants in front and tall ones behind). Without zones, the whole
+  // bed is one range. Sets bed.targetAt for the layout engine and for heightSort.
+  function setZoneTargets(plants) {
+    if (!bed || !bed.depth) return;
+    if (!sunActive() || !plants.length) { bed.targetAt = null; return; }
+    const zs = zonesPresent(), bb = bed.bb, depths = {};
+    for (let x = bb.x0 + 0.25; x < bb.x0 + bb.w; x += 0.5) for (let y = bb.y0 + 0.25; y < bb.y0 + bb.h; y += 0.5) {
+      if (!Geo.pip(bed.poly, x, y)) continue; const z = zoneAt(x, y); (depths[z] = depths[z] || []).push(bed.depth(x, y));
+    }
+    const R = {};
+    zs.forEach(z => {
+      const d = (depths[z] || []).sort((p, q) => p - q); if (!d.length) return;
+      const lo = d[Math.floor(d.length * 0.05)], hi = d[Math.min(d.length - 1, Math.floor(d.length * 0.95))];
+      const fits = plants.filter(p => !p.sun || !p.sun.some(s => zs.has(s)) || p.sun.includes(z)), hs = fits.map(Geo.hMean);
+      R[z] = { lo, hi, hmin: Math.min(...hs), hmax: Math.max(...hs) };
+    });
+    bed.targetAt = (id, x, y, fallback) => {
+      const r = R[zoneAt(x, y)], p = byId[id]; if (!r || !p || !isFinite(r.hmin)) return fallback;
+      const t = r.hmax > r.hmin ? (Geo.hMean(p) - r.hmin) / (r.hmax - r.hmin) : 0.5;
+      return r.lo + (r.hi - r.lo) * (0.1 + 0.8 * t);
+    };
+  }
+  function heightWrong() {
+    if (!bed || !bed.depth) return 0;
+    const P = S.placements.filter(q => !q.c), h = q => Geo.hMean(byId[q.id]), sp = q => Geo.spFt(byId[q.id]);
+    let n = 0;
+    for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) {
+      const a = P[i], b = P[j];
+      if (Math.abs(h(a) - h(b)) < 10 || Math.hypot(a.x - b.x, a.y - b.y) > (sp(a) + sp(b)) / 2 * 1.6) continue;
+      const [tl, sh] = h(a) > h(b) ? [a, b] : [b, a];
+      if (bed.depth(tl.x, tl.y) - bed.depth(sh.x, sh.y) < -0.05) n++;
+    }
+    return n;
+  }
+  // A stronger height pass, run once at the end of Re-arrange and Suggest a planting: for each taller plant that
+  // stands in front of a shorter neighbor, swap the two and let the plants around them step aside (the same
+  // push as dragging). The swap is kept only if the bed as a whole ends up better ordered by height, with no
+  // new crowding and nobody in the wrong light.
+  function heightPolish() {
+    if (!bed || !bed.depth) return;
+    const P = S.placements, t = Geo.depthTargets(selected()), zs = sunActive() ? zonesPresent() : null;
+    const h = i => Geo.hMean(byId[P[i].id]), sp = i => Geo.spFt(byId[P[i].id]);
+    const want = i => { const f = t[P[i].id] != null ? t[P[i].id] : 0.5; return bed.targetAt ? bed.targetAt(P[i].id, P[i].x, P[i].y, f) : f; };
+    const total = () => { let s = 0; P.forEach((q, i) => { if (!q.c) s += Math.abs(bed.depth(q.x, q.y) - want(i)); }); return s; };
+    const lightOk = i => { const pl = byId[P[i].id]; return !zs || !pl.sun || !pl.sun.some(z => zs.has(z)) || pl.sun.includes(zoneAt(P[i].x, P[i].y)); };
+    const wrongPairs = () => {
+      const out = [];
+      for (let i = 0; i < P.length; i++) for (let j = 0; j < P.length; j++) {
+        if (i === j || P[i].c || P[j].c || P[i].lock || P[j].lock || P[i].id === P[j].id || h(i) - h(j) < 10) continue;
+        if (Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y) > (sp(i) + sp(j)) / 2 * 1.8) continue;
+        const dd = bed.depth(P[i].x, P[i].y) - bed.depth(P[j].x, P[j].y);   // i is the taller one
+        if (dd < -0.04) out.push([i, j, dd]);
+      }
+      return out.sort((a, b) => a[2] - b[2]);
+    };
+    let tries = 0;
+    for (let pass = 0; pass < 6 && tries < 400; pass++) {
+      let any = false;
+      for (const [i, j] of wrongPairs()) {
+        if (++tries > 400) break;
+        const snap = P.map(q => ({ x: q.x, y: q.y })), base = total(), baseO = overlapPairs().length;
+        P[i].x = snap[j].x; P[i].y = snap[j].y; P[j].x = snap[i].x; P[j].y = snap[i].y;
+        if (lightOk(i) && lightOk(j)) {
+          makeRoom(new Set([i, j]), snap);
+          if (total() < base - 0.03 && overlapPairs().length <= baseO) { any = true; continue; }
+        }
+        P.forEach((q, k) => { q.x = snap[k].x; q.y = snap[k].y; });
+      }
+      if (!any) break;
+    }
+  }
+  // Height order: after a layout, swap pairs of plants whenever that puts the taller one farther back (and the
+  // shorter one farther forward), as long as both still sit in light they like, stay inside the bed, off
+  // objects and properly spaced. A small pull keeps each plant near others of its kind, so drifts hold together.
+  function heightSort() {
+    if (!bed || !bed.depth) return;
+    const P = S.placements, idx = P.map((q, i) => i).filter(i => !P[i].c && !P[i].lock), t = Geo.depthTargets(selected());
+    const blocks = (S.objects || []).map(Geo.objBlock).filter(Boolean), zs = sunActive() ? zonesPresent() : null;
+    const sp = i => Geo.spFt(byId[P[i].id]);
+    const depthCost = (i, x, y) => { const f = t[P[i].id] != null ? t[P[i].id] : 0.5; return Math.abs(bed.depth(x, y) - (bed.targetAt ? bed.targetAt(P[i].id, x, y, f) : f)); };
+    const kin = (i, x, y, skip) => {   // distance to the nearest other plant of the same kind, beyond a comfortable gap
+      let m = Infinity; P.forEach((q, j) => { if (j !== i && j !== skip && !q.c && q.id === P[i].id) m = Math.min(m, Math.hypot(q.x - x, q.y - y)); });
+      return m === Infinity ? 0 : Math.max(0, m - sp(i) * 1.5);
+    };
+    const cost = (i, x, y, skip) => depthCost(i, x, y) + kin(i, x, y, skip) * 0.03;
+    const okAt = (i, x, y, skip) => {
+      const pl = byId[P[i].id], r = sp(i) / 2;
+      if (!Geo.pip(bed.poly, x, y) || Geo.edgeDist(bed.poly, x, y) < r * 0.6) return false;
+      for (const b of blocks) if (Geo.objDist(b, x, y) < r * 0.65) return false;
+      if (zs && pl.sun && pl.sun.some(z => zs.has(z)) && !pl.sun.includes(zoneAt(x, y))) return false;
+      for (let j = 0; j < P.length; j++) {
+        if (j === i || j === skip || P[j].c) continue;
+        const B = byId[P[j].id], f = !!pl.dormant !== !!B.dormant ? 0.3 : 0.74;
+        if (Math.hypot(P[j].x - x, P[j].y - y) < (sp(i) + sp(j)) / 2 * f) return false;
+      }
+      return true;
+    };
+    for (let pass = 0; pass < 8; pass++) {
+      let any = false;
+      for (let u = 0; u < idx.length; u++) for (let v = u + 1; v < idx.length; v++) {
+        const a = idx[u], b = idx[v], A = P[a], B = P[b];
+        if (A.id === B.id) continue;
+        const ax = A.x, ay = A.y, bx = B.x, by = B.y;
+        const gain = cost(a, ax, ay, b) + cost(b, bx, by, a) - cost(a, bx, by, b) - cost(b, ax, ay, a);
+        if (gain < 0.03) continue;
+        if (!okAt(a, bx, by, b) || !okAt(b, ax, ay, a)) continue;
+        A.x = bx; A.y = by; B.x = ax; B.y = ay; any = true;
+      }
+      if (!any) break;
+    }
   }
   function rebuildBed(keepLayout) {
     bed = Geo.buildBed(S); attachExtras();
@@ -302,7 +548,7 @@
   function togglePlant(id) {
     notice = ""; noFit = [];
     if (S.removed) delete S.removed[id];
-    if (counts()[id] > 0) removePlant(id); else addMany(id, defaultQty(byId[id]));
+    if (counts()[id] > 0) removePlant(id); else addOne(id);   // + Add puts in one plant; use + for more
     refresh();
   }
   function setQty(id, d) {
@@ -524,6 +770,7 @@
   function passes(p) {
     const f = S.filter, h = Geo.hMean(p);
     if (!matchesPrefs(p) && !(counts()[p.id] > 0)) return false;
+    if (f.sun && !(p.sun && p.sun.includes(f.sun))) return false;   // the light filter: plants that grow in that light
     if (f.height === "low" && !(p.hHi < 12)) return false;
     if (f.height === "mid" && !(h >= 12 && h <= 30)) return false;
     if (f.height === "tall" && !(p.hHi >= 30)) return false;
@@ -564,18 +811,48 @@
     if (k === "sun") return "<b>" + pr.sun.map(z => lab[z]).join(", ") + "</b>" + (Object.keys(S.sun.cells).length ? " · sun zones mapped" : "");
     const org = pr.origin.length === 2 ? "Natives and garden favorites" : pr.origin[0] === "nat" ? "Michigan natives" : "Garden favorites";
     const nk = pr.kinds.length, kinds = nk === KINDS.length - 1 ? "all kinds" : nk + " kind" + (nk === 1 ? "" : "s");
-    const out = AVOID.filter(a => pr[a.key] === false).map(a => ({ toxic: "toxic", deer: "deer favorites", daisy: "daisy family" }[a.key]));
-    return "<b>" + org + "</b>, " + kinds + (out.length ? " · leaving out " + out.join(", ") : "") + " · " + PL.filter(matchesPrefs).length + " plants match";
+    if (k === "kind") return "<b>" + org + "</b>, " + kinds;
+    const out = AVOID.filter(a => pr[a.key] === false).map(a => ({ toxic: "toxic plants", deer: "deer favorites", tender: "plants needing winter care", daisy: "daisy family" }[a.key]));
+    return (out.length ? "Leaving out <b>" + out.join(", ") + "</b>" : "<b>Nothing left out</b>") + " · " + PL.filter(matchesPrefs).length + " plants match";
   }
+  // Only one step is open at a time: the one you opened with Edit, or else the first one not done yet. On a
+  // wide screen an open step floats over the page (its slot keeps the folded size), so nothing shifts.
+  const FLOAT = () => !(window.matchMedia && window.matchMedia("(max-width: 1050px)").matches);
+  function curStep() { return Object.keys(STEPS_UI).find(n => !(S.done && S.done[n])); }
+  // Your bed, Add objects and How much sun? change the bed plan, so on a wide screen they open in the left
+  // column beside it (where the Plants list is; Plants comes back on Done). Their box in the grid stays folded.
+  const SIDE = new Set(["bed", "objects", "sun"]), HOME = {}, PH = {};
   function renderSteps() {
+    const cur = curStep(), float = FLOAT(), side = $("#sideStep");
+    let sideOn = false;
     Object.keys(STEPS_UI).forEach(k => {
       const card = $(STEPS_UI[k]); if (!card) return;
-      const done = !!(S.done && S.done[k]), open = !done || openSteps.has(k);
-      card.classList.toggle("done", done); card.classList.toggle("open", open);
-      card.querySelector(".stepsum").innerHTML = done ? stepSummary(k) : "";
-      const tog = card.querySelector(".steptog"); tog.textContent = open ? "Fold up" : "Change"; tog.hidden = !done;
+      if (!HOME[k]) HOME[k] = card.parentElement;
+      const slot = HOME[k], done = !!(S.done && S.done[k]), open = openSteps.has(k) || (!openSteps.size && k === cur);
+      const toSide = !!(side && float && open && SIDE.has(k));
+      if (toSide) { if (card.parentElement !== side) side.appendChild(card); }
+      else if (card.parentElement !== slot) slot.appendChild(card);
+      if (!PH[k]) { PH[k] = document.createElement("div"); PH[k].className = "card step-ph"; PH[k].onclick = () => card.scrollIntoView({ behavior: "smooth", block: "nearest" }); }
+      if (toSide) {
+        PH[k].innerHTML = `<div class="stephead"><h2>${esc(card.querySelector(".stephead h2").textContent.replace("✓", "").trim())}</h2></div><div class="ph-tag">Open beside the bed plan</div>`;
+        if (PH[k].parentElement !== slot) slot.insertBefore(PH[k], slot.firstChild);
+      } else PH[k].remove();
+      sideOn = sideOn || toSide;
+      card.classList.toggle("done", done);
+      card.querySelector(".stepsum").innerHTML = done ? stepSummary(k) : "Not done yet";
+      const tog = card.querySelector(".steptog");
+      card.classList.remove("open"); tog.textContent = "Edit"; tog.className = "steptog btn"; tog.hidden = false;
+      let fh = 0;
+      if (!toSide) { slot.classList.remove("open"); slot.style.height = ""; fh = card.offsetHeight; }
+      card.classList.toggle("open", open);
+      if (open) { tog.textContent = "Done"; tog.className = "steptog btn primary"; tog.hidden = !done; }
+      const fl = open && float && !toSide;
+      slot.classList.toggle("open", fl); slot.style.height = fl ? fh + "px" : "";
     });
+    const lib = $("#libCard"); if (lib) lib.hidden = sideOn;
   }
+  let stepResizeT = null;
+  window.addEventListener("resize", () => { clearTimeout(stepResizeT); stepResizeT = setTimeout(() => renderSteps(), 150); });
   // Leaving step 2 while the outline editor is open saves the outline for you (it needs 3 corners);
   // leaving step 3 mid-path finishes the path. Returns false if the step can't be left yet.
   function settleBed() {
@@ -595,7 +872,9 @@
     if (k === "sun") endSunStep();
     S.done = S.done || {}; S.done[k] = true; openSteps.delete(k); save(); renderSteps();
     if (scroll) {
-      const next = Object.keys(STEPS_UI).find(n => !S.done[n]); const el = next ? $(STEPS_UI[next]) : $("#libCard"); if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      // on a phone the steps are stacked, so bring the next one into view; on a wide screen they all sit in one row
+      // at the top and the page stays where it is
+      const next = Object.keys(STEPS_UI).find(n => !S.done[n]); const el = next ? $(STEPS_UI[next]) : $("#libCard"); if (el && !FLOAT()) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
       if (next === "sun") startSunStep();   // moving on to step 4 opens the sun palette on the plan
     }
     return true;
@@ -633,25 +912,32 @@
     const card = $(STEPS_UI[k]);
     card.querySelector(".stepdone").onclick = () => completeStep(k, true);
     const toggle = () => {
-      if (!(S.done && S.done[k])) return;
-      if (openSteps.has(k)) { if (k === "bed" && !settleBed()) return; openSteps.delete(k); if (k === "sun") endSunStep(); }
-      else {
-        // opening a finished step closes any other one you reopened, as if you'd pressed its Done
-        for (const o of [...openSteps]) if (o !== k && STEPS_UI[o] && !completeStep(o)) return;
+      const done = !!(S.done && S.done[k]), isOpen = card.classList.contains("open");
+      if (isOpen) {
+        if (!done) return;   // a step not done yet closes with its Done button
+        if (k === "bed" && !settleBed()) return; openSteps.delete(k); if (k === "sun") endSunStep();
+      } else {
+        // opening a step closes the open one: a finished step as if you'd pressed its Done, an unfinished one just folds
+        const cur = curStep(), others = [...openSteps].concat(!openSteps.size && cur && cur !== k ? [cur] : []);
+        for (const o of others) {
+          if (o === k || !STEPS_UI[o]) continue;
+          if (S.done && S.done[o]) { if (!completeStep(o)) return; }
+          else { if (o === "bed" && !settleBed()) return; if (o === "objects") settleObjects2(); if (o === "sun") endSunStep(); openSteps.delete(o); }
+        }
         openSteps.add(k); if (k === "sun" && !Tour.on) startSunStep();
       }
       renderSteps();
     };
     card.querySelector(".steptog").onclick = e => { e.stopPropagation(); toggle(); };
-    card.querySelector(".stephead").onclick = toggle;
-    card.querySelector(".stepsum").onclick = toggle;
+    // a folded step opens from a click anywhere on its box; an open one only folds from its title
+    card.addEventListener("click", e => { if (e.target.closest(".stepfoot, .steptog")) return; if (!card.classList.contains("open") || e.target.closest(".stephead")) toggle(); });
   });
   // the example garden: a finished plan to look around, with every step already done
   function loadExample() {
     const go = () => {
       if (Tour.on) Tour.end("quiet");
-      S = exampleState(); init(true, true);
-      toast("Here's an example garden. Open any step to change it, or Start over for an empty bed.", 4500);
+      S = exampleState(); init(true, true); heightPolish(); refresh();
+      toast("Here's an example garden. Click Edit on any step to change it, or Start over for an empty bed.", 4500);
     };
     if (S.placements.length || S.objects.length) askChoice("Load the example garden?", ["The example replaces your current plan, including the bed, plants and choices.", "If you want to keep this plan, press Cancel and use Save plan first."], [["Load the example", go]]);
     else go();
@@ -659,7 +945,7 @@
   $("#btnExample").addEventListener("click", loadExample);
   $("#gName").addEventListener("keydown", e => { if (e.key === "Enter" && !document.body.classList.contains("touring")) { e.preventDefault(); e.target.blur(); completeStep("name", true); } });
   $("#btnPaintSun").addEventListener("click", () => { if (!paint) togglePaint(); if (innerWidth > 1050) $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" }); });
-  // ---------- steps 4 and 5: how much sun, and what kind of garden ----------
+  // ---------- steps 4 to 6: how much sun, what kind of garden, and plants to watch out for ----------
   // Sun as three rows in the planner's sun colors, what to include as tiles and chips, and what to leave out as
   // plain switches (with the full explanation one click away). A counter shows how many plants match.
   const AVOID = [
@@ -683,7 +969,7 @@
       pr[key] = on ? pr[key].filter(x => x !== k) : pr[key].concat(k); prefChanged();
     };
     const n = PL.filter(matchesPrefs).length;
-    $("#prefCount").innerHTML = `<b>${n}</b> of ${PL.length} plants match<i style="width:${Math.round(n / PL.length * 100)}%"></i>`;
+    $("#prefCount").innerHTML = $("#avoidCount").innerHTML = `<b>${n}</b> of ${PL.length} plants match<i style="width:${Math.round(n / PL.length * 100)}%"></i>`;
     // sun: three rows in the sun colors, with hours
     const sunBox = $("#pSun"); sunBox.innerHTML = "";
     ["full", "part", "shade"].forEach(k => {
@@ -726,17 +1012,117 @@
     });
     renderSteps();
   }
-  // ---------- step 6: pick plants ----------
+  // ---------- dragging a plant in from the Plants list ----------
+  // Press and drag a plant (on a phone, press and hold first): the pointer becomes the plant's circle, drawn at
+  // its real size over the bed plan, and the sun zones that suit it light up. Let go on the bed plan to plant it
+  // right there (neighbors step aside), or on the Garden Timeline to have it placed for you, short to tall.
+  let libDrag = null, eatLibClick = 0;
+  function libDragDown(e, p) {
+    if (e.button !== 0 || e.target.closest("button, .pc-qty")) return;
+    const touch = e.pointerType === "touch", d = { p, sx: e.clientX, sy: e.clientY, x: e.clientX, y: e.clientY, on: false, id: e.pointerId, over: null };
+    libDrag = d;
+    const start = () => {
+      if (d.on || libDrag !== d) return;
+      d.on = true;
+      const g = document.createElement("div"); g.className = "libghost"; g.textContent = p.code;
+      g.style.background = p.hex; g.style.color = p.txt || "#2E3A2C"; document.body.appendChild(g); d.g = g;
+      document.body.classList.add("libdragging");
+      if (window.Plan.zonesForSun) window.Plan.zonesForSun(p.sun);
+      place();
+    };
+    // while the circle is over the bed, the plants it crowds step aside, and slide back once it moves on
+    let pushOrig = null, tmpIdx = -1;
+    const pushAt = (bx, by) => {
+      if (!pushOrig) { pushOrig = S.placements.map(q => ({ x: q.x, y: q.y })); S.placements.push({ id: p.id, x: bx, y: by, tmp: 1 }); tmpIdx = S.placements.length - 1; pushOrig.push({ x: bx, y: by }); }
+      S.placements[tmpIdx].x = bx; S.placements[tmpIdx].y = by; pushOrig[tmpIdx] = { x: bx, y: by };
+      makeRoom(new Set([tmpIdx]), pushOrig).forEach(i => { if (i !== tmpIdx) window.Plan.movePl(i); });
+    };
+    const unpush = () => {
+      if (!pushOrig) return;
+      S.placements.splice(tmpIdx, 1); pushOrig.pop();
+      S.placements.forEach((q, i) => { if (q.x !== pushOrig[i].x || q.y !== pushOrig[i].y) { q.x = pushOrig[i].x; q.y = pushOrig[i].y; window.Plan.movePl(i); } });
+      pushOrig = null; tmpIdx = -1;
+    };
+    const place = () => {
+      if (!d.g) return;
+      const under = document.elementFromPoint(d.x, d.y);
+      d.over = under && under.closest("#planWrap svg") ? "plan" : under && under.closest("#bloomCard") ? "timeline" : null;
+      const size = d.over === "plan" ? Math.max(18, Geo.spFt(p) * window.Plan.pxPerFt()) : 42;
+      d.g.style.width = d.g.style.height = size + "px"; d.g.style.fontSize = Math.max(9, Math.min(15, size / 3.4)) + "px";
+      d.g.style.left = d.x + "px"; d.g.style.top = d.y + "px";
+      d.g.classList.toggle("nowhere", !d.over);
+      $("#bloomCard").classList.toggle("dropok", d.over === "timeline");
+      if (d.over === "plan") { const pt = window.Plan.clientToBed(d.x, d.y); if (Geo.pip(bed.poly, pt.x, pt.y)) pushAt(pt.x, pt.y); else unpush(); }
+      else unpush();
+    };
+    const hold = touch ? setTimeout(start, 350) : null;
+    const noScroll = ev => { if (d.on) ev.preventDefault(); };
+    const move = ev => {
+      if (ev.pointerId !== d.id) return;
+      d.x = ev.clientX; d.y = ev.clientY;
+      if (!d.on) {
+        const dist = Math.hypot(d.x - d.sx, d.y - d.sy);
+        if (touch) { if (dist > 8) finish(null); return; }   // a swipe before the hold is a scroll
+        if (dist < 6) return;
+        start();
+      }
+      ev.preventDefault(); place();
+    };
+    const finish = ev => {
+      clearTimeout(hold);
+      document.removeEventListener("pointermove", move); document.removeEventListener("pointerup", finish); document.removeEventListener("pointercancel", finish);
+      document.removeEventListener("touchmove", noScroll);
+      if (libDrag === d) libDrag = null;
+      if (!d.on) return;
+      unpush();   // everyone back where they were; the drop below lays them out the same way for good
+      eatLibClick = Date.now();
+      if (d.g) d.g.remove();
+      document.body.classList.remove("libdragging"); $("#bloomCard").classList.remove("dropok");
+      if (window.Plan.zonesOff) window.Plan.zonesOff();
+      if (!ev || ev.type !== "pointerup") return;
+      if (d.over === "plan") { const pt = window.Plan.clientToBed(d.x, d.y); dropPlantAt(p.id, pt.x, pt.y); }
+      else if (d.over === "timeline") dropPlantAuto(p.id);
+    };
+    document.addEventListener("pointermove", move, { passive: false }); document.addEventListener("pointerup", finish); document.addEventListener("pointercancel", finish);
+    document.addEventListener("touchmove", noScroll, { passive: false });
+  }
+  // dropped on the bed plan: right where it was let go, and the plants around it step aside. Off the bed or on
+  // top of an object, it goes to the nearest open spot instead.
+  function dropPlantAt(id, x, y) {
+    const pl = byId[id], r = Geo.spFt(pl) / 2; notice = ""; noFit = [];
+    S.placements = S.placements.filter(q => !q.c);
+    const blocks = (S.objects || []).map(Geo.objBlock).filter(Boolean);
+    const inside = Geo.pip(bed.poly, x, y) && Geo.edgeDist(bed.poly, x, y) >= r * 0.4 && !blocks.some(b => Geo.objDist(b, x, y) < r * 0.5);
+    if (inside) {
+      const orig = S.placements.map(q => ({ x: q.x, y: q.y })).concat([{ x, y }]);
+      S.placements.push({ id, x, y }); makeRoom(new Set([S.placements.length - 1]), orig);
+    } else {
+      const q = Geo.placeAt(bed, byId, S.placements, id, x, y);
+      if (!q) { toast(`No room for ${pl.name} near there. Try another spot.`); refresh(); return; }
+      S.placements.push(q);
+    }
+    if (S.removed) delete S.removed[id];
+    recarpet(); refresh();
+    const last = S.placements[S.placements.length - 1], z = zoneAt(last.x, last.y);
+    toast(`Added ${pl.name}.` + (z && pl.sun && !pl.sun.includes(z) && pl.sun.some(s => zonesPresent().has(s)) ? ` It doesn't like ${({ full: "full sun", part: "part shade", shade: "shade" })[z]} there, though.` : ""), 2600);
+  }
+  // dropped on the Garden Timeline: placed for you, short plants in front and tall ones behind, in light it likes
+  function dropPlantAuto(id) {
+    const pl = byId[id]; notice = ""; noFit = [];
+    if (S.removed) delete S.removed[id];
+    const ok = addOne(id, true); if (!ok) addWaiting(id, 1);
+    refresh();
+    toast(ok ? `Added ${pl.name}, placed by height in light it likes.` : `No room left for ${pl.name} in light it likes. It's on the shopping list.`, 3000);
+  }
+  // ---------- the Plants list ----------
   // Two tabs (everything that fits, or just what's in the bed), search, filters and a sort. Each plant shows
-  // "+ Add", or a - count + stepper once it's in the bed. The list sits in the page (no scroll box of its own)
-  // and shows 15 at a time, with "Show more" and "Show all"; changing the tab, search, filters or sort starts over.
-  let showKey = false, libLimit = 15, libKey = "";
-  const LIB_STEP = 15;
+  // "+ Add", or a - count + stepper once it's in the bed. Every matching plant is listed; the column scrolls.
+  let showKey = false;
   function renderLibrary() {
     const c = counts(), f = S.filter, tab = f.tab === "bed" ? "bed" : "all";
     const nMatch = PL.filter(matchesPrefs).length, inBed = PL.filter(p => c[p.id] > 0), outside = inBed.filter(p => !matchesPrefs(p)).length;
     $("#libLede").innerHTML = `Click a plant to add it to your bed, and use − and + to change how many. <button type="button" class="whybtn" id="keyBtn">${showKey ? "Hide the icon key" : "What do the icons mean?"}</button>` +
-      (outside ? `<span class="liboff"><span class="ic ic-off" data-k="off" data-tip="Outside your step 4 and 5 choices">–</span> ${outside} plant${outside > 1 ? "s" : ""} in your bed ${outside > 1 ? "don't" : "doesn't"} fit your step 4 and 5 choices.</span>` : "");
+      (outside ? `<span class="liboff"><span class="ic ic-off" data-k="off" data-tip="Outside your garden choices">–</span> ${outside} plant${outside > 1 ? "s" : ""} in your bed ${outside > 1 ? "don't" : "doesn't"} fit your garden choices.</span>` : "");
     $("#keyBtn").onclick = () => { showKey = !showKey; renderLibrary(); };
     const key = $("#libKey"); key.hidden = !showKey; key.innerHTML = showKey ? KEY() : "";
     // tabs
@@ -750,8 +1136,7 @@
     const sorters = { name: (a, b) => a.name.localeCompare(b.name), height: (a, b) => Geo.hMean(a) - Geo.hMean(b) || a.name.localeCompare(b.name), bloom: (a, b) => (a.bloom ? a.bloom[0] : 99) - (b.bloom ? b.bloom[0] : 99) || a.name.localeCompare(b.name) };
     list.sort(sorters[f.sort] || sorters.name);
     $("#libN").textContent = list.length + (list.length === 1 ? " plant" : " plants");
-    const viewKey = [tab, f.q, f.height, f.month, f.sort].join("|"); if (viewKey !== libKey) { libKey = viewKey; libLimit = LIB_STEP; }
-    const total = list.length; list = list.slice(0, libLimit);
+    $("#fReset").disabled = !(f.q || f.height || f.month || f.sun);
     const box = $("#lib"); box.style.minHeight = box.offsetHeight + "px"; box.innerHTML = "";
     requestAnimationFrame(() => { box.style.minHeight = ""; });
     if (!list.length) {
@@ -763,19 +1148,13 @@
       d.className = "pcard" + (on ? " on" : ""); d.dataset.id = p.id;
       d.innerHTML = `<img src="${imgSrc(p.id)}" alt=""><div class="pc-main"><div class="nm">${esc(p.name)}${icons(p, !matchesPrefs(p))}</div><div class="meta">${Ch.heightText(p)} · ${esc(Ch.bloomText(p))}</div></div>` +
         (on ? `<div class="pc-qty"><button type="button" class="q-" title="One fewer">−</button><b title="${n} in the bed">${n}</b><button type="button" class="q+" title="One more">+</button></div>` : `<button type="button" class="pc-add" title="Add ${esc(p.name)} to the bed">+ Add</button>`);
-      d.onclick = e => { if (e.target.closest(".pc-qty")) return; if (!on) togglePlant(p.id); };
+      d.onclick = e => { if (e.target.closest(".pc-qty")) return; if (eatLibClick && Date.now() - eatLibClick < 400) return; if (!on) togglePlant(p.id); };
+      d.addEventListener("pointerdown", e => libDragDown(e, p)); d.addEventListener("dragstart", e => e.preventDefault());   // no browser image-drag
       if (on) { d.querySelector(".q-").onclick = e => { e.stopPropagation(); setQty(p.id, -1); }; d.querySelector(".q\\+").onclick = e => { e.stopPropagation(); setQty(p.id, 1); }; }
       d.title = on ? `${n} in the bed. Use − and + to change how many.` : `Click to add ${p.name}`;
       d.onmouseenter = () => setHover(p.id); d.onmouseleave = () => setHover(null);
       box.appendChild(d);
     });
-    if (total > list.length) {
-      const more = document.createElement("div"); more.className = "libmore"; const left = total - list.length;
-      more.innerHTML = `<span>Showing ${list.length} of ${total}</span>`;
-      const b1 = document.createElement("button"); b1.type = "button"; b1.className = "btn small"; b1.textContent = `Show ${Math.min(LIB_STEP, left)} more`; b1.onclick = () => { libLimit += LIB_STEP; renderLibrary(); };
-      const b2 = document.createElement("button"); b2.type = "button"; b2.className = "btn small"; b2.textContent = "Show all"; b2.onclick = () => { libLimit = total; renderLibrary(); };
-      more.append(b1, b2); box.appendChild(more);
-    }
   }
   const refreshLibSort = bindSelectBtn("libSort",
     () => [{ value: "name", label: "A to Z" }, { value: "height", label: "Short to tall" }, { value: "bloom", label: "First to bloom" }],
@@ -800,15 +1179,19 @@
     const box = $("#bloomRows"); box.innerHTML = "";
     if (!list.length) { box.innerHTML = '<div class="empty">Nothing chosen yet. Switch to "All plants" and click + Add on some rows.</div>'; }
     else {
-      const row = (p, qty) => {
+      const badN = {}; lightBadIdx().forEach(i => { const id = S.placements[i].id; badN[id] = (badN[id] || 0) + 1; });
+      const row = (p, qty, zone) => {
         const on = c[p.id] > 0, r = document.createElement("div");
-        r.className = "brow" + (on ? "" : " off"); r.dataset.id = p.id;
+        // a plant set in light it doesn't like (the dotted gold edge on the bed plan) is marked here too
+        const bad = on && (zone ? qty > 0 && !p.sun.includes(zone) : badN[p.id] > 0), badQ = zone ? qty : badN[p.id];
+        r.className = "brow" + (on ? "" : " off") + (bad ? " badlight" : ""); r.dataset.id = p.id;
         let bar;
         if (p.bloom) { const a = Ch.pct(p.bloom[0]), b = Ch.pct(p.bloom[1]); bar = `<div class="bar" style="left:${a}%;width:${b - a}%;background:${p.hex}" title="${esc(Ch.bloomText(p))}: ${esc(p.color)}"></div>`; }
         else bar = `<div class="bar leaf" style="left:2%;width:96%" title="Foliage plant, green all season"></div>`;
         bar += carePills(p);
-        r.innerHTML = `<div class="lab"><img src="${imgSrc(p.id)}" alt=""><div class="nm">${esc(p.name)}${icons(p)}<small>${on ? "×" + qty + " · " : ""}${esc(Ch.bloomText(p))}</small></div></div><div class="track">${bar}</div>`;
-        r.onclick = e => { if (e.target.closest(".addbtn")) return; if (on) pickFromChart(p.id, e.ctrlKey || e.metaKey); };
+        r.innerHTML = `<div class="lab"><img src="${imgSrc(p.id)}" alt=""><div class="nm">${esc(p.name)}${icons(p)}<small>${on ? "×" + qty + " · " : ""}${esc(Ch.bloomText(p))}</small>${bad ? `<em class="badl" title="It is planted where the light doesn't suit it. Move it on the bed plan, or use Move it under the plan.">${badQ > 1 ? badQ + " in" : "In"} the wrong light</em>` : ""}</div></div><div class="track">${bar}</div>`;
+        r.onclick = e => { if (e.target.closest(".addbtn")) return; if (eatRowClick && Date.now() - eatRowClick < 400) return; if (on) pickFromChart(p.id, e.ctrlKey || e.metaKey); };
+        if (zone) { r.dataset.zone = zone; if (on && qty > 0) { r.classList.add("canmove"); r.title = "Drag into another sun section to move it there on the bed plan"; r.addEventListener("pointerdown", e => rowDragDown(e, r, p, zone)); } }
         if (!on) { const ab = document.createElement("button"); ab.type = "button"; ab.className = "addbtn"; ab.textContent = "+ Add"; ab.onclick = () => togglePlant(p.id); r.querySelector(".nm").appendChild(ab); }
         r.onmouseenter = () => setHover(p.id); r.onmouseleave = () => setHover(null);
         return r;
@@ -826,9 +1209,9 @@
             else if (p.sun && p.sun.includes(z)) rows.push({ p, qty: 0 });
           });
           if (!rows.length) return;
-          const head = document.createElement("div"); head.className = "zone-head"; head.innerHTML = `<i style="background:${SUNCOL[z]}"></i>${{ full: "Full sun", part: "Part shade", shade: "Shade" }[z]}<span class="zh-hrs">${window.Plan.ZONE_TIP[z].replace(/^[^:]+: /, "")}</span>`;
+          const head = document.createElement("div"); head.className = "zone-head"; head.dataset.zone = z; head.innerHTML = `<i style="background:${SUNCOL[z]}"></i>${{ full: "Full sun", part: "Part shade", shade: "Shade" }[z]}<span class="zh-hrs">${window.Plan.ZONE_TIP[z].replace(/^[^:]+: /, "")}</span>`;
           box.appendChild(head);
-          rows.forEach(({ p, qty }) => box.appendChild(row(p, qty)));
+          rows.forEach(({ p, qty }) => box.appendChild(row(p, qty, z)));
         });
       } else {
         list.forEach(p => box.appendChild(row(p, c[p.id] || 0)));
@@ -845,22 +1228,31 @@
   const SPROUT = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 11V6.5M6 6.8C6 4.2 4.2 2.8 1.6 3c0 2.4 1.8 3.8 4.4 3.8zM6 6.2c0-2.6 1.8-4 4.4-3.8 0 2.4-1.8 3.8-4.4 3.8z" fill="currentColor" stroke="currentColor" stroke-width=".8" stroke-linejoin="round"/></svg>';
   const CARE_ICON = { prep: SPROUT, cut: "✂", trim: "✂", divide: "↔", bulbs: "●", mulch: "≋", lift: "↑", replant: "↓", dig: "↑" };
   const CARE_LAB = { prep: "Prep", cut: "Cut back", trim: "Optional trim", lift: "Dig up", replant: "Replant", mulch: "Winter mulch" };
-  function pill(k, w, tip, label) {
+  function pill(k, w, tip, label, top) {
     const a = Ch.pct(w.a), b = Ch.pct(w.b);
-    return `<span class="cpill k-${k}${label ? " big" : ""}" data-k="${k}" data-tip="${esc(tip)}" style="left:${a}%;width:${Math.max(1.2, b - a)}%"><i>${CARE_ICON[k]}</i>${label ? "<b>" + esc(label) + "</b>" : ""}</span>`;
+    return `<span class="cpill k-${k}${label ? " big" : ""}" data-k="${k}" data-tip="${esc(tip)}" style="left:${a}%;width:${Math.max(1.2, b - a)}%${top == null ? "" : ";top:" + top + "px"}"><i>${CARE_ICON[k]}</i>${label ? "<b>" + esc(label) + "</b>" : ""}</span>`;
   }
+  // every care mark sits on one line through the middle of the bloom bar; marks whose dates overlap stack up
+  // (two or more lines), still centered on that middle line
   function carePills(p) {
-    const c = window.Care.careFor(p); let h = "";
-    ["prep", "cut", "trim"].forEach(k => { if (c[k]) h += pill(k, c[k], CARE_LAB[k] + ": " + c[k].text + (k === "prep" || (k === "cut" && !c.prep) ? " " + c.divide : "")); });
-    ["lift", "replant", "mulch"].forEach(k => { if (c[k]) h += pill(k, c[k], (c.winter.how === "annual" && k === "replant" ? "Plant new" : c.winter.how === "pot" && k === "lift" ? "Bring indoors" : CARE_LAB[k]) + ": " + c[k].text); });
-    return h;
+    const c = window.Care.careFor(p), items = [];
+    ["prep", "cut", "trim"].forEach(k => { if (c[k]) items.push([k, c[k], CARE_LAB[k] + ": " + c[k].text + (k === "prep" || (k === "cut" && !c.prep) ? " " + c.divide : "")]); });
+    if (c.divideW) items.push(["divide", c.divideW, "Divide: " + c.divideW.text]);
+    ["lift", "replant", "mulch"].forEach(k => { if (c[k]) items.push([k, c[k], (c.winter.how === "annual" && k === "replant" ? "Plant new" : c.winter.how === "pot" && k === "lift" ? "Bring indoors" : CARE_LAB[k]) + ": " + c[k].text]); });
+    items.sort((x, y) => x[1].a - y[1].a);
+    const ends = [];                                   // where each stacked line is busy until, in % across the track
+    items.forEach(it => {
+      const pa = Ch.pct(it[1].a), pb = Math.max(Ch.pct(it[1].b), pa + 1.2);
+      let ln = ends.findIndex(e => pa >= e - 0.01); if (ln < 0) { ln = ends.length; ends.push(0); }
+      ends[ln] = pb; it.push(ln);
+    });
+    const n = Math.max(1, ends.length), H = 11, GAP = 1, mid = 19, top0 = mid - (n * H + (n - 1) * GAP) / 2;
+    return items.map(it => pill(it[0], it[1], it[2], null, +(top0 + it[3] * (H + GAP)).toFixed(1))).join("");
   }
   function renderGardenCare() {
+    // the care timing is drawn on each plant's own row; this is just the key
     const box = $("#gardenCare"); if (!box) return;
-    const tasks = window.Care.gardenTasks(selected());
-    const lane = n => tasks.filter(t => t.lane === n).map(t => pill(t.k, t, t.label + ": " + t.text, t.label)).join("");
-    box.innerHTML = `<div class="gc-lab"><b>Whole garden</b><small>Michigan zone 6B. Hover or tap for details.</small></div><div class="gc-track"><div class="gc-lane">${lane(0)}</div><div class="gc-lane">${lane(1)}</div>${tasks.some(t => t.lane === 2) ? `<div class="gc-lane">${lane(2)}</div>` : ""}</div>`
-      + `<div class="gc-key"><span class="cpill k-prep"><i>${SPROUT}</i></span> prep <span class="cpill k-cut"><i>✂</i></span> cut back <span class="cpill k-trim"><i>✂</i></span> optional trim for more flowers <span class="cpill k-divide"><i>↔</i></span> divide <span class="cpill k-bulbs"><i>●</i></span> plant bulbs${tasks.some(t => t.lane === 2) ? ' <span class="cpill k-lift"><i>↑</i></span> dig up / bring in <span class="cpill k-replant"><i>↓</i></span> replant' : ""}</div>`;
+    box.innerHTML = `<div class="gc-key"><b>Care on each plant (hover or tap a bar):</b> <span class="cpill k-prep"><i>${SPROUT}</i></span> prep <span class="cpill k-cut"><i>✂</i></span> cut back <span class="cpill k-trim"><i>✂</i></span> optional trim for more flowers <span class="cpill k-divide"><i>↔</i></span> divide <span class="cpill k-lift"><i>↑</i></span> dig up / bring in <span class="cpill k-replant"><i>↓</i></span> replant <span class="cpill k-mulch"><i>≋</i></span> winter mulch</div>`;
   }
 
   // ---------- small to big chart ----------
@@ -909,7 +1301,7 @@
     const t = $("#shop");
     if (!sel.length) { t.innerHTML = '<tbody><tr><td class="empty">No plants chosen yet.</td></tr></tbody>'; return; }
     t.innerHTML = `<thead><tr><th>Plant</th><th>How many</th><th>Spacing</th><th>Height</th><th>Blooms</th></tr></thead><tbody>` +
-      sel.map(p => `<tr data-id="${p.id}"><td><img src="${imgSrc(p.id)}" alt=""><b>${esc(p.name)}</b>${icons(p)}${S.waiting && S.waiting[p.id] > 0 ? `<small class="wfit">${S.waiting[p.id]} won't fit in the bed yet</small>` : ""}</td>
+      sel.map(p => `<tr data-id="${p.id}"><td class="shp"><img src="${imgSrc(p.id)}" alt=""><span class="shn"><b>${esc(p.name)}</b>${icons(p)}<small class="lat">${esc(p.latin)}</small>${S.waiting && S.waiting[p.id] > 0 ? `<small class="wfit">${S.waiting[p.id]} won't fit in the bed yet</small>` : ""}</span></td>
         <td><div class="stepper"><button type="button" data-d="-1">−</button><span>${c[p.id]}</span><button type="button" data-d="1">+</button></div>${p.clump ? `<small class="bulbn">spots, about ${c[p.id] * p.clump} bulbs</small>` : ""}</td>
         <td>${p.spacing} in</td><td>${Ch.heightText(p)}</td><td>${esc(Ch.bloomText(p))}</td></tr>`).join("") +
       `</tbody><tfoot><tr><td>Total</td><td>${S.placements.length + waitTotal()} plants</td><td colspan="3"></td></tr></tfoot>`;
@@ -1187,7 +1579,7 @@
     const c = counts(true), mine = PL.filter(p => c[p.id] > 0);   // the gap-filler carpet doesn't count as a pick
     if (!mine.length) { doSuggestPlanting(false); return; }
     askChoice("Suggest a planting", [
-      "I'll pick plants for each part of the bed, matched to its light, and lay them out so the bed is full once grown (every plant at its recommended spacing): plants that go well together, flowers from spring into fall, and short, middle and tall plants in the right places. Only plants that fit your step 4 and 5 choices are used.",
+      "I'll pick plants for each part of the bed, matched to its light, and lay them out so the bed is full once grown (every plant at its recommended spacing): plants that go well together, flowers from spring into fall, and short, middle and tall plants in the right places. Only plants that fit your garden choices are used.",
       `Build around the ${mine.length} kind${mine.length === 1 ? "" : "s"} of plant you have now, adding others that suit them, or start fresh with a whole new mix. Locked plants always stay. Each click gives a different planting, and you can undo it.`],
       [["Build around my plants", () => doSuggestPlanting(true)], ["Start fresh", () => doSuggestPlanting(false)]]);
   }
@@ -1253,6 +1645,10 @@
     () => [{ value: "", label: "Any height" }, { value: "low", label: "Low (under 12 in)" }, { value: "mid", label: "Medium (12–30 in)" }, { value: "tall", label: "Tall (30 in and up)" }],
     () => S.filter.height || "",
     v => { S.filter.height = v; renderLibrary(); save(); });
+  const refreshSun = bindSelectBtn("fSun",
+    () => [{ value: "", label: "Any light" }, { value: "full", label: "Full sun" }, { value: "part", label: "Part shade" }, { value: "shade", label: "Shade" }],
+    () => S.filter.sun || "",
+    v => { S.filter.sun = v; renderLibrary(); save(); });
   const refreshMonth = bindSelectBtn("fMonth",
     () => [{ value: "", label: "Any bloom month" }].concat(Ch.MONTHS.map((m, i) => ({ value: String(4 + i), label: "Blooms in " + m }))),
     () => S.filter.month || "",
@@ -1315,6 +1711,7 @@
   }
   // the sun-painting palette floats at the top of the bed plan while painting
   function renderPaintBar() {
+    document.body.classList.toggle("painting", !!paint);
     const bar = $("#paintBar"); if (!bar) return;
     if (!paint) { bar.hidden = true; bar.innerHTML = ""; return; }
     bar.hidden = false; bar.innerHTML = "";
@@ -1352,8 +1749,11 @@
       if (selIdx >= 0) optMode = "idle";
       renderPlan();
     },
-    onMoved() { save(); renderPlan(); if (sunActive()) renderBloom(); },   // a plant dragged into another sun zone moves to that zone's section of the Garden Timeline
+    onDragStart() { dragOrig = S.placements.map(p => ({ x: p.x, y: p.y })); const c = $("#selCard"); if (c) c.hidden = true; },
+    onDragPush(idx) { return dragOrig ? makeRoom(new Set([idx]), dragOrig) : []; },
+    onMoved() { dragOrig = null; save(); renderPlan(); if (sunActive()) renderBloom(); },   // a plant dragged into another sun zone moves to that zone's section of the Garden Timeline
     isMulti() { return multiTap; },
+    isOnlySelected(i) { const s = selAll(); return s.length === 1 && s[0] === i; },
     // the card beside a selection follows the plant when the plan is zoomed or moved around
     onPanStart() { const c = $("#selCard"); if (c) c.style.visibility = "hidden"; },
     onView() { const c = $("#selCard"); if (c) c.style.visibility = ""; renderSelCard(); },
@@ -1428,6 +1828,8 @@
     r.readAsText(f);
   });
   $("#q").addEventListener("input", e => { S.filter.q = e.target.value; renderLibrary(); save(); });
+  // one click puts the Plants filters back to showing everything (the sort order stays)
+  $("#fReset").onclick = () => { Object.assign(S.filter, { q: "", height: "", month: "", sun: "" }); $("#q").value = ""; refreshHeight(); refreshMonth(); refreshSun(); renderLibrary(); save(); };
   $("#bloomFilter").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; S.bloomFilter = b.dataset.f; document.querySelectorAll("#bloomFilter button").forEach(x => x.classList.toggle("on", x === b)); renderBloom(); save(); });
   // groundcovers to offer: low plants that suit the step-2 choices (sun, origin, safety)
   function groundcovers() {
@@ -1629,7 +2031,7 @@
     addSpot = spot; const card = $("#addCard"); card.hidden = false; card.innerHTML = "";
     renderPlan();
     const z = spot ? zoneAt(spot.x, spot.y) : null;
-    cardHead(card, `<span class="sc-oic">${PLANT_ICON}</span><div><div class="sc-name">${spot ? "Add a plant here" : "Add a plant"}</div><div class="sc-sub">${z ? "Plants that suit " + esc(window.Plan.ZONE_LAB[z].toLowerCase()) + " here (" + esc(window.Plan.ZONE_HRS[z]) + " of direct sun)" : spot ? "Plants that fit your step 4 and 5 choices" : "Placed where it suits best. Right-click the bed to choose a spot."}</div></div>`, closeAddCard);
+    cardHead(card, `<span class="sc-oic">${PLANT_ICON}</span><div><div class="sc-name">${spot ? "Add a plant here" : "Add a plant"}</div><div class="sc-sub">${z ? "Plants that suit " + esc(window.Plan.ZONE_LAB[z].toLowerCase()) + " here (" + esc(window.Plan.ZONE_HRS[z]) + " of direct sun)" : spot ? "Plants that fit your choices" : "Placed where it suits best. Right-click the bed to choose a spot."}</div></div>`, closeAddCard);
     const q = document.createElement("input"); q.type = "search"; q.className = "sc-search"; q.placeholder = "Search by name"; card.appendChild(q);
     const list = document.createElement("div"); list.className = "sc-list"; card.appendChild(list);
     q.oninput = () => renderAddList(list, q.value);
@@ -1660,7 +2062,7 @@
     section("Go well with plants nearby", sec1, p => "goes with " + goes[p.id]);
     section("Already in your bed", sec2, p => cnt[p.id] + " in the bed · " + Ch.heightText(p));
     section(sec1.length || sec2.length ? "More plants" : "Plants", sec3, p => Ch.heightText(p) + " · " + p.spacing + " in apart");
-    if (!pool.length) list.innerHTML = `<div class="sc-empty">${qq ? "No match. Try another name." : "No plants match your step 4 and 5 choices for this light. Try widening those choices."}</div>`;
+    if (!pool.length) list.innerHTML = `<div class="sc-empty">${qq ? "No match. Try another name." : "No plants match your choices for this light. Try widening them in What kind of garden?, Plants to watch out for or How much sun?"}</div>`;
   }
   function addPlantHere(id) {
     const pl = byId[id], spot = addSpot; notice = ""; noFit = [];
@@ -1721,7 +2123,7 @@
     const list = groundcovers();
     S.fillPicks = (S.fillPicks || []).filter(id => list.some(p => p.id === id));
     if (!list.length) {
-      const lab = document.createElement("span"); lab.className = "fp-lab"; lab.textContent = "No groundcover matches your choices in steps 4 and 5. Try adding more sun or origin choices.";
+      const lab = document.createElement("span"); lab.className = "fp-lab"; lab.textContent = "No groundcover matches your choices. Try adding more sun or origin choices.";
       top.appendChild(lab);
     } else {
       const lab = document.createElement("div"); lab.className = "fp-lab fp-full"; lab.innerHTML = "<span class=\"fp-hint\">I will tuck a low groundcover into the empty spaces between your plants, in light that suits it. Click a name to pick one or more, then confirm. Click a photo to enlarge it.</span>";
@@ -1751,7 +2153,7 @@
     lab.innerHTML = `<span class="fp-hint">For each empty spot I look at the nearest plant and tuck in one of its researched companions that fits there: short ones toward the front, tall ones toward the back, and only in light that suits it. Any groundcover filler is cleared first; you can add it back afterward. Click a plant to leave it out.</span>`;
     top.appendChild(lab);
     if (!all.length) {
-      const e = document.createElement("span"); e.className = "fp-lab"; e.textContent = "None of the plants in your bed have researched companions that match your step 4 and 5 choices yet.";
+      const e = document.createElement("span"); e.className = "fp-lab"; e.textContent = "None of the plants in your bed have researched companions that match your garden choices yet.";
       top.appendChild(e);
     } else {
       const tiles = document.createElement("div"); tiles.className = "fp-tiles";
@@ -1792,14 +2194,24 @@
   function doArrange() {
     const q = counts(true), lockN = {}; S.placements.forEach(p => { if (p.lock && !p.c) lockN[p.id] = (lockN[p.id] || 0) + 1; });
     const items = () => Object.keys(q).filter(id => q[id] > 0 && byId[id]).map(id => ({ plant: byId[id], n: q[id] }));
-    relayout(true, items()); fitToFull(q, items, lockN); refresh();
+    // build three layouts and keep the best one: fewest plants left waiting first, then the best height order
+    const q0 = Object.assign({}, q); let best = null;
+    for (let k = 0; k < 3; k++) {
+      Object.keys(q).forEach(id => delete q[id]); Object.assign(q, q0);
+      relayout(true, items()); fitToFull(q, items, lockN); heightPolish();
+      const sc = waitTotal() * 1000 + heightWrong();
+      if (!best || sc < best.sc) best = { sc, placements: S.placements.map(p => Object.assign({}, p)), waiting: Object.assign({}, S.waiting), seed: S.seed, q: Object.assign({}, q), un: Object.assign({}, lastUnplaced) };
+    }
+    S.placements = best.placements; S.waiting = best.waiting; S.seed = best.seed; lastUnplaced = best.un;
+    Object.keys(q).forEach(id => delete q[id]); Object.assign(q, best.q);
+    refresh();
     toast("New arrangement, " + fullnessNow() + "% full once grown. Click Re-arrange again for another.", 3500);
   }
   // ---------- Suggest a planting ----------
   // Picks the plants as well as how many of each, the way the starter garden was put together: plants matched
   // to the light in each part of the bed (more kinds where there is more room), favoring real "goes well with"
   // pairings, filling months when nothing else blooms, mixing short, middle and tall plants sized to the bed,
-  // and only from plants that fit the step 4 and 5 choices. A little randomness makes each click a different but
+  // and only from plants that fit the garden choices (kind of garden, plants to watch out for, sun). A little randomness makes each click a different but
   // still sensible planting. keepIds are plants to build around; locked plants are always kept.
   function zoneAreas() {   // planting room in each light, skipping spots taken by objects
     const res = 0.5, bb = bed.bb, out = {};
@@ -1899,7 +2311,7 @@
     const locked = [...new Set(S.placements.filter(p => p.lock && !p.c).map(p => p.id))];
     const mine = counts(true), keep = [...new Set((build ? PL.filter(p => mine[p.id] > 0).map(p => p.id) : []).concat(locked))];
     const plan = planPlanting(keep, (Date.now() % 100000) + 1);
-    if (!plan || !Object.keys(plan.q).length) { toast("No plants match your step 4 and 5 choices for the light in this bed. Try widening those choices."); return; }
+    if (!plan || !Object.keys(plan.q).length) { toast("No plants match your choices for the light in this bed. Try widening them in What kind of garden?, Plants to watch out for or How much sun?"); return; }
     // never fewer than the locked plants of a kind already on the bed
     const lockN = {}; S.placements.forEach(p => { if (p.lock && !p.c) lockN[p.id] = (lockN[p.id] || 0) + 1; });
     Object.keys(lockN).forEach(id => (plan.q[id] = Math.max(plan.q[id] || 0, lockN[id])));
@@ -1919,7 +2331,7 @@
       ids.forEach(id => { const cut = Math.min(over[id], q[id] - (lockN[id] || 0)); if (cut > 0) { q[id] -= cut; changed = true; } });
       if (!changed) break;
     }
-    fitToFull(q, items, lockN);
+    fitToFull(q, items, lockN); heightPolish();
     notice = ""; noFit = []; selIdx = -1; extraSel = [];
     refresh();
     const kinds = Object.keys(q).filter(id => q[id] > 0).length, n = S.placements.filter(p => !p.c).length;
@@ -2015,7 +2427,7 @@
     }
     armed = null; selIdx = -1; hoverId = null;
     document.querySelectorAll("#bloomFilter button").forEach(x => x.classList.toggle("on", x.dataset.f === S.bloomFilter));
-    refreshBloomSort(); $("#q").value = S.filter.q || ""; refreshHeight(); refreshMonth(); refreshLibSort();
+    refreshBloomSort(); $("#q").value = S.filter.q || ""; refreshHeight(); refreshMonth(); refreshSun(); refreshLibSort();
     renderName();
     fullRender();
   }
@@ -2081,20 +2493,23 @@
   const Tour = (function () {
     const NS = "http://www.w3.org/2000/svg";
     let on = false, idx = 0, raf = 0, veil, path, ring, coach;
+    const STEP_UNDER = { bed: "#bedPanel", objects: "#objCard", sun: "#sunCard" };
     const STEPS = [
       { key: "name", title: "Name your garden", holes: [["#nameCard"]], example: true,
         text: "Give your garden a name, like <i>Backyard Shade Garden</i>. It goes at the top of the planner and on your PDF guide. It's optional, so you can skip it.<br><br>Just looking around? Load the example garden to see a finished plan and skip the other steps.",
         enter() { setTimeout(() => { const i = $("#gName"); if (i) i.focus(); }, 350); } },
+      { key: "kind", title: "What kind of garden?", holes: [["#prefCard"]],
+        text: "Choose Michigan natives, garden favorites or both, and which kinds of plants you like. The counter shows how many plants match." },
+      { key: "avoid", title: "Plants to watch out for", holes: [["#avoidCard"]],
+        text: "Leave out plants that are toxic to pets or people, that deer eat, that need winter care here, or that bother ragweed allergies. Or include them: they're marked with an icon so you know." },
       { key: "bed", title: "Build your bed", holes: [["#bedPanel"], ["#planWrap"]],
-        text: "Pick a shape: a rectangle, a round island, or draw your own. Then set the size with <b>−</b> and <b>+</b>. The bed plan changes as you go." },
+        text: "Pick a shape: a rectangle, a round island, or draw your own. Then set the size with <b>−</b> and <b>+</b>. The bed plan beside it changes as you go." },
       { key: "objects", title: "Add objects", holes: [["#objCard"], ["#planWrap"]],
         text: "Add anything that's in the bed or going into it: a path, stepping stones, rocks, a birdbath, shrubs, a hedge or trees. Plants are then laid out around them. Click one, then click the bed. Drag it to move it, and drag the white dots to resize. Nothing to add? Just click Next." },
       { key: "sun", title: "Add the sun", holes: [["#planWrap"], ["#sunCard"]], primary: 0,
-        text: "Map where the sun falls. Pick a light, then drag across the bed: <b>full sun</b> is 6+ hours of direct sun a day, <b>part shade</b> 3 to 6, <b>shade</b> under 3. <b>Rest of bed</b> sets the light everywhere you don't paint. Step 4 on the left follows what you map, or you can just tick the lights there.",
+        text: "Map where the sun falls. Pick a light, then drag across the bed: <b>full sun</b> is 6+ hours of direct sun a day, <b>part shade</b> 3 to 6, <b>shade</b> under 3. <b>Rest of bed</b> sets the light everywhere you don't paint. The list of lights in this step follows what you map, or you can just tick the lights there.",
         enter() { if (!paint) togglePaint(true); },
         leave(fwd) { if (paint) { paint = null; renderPaintBar(); renderPlan(); } if (fwd) syncSunPrefs(true); } },
-      { key: "kind", title: "What kind of garden?", holes: [["#prefCard"]],
-        text: "Choose Michigan natives, garden favorites or both, which kinds of plants you like, and whether to leave out plants that are toxic, that deer eat, or that bother ragweed allergies. The counter shows how many plants match." },
       { key: "plants", title: "Pick your plants", holes: [["#libCard"]], last: true,
         text: "Click <b>+ Add</b> on any plant and it's placed in the bed for you. Or let the planner choose: <b>Suggest a planting</b> picks plants that suit each part of the bed and go well together." }
     ];
@@ -2127,11 +2542,17 @@
       veil.setAttribute("viewBox", `0 0 ${W} ${H}`); veil.setAttribute("width", W); veil.setAttribute("height", H);
       path.setAttribute("d", `M0 0H${W}V${H}H0Z` + holes.join(""));
       ring.setAttribute("d", holes.join(""));
-      place(rects[st.primary || 0] || rects.find(Boolean), rects.filter(Boolean));
+      place(rects[st.primary || 0] || rects.find(Boolean), rects.filter(Boolean), st);
       raf = requestAnimationFrame(frame);
     }
     // the coach card sits beside the main hole, on whichever side has room and doesn't cover another hole
-    function place(r, all) {
+    function place(r, all, st) {
+      // steps that open in the left column: the box goes right under the step, in that column
+      const side = st && STEP_UNDER[st.key] && document.querySelector("#sideStep " + STEP_UNDER[st.key]);
+      if (side && innerWidth >= 640) {
+        const sr = side.getBoundingClientRect(), cw = coach.offsetWidth, ch = coach.offsetHeight, y = sr.bottom + 12;
+        if (y + ch <= innerHeight - 10 && sr.bottom > 0) { coach.style.left = Math.round(Math.max(10, sr.left + (sr.width - cw) / 2)) + "px"; coach.style.top = Math.round(y) + "px"; return; }
+      }
       if (innerWidth < 640) { coach.style.left = "10px"; coach.style.top = Math.round(innerHeight - coach.offsetHeight - 10) + "px"; return; }   // phone: along the bottom
       const cw = coach.offsetWidth, ch = coach.offsetHeight, W = innerWidth, H = innerHeight, g = 14, top0 = ($(".top") ? $(".top").getBoundingClientRect().bottom : 0) + 8;
       const clampY = y => Math.max(top0, Math.min(H - ch - 10, y)), clampX = x => Math.max(10, Math.min(W - cw - 10, x));
@@ -2146,7 +2567,7 @@
     }
     function show() {
       const st = STEPS[idx];
-      coach.innerHTML = `<div class="tc-kick">Step ${idx + 1} of ${STEPS.length}<span class="tc-dots">${STEPS.map((_, i) => `<i class="${i === idx ? "on" : i < idx ? "done" : ""}"></i>`).join("")}</span></div><h3>${st.title}</h3><p>${st.text}</p><div class="tc-acts"></div><button type="button" class="tc-skip">Skip the tour</button>`;
+      coach.innerHTML = `<div class="tc-kick">${st.last ? "Your plants" : "Step " + (idx + 1) + " of " + (STEPS.length - 1)}<span class="tc-dots">${STEPS.map((_, i) => `<i class="${i === idx ? "on" : i < idx ? "done" : ""}"></i>`).join("")}</span></div><h3>${st.title}</h3><p>${st.text}</p><div class="tc-acts"></div><button type="button" class="tc-skip">Skip the tour</button>`;
       const acts = coach.querySelector(".tc-acts");
       const b = (t, cls, fn) => { const x = document.createElement("button"); x.type = "button"; x.className = "btn " + cls; x.textContent = t; x.onclick = fn; acts.appendChild(x); return x; };
       if (idx > 0) b("Back", "small tc-back", () => go(idx - 1));

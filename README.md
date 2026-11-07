@@ -7,14 +7,16 @@ Plan a perennial flower bed for Michigan (zone 6B): pick a bed shape, choose Mic
 **Open the planner:** https://spreck79.github.io/perennial-bed-planner/
 
 ## What it does
-A guided tour walks first-time visitors through six steps, lighting up one at a time. Each finished step folds down to a one-line summary and can be opened again to change it. Or load the example garden to see a finished plan right away.
+A guided tour walks first-time visitors through six steps and the plant list, lighting up one at a time. Each finished step folds down to a one-line summary and can be opened again to change it. Or load the example garden to see a finished plan right away.
 
 1. **Name your garden.** The PDF guide is saved as the date and name, like "26-10-28 Backyard Garden.pdf".
-2. **Your bed.** A rectangle, a round island, or draw your own: drag the dots, click a dot to switch between a sharp corner and a curve (crisp corners against a house, a curved front), and drag inside to move the shape (a drawn bed can be changed any time with "Edit the outline"). Choose where the bed is seen from, one side or several or all the way around: those edges are outlined in green and plants run short to tall away from them.
-3. **Add objects.** Paths, stepping stones, rocks, a birdbath, shrubs, a hedge or trees, placed before the plants so they're laid out around them. Paths and stepping stones show footprints, and a path where people walk and look counts as a viewing edge too, so plants beside it stay low.
-4. **How much sun?** Full sun (6+ hours of direct sun a day), part shade (3 to 6) or shade (under 3), and map sunny and shady spots right on the bed plan.
-5. **What kind of garden?** Michigan natives and/or garden favorites, kinds of plants (including spring bulbs), and whether to leave out plants that are toxic, that deer eat, or in the daisy family (ragweed allergies).
-6. **Pick plants,** or let **Suggest a planting** choose plants that suit each part of the bed and go well together. Suggestions and Re-arrange aim for a bed that's about 100% full once the plants are grown.
+2. **What kind of garden?** Michigan natives and/or garden favorites, and kinds of plants (including spring bulbs).
+3. **Plants to watch out for.** Whether to leave out plants that are toxic, that deer eat, that need winter care here, or in the daisy family (ragweed allergies).
+4. **Your bed.** A rectangle, a round island, or draw your own: drag the dots, click a dot to switch between a sharp corner and a curve (crisp corners against a house, a curved front), and drag inside to move the shape (a drawn bed can be changed any time with "Edit the outline"). Choose where the bed is seen from, one side or several or all the way around: those edges are outlined in green and plants run short to tall away from them.
+5. **Add objects.** Paths, stepping stones, rocks, a birdbath, shrubs, a hedge or trees, placed before the plants so they're laid out around them. Paths and stepping stones show footprints, and a path where people walk and look counts as a viewing edge too, so plants beside it stay low.
+6. **How much sun?** Full sun (6+ hours of direct sun a day), part shade (3 to 6) or shade (under 3), and map sunny and shady spots right on the bed plan.
+
+Then **pick plants** from the Plants list beside the bed plan, or let **Suggest a planting** choose plants that suit each part of the bed and go well together. Suggestions and Re-arrange aim for a bed that's about 100% full once the plants are grown.
 
 On the bed plan:
 - Right-click any plant, object or empty spot for a menu; click one for a card with what it is, its sun needs and plants that go well with it (each pairing from a published source).

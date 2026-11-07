@@ -423,7 +423,7 @@
     }
     // ================= Shopping list (fills the rest of the page, then continues) =================
     {
-      const list = byHeight, rh = 31, uw = W - 2 * M;
+      const list = byHeight, rh = 37, uw = W - 2 * M;
       const cx = { qty: uw * 0.50, sp: uw * 0.60, ht: uw * 0.72, bl: uw * 0.86 };
       const hdr = (cont) => {
         sf("rb", 14); color(C.forest); text(cont ? "Shopping list (continued)" : "Shopping list", M, sy); sy += 12;
@@ -435,15 +435,16 @@
       sy += 6; hdr(false);
       list.forEach(p => {
         if (sy + rh > H - 56) { newPage(); sy = 62; hdr(true); }
-        stroke("#8b8f80"); doc.setLineWidth(0.7); fill("#FFFFFF"); doc.roundedRect(M + 4, sy + 11, 9, 9, 1.5, 1.5, "FD");
-        photo(p.id, M + 18, sy + 4, 30, 22, 3);
-        sf("sb", 7.8); color(C.ink); text(p.name, M + 54, sy + 12); drawIcons(p, M + 54 + doc.getTextWidth(p.name) + 4, sy + 9.3, 3.2);
-        { let lx = M + 54; const lab0 = p.native ? "Michigan native" : "Garden favorite"; sf("s", 6); color(C.muted); text(lab0, lx, sy + 20); lx += doc.getTextWidth(lab0 + "  ");
-          if (deerEats(p)) { const dt = p.deer === "D" ? "Deer often eat" : "Deer sometimes eat"; sf("sb", 6); color("#7A5230"); text(dt, lx, sy + 20); lx += doc.getTextWidth(dt + "  "); }
-          if (waiting[p.id] > 0) { sf("sb", 6); color(TOX); text(waiting[p.id] + " won't fit in the bed drawing", lx, sy + 20); } }
-        if (p.toxic) { sf("sb", 6); color(TOX); text(toxLabel(p), M + 54, sy + 27.5); }
-        sf("sb", 9.5); color(C.forest); text(String(counts[p.id] || 0), M + cx.qty + 14, sy + (p.clump ? 14 : 17), { align: "center" }); if (p.clump) { sf("s", 5.6); color(C.muted); text("clumps, about " + (counts[p.id] || 0) * p.clump + " bulbs", M + cx.qty + 14, sy + 22, { align: "center" }); }
-        sf("s", 7.4); color(C.ink); text(p.spacing + " in", M + cx.sp, sy + 16.5); text(Ch.heightText(p), M + cx.ht, sy + 16.5); text(p.bloom ? Ch.bloomText(p) : "Foliage plant", M + cx.bl, sy + 16.5);
+        stroke("#8b8f80"); doc.setLineWidth(0.7); fill("#FFFFFF"); doc.roundedRect(M + 4, sy + 14, 9, 9, 1.5, 1.5, "FD");
+        photo(p.id, M + 18, sy + 7, 30, 22, 3);
+        sf("sb", 7.8); color(C.ink); text(p.name, M + 54, sy + 11); drawIcons(p, M + 54 + doc.getTextWidth(p.name) + 4, sy + 8.3, 3.2);
+        sf("ri", 6.8); color(C.muted); text(p.latin, M + 54, sy + 18.5);   // the botanical name under the common name
+        { let lx = M + 54; const lab0 = p.native ? "Michigan native" : "Garden favorite"; sf("s", 6); color(C.muted); text(lab0, lx, sy + 26); lx += doc.getTextWidth(lab0 + "  ");
+          if (deerEats(p)) { const dt = p.deer === "D" ? "Deer often eat" : "Deer sometimes eat"; sf("sb", 6); color("#7A5230"); text(dt, lx, sy + 26); lx += doc.getTextWidth(dt + "  "); }
+          if (waiting[p.id] > 0) { sf("sb", 6); color(TOX); text(waiting[p.id] + " won't fit in the bed drawing", lx, sy + 26); } }
+        if (p.toxic) { sf("sb", 6); color(TOX); text(toxLabel(p), M + 54, sy + 33); }
+        sf("sb", 9.5); color(C.forest); text(String(counts[p.id] || 0), M + cx.qty + 14, sy + (p.clump ? 17 : 20), { align: "center" }); if (p.clump) { sf("s", 5.6); color(C.muted); text("clumps, about " + (counts[p.id] || 0) * p.clump + " bulbs", M + cx.qty + 14, sy + 25, { align: "center" }); }
+        sf("s", 7.4); color(C.ink); text(p.spacing + " in", M + cx.sp, sy + 19.5); text(Ch.heightText(p), M + cx.ht, sy + 19.5); text(p.bloom ? Ch.bloomText(p) : "Foliage plant", M + cx.bl, sy + 19.5);
         stroke(C.rule); doc.setLineWidth(0.4); doc.line(M, sy + rh, W - M, sy + rh); sy += rh;
       });
       sf("sb", 8.8); color(C.ink); text("Total: " + (placements.length + nWait) + " plants", W - M - 6, sy + 15, { align: "right" }); sy += 26;

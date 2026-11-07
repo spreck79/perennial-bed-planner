@@ -172,7 +172,7 @@
       pan = null; renderDraw(); return;
     }
     if (pan) { pan = null; svg.classList.remove("panning"); }
-    if (drag) { const d = drag; drag = null; if (d.moved) cb.onMoved && cb.onMoved(d.idx); }
+    if (drag) { const d = drag; drag = null; zonesOff(); if (d.moved) cb.onMoved && cb.onMoved(d.idx); }
     if (objDrag) { const d = objDrag; objDrag = null; if (d.moved) cb.onObjDone && cb.onObjDone(d.oi); }
     if (paintDrag) { paintDrag = false; cb.onPaintEnd && cb.onPaintEnd(); }
   }
@@ -245,9 +245,10 @@
     const g = near(e, ".pl");
     if (g && e.button === 2) { cb.onSelect && cb.onSelect(+g.dataset.idx, false); cb.onContextMenu && cb.onContextMenu(+g.dataset.idx, e.clientX, e.clientY); e.preventDefault(); return; }
     if (g) {
-      const idx = +g.dataset.idx, p = ctx.placements[idx];
-      cb.onSelect && cb.onSelect(idx, e.ctrlKey || e.metaKey || e.shiftKey || !!(cb.isMulti && cb.isMulti()));
-      drag = { idx, dx: p.x - pt.x, dy: p.y - pt.y, moved: false, g: svg.querySelector(`.pl[data-idx="${idx}"]`) || g, sx: e.clientX, sy: e.clientY };
+      const idx = +g.dataset.idx, p = ctx.placements[idx], add = e.ctrlKey || e.metaKey || e.shiftKey || !!(cb.isMulti && cb.isMulti());
+      const wasOnly = !add && !!(cb.isOnlySelected && cb.isOnlySelected(idx));   // a second click on the selected plant lets it go
+      cb.onSelect && cb.onSelect(idx, add);
+      drag = { idx, dx: p.x - pt.x, dy: p.y - pt.y, moved: false, g: svg.querySelector(`.pl[data-idx="${idx}"]`) || g, sx: e.clientX, sy: e.clientY, wasOnly };
       svg.setPointerCapture(e.pointerId);
       e.preventDefault(); return;
     }
@@ -318,6 +319,7 @@
     if (!drag) return;
     if (!drag.moved && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 3) return;
     if (ctx.placements[drag.idx].lock) { if (!drag.warned) { drag.warned = true; cb.onLockedDrag && cb.onLockedDrag(); } return; }
+    if (!drag.moved) { cb.onDragStart && cb.onDragStart(drag.idx); zonesFor(drag.idx); }
     drag.moved = true; svg.querySelectorAll(".sellab").forEach(e => { e.style.display = "none"; });
     const pt = toBed(e), p = ctx.placements[drag.idx];
     let nx = pt.x + drag.dx, ny = pt.y + drag.dy;
@@ -326,12 +328,31 @@
       // slide along the edge: try each axis on its own
       if (window.Geo.pip(ctx.bed.poly, nx, p.y)) p.x = nx; else if (window.Geo.pip(ctx.bed.poly, p.x, ny)) p.y = ny;
     }
-    const g = svg.querySelector(`.pl[data-idx="${drag.idx}"]`) || drag.g;
+    movePl(drag.idx, drag.g);
+    // neighbors slide aside to make room while you drag, and slide back once the plant moves on
+    const ch = cb.onDragPush ? cb.onDragPush(drag.idx) : [];
+    ch.forEach(i => { if (i !== drag.idx) movePl(i); });
+  }
+  // redraw one plant at its current spot (the dragged one, or a neighbor that was pushed aside)
+  function movePl(idx, fallback) {
+    const p = ctx.placements[idx], g = svg.querySelector(`.pl[data-idx="${idx}"]`) || fallback; if (!p || !g) return;
     const c = g.querySelector("circle.pc"), t = g.querySelector("text:not(.tx)");
-    c.setAttribute("cx", p.x); c.setAttribute("cy", ctx.H - p.y);
+    if (c) { c.setAttribute("cx", p.x); c.setAttribute("cy", ctx.H - p.y); }
     if (t) { t.setAttribute("x", p.x); t.setAttribute("y", ctx.H - p.y + ctx.fs * 0.35); }
     g.querySelectorAll(".tx").forEach(e => { const ox = +e.dataset.ox, oy = +e.dataset.oy; if (e.tagName === "g") { e.setAttribute("transform", `translate(${p.x + ox} ${ctx.H - p.y + oy})`); } else if (e.tagName === "circle") { e.setAttribute("cx", p.x + ox); e.setAttribute("cy", ctx.H - p.y + oy); } else { e.setAttribute("x", p.x + ox); e.setAttribute("y", ctx.H - p.y + oy); } });
   }
+  // while a plant is dragged, the painted sun zones that suit it stay bright and the others fade
+  function zonesFor(idx) { const pl = ctx.byId[ctx.placements[idx].id]; if (pl) zonesForSun(pl.sun); }
+  function zonesForSun(sun) {
+    const zs = svg.querySelectorAll(".zlayer .ztip"); if (!zs.length) return;
+    zs.forEach(g => g.classList.toggle("zok", !!(sun && sun.includes(g.dataset.z))));
+    svg.classList.add("zdrag");
+  }
+  // for dropping a plant dragged in from the Plants list: a point on the screen in bed feet, and how many screen
+  // pixels one foot takes at the current zoom
+  function clientToBed(cx, cy) { return toBed({ clientX: cx, clientY: cy }); }
+  function pxPerFt() { const m = svg.getScreenCTM(); return m ? Math.hypot(m.a, m.b) : 30; }
+  function zonesOff() { svg.classList.remove("zdrag"); }
   function onUp(e) {
     if (draw) { drawUp(e); return; }
     const rel = () => { try { svg.releasePointerCapture(e.pointerId); } catch (_) {} };
@@ -342,7 +363,7 @@
       return;
     }
     if (objDrag) { const d = objDrag; objDrag = null; rel(); if (d.moved) cb.onObjDone && cb.onObjDone(d.oi); return; }
-    if (drag) { const d = drag; drag = null; rel(); if (d.moved) cb.onMoved && cb.onMoved(d.idx); }
+    if (drag) { const d = drag; drag = null; rel(); zonesOff(); if (d.moved) cb.onMoved && cb.onMoved(d.idx); else if (d.wasOnly) cb.onSelect && cb.onSelect(-1); }
   }
   function onDbl(e) { if (draw) drawDbl(e); else if (ctx && ctx.pathDraw) cb.onPathFinish && cb.onPathFinish(); }
 
@@ -526,7 +547,7 @@
     // sun zones: the whole bed in its starting light, then the painted cells (runs of the same zone merged per row)
     if (sun && sun.show) {
       const zg = el("g", { class: "zlayer", "clip-path": "url(#bedclip)" }, root), res = sun.res, cells = sun.cells || {}, zsub = {};
-      const zgrp = v => zsub[v] || (zsub[v] = el("g", { class: "ztip", "data-k": "sun", "data-tip": ZONE_TIP[v] }, zg));
+      const zgrp = v => zsub[v] || (zsub[v] = el("g", { class: "ztip", "data-z": v, "data-k": "sun", "data-tip": ZONE_TIP[v] }, zg));
       const nx = Math.ceil(bb.w / res), ny = Math.ceil(bb.h / res);
       for (let j = 0; j < ny; j++) {
         let i = 0;
@@ -848,5 +869,5 @@
     svg.classList.toggle("hasHover", !!id);   // the bed and objects fade back while a plant is pointed at
     svg.querySelectorAll(".pl").forEach(g => { g.classList.toggle("hl", !!id && g.dataset.id === id); g.classList.toggle("dim", !!id && g.dataset.id !== id && !g.classList.contains("sel")); });
   }
-  window.Plan = { init, render, startDraw, setHover, isDrawing: () => !!draw, touch: TOUCH, sidesList, resetView, zoomBy, cancelDraw, finishDraw, chaikin, frontLabels, ZONE, ZONE_LAB, ZONE_HRS, ZONE_TIP, sunNeed, sunTip };
+  window.Plan = { init, render, clientToBed, pxPerFt, zonesForSun, zonesOff, movePl, startDraw, setHover, isDrawing: () => !!draw, touch: TOUCH, sidesList, resetView, zoomBy, cancelDraw, finishDraw, chaikin, frontLabels, ZONE, ZONE_LAB, ZONE_HRS, ZONE_TIP, sunNeed, sunTip };
 })();
