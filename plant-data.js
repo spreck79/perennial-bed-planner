@@ -176,6 +176,8 @@
   };
 
   let current = "", source = null;
+  // what the plants say, without the version in the photo addresses (so only a change to a plant counts)
+  const fingerprint = (data, src) => { const t = JSON.stringify(data); return src.kind === "github" && src.version ? t.split(src.version).join("") : t; };
   // start(scripts): read the plants, then load the page's own scripts in order
   root.PlantData.start = async function (scripts) {
     source = await findFolders();
@@ -183,7 +185,7 @@
     if (source.kind === "none") return !!showMessage("<b>The plant folders couldn't be found.</b><br>Please try again in a minute.");
     const data = await readPlants(source);
     Object.assign(root, data);
-    current = JSON.stringify(data);
+    current = fingerprint(data, source);
     for (const s of scripts) await loadScript(s);
     watch();
     return true;
@@ -199,7 +201,7 @@
         const s = await findFolders();
         if (s.kind === source.kind && (s.version !== source.version || String(s.ids) !== String(source.ids))) {
           const data = await readPlants(s);
-          if (JSON.stringify(data) !== current) { setTimeout(() => location.reload(), 400); return; }
+          if (fingerprint(data, s) !== current) { setTimeout(() => location.reload(), 400); return; }
           source = s;
         }
       } catch (e) {}
