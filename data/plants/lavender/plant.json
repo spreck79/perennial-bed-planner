@@ -1,0 +1,117 @@
+{
+  "id": "lavender",
+  "facts": {
+    "code": "EnLa",
+    "name": "English Lavender",
+    "latin": "Lavandula angustifolia",
+    "native": false,
+    "kind": "clump",
+    "hLo": 12,
+    "hHi": 24,
+    "spacing": 18,
+    "bloom": [6, 8],
+    "color": "Lavender-purple, fragrant",
+    "hex": "#9C8BD1",
+    "txt": "#FFFFFF",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Dry, well-drained",
+    "notes": "Fragrant silver-gray mounds with purple spikes in summer. Needs sharp drainage; wet winter soil kills it.",
+    "deer": "A",
+    "toxic": ["dogs", "cats"],
+    "toxSrc": "ASPCA lists lavender as toxic",
+    "zones": [5, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Lavandula angustifolia Hidcote 2020-07-30 1484.jpg",
+      "by": "Salicyna",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "pruneInMay",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Purdue Extension: Prune Lavender at the Right Time",
+      "url": "https://www.purdue.edu/hla/sites/yardandgarden/prune-lavender-at-the-right-time/",
+      "topic": "Care timing",
+      "note": "Lavender is marginally hardy in the Midwest; wait to prune until new growth is under way in spring."
+    }
+  ],
+  "companions": [
+    {
+      "id": "catmint",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, Shasta daisy, catmint 'Walker's Low' and Salvia nemorosa.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: English Lavender companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LAVHI",
+          "about": "lavender"
+        }
+      ]
+    },
+    {
+      "id": "caradonna",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, Shasta daisy, catmint 'Walker's Low' and Salvia nemorosa.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: English Lavender companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LAVHI",
+          "about": "lavender"
+        }
+      ]
+    },
+    {
+      "id": "salvia",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, Shasta daisy, catmint 'Walker's Low' and Salvia nemorosa.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: English Lavender companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LAVHI",
+          "about": "lavender"
+        }
+      ]
+    },
+    {
+      "id": "shasta",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, Shasta daisy, catmint 'Walker's Low' and Salvia nemorosa.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: English Lavender companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LAVHI",
+          "about": "lavender"
+        }
+      ]
+    },
+    {
+      "id": "yarrow",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, Shasta daisy, catmint 'Walker's Low' and Salvia nemorosa.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: English Lavender companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LAVHI",
+          "about": "lavender"
+        }
+      ]
+    }
+  ]
+}

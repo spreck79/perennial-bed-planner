@@ -1,0 +1,229 @@
+{
+  "id": "geranium",
+  "facts": {
+    "code": "WiGe",
+    "name": "Wild Geranium",
+    "latin": "Geranium maculatum",
+    "native": true,
+    "kind": "clump",
+    "hLo": 18,
+    "hHi": 24,
+    "spacing": 15,
+    "bloom": [5, 7],
+    "color": "Pink-lavender",
+    "hex": "#D3A2D3",
+    "txt": "#2E3A2C",
+    "light": "Sun to part shade; adaptable",
+    "sun": ["full", "part"],
+    "moisture": "Average",
+    "notes": "Tough, long-lived and easy. The deeply cut leaves often turn red-orange in fall.",
+    "toxic": null,
+    "zones": [3, 11.5]
+  },
+  "photo": {
+    "focus": [0.48, 0.5],
+    "credit": {
+      "file": "Geranium maculatum, 2021-05-06, Bird Park, 01.jpg",
+      "by": "Cbaile19",
+      "lic": "CC0",
+      "licUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Dryland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/dryland-species-2/",
+        "note": "Michigan seed grower; marks any species that is not native to Michigan."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": true
+  },
+  "example": 3,
+  "sources": [
+    {
+      "title": "University of Nebraska Extension: Early Summer Maintenance for Perennials",
+      "url": "https://extension.unl.edu/statewide/buffalo/Early%20Summer%20Maintenance%20for%20Perennials%2C%20July%207%2C%202012.pdf",
+      "topic": "Care timing",
+      "note": "Shear perennial salvia, coreopsis, Shasta daisy, columbine, coral bells, hardy geranium and catmint after flowering; many rebloom in 5 to 6 weeks."
+    },
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    }
+  ],
+  "companions": [
+    {
+      "id": "celandine",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    },
+    {
+      "id": "christmas",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    },
+    {
+      "id": "cinnamon",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    },
+    {
+      "id": "foam",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    },
+    {
+      "id": "goatsbeard",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "lady",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    },
+    {
+      "id": "fern",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    },
+    {
+      "id": "mayapple",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    },
+    {
+      "id": "ostrich",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    },
+    {
+      "id": "solomon",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    },
+    {
+      "id": "phlox",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    },
+    {
+      "id": "columbine",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Columbine article",
+          "url": "https://hort.extension.wisc.edu/articles/eastern-red-columbine-aquilegia-canadensis/",
+          "about": "columbine"
+        }
+      ]
+    },
+    {
+      "id": "waterleaf",
+      "why": "Commonly found with wild columbine, wild ginger, wild geranium, woodland phlox and mayapple.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Waterleaf article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-waterleaf-hydrophyllum-virginianum/",
+          "about": "waterleaf"
+        }
+      ]
+    }
+  ]
+}

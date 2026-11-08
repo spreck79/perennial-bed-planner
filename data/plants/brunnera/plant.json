@@ -1,0 +1,133 @@
+{
+  "id": "brunnera",
+  "facts": {
+    "code": "Brun",
+    "name": "Brunnera 'Jack Frost'",
+    "latin": "Brunnera macrophylla",
+    "native": false,
+    "kind": "clump",
+    "hLo": 12,
+    "hHi": 18,
+    "spacing": 18,
+    "bloom": [4.3, 5.9],
+    "color": "Tiny blue flowers, silver leaves",
+    "hex": "#C8D4CB",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade; moist soil",
+    "sun": ["part", "shade"],
+    "moisture": "Average to moist",
+    "notes": "Clouds of forget-me-not flowers in spring, then silvery heart-shaped leaves that light up the shade all season.",
+    "deer": "A",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "focus": [0.5, 0.45],
+    "credit": {
+      "file": "Siberian Bugloss Brunnera macrophylla 'Jack Frost' Plant 1950px.JPG",
+      "by": "Derek Ramsey (Ram-Man)",
+      "lic": "CC BY-SA 2.5",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/2.5/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "fall",
+    "trim": false,
+    "fall": {
+      "short": "mushy leaves",
+      "why": "the leaves turn to mush and add nothing to the winter garden"
+    }
+  },
+  "sources": [
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    }
+  ],
+  "companions": [
+    {
+      "id": "astilbe",
+      "why": "Contrasts nicely with Japanese painted fern; combines well with astilbes, bleeding heart and Heuchera.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Brunnera 'Jack Frost' article",
+          "url": "https://hort.extension.wisc.edu/articles/brunnera-macrophylla-jack-frost",
+          "about": "brunnera"
+        }
+      ]
+    },
+    {
+      "id": "bleeding",
+      "why": "Contrasts nicely with Japanese painted fern; combines well with astilbes, bleeding heart and Heuchera.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Brunnera 'Jack Frost' article",
+          "url": "https://hort.extension.wisc.edu/articles/brunnera-macrophylla-jack-frost",
+          "about": "brunnera"
+        }
+      ]
+    },
+    {
+      "id": "coral",
+      "why": "Contrasts nicely with Japanese painted fern; combines well with astilbes, bleeding heart and Heuchera.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Brunnera 'Jack Frost' article",
+          "url": "https://hort.extension.wisc.edu/articles/brunnera-macrophylla-jack-frost",
+          "about": "brunnera"
+        }
+      ]
+    },
+    {
+      "id": "painted",
+      "why": "Contrasts nicely with Japanese painted fern; combines well with astilbes, bleeding heart and Heuchera.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Brunnera 'Jack Frost' article",
+          "url": "https://hort.extension.wisc.edu/articles/brunnera-macrophylla-jack-frost",
+          "about": "brunnera"
+        }
+      ]
+    },
+    {
+      "id": "forestgrass",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "morrows",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: astilbe, lady fern 'Lady in Red', Brunnera 'Jack Frost' and Heuchera.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Morrow's Sedge companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=CARID",
+          "about": "morrows"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "id": "goatsbeard",
+  "facts": {
+    "code": "GoBe",
+    "name": "Goat's Beard",
+    "latin": "Aruncus dioicus",
+    "native": false,
+    "kind": "clump",
+    "hLo": 48,
+    "hHi": 72,
+    "spacing": 36,
+    "bloom": [6, 7],
+    "color": "Big creamy-white plumes",
+    "hex": "#F1ECD8",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade; best in light shade, takes some sun if the soil stays moist",
+    "sun": ["part", "shade"],
+    "moisture": "Average to moist",
+    "notes": "A shrub-sized perennial with feathery plumes in June, like a giant astilbe. Native to the eastern U.S. Give it room at the back.",
+    "deer": "C",
+    "toxic": null,
+    "zones": [4, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Aruncus dioicus 2016 G1.jpg",
+      "by": "George Chernilevsky",
+      "lic": "Public domain",
+      "licUrl": ""
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "example": 1,
+  "companions": [
+    {
+      "id": "astilbe",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "christmas",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "cinnamon",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "jacobs",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "lady",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "fern",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "ostrich",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "siberianiris",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "bluebells",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "columbine",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "geranium",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "ginger",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    }
+  ]
+}

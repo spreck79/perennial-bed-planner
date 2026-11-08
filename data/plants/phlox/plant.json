@@ -1,0 +1,247 @@
+{
+  "id": "phlox",
+  "facts": {
+    "code": "WBPh",
+    "name": "Wild Blue Phlox",
+    "latin": "Phlox divaricata",
+    "native": true,
+    "kind": "clump",
+    "hLo": 10,
+    "hHi": 15,
+    "spacing": 12,
+    "bloom": [4.6, 6],
+    "color": "Pale blue to lavender",
+    "hex": "#B7C2EE",
+    "txt": "#2E3A2C",
+    "light": "Part shade; average to moist soil",
+    "sun": ["part"],
+    "moisture": "Average to moist",
+    "notes": "Sweetly fragrant and an early favorite of bees and butterflies. Spreads gently into soft drifts.",
+    "deer": "C",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "focus": [0.45, 0.5],
+    "credit": {
+      "file": "Phlox divaricata Blue Moon 0zz.jpg",
+      "by": "David J. Stang",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Black Cap Plants (Onekama, Michigan): Species list of native plants",
+        "url": "https://www.blackcapplants.com/species-list",
+        "note": "Michigan native nursery; marks the few species it sells that have no natural Michigan range (none of these are marked). Checked November 2026."
+      },
+      {
+        "title": "Michigan Tech KISMA: Native species table",
+        "url": "https://www.mtu.edu/kisma/native-alternatives/native-species-table/",
+        "note": "Michigan Technological University table of plants native to the Upper Peninsula or the northern Great Lakes region (Heart-leaved Aster is not in it). Checked November 2026."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "example": 3,
+  "companions": [
+    {
+      "id": "astilbe",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "bleeding",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "christmas",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "cinnamon",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "coral",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "hosta",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "jack",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "lady",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "hellebore",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "lungwort",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "fern",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "ostrich",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "alumroot",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "columbine",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "waterleaf",
+      "why": "Commonly found with wild columbine, wild ginger, wild geranium, woodland phlox and mayapple.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Waterleaf article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-waterleaf-hydrophyllum-virginianum/",
+          "about": "waterleaf"
+        }
+      ]
+    },
+    {
+      "id": "geranium",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    }
+  ]
+}

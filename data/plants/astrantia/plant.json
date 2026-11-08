@@ -1,0 +1,143 @@
+{
+  "id": "astrantia",
+  "facts": {
+    "code": "Mast",
+    "name": "Masterwort",
+    "latin": "Astrantia major",
+    "native": false,
+    "kind": "clump",
+    "hLo": 18,
+    "hHi": 30,
+    "spacing": 18,
+    "bloom": [6, 8.5],
+    "color": "Pink or white pincushions",
+    "hex": "#D99AB0",
+    "txt": "#2E3A2C",
+    "light": "Part shade; moist soil",
+    "sun": ["part"],
+    "moisture": "Moist",
+    "notes": "Starry pincushion flowers held above neat, lobed leaves from June to August. Likes soil that stays damp.",
+    "toxic": null,
+    "zones": [4, 7.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Astrantia major Isotähtiputki - H6335 C.jpg",
+      "by": "Anneli Salo",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Ray Wiegand's Nursery (Macomb, Michigan): Masterwort",
+        "url": "http://plants.wiegandsnursery.com/12150006/Plant/23731/Star_Of_Billion_Masterwort/",
+        "note": "Sold at Wiegand's."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "astilbe",
+      "why": "Combine with astilbe, ligularia and ferns in shade; fine foliage contrasts with hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Masterwort article",
+          "url": "https://hort.extension.wisc.edu/articles/astrantia-astrantia-major/",
+          "about": "astrantia"
+        }
+      ]
+    },
+    {
+      "id": "christmas",
+      "why": "Combine with astilbe, ligularia and ferns in shade; fine foliage contrasts with hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Masterwort article",
+          "url": "https://hort.extension.wisc.edu/articles/astrantia-astrantia-major/",
+          "about": "astrantia"
+        }
+      ]
+    },
+    {
+      "id": "cinnamon",
+      "why": "Combine with astilbe, ligularia and ferns in shade; fine foliage contrasts with hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Masterwort article",
+          "url": "https://hort.extension.wisc.edu/articles/astrantia-astrantia-major/",
+          "about": "astrantia"
+        }
+      ]
+    },
+    {
+      "id": "hosta",
+      "why": "Combine with astilbe, ligularia and ferns in shade; fine foliage contrasts with hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Masterwort article",
+          "url": "https://hort.extension.wisc.edu/articles/astrantia-astrantia-major/",
+          "about": "astrantia"
+        }
+      ]
+    },
+    {
+      "id": "lady",
+      "why": "Combine with astilbe, ligularia and ferns in shade; fine foliage contrasts with hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Masterwort article",
+          "url": "https://hort.extension.wisc.edu/articles/astrantia-astrantia-major/",
+          "about": "astrantia"
+        }
+      ]
+    },
+    {
+      "id": "ligularia",
+      "why": "Combine with astilbe, ligularia and ferns in shade; fine foliage contrasts with hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Masterwort article",
+          "url": "https://hort.extension.wisc.edu/articles/astrantia-astrantia-major/",
+          "about": "astrantia"
+        }
+      ]
+    },
+    {
+      "id": "fern",
+      "why": "Combine with astilbe, ligularia and ferns in shade; fine foliage contrasts with hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Masterwort article",
+          "url": "https://hort.extension.wisc.edu/articles/astrantia-astrantia-major/",
+          "about": "astrantia"
+        }
+      ]
+    },
+    {
+      "id": "ostrich",
+      "why": "Combine with astilbe, ligularia and ferns in shade; fine foliage contrasts with hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Masterwort article",
+          "url": "https://hort.extension.wisc.edu/articles/astrantia-astrantia-major/",
+          "about": "astrantia"
+        }
+      ]
+    }
+  ]
+}

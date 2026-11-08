@@ -1,0 +1,115 @@
+{
+  "id": "foxglove",
+  "facts": {
+    "code": "YeFo",
+    "name": "Yellow Foxglove",
+    "latin": "Digitalis grandiflora",
+    "native": false,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 18,
+    "bloom": [6, 7.5],
+    "color": "Pale yellow bells",
+    "hex": "#EADB8C",
+    "txt": "#2E3A2C",
+    "light": "Part shade to sun",
+    "sun": ["full", "part"],
+    "moisture": "Average to moist",
+    "notes": "A true perennial foxglove with soft yellow bells on tall spikes. Every part is very poisonous if eaten.",
+    "deer": "B",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "ASPCA lists foxglove as toxic",
+    "gloves": true,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Digitalis grandioflora 2.jpg",
+      "by": "Audrius Meskauskas (Audriusa)",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "astilbe",
+      "why": "Combines with catmint and lady's mantle; in shade with astilbe, hosta or coral bells.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
+          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
+          "about": "foxglove"
+        }
+      ]
+    },
+    {
+      "id": "catmint",
+      "why": "Combines with catmint and lady's mantle; in shade with astilbe, hosta or coral bells.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
+          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
+          "about": "foxglove"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Catmint 'Walker's Low' article",
+          "url": "https://hort.extension.wisc.edu/articles/nepeta-x-faassenii-walkers-low/",
+          "about": "catmint"
+        }
+      ]
+    },
+    {
+      "id": "coral",
+      "why": "Combines with catmint and lady's mantle; in shade with astilbe, hosta or coral bells.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
+          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
+          "about": "foxglove"
+        }
+      ]
+    },
+    {
+      "id": "hosta",
+      "why": "Combines with catmint and lady's mantle; in shade with astilbe, hosta or coral bells.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
+          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
+          "about": "foxglove"
+        }
+      ]
+    },
+    {
+      "id": "ladysmantle",
+      "why": "Combines with catmint and lady's mantle; in shade with astilbe, hosta or coral bells.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
+          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
+          "about": "foxglove"
+        }
+      ]
+    }
+  ]
+}

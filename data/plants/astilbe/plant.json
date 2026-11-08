@@ -1,0 +1,206 @@
+{
+  "id": "astilbe",
+  "facts": {
+    "code": "Asti",
+    "name": "Astilbe",
+    "latin": "Astilbe, garden hybrids",
+    "native": false,
+    "kind": "clump",
+    "hLo": 18,
+    "hHi": 30,
+    "spacing": 18,
+    "bloom": [6, 7.8],
+    "color": "Pink, red or white plumes",
+    "hex": "#E98FB3",
+    "txt": "#2E3A2C",
+    "light": "Part shade; soil must stay moist",
+    "sun": ["part"],
+    "moisture": "Moist",
+    "notes": "The classic shade bloomer, with feathery plumes in early summer that dry and stand into winter. Water in dry spells or the leaves crisp.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [4, 8.5]
+  },
+  "photo": {
+    "focus": [0.5, 0.3],
+    "credit": {
+      "file": "Astilbe-arendsii-total.JPG",
+      "by": "Sten Porse",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "example": 3,
+  "companions": [
+    {
+      "id": "bleeding",
+      "why": "Pairs with Virginia bluebells in spring; ferns, hosta, hardy geranium and astilbe fill in as it dies back.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        }
+      ]
+    },
+    {
+      "id": "brunnera",
+      "why": "Contrasts nicely with Japanese painted fern; combines well with astilbes, bleeding heart and Heuchera.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Brunnera 'Jack Frost' article",
+          "url": "https://hort.extension.wisc.edu/articles/brunnera-macrophylla-jack-frost",
+          "about": "brunnera"
+        }
+      ]
+    },
+    {
+      "id": "goatsbeard",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "forestgrass",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "astrantia",
+      "why": "Combine with astilbe, ligularia and ferns in shade; fine foliage contrasts with hostas.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Masterwort article",
+          "url": "https://hort.extension.wisc.edu/articles/astrantia-astrantia-major/",
+          "about": "astrantia"
+        }
+      ]
+    },
+    {
+      "id": "morrows",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: astilbe, lady fern 'Lady in Red', Brunnera 'Jack Frost' and Heuchera.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Morrow's Sedge companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=CARID",
+          "about": "morrows"
+        }
+      ]
+    },
+    {
+      "id": "siberianiris",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: lady's mantle, astilbe, Baptisia and Salvia 'May Night'.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Siberian Iris companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=IRSCB",
+          "about": "siberianiris"
+        }
+      ]
+    },
+    {
+      "id": "solomon",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "toad",
+      "why": "Combines well with anemone, astilbe, ferns, hellebores, hosta and lungwort.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Toad Lily article",
+          "url": "https://hort.extension.wisc.edu/articles/hairy-toad-lily-tricyrtis-hirta/",
+          "about": "toad"
+        }
+      ]
+    },
+    {
+      "id": "bluebells",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "phlox",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "columbine",
+      "why": "Combines well with hostas and astilbe in shade gardens, and with wild geranium and wild ginger in natural settings.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Columbine article",
+          "url": "https://hort.extension.wisc.edu/articles/eastern-red-columbine-aquilegia-canadensis/",
+          "about": "columbine"
+        }
+      ]
+    },
+    {
+      "id": "foxglove",
+      "why": "Combines with catmint and lady's mantle; in shade with astilbe, hosta or coral bells.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
+          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
+          "about": "foxglove"
+        }
+      ]
+    }
+  ]
+}

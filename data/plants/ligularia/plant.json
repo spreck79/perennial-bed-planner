@@ -1,0 +1,61 @@
+{
+  "id": "ligularia",
+  "facts": {
+    "code": "Ligu",
+    "name": "Ligularia 'The Rocket'",
+    "latin": "Ligularia stenocephala",
+    "native": false,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 48,
+    "hHi": 60,
+    "spacing": 36,
+    "bloom": [7, 8.5],
+    "color": "Tall yellow flower spires",
+    "hex": "#EBB322",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade; sheltered from wind",
+    "sun": ["part", "shade"],
+    "moisture": "Moist to wet",
+    "notes": "Bold leaves and tall yellow spires for a damp, shady back row. Wilts in afternoon sun or dry soil, so keep it moist.",
+    "deer": "A",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "Contains pyrrolizidine alkaloids (general references; not on the ASPCA list)"
+  },
+  "photo": {
+    "credit": {
+      "file": "Ligularia stenocephala Little Lantern 1zz.jpg",
+      "by": "David J. Stang",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "astrantia",
+      "why": "Combine with astilbe, ligularia and ferns in shade; fine foliage contrasts with hostas.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Masterwort article",
+          "url": "https://hort.extension.wisc.edu/articles/astrantia-astrantia-major/",
+          "about": "astrantia"
+        }
+      ]
+    }
+  ]
+}

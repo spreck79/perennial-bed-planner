@@ -1,0 +1,197 @@
+{
+  "id": "ladysmantle",
+  "facts": {
+    "code": "LaMa",
+    "name": "Lady's Mantle",
+    "latin": "Alchemilla mollis",
+    "native": false,
+    "kind": "mat",
+    "hLo": 12,
+    "hHi": 18,
+    "spacing": 18,
+    "bloom": [5.7, 7.7],
+    "color": "Chartreuse sprays",
+    "hex": "#C5D86A",
+    "txt": "#2E3A2C",
+    "light": "Part shade to sun; moist, well-drained soil",
+    "sun": ["full", "part"],
+    "moisture": "Average to moist",
+    "notes": "Soft, scalloped leaves that hold drops of water, topped by frothy chartreuse flowers. Reseeds freely, so cut off the spent flowers.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Alchemilla mollis Lady's Mantle MN 2007.JPG",
+      "by": "SEWilco",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "tidy",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "iris",
+      "why": "Contrasts nicely with vertical perennials such as iris, liatris, ferns and salvia.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lady's Mantle article",
+          "url": "https://hort.extension.wisc.edu/articles/ladys-mantle-alchemilla-mollis/",
+          "about": "ladysmantle"
+        }
+      ]
+    },
+    {
+      "id": "liatris",
+      "why": "Contrasts nicely with vertical perennials such as iris, liatris, ferns and salvia.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lady's Mantle article",
+          "url": "https://hort.extension.wisc.edu/articles/ladys-mantle-alchemilla-mollis/",
+          "about": "ladysmantle"
+        }
+      ]
+    },
+    {
+      "id": "christmas",
+      "why": "Contrasts nicely with vertical perennials such as iris, liatris, ferns and salvia.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lady's Mantle article",
+          "url": "https://hort.extension.wisc.edu/articles/ladys-mantle-alchemilla-mollis/",
+          "about": "ladysmantle"
+        }
+      ]
+    },
+    {
+      "id": "cinnamon",
+      "why": "Contrasts nicely with vertical perennials such as iris, liatris, ferns and salvia.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lady's Mantle article",
+          "url": "https://hort.extension.wisc.edu/articles/ladys-mantle-alchemilla-mollis/",
+          "about": "ladysmantle"
+        }
+      ]
+    },
+    {
+      "id": "lady",
+      "why": "Contrasts nicely with vertical perennials such as iris, liatris, ferns and salvia.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lady's Mantle article",
+          "url": "https://hort.extension.wisc.edu/articles/ladys-mantle-alchemilla-mollis/",
+          "about": "ladysmantle"
+        }
+      ]
+    },
+    {
+      "id": "fern",
+      "why": "Contrasts nicely with vertical perennials such as iris, liatris, ferns and salvia.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lady's Mantle article",
+          "url": "https://hort.extension.wisc.edu/articles/ladys-mantle-alchemilla-mollis/",
+          "about": "ladysmantle"
+        }
+      ]
+    },
+    {
+      "id": "ostrich",
+      "why": "Contrasts nicely with vertical perennials such as iris, liatris, ferns and salvia.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lady's Mantle article",
+          "url": "https://hort.extension.wisc.edu/articles/ladys-mantle-alchemilla-mollis/",
+          "about": "ladysmantle"
+        }
+      ]
+    },
+    {
+      "id": "caradonna",
+      "why": "Contrasts nicely with vertical perennials such as iris, liatris, ferns and salvia.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lady's Mantle article",
+          "url": "https://hort.extension.wisc.edu/articles/ladys-mantle-alchemilla-mollis/",
+          "about": "ladysmantle"
+        }
+      ]
+    },
+    {
+      "id": "salvia",
+      "why": "Contrasts nicely with vertical perennials such as iris, liatris, ferns and salvia.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lady's Mantle article",
+          "url": "https://hort.extension.wisc.edu/articles/ladys-mantle-alchemilla-mollis/",
+          "about": "ladysmantle"
+        }
+      ]
+    },
+    {
+      "id": "siberianiris",
+      "why": "Contrasts nicely with vertical perennials such as iris, liatris, ferns and salvia.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lady's Mantle article",
+          "url": "https://hort.extension.wisc.edu/articles/ladys-mantle-alchemilla-mollis/",
+          "about": "ladysmantle"
+        },
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Siberian Iris companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=IRSCB",
+          "about": "siberianiris"
+        }
+      ]
+    },
+    {
+      "id": "penstemon",
+      "why": "Combines well with blue spiderworts, blue false indigo and prairie dropseed; try it with catmint and lady's mantle.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Foxglove Beardtongue article",
+          "url": "https://hort.extension.wisc.edu/articles/husker-red-foxglove-beardtongue-penstemon-digitalis-husker-red/",
+          "about": "penstemon"
+        }
+      ]
+    },
+    {
+      "id": "foxglove",
+      "why": "Combines with catmint and lady's mantle; in shade with astilbe, hosta or coral bells.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
+          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
+          "about": "foxglove"
+        }
+      ]
+    }
+  ]
+}

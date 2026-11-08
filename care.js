@@ -1,55 +1,23 @@
 // Care timing for Michigan zone 6B: when to get each plant going in spring, when to cut it back,
 // optional summer trims, and the whole-garden calendar. Month numbers match the bloom chart
-// (4 = start of April, 4.5 = mid-April, 12 = end of November). Sources are listed in sources.js.
+// (4 = start of April, 4.5 = mid-April, 12 = end of November). Sources are on the credits page.
 (function () {
 
-  // how each plant is cut back
-  const CUT = {
-    // cut after a few hard frosts (disease, pests, or mushy foliage)
-    fall: ["peony", "daylily", "brunnera", "veronica", "hosta", "iris", "bergamot", "gardenphlox", "yarrow", "shasta"],
-    grass: ["bluestem", "dropseed", "bottlebrush", "forestgrass"],
-    sedge: ["sedge", "palmsedge", "morrows"],
-    fern: ["fern", "ostrich", "lady", "cinnamon", "painted"],
-    evfern: ["christmas", "autumn"],
-    // low evergreen or semi-evergreen plants: no fall cutting, tidy in spring
-    tidy: ["coral", "alumroot", "bigroot", "bergenia", "creepphlox", "lambsear", "ginger", "strawberry", "foam", "lungwort", "ladysmantle"],
-    hellebore: ["hellebore"],
-    epimedium: ["epimedium"],
-    lavender: ["lavender"],
-    marginal: ["hyssop"],
-    late: ["butterflyweed"],
-    ephemeral: ["bluebells", "mayapple", "bleeding"],
-    bulb: ["daffodil", "tulip", "allium"]
-  };
+  // each plant's care, from the "care" part of its plant.json (gathered by plant-data.js)
+  const { CUT, TRIM, FALL_SHORT, FALL_WHY, DIVIDE, DIVIDE_NOTE, JUNE, EVERGREEN, DORMANCY } = window.CARE_DATA;
   const catOf = {}; Object.keys(CUT).forEach(k => CUT[k].forEach(id => (catOf[id] = k)));
-
-  // optional shear after the first flowers (UNL list: salvia, coreopsis, Shasta daisy, columbine, coral bells, hardy geranium, catmint)
-  const TRIM = ["salvia", "caradonna", "coreopsis", "shasta", "columbine", "coral", "alumroot", "geranium", "rozanne", "bigroot", "catmint"];
-
-  const FALL_SHORT = { peony: "leaf blight", daylily: "mushy leaves", brunnera: "mushy leaves", veronica: "blackened leaves", hosta: "rake up slug eggs", iris: "iris borer eggs", bergamot: "bag mildewed leaves", gardenphlox: "bag mildewed leaves", yarrow: "keep low base leaves", shasta: "keep low base leaves" };
-  const FALL_WHY = {
-    peony: "the leaves blacken and can carry leaf blight into next year",
-    daylily: "the leaves turn to mush and add nothing to the winter garden",
-    brunnera: "the leaves turn to mush and add nothing to the winter garden",
-    veronica: "the leaves blacken and add nothing to the winter garden",
-    hosta: "dead hosta leaves hide slug eggs, so rake them all up",
-    iris: "old leaves are where iris borers lay their eggs",
-    bergamot: "if the leaves had powdery mildew (a white coating), bag them instead of composting. If they stayed clean, you can leave the stems for bees until spring",
-    gardenphlox: "if the leaves had powdery mildew (a white coating), bag them instead of composting",
-    yarrow: "cut the flower stalks but leave the low new leaves at the base",
-    shasta: "cut the flower stalks but leave the low new leaves at the base"
-  };
 
   const W = (a, b, text, sum) => ({ a, b, text, sum });
   const SPRING_CUT = "Spring cleanup, once days stay around 50°F (mid-April to mid-May): cut last year's stems down to 8 to 24 in. New growth hides the stubble within weeks, and native bees nest in the hollow stems.";
   const PREP_EARLY = "Early April, as shoots show: pull back any winter mulch from the crown and clear soggy leaves off the new growth.";
 
-  function divideText(p) {
-    const id = p.id;
-    if (id === "baptisia" || id === "butterflyweed") return "Don't divide: the deep taproot breaks and the plant rarely recovers.";
-    if (id === "peony" || id === "siberianiris") return "Divide only if crowded, in late August to September (fleshy roots do best in fall). Replant peony eyes just 1½ in deep.";
-    if (id === "iris") return "Divide every 3 to 4 years in late July to early August.";
-    if (id === "hosta") return "Divide in spring as the shoots poke up, before the leaves open.";
+  function divideText(p) { const t = divideBase(p); return DIVIDE_NOTE[p.id] ? t + " " + DIVIDE_NOTE[p.id] : t; }
+  function divideBase(p) {
+    const id = p.id, d = DIVIDE[id];
+    if (d === "never") return "Don't divide: the deep taproot breaks and the plant rarely recovers.";
+    if (d === "fleshy") return "Divide only if crowded, in late August to September (fleshy roots do best in fall).";
+    if (d === "summer") return "Divide every 3 to 4 years in late July to early August.";
+    if (d === "early-spring") return "Divide in spring as the shoots poke up, before the leaves open.";
     const c = catOf[id];
     if (c === "bulb") return "If a clump gets crowded and flowers less, dig and split it after the leaves die back.";
     if (c === "grass" || c === "sedge" || c === "fern" || c === "evfern") return "Divide in spring as new growth starts, if the clump gets too big.";
@@ -58,11 +26,11 @@
   }
 
   function divideShort(p) {
-    const id = p.id, c = catOf[id];
-    if (id === "baptisia" || id === "butterflyweed") return "Don't divide";
-    if (id === "peony" || id === "siberianiris") return "Late Aug to Sep, if crowded";
-    if (id === "iris") return "Late Jul to early Aug";
-    if (id === "hosta") return "Spring, before leaves open";
+    const id = p.id, c = catOf[id], d = DIVIDE[id];
+    if (d === "never") return "Don't divide";
+    if (d === "fleshy") return "Late Aug to Sep, if crowded";
+    if (d === "summer") return "Late Jul to early Aug";
+    if (d === "early-spring") return "Spring, before leaves open";
     if (c === "bulb") return "After leaves die, if crowded";
     if (c === "grass" || c === "sedge" || c === "fern" || c === "evfern" || !p.bloom || p.bloom[0] >= 6) return "Spring, as shoots come up";
     return "Late Aug to Sep";
@@ -79,7 +47,7 @@
         out.cut = W(4.0, 4.5, "Leave standing all winter; it looks good in snow. Cut to 3 to 4 in tall in early April, before the new green blades come up.", "Early Apr: cut to 3 to 4 in");
         break;
       case "sedge":
-        out.cut = W(4.0, 4.5, p.id === "morrows" ? "Evergreen: no fall cutting. In early April, snip off any brown or tattered blades." : "Leave over winter. In early April, comb out or trim the old brown blades before new growth starts.", p.id === "morrows" ? "Early Apr: snip brown blades" : "Early Apr: comb out old blades");
+        out.cut = W(4.0, 4.5, EVERGREEN.includes(p.id) ? "Evergreen: no fall cutting. In early April, snip off any brown or tattered blades." : "Leave over winter. In early April, comb out or trim the old brown blades before new growth starts.", EVERGREEN.includes(p.id) ? "Early Apr: snip brown blades" : "Early Apr: comb out old blades");
         break;
       case "fern":
         out.cut = W(4.0, 4.45, "Leave the old fronds over winter to protect the crown. In early April, clear them away before the new fiddleheads uncurl.", "Early Apr: clear old fronds");
@@ -90,13 +58,13 @@
       case "tidy":
         out.cut = W(4.0, 4.5, "Evergreen or semi-evergreen: no fall cutting. In early spring, snip off leaves that winter browned.", "Early Apr: snip winter-browned leaves");
         break;
-      case "hellebore":
+      case "leavesAtBud":
         out.cut = W(4.0, 4.45, "Evergreen: no fall cutting. In early spring, as the flower buds rise, cut off last year's leaves at the base so the flowers and new leaves show.", "Early Apr: cut off last year's leaves");
         break;
-      case "epimedium":
+      case "leavesEarly":
         out.cut = W(4.0, 4.35, "No fall cutting. Cut the old leaves to the ground in early April, before the flowers appear, so the blooms aren't hidden.", "Early Apr: cut old leaves to the ground");
         break;
-      case "lavender":
+      case "pruneInMay":
         out.prep = W(4.0, 4.45, PREP_EARLY, "Early Apr: pull mulch off the crown");
         out.cut = W(5.0, 5.6, "Don't cut in fall. Wait until new growth is well under way in May, then cut out dead stems and trim live ones back to healthy buds.", "May, after new growth: trim to live buds");
         break;
@@ -109,9 +77,9 @@
         out.cut = W(4.4, 5.05, "Leave the stems standing over winter and cut them back in spring, before the new shoots appear.", "Mid-Apr to early May: cut old stems");
         break;
       case "ephemeral": {
-        const a = p.id === "bleeding" ? 7.0 : 6.2;
+        const dz = DORMANCY[p.id], a = dz ? dz.from : 6.2;
         out.prep = W(4.0, 4.3, "Comes up very early: mark the spot and don't rake or mulch over the shoots.", "Early Apr: mark the spot, don't rake");
-        out.cut = W(a, a + 0.7, "Goes dormant in summer. Let the leaves yellow and fade on their own (they feed the roots), then clear them away. Nearby ferns or hostas fill the gap.", (p.id === "bleeding" ? "Jul" : "Jun to early Jul") + ": clear leaves once yellow");
+        out.cut = W(a, a + 0.7, "Goes dormant in summer. Let the leaves yellow and fade on their own (they feed the roots), then clear them away. Later-growing neighbors fill the gap.", (dz ? dz.short : "Jun to early Jul") + ": clear leaves once yellow");
         break;
       }
       case "bulb":
@@ -137,12 +105,12 @@
     }
     // when to divide this plant (its own window, not a whole-garden one); none for plants that shouldn't be divided
     if (!(wc && wc.status === "tender")) {
-      const id = p.id, k = catOf[id];
+      const id = p.id, k = catOf[id], d = DIVIDE[id];
       let dw = null;
-      if (id === "baptisia" || id === "butterflyweed" || k === "bulb") dw = null;
-      else if (id === "peony" || id === "siberianiris") dw = [8.6, 9.7];
-      else if (id === "iris") dw = [7.6, 8.3];
-      else if (id === "hosta") dw = [4.3, 4.75];
+      if (d === "never" || k === "bulb") dw = null;
+      else if (d === "fleshy") dw = [8.6, 9.7];
+      else if (d === "summer") dw = [7.6, 8.3];
+      else if (d === "early-spring") dw = [4.3, 4.75];
       else if (k === "grass" || k === "sedge" || k === "fern" || k === "evfern" || !p.bloom || p.bloom[0] >= 6) dw = [4.3, 5.0];
       else dw = [8.6, 9.7];
       if (dw) out.divideW = W(dw[0], dw[1], out.divide, out.divideShort);
@@ -172,5 +140,7 @@
     ]);
   }
 
-  window.Care = { careFor, gardenTasks };
+  // the early-June job for a plant, if it has one: "pinch" or "halve"
+  const june = p => JUNE[p.id] || null;
+  window.Care = { careFor, gardenTasks, june };
 })();

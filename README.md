@@ -25,7 +25,7 @@ On the bed plan:
 - Works on phones and tablets: press and hold for the menus, pinch to zoom, and "Select more plants" to pick several.
 - Small icons show sun needs, native, garden favorite, daisy family, toxic and deer-eaten plants; hover one for what it means.
 - A legend under the plan explains the colors and markings.
-- Early-dormant plants (Virginia Bluebells, Mayapple, Bleeding Heart, spring bulbs) may share space with later plants.
+- Early-dormant plants (marked "dormant" in their plant files, plus the spring bulbs) may share space with later plants.
 
 The Garden Timeline shows when everything blooms, grouped by sun area when the bed has more than one; drag a plant into another sun area and it moves to that section.
 
@@ -35,7 +35,7 @@ Then create a PDF guide: it opens in a full-screen preview where you can look it
 Plants are believed non-toxic to people, dogs and cats unless marked Toxic. Please check the [ASPCA plant list](https://www.aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants) before buying. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 ([poisonhelp.org](https://poisonhelp.org/)).
 
 ## Sources
-Photo credits, companion-plant sources and native/garden status sources are on the [Sources and photo credits](https://spreck79.github.io/perennial-bed-planner/credits.html) page. Research notes are in the `research` folder. New plants are researched with the companion project [perennial-bed-planner-research](https://github.com/spreck79/perennial-bed-planner-research), then added by following `research/ADDING-A-PLANT.md`.
+Photo credits, companion-plant sources and native/garden status sources are on the [Sources and photo credits](https://spreck79.github.io/perennial-bed-planner/credits.html) page. Each plant lives in its own folder in `data/plants` (facts, photos, sources, care and good neighbors; see `data/SCHEMA.md`), and nothing about a plant is kept anywhere else. The site reads the folders every time a page opens: add a folder and the plant is on the site, delete it and it's gone, edit it and the change shows. On your own computer it runs at http://localhost:8321 (see `build/serve.js`).
 
 ## License
 The planner's own text, plant notes, research and code are © 2026 spreck79, licensed under [Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/). Photos keep their own licenses (see the Sources and photo credits page); jsPDF is MIT licensed; PDF.js (used for the preview on phones and tablets) is Apache 2.0; the DejaVu fonts have their own free license. Details in `LICENSE.txt`.

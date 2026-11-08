@@ -1,0 +1,130 @@
+{
+  "id": "rudbeckia",
+  "facts": {
+    "code": "BlSu",
+    "name": "Black-eyed Susan",
+    "latin": "Rudbeckia fulgida",
+    "native": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 24,
+    "hHi": 30,
+    "spacing": 18,
+    "bloom": [7, 9.8],
+    "color": "Golden petals, dark eye",
+    "hex": "#F0B323",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part shade",
+    "sun": ["full", "part"],
+    "moisture": "Average",
+    "notes": "A long run of golden daisies from midsummer into fall, loved by bees and butterflies. Leave the seed heads for winter birds.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [3, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Bloeiwijze van Rudbeckia fulgida. Locatie, Tuinreservaat Jonkervallei.jpg",
+      "by": "Dominicus Johannes Bergsma",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Wetland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/wetland-species/",
+        "note": "Same grower, wetland list."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "example": 3,
+  "sources": [
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    }
+  ],
+  "companions": [
+    {
+      "id": "gardenphlox",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Sedum 'Autumn Joy' and garden phlox.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Black-eyed Susan companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=RUDGO",
+          "about": "rudbeckia"
+        }
+      ]
+    },
+    {
+      "id": "sedum",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Sedum 'Autumn Joy' and garden phlox.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Black-eyed Susan companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=RUDGO",
+          "about": "rudbeckia"
+        }
+      ]
+    },
+    {
+      "id": "butterflyweed",
+      "why": "Combine with Penstemon 'Husker Red' or purple speedwells; works well with coreopsis, purple coneflower, blazing star, black-eyed Susan, little bluestem and prairie dropseed.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Butterfly Weed article",
+          "url": "https://hort.extension.wisc.edu/articles/butterflyweed-asclepias-tuberosa/",
+          "about": "butterflyweed"
+        }
+      ]
+    },
+    {
+      "id": "bluestem",
+      "why": "Pair with dark-leaved Heuchera; combine with aster, tall sedums like 'Autumn Joy', yarrow, rudbeckias and purple coneflower.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Little Bluestem article",
+          "url": "https://hort.extension.wisc.edu/articles/little-bluestem-schizachyrium-scoparium/",
+          "about": "bluestem"
+        }
+      ]
+    },
+    {
+      "id": "dropseed",
+      "why": "Combined with fall-blooming sedums; a great filler between purple coneflower, liatris, black-eyed Susan and butterfly weed.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Dropseed article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-dropseed-sporobolus-heterolepis/",
+          "about": "dropseed"
+        }
+      ]
+    },
+    {
+      "id": "sneezeweed",
+      "why": "Combines well with ornamental grasses, anise hyssop, beebalm, daylilies, fall asters, liatris, purple coneflower and rudbeckias.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Sneezeweed article",
+          "url": "https://hort.extension.wisc.edu/articles/helenium-helenium-autumnale/",
+          "about": "sneezeweed"
+        }
+      ]
+    }
+  ]
+}

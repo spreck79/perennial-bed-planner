@@ -1,0 +1,79 @@
+{
+  "id": "goldenrod",
+  "facts": {
+    "code": "ZiGo",
+    "name": "Zigzag Goldenrod",
+    "latin": "Solidago flexicaulis",
+    "native": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 12,
+    "hHi": 36,
+    "spacing": 18,
+    "bloom": [8, 11],
+    "color": "Bright yellow",
+    "hex": "#EFCF4A",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade; average soil",
+    "sun": ["part", "shade"],
+    "moisture": "Average",
+    "notes": "A goldenrod that is happy in shade, named for its zigzag stems. Its pollen is carried mostly by insects rather than wind. Spreads slowly.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [2, 8.5]
+  },
+  "photo": {
+    "focus": [0.55, 0.45],
+    "credit": {
+      "file": "Solidago flexicaulis - Zigzag Goldenrod.jpg",
+      "by": "Fritzflohrreynolds",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Black Cap Plants (Onekama, Michigan): Species list of native plants",
+        "url": "https://www.blackcapplants.com/species-list",
+        "note": "Michigan native nursery; marks the few species it sells that have no natural Michigan range (none of these are marked). Checked November 2026."
+      },
+      {
+        "title": "Michigan Tech KISMA: Native species table",
+        "url": "https://www.mtu.edu/kisma/native-alternatives/native-species-table/",
+        "note": "Michigan Technological University table of plants native to the Upper Peninsula or the northern Great Lakes region (Heart-leaved Aster is not in it). Checked November 2026."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "aster",
+      "why": "New Moon Nurseries: at a woods edge, try pairing zigzag goldenrod with heart-leaved aster (Aster cordifolius).",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Zigzag Goldenrod",
+          "url": "https://newmoonnursery.com/plant/Solidago-flexicaulis",
+          "about": "goldenrod"
+        }
+      ]
+    },
+    {
+      "id": "bottlebrush",
+      "why": "Minnesota Board of Water and Soil Resources: good companion plants include early meadow rue, wild columbine and zigzag goldenrod.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Minnesota Board of Water and Soil Resources: featured plant, Bottlebrush Grass",
+          "url": "https://bwsr.state.mn.us/sites/default/files/2023-09/featured_plant_october_2023_bottlebrush_grass.pdf",
+          "about": "bottlebrush"
+        }
+      ]
+    }
+  ]
+}

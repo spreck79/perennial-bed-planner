@@ -1,0 +1,83 @@
+{
+  "id": "prairiesmoke",
+  "facts": {
+    "code": "PrSm",
+    "name": "Prairie Smoke",
+    "latin": "Geum triflorum",
+    "native": true,
+    "kind": "mat",
+    "hLo": 6,
+    "hHi": 12,
+    "spacing": 12,
+    "bloom": [4.7, 6],
+    "color": "Nodding pink flowers, feathery seed heads",
+    "hex": "#C9708F",
+    "txt": "#FFFFFF",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Dry to average",
+    "notes": "Nodding pink flowers in spring turn into wispy pink seed plumes that look like smoke. A low front-edge plant for a sunny, dry spot.",
+    "deer": "C",
+    "toxic": null
+  },
+  "photo": {
+    "credit": {
+      "file": "Geum triflorum - prairie smoke - Flickr - Matt Lavin.jpg",
+      "by": "Matt Lavin",
+      "lic": "CC BY-SA 2.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/2.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Wild Cherry Farm: Prairie Smoke",
+        "url": "https://www.wildcherryfarm.com/shop-native-plants/p/prairie-smoke-geum-triflorum",
+        "note": "State threatened in Michigan (only native plants are state-listed)."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "liatris",
+      "why": "Grows well with blazing star and little bluestem; often grows with prairie dropseed in natural settings.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Smoke article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-smoke-geum-triflorum/",
+          "about": "prairiesmoke"
+        }
+      ]
+    },
+    {
+      "id": "bluestem",
+      "why": "Grows well with blazing star and little bluestem; often grows with prairie dropseed in natural settings.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Smoke article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-smoke-geum-triflorum/",
+          "about": "prairiesmoke"
+        }
+      ]
+    },
+    {
+      "id": "dropseed",
+      "why": "Grows well with blazing star and little bluestem; often grows with prairie dropseed in natural settings.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Smoke article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-smoke-geum-triflorum/",
+          "about": "prairiesmoke"
+        }
+      ]
+    }
+  ]
+}

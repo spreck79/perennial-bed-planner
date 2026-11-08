@@ -1,0 +1,128 @@
+{
+  "id": "sedum",
+  "facts": {
+    "code": "Sedu",
+    "name": "Sedum 'Autumn Joy'",
+    "latin": "Hylotelephium 'Herbstfreude'",
+    "native": false,
+    "kind": "clump",
+    "hLo": 18,
+    "hHi": 24,
+    "spacing": 18,
+    "bloom": [8.3, 10.5],
+    "color": "Pink heads aging to rust",
+    "hex": "#B5536A",
+    "txt": "#FFFFFF",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Dry to average",
+    "notes": "Fleshy leaves all season, then broccoli-like heads that turn pink and then rusty red in fall. Nearly indestructible in sun.",
+    "deer": "C",
+    "toxic": null,
+    "zones": [3, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Sedum spectabile Autumn Joy 2zz.jpg",
+      "by": "David J. Stang",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    }
+  ],
+  "companions": [
+    {
+      "id": "rudbeckia",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Sedum 'Autumn Joy' and garden phlox.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Black-eyed Susan companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=RUDGO",
+          "about": "rudbeckia"
+        }
+      ]
+    },
+    {
+      "id": "rozanne",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Heuchera, Hosta and Sedum.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Geranium 'Rozanne' companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=GERRO",
+          "about": "rozanne"
+        }
+      ]
+    },
+    {
+      "id": "anemone",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "bluestem",
+      "why": "Pair with dark-leaved Heuchera; combine with aster, tall sedums like 'Autumn Joy', yarrow, rudbeckias and purple coneflower.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Little Bluestem article",
+          "url": "https://hort.extension.wisc.edu/articles/little-bluestem-schizachyrium-scoparium/",
+          "about": "bluestem"
+        }
+      ]
+    },
+    {
+      "id": "dropseed",
+      "why": "Combined with fall-blooming sedums; a great filler between purple coneflower, liatris, black-eyed Susan and butterfly weed.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Dropseed article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-dropseed-sporobolus-heterolepis/",
+          "about": "dropseed"
+        }
+      ]
+    },
+    {
+      "id": "shasta",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, daylily, iris, catmint and sedum.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Shasta Daisy companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LEUBE",
+          "about": "shasta"
+        }
+      ]
+    }
+  ]
+}

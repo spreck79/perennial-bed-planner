@@ -1,0 +1,103 @@
+{
+  "id": "newengland",
+  "facts": {
+    "code": "NEAs",
+    "name": "New England Aster",
+    "latin": "Symphyotrichum novae-angliae",
+    "native": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 36,
+    "hHi": 60,
+    "spacing": 24,
+    "bloom": [8.5, 10.5],
+    "color": "Purple with gold centers",
+    "hex": "#8A5FC2",
+    "txt": "#FFFFFF",
+    "light": "Full sun to part shade",
+    "sun": ["full", "part"],
+    "moisture": "Average to moist",
+    "notes": "A tall fall bloomer covered in purple daisies that feed migrating monarchs. Pinch back by half in early June for a bushier plant.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [4, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Symphyotrichum novae-angliae3.jpg",
+      "by": "The Cosmonaut",
+      "lic": "CC BY-SA 2.5 CA",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/2.5/ca/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Dryland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/dryland-species-2/",
+        "note": "Michigan seed grower; marks any species that is not native to Michigan."
+      },
+      {
+        "title": "Michigan Wildflower Farm: Wetland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/wetland-species/",
+        "note": "Same grower, wetland list."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false,
+    "june": "halve"
+  },
+  "companions": [
+    {
+      "id": "zizia",
+      "why": "Plant at the edge of a meadow with butterfly weed and New England aster.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Mt. Cuba Center: Golden Alexanders",
+          "url": "https://mtcubacenter.org/plants/common-golden-alexanders/",
+          "about": "zizia"
+        }
+      ]
+    },
+    {
+      "id": "anemone",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "bluestem",
+      "why": "Pair with dark-leaved Heuchera; combine with aster, tall sedums like 'Autumn Joy', yarrow, rudbeckias and purple coneflower.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Little Bluestem article",
+          "url": "https://hort.extension.wisc.edu/articles/little-bluestem-schizachyrium-scoparium/",
+          "about": "bluestem"
+        }
+      ]
+    },
+    {
+      "id": "sneezeweed",
+      "why": "Combines well with ornamental grasses, anise hyssop, beebalm, daylilies, fall asters, liatris, purple coneflower and rudbeckias.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Sneezeweed article",
+          "url": "https://hort.extension.wisc.edu/articles/helenium-helenium-autumnale/",
+          "about": "sneezeweed"
+        }
+      ]
+    }
+  ]
+}

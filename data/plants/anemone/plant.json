@@ -1,0 +1,186 @@
+{
+  "id": "anemone",
+  "facts": {
+    "code": "JaAn",
+    "name": "Japanese Anemone",
+    "latin": "Anemone × hybrida",
+    "native": false,
+    "kind": "clump",
+    "hLo": 30,
+    "hHi": 48,
+    "spacing": 24,
+    "bloom": [8.5, 10.5],
+    "color": "Pink or white flowers on tall stems",
+    "hex": "#EDB8CF",
+    "txt": "#2E3A2C",
+    "light": "Part shade to sun",
+    "sun": ["full", "part"],
+    "moisture": "Average to moist",
+    "notes": "Graceful pink or white flowers float on tall stems in late summer and fall, when most of the bed is winding down. Spreads once settled.",
+    "deer": "B",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "Buttercup family; considered poisonous to people and pets (veterinary references)",
+    "zones": [4, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Pale pink anemone in Munich 01.jpg",
+      "by": "Kritzolina",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "cohosh",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "bleeding",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "aster",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "hosta",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "bluestem",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "newengland",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "dropseed",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "sedum",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "joepye",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "toad",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Toad Lily article",
+          "url": "https://hort.extension.wisc.edu/articles/hairy-toad-lily-tricyrtis-hirta/",
+          "about": "toad"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "hyssop",
+      "why": "Combines well with purple coneflower, bee balm and native grasses; in gardens with Japanese anemones.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Anise Hyssop article",
+          "url": "https://hort.extension.wisc.edu/articles/anise-hyssop-agastache-foeniculum/",
+          "about": "hyssop"
+        }
+      ]
+    }
+  ]
+}

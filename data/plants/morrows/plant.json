@@ -1,0 +1,97 @@
+{
+  "id": "morrows",
+  "facts": {
+    "code": "MoSe",
+    "name": "Morrow's Sedge",
+    "latin": "Carex morrowii",
+    "native": false,
+    "kind": "grass",
+    "hLo": 10,
+    "hHi": 16,
+    "spacing": 15,
+    "bloom": null,
+    "color": "Dark green, often white-edged blades",
+    "hex": "#8FBF8A",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade; average to moist soil",
+    "sun": ["part", "shade"],
+    "moisture": "Average to moist",
+    "notes": "An evergreen sedge that makes a neat, dark-green fountain of blades all year. Clumping and low-maintenance.",
+    "deer": "A",
+    "toxic": null,
+    "zones": [5, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Morrow's sedge (10892618625).jpg",
+      "by": "F. D. Richards",
+      "lic": "CC BY-SA 2.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/2.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Ray Wiegand's Nursery: Ice Dance Sedge",
+        "url": "http://plants.wiegandsnursery.com/12150006/Plant/3385/Ice_Dance_Sedge/",
+        "note": "Sold at Wiegand's."
+      }
+    ]
+  },
+  "care": {
+    "group": "sedge",
+    "trim": false,
+    "evergreen": true
+  },
+  "companions": [
+    {
+      "id": "astilbe",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: astilbe, lady fern 'Lady in Red', Brunnera 'Jack Frost' and Heuchera.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Morrow's Sedge companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=CARID",
+          "about": "morrows"
+        }
+      ]
+    },
+    {
+      "id": "brunnera",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: astilbe, lady fern 'Lady in Red', Brunnera 'Jack Frost' and Heuchera.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Morrow's Sedge companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=CARID",
+          "about": "morrows"
+        }
+      ]
+    },
+    {
+      "id": "coral",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: astilbe, lady fern 'Lady in Red', Brunnera 'Jack Frost' and Heuchera.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Morrow's Sedge companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=CARID",
+          "about": "morrows"
+        }
+      ]
+    },
+    {
+      "id": "lady",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: astilbe, lady fern 'Lady in Red', Brunnera 'Jack Frost' and Heuchera.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Morrow's Sedge companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=CARID",
+          "about": "morrows"
+        }
+      ]
+    }
+  ]
+}

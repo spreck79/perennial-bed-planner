@@ -1,0 +1,107 @@
+{
+  "id": "allium",
+  "facts": {
+    "code": "Alli",
+    "name": "Allium 'Purple Sensation'",
+    "latin": "Allium aflatunense 'Purple Sensation'",
+    "native": false,
+    "kind": "bulb",
+    "dormant": true,
+    "clump": 5,
+    "hLo": 20,
+    "hHi": 30,
+    "spacing": 10,
+    "bloom": [5.3, 6.2],
+    "color": "Violet-purple balls",
+    "hex": "#8A4FC2",
+    "txt": "#FFFFFF",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Average to dry, well drained",
+    "notes": "Baseball-sized purple globes on tall stems in late spring. Plant 6 to 8 inches deep in October among perennials that hide the leaves as they fade. Deer, rabbits and squirrels leave it alone.",
+    "deer": "A",
+    "toxic": ["dogs", "cats"],
+    "toxSrc": "Ornamental onion; ASPCA lists onion (Allium) as toxic",
+    "zones": [4, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Allium purple sensation, 17-04-2024 (d.j.b.) 02.jpg",
+      "by": "Dominicus Johannes Bergsma",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "MIgardener (St. Clair, Michigan): Allium 'Purple Sensation'",
+        "url": "https://migardener.com/products/allium-purple-sensation",
+        "note": "Michigan garden company selling the bulbs; 24 to 32 in tall, May bloom, deer resistant."
+      }
+    ]
+  },
+  "care": {
+    "group": "bulb",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Mississippi State Extension: Don't Touch the Daffodils",
+      "url": "https://extension.msstate.edu/blogs/extension-for-real-life/dont-touch-the-daffodils",
+      "topic": "Care timing",
+      "note": "Leave bulb leaves untouched for at least six weeks after they start to look dried up."
+    },
+    {
+      "title": "Purdue Extension (Marion County): Gardening with Bulbs",
+      "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+      "topic": "Spring bulbs",
+      "note": "Daffodils naturalize and are squirrel and deer resistant; hybrid tulips are 'like candy to squirrels and deer'; squirrels don't eat alliums; interplant bulbs with later perennials that hide the ripening leaves; plant from mid-October."
+    },
+    {
+      "title": "Iowa State Extension: All About Ornamental Onions",
+      "url": "https://yardandgarden.extension.iastate.edu/how-to/all-about-ornamental-onions",
+      "topic": "Spring bulbs",
+      "note": "'Purple Sensation' grows 20 to 30 in; deer and rabbits rarely browse alliums; plant in October among perennials that hide the fading leaves."
+    },
+    {
+      "title": "ASPCA: Daffodil, Tulip and Onion plant pages",
+      "url": "https://www.aspca.org/pet-care/aspca-poison-control/toxic-and-non-toxic-plants/daffodil",
+      "topic": "Spring bulbs",
+      "note": "Daffodil (Narcissus), tulip (Tulipa) and onion (Allium) are all listed as toxic to dogs, cats and horses."
+    },
+    {
+      "title": "University of Minnesota Extension: Upper Midwest Home Garden Care Calendar",
+      "url": "https://extension.umn.edu/gardening-minnesota/upper-midwest-home-garden-care-calendar",
+      "topic": "Care timing",
+      "note": "Divide bearded iris late July to early August and peonies from late August; plant spring bulbs from September to mid-November."
+    }
+  ],
+  "companions": [
+    {
+      "id": "bluestem",
+      "why": "Purdue Extension: alliums look good planted with grasses, in cottage plantings or English borders.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    },
+    {
+      "id": "dropseed",
+      "why": "Purdue Extension: alliums look good planted with grasses, in cottage plantings or English borders.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    }
+  ]
+}

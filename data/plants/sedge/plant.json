@@ -1,0 +1,79 @@
+{
+  "id": "sedge",
+  "facts": {
+    "code": "PeSe",
+    "name": "Pennsylvania Sedge",
+    "latin": "Carex pensylvanica",
+    "native": true,
+    "kind": "grass",
+    "filler": true,
+    "hLo": 6,
+    "hHi": 10,
+    "spacing": 10,
+    "bloom": null,
+    "color": "Soft green, grass-like",
+    "hex": "#B9D39A",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade; handles dry shade under trees",
+    "sun": ["part", "shade"],
+    "moisture": "Dry to average",
+    "notes": "A fine, soft groundcover that knits the bed together, fills gaps and crowds out weeds. Rarely needs mowing or trimming.",
+    "deer": "A",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "focus": [0.5, 0.5],
+    "credit": {
+      "file": "Carex pensylvanica kz1.jpg",
+      "by": "Krzysztof Ziarnek, Kenraiz",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Black Cap Plants (Onekama, Michigan): Species list of native plants",
+        "url": "https://www.blackcapplants.com/species-list",
+        "note": "Michigan native nursery; marks the few species it sells that have no natural Michigan range (none of these are marked). Checked November 2026."
+      },
+      {
+        "title": "Michigan Tech KISMA: Native species table",
+        "url": "https://www.mtu.edu/kisma/native-alternatives/native-species-table/",
+        "note": "Michigan Technological University table of plants native to the Upper Peninsula or the northern Great Lakes region (Heart-leaved Aster is not in it). Checked November 2026."
+      }
+    ]
+  },
+  "care": {
+    "group": "sedge",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "coral",
+      "why": "Heuchera 'Brownies' gives a bolder contrast to the sedge's fine leaves at a woodland edge.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Mt. Cuba Center: Pennsylvania Sedge",
+          "url": "https://mtcubacenter.org/plants/pennsylvania-sedge/",
+          "about": "sedge"
+        }
+      ]
+    },
+    {
+      "id": "sunflower",
+      "why": "New Moon Nurseries: in lightly shaded gardens, companions include wild columbine, Pennsylvania sedge and lanceleaf coreopsis.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Woodland Sunflower",
+          "url": "https://newmoonnursery.com/plant/Helianthus-divaricatus",
+          "about": "sunflower"
+        }
+      ]
+    }
+  ]
+}

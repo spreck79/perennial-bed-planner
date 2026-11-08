@@ -1,0 +1,106 @@
+{
+  "id": "bergamot",
+  "facts": {
+    "code": "WiBe",
+    "name": "Wild Bergamot",
+    "latin": "Monarda fistulosa",
+    "native": true,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 48,
+    "spacing": 24,
+    "bloom": [7, 9],
+    "color": "Lavender pom-poms",
+    "hex": "#B58AD0",
+    "txt": "#FFFFFF",
+    "light": "Sun to light shade; needs about 4 hours of sun",
+    "sun": ["full", "part"],
+    "moisture": "Dry to average",
+    "notes": "A pollinator magnet with shaggy lavender flowers. Needs good air flow; in deep shade it can get powdery mildew.",
+    "toxic": null,
+    "zones": [3, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Monarda Fistulosa (7335256124).jpg",
+      "by": "USFWS Mountain-Prairie",
+      "lic": "Public domain",
+      "licUrl": ""
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Dryland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/dryland-species-2/",
+        "note": "Michigan seed grower; marks any species that is not native to Michigan."
+      },
+      {
+        "title": "Michigan Wildflower Farm: Wetland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/wetland-species/",
+        "note": "Same grower, wetland list."
+      }
+    ]
+  },
+  "care": {
+    "group": "fall",
+    "trim": false,
+    "fall": {
+      "short": "bag mildewed leaves",
+      "why": "if the leaves had powdery mildew (a white coating), bag them instead of composting. If they stayed clean, you can leave the stems for bees until spring"
+    }
+  },
+  "sources": [
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    },
+    {
+      "title": "Purdue Extension: Cut Back Perennials Now or Later?",
+      "url": "https://www.purdue.edu/hla/sites/yardandgarden/cut-back-perennials-now-or-later/",
+      "topic": "Care timing",
+      "note": "Cut iris in fall to reduce iris borer sites; cut peonies, bee balm and phlox; otherwise wait until several hard frosts have killed the tops."
+    }
+  ],
+  "companions": [
+    {
+      "id": "hyssop",
+      "why": "Combines well with purple coneflower, bee balm and native grasses; in gardens with Japanese anemones.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Anise Hyssop article",
+          "url": "https://hort.extension.wisc.edu/articles/anise-hyssop-agastache-foeniculum/",
+          "about": "hyssop"
+        }
+      ]
+    },
+    {
+      "id": "catmint",
+      "why": "Combines well with beebalm and Shasta daisies; harmonizes with yellow foxglove, Coreopsis and lemon daylilies.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Catmint 'Walker's Low' article",
+          "url": "https://hort.extension.wisc.edu/articles/nepeta-x-faassenii-walkers-low/",
+          "about": "catmint"
+        }
+      ]
+    },
+    {
+      "id": "sneezeweed",
+      "why": "Combines well with ornamental grasses, anise hyssop, beebalm, daylilies, fall asters, liatris, purple coneflower and rudbeckias.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Sneezeweed article",
+          "url": "https://hort.extension.wisc.edu/articles/helenium-helenium-autumnale/",
+          "about": "sneezeweed"
+        }
+      ]
+    }
+  ]
+}

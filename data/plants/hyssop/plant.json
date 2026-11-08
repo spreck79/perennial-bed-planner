@@ -1,0 +1,133 @@
+{
+  "id": "hyssop",
+  "facts": {
+    "code": "AnHy",
+    "name": "Anise Hyssop",
+    "latin": "Agastache foeniculum",
+    "native": false,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 18,
+    "bloom": [6.8, 9.5],
+    "color": "Lavender-blue spikes",
+    "hex": "#8F7CC8",
+    "txt": "#FFFFFF",
+    "light": "Full sun to part shade",
+    "sun": ["full", "part"],
+    "moisture": "Dry to average",
+    "notes": "Licorice-scented leaves and lavender spikes all summer, one of the best bee plants there is. Native to the northern prairies. Short-lived but reseeds.",
+    "deer": "A",
+    "toxic": null,
+    "zones": [4, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Bumblebees on anise hyssop.jpg",
+      "by": "Potentillarecta",
+      "lic": "CC0",
+      "licUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Wild Cherry Farm: Anise Hyssop",
+        "url": "https://www.wildcherryfarm.com/shop-native-plants/p/anise-hyssop-agastache-foeniculum",
+        "note": "Mainly native west of Michigan, so listed here as a garden favorite."
+      },
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "marginal",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    }
+  ],
+  "companions": [
+    {
+      "id": "anemone",
+      "why": "Combines well with purple coneflower, bee balm and native grasses; in gardens with Japanese anemones.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Anise Hyssop article",
+          "url": "https://hort.extension.wisc.edu/articles/anise-hyssop-agastache-foeniculum/",
+          "about": "hyssop"
+        }
+      ]
+    },
+    {
+      "id": "bluestem",
+      "why": "Combines well with purple coneflower, bee balm and native grasses; in gardens with Japanese anemones.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Anise Hyssop article",
+          "url": "https://hort.extension.wisc.edu/articles/anise-hyssop-agastache-foeniculum/",
+          "about": "hyssop"
+        }
+      ]
+    },
+    {
+      "id": "dropseed",
+      "why": "Combines well with purple coneflower, bee balm and native grasses; in gardens with Japanese anemones.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Anise Hyssop article",
+          "url": "https://hort.extension.wisc.edu/articles/anise-hyssop-agastache-foeniculum/",
+          "about": "hyssop"
+        }
+      ]
+    },
+    {
+      "id": "coneflower",
+      "why": "Combines well with purple coneflower, bee balm and native grasses; in gardens with Japanese anemones.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Anise Hyssop article",
+          "url": "https://hort.extension.wisc.edu/articles/anise-hyssop-agastache-foeniculum/",
+          "about": "hyssop"
+        }
+      ]
+    },
+    {
+      "id": "bergamot",
+      "why": "Combines well with purple coneflower, bee balm and native grasses; in gardens with Japanese anemones.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Anise Hyssop article",
+          "url": "https://hort.extension.wisc.edu/articles/anise-hyssop-agastache-foeniculum/",
+          "about": "hyssop"
+        }
+      ]
+    },
+    {
+      "id": "sneezeweed",
+      "why": "Combines well with ornamental grasses, anise hyssop, beebalm, daylilies, fall asters, liatris, purple coneflower and rudbeckias.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Sneezeweed article",
+          "url": "https://hort.extension.wisc.edu/articles/helenium-helenium-autumnale/",
+          "about": "sneezeweed"
+        }
+      ]
+    }
+  ]
+}

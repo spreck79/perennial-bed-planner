@@ -1,0 +1,66 @@
+{
+  "id": "jack",
+  "facts": {
+    "code": "Jack",
+    "name": "Jack-in-the-Pulpit",
+    "latin": "Arisaema triphyllum",
+    "native": true,
+    "kind": "clump",
+    "hLo": 12,
+    "hHi": 24,
+    "spacing": 12,
+    "bloom": [4.7, 6],
+    "color": "Green and purple hooded flower",
+    "hex": "#6E7F4A",
+    "txt": "#FFFFFF",
+    "light": "Part shade to shade",
+    "sun": ["part", "shade"],
+    "moisture": "Moist",
+    "notes": "A woodland oddity with a hooded flower in spring and bright red berries in fall.",
+    "deer": "A",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "ASPCA lists jack-in-the-pulpit as toxic",
+    "zones": [4, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Arisaema triphyllum Bob Hunter Memorial Park.jpg",
+      "by": "СССР",
+      "lic": "CC BY-SA 2.5 CA",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/2.5/ca/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Black Cap Plants (Onekama, Michigan): Species list of native plants",
+        "url": "https://www.blackcapplants.com/species-list",
+        "note": "Michigan native nursery; marks the few species it sells that have no natural Michigan range (none of these are marked). Checked November 2026."
+      },
+      {
+        "title": "Michigan Tech KISMA: Native species table",
+        "url": "https://www.mtu.edu/kisma/native-alternatives/native-species-table/",
+        "note": "Michigan Technological University table of plants native to the Upper Peninsula or the northern Great Lakes region (Heart-leaved Aster is not in it). Checked November 2026."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "phlox",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    }
+  ]
+}

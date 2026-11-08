@@ -1,0 +1,128 @@
+{
+  "id": "peony",
+  "facts": {
+    "code": "GaPe",
+    "name": "Garden Peony",
+    "latin": "Paeonia lactiflora",
+    "native": false,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 36,
+    "bloom": [5.5, 6.3],
+    "color": "Pink, white or red, fragrant",
+    "hex": "#F2A7BB",
+    "txt": "#2E3A2C",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Average",
+    "notes": "Huge fragrant flowers in late spring and handsome leaves all season. Plant the eyes only 1-2 inches deep. Lives for decades.",
+    "deer": "A",
+    "toxic": ["dogs", "cats"],
+    "toxSrc": "ASPCA lists peony as toxic"
+  },
+  "photo": {
+    "credit": {
+      "file": "Lactiflora1b.UME.jpg",
+      "by": "Ulf Eliasson",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "fall",
+    "trim": false,
+    "fall": {
+      "short": "leaf blight",
+      "why": "the leaves blacken and can carry leaf blight into next year"
+    },
+    "divide": "fleshy",
+    "divideNote": "Replant peony eyes just 1½ in deep."
+  },
+  "sources": [
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    },
+    {
+      "title": "Purdue Extension: Cut Back Perennials Now or Later?",
+      "url": "https://www.purdue.edu/hla/sites/yardandgarden/cut-back-perennials-now-or-later/",
+      "topic": "Care timing",
+      "note": "Cut iris in fall to reduce iris borer sites; cut peonies, bee balm and phlox; otherwise wait until several hard frosts have killed the tops."
+    },
+    {
+      "title": "University of Minnesota Extension: Dividing Perennials",
+      "url": "https://extension.umn.edu/planting-and-growing-guides/dividing-perennials",
+      "topic": "Care timing",
+      "note": "Divide fall bloomers in spring and spring and summer bloomers in fall, 4 to 6 weeks before the ground freezes; peonies and Siberian iris in fall; hostas in spring; avoid dividing baptisia."
+    },
+    {
+      "title": "University of Minnesota Extension: Upper Midwest Home Garden Care Calendar",
+      "url": "https://extension.umn.edu/gardening-minnesota/upper-midwest-home-garden-care-calendar",
+      "topic": "Care timing",
+      "note": "Divide bearded iris late July to early August and peonies from late August; plant spring bulbs from September to mid-November."
+    }
+  ],
+  "companions": [
+    {
+      "id": "iris",
+      "why": "NDSU Extension: plants that pair well with peonies include irises, catmint, coral bells and June-blooming alliums.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "NDSU Extension (North Dakota State University): Peonies",
+          "url": "https://ndsu.edu/agriculture/sites/default/files/2024-10/h2245.pdf",
+          "about": "peony"
+        }
+      ]
+    },
+    {
+      "id": "catmint",
+      "why": "NDSU Extension: plants that pair well with peonies include irises, catmint, coral bells and June-blooming alliums.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "NDSU Extension (North Dakota State University): Peonies",
+          "url": "https://ndsu.edu/agriculture/sites/default/files/2024-10/h2245.pdf",
+          "about": "peony"
+        }
+      ]
+    },
+    {
+      "id": "coral",
+      "why": "NDSU Extension: plants that pair well with peonies include irises, catmint, coral bells and June-blooming alliums.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "NDSU Extension (North Dakota State University): Peonies",
+          "url": "https://ndsu.edu/agriculture/sites/default/files/2024-10/h2245.pdf",
+          "about": "peony"
+        }
+      ]
+    },
+    {
+      "id": "siberianiris",
+      "why": "NDSU Extension: plants that pair well with peonies include irises, catmint, coral bells and June-blooming alliums.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "NDSU Extension (North Dakota State University): Peonies",
+          "url": "https://ndsu.edu/agriculture/sites/default/files/2024-10/h2245.pdf",
+          "about": "peony"
+        }
+      ]
+    }
+  ]
+}

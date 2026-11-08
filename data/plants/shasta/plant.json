@@ -1,0 +1,180 @@
+{
+  "id": "shasta",
+  "facts": {
+    "code": "ShDa",
+    "name": "Shasta Daisy",
+    "latin": "Leucanthemum × superbum",
+    "native": false,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 18,
+    "bloom": [6, 8.5],
+    "color": "White with yellow centers",
+    "hex": "#F7F5EC",
+    "txt": "#2E3A2C",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Average",
+    "notes": "Classic white daisies all summer; deadhead for more flowers. Divide every few years to keep it vigorous.",
+    "deer": "C",
+    "toxic": ["dogs", "cats"],
+    "toxSrc": "ASPCA lists daisy as toxic"
+  },
+  "photo": {
+    "credit": {
+      "file": "Leucanthemum x superbum 'Becky' in NH.jpg",
+      "by": "Captain-tucker",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "fall",
+    "trim": true,
+    "fall": {
+      "short": "keep low base leaves",
+      "why": "cut the flower stalks but leave the low new leaves at the base"
+    }
+  },
+  "sources": [
+    {
+      "title": "University of Nebraska Extension: Early Summer Maintenance for Perennials",
+      "url": "https://extension.unl.edu/statewide/buffalo/Early%20Summer%20Maintenance%20for%20Perennials%2C%20July%207%2C%202012.pdf",
+      "topic": "Care timing",
+      "note": "Shear perennial salvia, coreopsis, Shasta daisy, columbine, coral bells, hardy geranium and catmint after flowering; many rebloom in 5 to 6 weeks."
+    },
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    }
+  ],
+  "companions": [
+    {
+      "id": "iris",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, daylily, iris, catmint and sedum.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Shasta Daisy companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LEUBE",
+          "about": "shasta"
+        }
+      ]
+    },
+    {
+      "id": "catmint",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, daylily, iris, catmint and sedum.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Catmint 'Walker's Low' article",
+          "url": "https://hort.extension.wisc.edu/articles/nepeta-x-faassenii-walkers-low/",
+          "about": "catmint"
+        },
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Shasta Daisy companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LEUBE",
+          "about": "shasta"
+        }
+      ]
+    },
+    {
+      "id": "daylily",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, daylily, iris, catmint and sedum.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Shasta Daisy companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LEUBE",
+          "about": "shasta"
+        }
+      ]
+    },
+    {
+      "id": "sedum",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, daylily, iris, catmint and sedum.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Shasta Daisy companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LEUBE",
+          "about": "shasta"
+        }
+      ]
+    },
+    {
+      "id": "yarrow",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, daylily, iris, catmint and sedum.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Shasta Daisy companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LEUBE",
+          "about": "shasta"
+        }
+      ]
+    },
+    {
+      "id": "lavender",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, Shasta daisy, catmint 'Walker's Low' and Salvia nemorosa.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: English Lavender companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LAVHI",
+          "about": "lavender"
+        }
+      ]
+    },
+    {
+      "id": "caradonna",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Geranium 'Rozanne', Shasta daisy 'Becky' and garden phlox.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Salvia 'Caradonna' companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=SALCA",
+          "about": "caradonna"
+        }
+      ]
+    },
+    {
+      "id": "salvia",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow and Shasta daisy 'Becky'.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Salvia 'May Night' companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=SALMN",
+          "about": "salvia"
+        }
+      ]
+    },
+    {
+      "id": "turtle",
+      "why": "Combines well with Shasta daisy 'Becky'.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): White Turtlehead article",
+          "url": "https://hort.extension.wisc.edu/articles/turtlehead-chelone-spp/",
+          "about": "turtle"
+        }
+      ]
+    }
+  ]
+}

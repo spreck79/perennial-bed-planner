@@ -1,0 +1,72 @@
+{
+  "id": "celandine",
+  "facts": {
+    "code": "CePo",
+    "name": "Celandine Poppy",
+    "latin": "Stylophorum diphyllum",
+    "native": true,
+    "kind": "clump",
+    "hLo": 12,
+    "hHi": 18,
+    "spacing": 15,
+    "bloom": [4.5, 6.3],
+    "color": "Bright yellow poppies",
+    "hex": "#F2C230",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade",
+    "sun": ["part", "shade"],
+    "moisture": "Moist",
+    "notes": "Cheery yellow poppies over lobed leaves in spring, with a few more later. Reseeds into shady corners. Not the invasive lesser celandine.",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "Poppy family; the orange sap contains alkaloids (general references; not on the ASPCA list)",
+    "zones": [4, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Stylophorum diphyllum - woodland poppy - desc-flower open.jpg",
+      "by": "",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Wild Ginger Woodlands: Wood (Celandine) Poppy",
+        "url": "https://www.wildgingerwoodlands.com/wild-ginger-woodlands-shop/p/wood-poppy-celandine-poppy",
+        "note": "Grown from Michigan seed."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "bluebells",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "geranium",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    }
+  ]
+}

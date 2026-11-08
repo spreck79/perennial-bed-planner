@@ -1,0 +1,115 @@
+{
+  "id": "iris",
+  "facts": {
+    "code": "BeIr",
+    "name": "Bearded Iris",
+    "latin": "Iris germanica",
+    "native": false,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 18,
+    "bloom": [5.3, 6.2],
+    "color": "Purple, blue, yellow or white",
+    "hex": "#7E68C2",
+    "txt": "#FFFFFF",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Dry to average",
+    "notes": "Ruffled flowers in late spring over sword-like leaves. Plant the rhizomes at the soil surface; divide every 3-4 years.",
+    "deer": "A",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "ASPCA lists iris as toxic"
+  },
+  "photo": {
+    "credit": {
+      "file": "Iris Germanica 2012-2.jpg",
+      "by": "GinoMM",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "fall",
+    "trim": false,
+    "fall": {
+      "short": "iris borer eggs",
+      "why": "old leaves are where iris borers lay their eggs"
+    },
+    "divide": "summer"
+  },
+  "sources": [
+    {
+      "title": "Purdue Extension: Cut Back Perennials Now or Later?",
+      "url": "https://www.purdue.edu/hla/sites/yardandgarden/cut-back-perennials-now-or-later/",
+      "topic": "Care timing",
+      "note": "Cut iris in fall to reduce iris borer sites; cut peonies, bee balm and phlox; otherwise wait until several hard frosts have killed the tops."
+    },
+    {
+      "title": "University of Minnesota Extension: Upper Midwest Home Garden Care Calendar",
+      "url": "https://extension.umn.edu/gardening-minnesota/upper-midwest-home-garden-care-calendar",
+      "topic": "Care timing",
+      "note": "Divide bearded iris late July to early August and peonies from late August; plant spring bulbs from September to mid-November."
+    }
+  ],
+  "companions": [
+    {
+      "id": "creepphlox",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Bergenia and bearded iris.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Creeping Phlox companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=PHSBE",
+          "about": "creepphlox"
+        }
+      ]
+    },
+    {
+      "id": "peony",
+      "why": "NDSU Extension: plants that pair well with peonies include irises, catmint, coral bells and June-blooming alliums.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "NDSU Extension (North Dakota State University): Peonies",
+          "url": "https://ndsu.edu/agriculture/sites/default/files/2024-10/h2245.pdf",
+          "about": "peony"
+        }
+      ]
+    },
+    {
+      "id": "ladysmantle",
+      "why": "Contrasts nicely with vertical perennials such as iris, liatris, ferns and salvia.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lady's Mantle article",
+          "url": "https://hort.extension.wisc.edu/articles/ladys-mantle-alchemilla-mollis/",
+          "about": "ladysmantle"
+        }
+      ]
+    },
+    {
+      "id": "shasta",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, daylily, iris, catmint and sedum.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Shasta Daisy companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LEUBE",
+          "about": "shasta"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "id": "bottlebrush",
+  "facts": {
+    "code": "BoGr",
+    "name": "Bottlebrush Grass",
+    "latin": "Elymus hystrix",
+    "native": true,
+    "kind": "grass",
+    "hLo": 24,
+    "hHi": 48,
+    "spacing": 24,
+    "bloom": [6.5, 8],
+    "color": "Bristly green flower spikes",
+    "hex": "#C8BE78",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade; handles dry shade",
+    "sun": ["part", "shade"],
+    "moisture": "Dry to average",
+    "notes": "One of the few native grasses that thrives in shade, with bristly bottlebrush flower heads. Reseeds lightly.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [5, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Elymus hystrix (Hystrix patula) - Berlin Botanical Garden - IMG 8558.JPG",
+      "by": "Daderot",
+      "lic": "Public domain",
+      "licUrl": ""
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Dryland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/dryland-species-2/",
+        "note": "Michigan seed grower; marks any species that is not native to Michigan."
+      }
+    ]
+  },
+  "care": {
+    "group": "grass",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "columbine",
+      "why": "Minnesota Board of Water and Soil Resources: good companion plants include early meadow rue, wild columbine and zigzag goldenrod.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Minnesota Board of Water and Soil Resources: featured plant, Bottlebrush Grass",
+          "url": "https://bwsr.state.mn.us/sites/default/files/2023-09/featured_plant_october_2023_bottlebrush_grass.pdf",
+          "about": "bottlebrush"
+        }
+      ]
+    },
+    {
+      "id": "goldenrod",
+      "why": "Minnesota Board of Water and Soil Resources: good companion plants include early meadow rue, wild columbine and zigzag goldenrod.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Minnesota Board of Water and Soil Resources: featured plant, Bottlebrush Grass",
+          "url": "https://bwsr.state.mn.us/sites/default/files/2023-09/featured_plant_october_2023_bottlebrush_grass.pdf",
+          "about": "bottlebrush"
+        }
+      ]
+    }
+  ]
+}

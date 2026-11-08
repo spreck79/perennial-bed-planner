@@ -1,0 +1,96 @@
+{
+  "id": "palmsedge",
+  "facts": {
+    "code": "PaSe",
+    "name": "Palm Sedge",
+    "latin": "Carex muskingumensis",
+    "native": true,
+    "kind": "grass",
+    "hLo": 18,
+    "hHi": 36,
+    "spacing": 18,
+    "bloom": null,
+    "color": "Bright green, palm-like whorls",
+    "hex": "#A9C75E",
+    "txt": "#2E3A2C",
+    "light": "Part shade to sun; moist soil",
+    "sun": ["full", "part"],
+    "moisture": "Moist to wet",
+    "notes": "A graceful sedge with leaves that radiate like tiny palm trees. Likes damp soil and turns gold in fall.",
+    "deer": "A",
+    "toxic": null,
+    "zones": [4, 7.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Carex muskingumensis.jpg",
+      "by": "Mason Brock (Masebrock)",
+      "lic": "Public domain",
+      "licUrl": ""
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Designs By Nature (Michigan nursery): Palm Sedge",
+        "url": "https://designsbynaturellc.com/product/palm-sedge/",
+        "note": "Native to Michigan."
+      }
+    ]
+  },
+  "care": {
+    "group": "sedge",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "lobelia",
+      "why": "New Moon Nurseries: try pairing with swamp milkweed, turtlehead, Joe-Pye weed (Eupatorium purpureum) or great blue lobelia.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Palm Sedge",
+          "url": "https://newmoonnursery.com/plant/Carex-muskingumensis",
+          "about": "palmsedge"
+        }
+      ]
+    },
+    {
+      "id": "swampmilkweed",
+      "why": "New Moon Nurseries: try pairing with swamp milkweed, turtlehead, Joe-Pye weed (Eupatorium purpureum) or great blue lobelia.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Palm Sedge",
+          "url": "https://newmoonnursery.com/plant/Carex-muskingumensis",
+          "about": "palmsedge"
+        }
+      ]
+    },
+    {
+      "id": "joepye",
+      "why": "New Moon Nurseries: try pairing with swamp milkweed, turtlehead, Joe-Pye weed (Eupatorium purpureum) or great blue lobelia.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Palm Sedge",
+          "url": "https://newmoonnursery.com/plant/Carex-muskingumensis",
+          "about": "palmsedge"
+        }
+      ]
+    },
+    {
+      "id": "turtle",
+      "why": "New Moon Nurseries: try pairing with swamp milkweed, turtlehead, Joe-Pye weed (Eupatorium purpureum) or great blue lobelia.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Palm Sedge",
+          "url": "https://newmoonnursery.com/plant/Carex-muskingumensis",
+          "about": "palmsedge"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "id": "dahlia",
+  "facts": {
+    "code": "Dahl",
+    "name": "Dahlia",
+    "latin": "Dahlia pinnata",
+    "native": false,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 12,
+    "hHi": 72,
+    "spacing": 24,
+    "bloom": [6, 10.5],
+    "color": "Many colors (red shown)",
+    "hex": "#CC3D3F",
+    "txt": "#FFFFFF",
+    "light": "Sun to part shade; rich, moist, well-drained soil",
+    "sun": ["full", "part"],
+    "moisture": "Average to moist",
+    "notes": "Big, showy flowers from midsummer until frost, in almost every color, and great for cutting. Not winter-hardy here: dig the tubers after the first frost and replant them in May.",
+    "deer": "C",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "ASPCA lists it as toxic to dogs and cats; NC State notes low-severity poison",
+    "zones": [7, 10.5],
+    "winter": {
+      "how": "dig"
+    }
+  },
+  "photo": {
+    "credit": {
+      "file": "00 0804 Großfiedrige Dahlie (Dahlia pinnata).jpg",
+      "by": "W. Bulach",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "English Gardens (Michigan garden center) plant finder: Dalina Midi Fiji Dahlia",
+        "url": "https://plants.englishgardens.com/12150001/Plant/24395/Dalina_Midi_Fiji_Dahlia",
+        "note": "Sold at a Michigan garden center; checked by Plant Research."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": []
+}

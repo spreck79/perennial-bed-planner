@@ -1,0 +1,170 @@
+{
+  "id": "columbine",
+  "facts": {
+    "code": "WiCo",
+    "name": "Wild Columbine",
+    "latin": "Aquilegia canadensis",
+    "native": true,
+    "kind": "clump",
+    "hLo": 12,
+    "hHi": 24,
+    "spacing": 12,
+    "bloom": [4.5, 6],
+    "color": "Red and yellow nodding bells",
+    "hex": "#D9443A",
+    "txt": "#FFFFFF",
+    "light": "Sun, part shade or shade",
+    "sun": ["full", "part", "shade"],
+    "moisture": "Dry to average",
+    "notes": "Dangling red-and-yellow flowers in spring that hummingbirds love. Short-lived but reseeds gently.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Wild Columbine.jpg",
+      "by": "Ragesoss",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Dryland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/dryland-species-2/",
+        "note": "Michigan seed grower; marks any species that is not native to Michigan."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": true
+  },
+  "example": 2,
+  "sources": [
+    {
+      "title": "University of Nebraska Extension: Early Summer Maintenance for Perennials",
+      "url": "https://extension.unl.edu/statewide/buffalo/Early%20Summer%20Maintenance%20for%20Perennials%2C%20July%207%2C%202012.pdf",
+      "topic": "Care timing",
+      "note": "Shear perennial salvia, coreopsis, Shasta daisy, columbine, coral bells, hardy geranium and catmint after flowering; many rebloom in 5 to 6 weeks."
+    }
+  ],
+  "companions": [
+    {
+      "id": "astilbe",
+      "why": "Combines well with hostas and astilbe in shade gardens, and with wild geranium and wild ginger in natural settings.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Columbine article",
+          "url": "https://hort.extension.wisc.edu/articles/eastern-red-columbine-aquilegia-canadensis/",
+          "about": "columbine"
+        }
+      ]
+    },
+    {
+      "id": "hosta",
+      "why": "Combines well with hostas and astilbe in shade gardens, and with wild geranium and wild ginger in natural settings.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Columbine article",
+          "url": "https://hort.extension.wisc.edu/articles/eastern-red-columbine-aquilegia-canadensis/",
+          "about": "columbine"
+        }
+      ]
+    },
+    {
+      "id": "geranium",
+      "why": "Combines well with hostas and astilbe in shade gardens, and with wild geranium and wild ginger in natural settings.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Columbine article",
+          "url": "https://hort.extension.wisc.edu/articles/eastern-red-columbine-aquilegia-canadensis/",
+          "about": "columbine"
+        }
+      ]
+    },
+    {
+      "id": "ginger",
+      "why": "Combines well with hostas and astilbe in shade gardens, and with wild geranium and wild ginger in natural settings.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Columbine article",
+          "url": "https://hort.extension.wisc.edu/articles/eastern-red-columbine-aquilegia-canadensis/",
+          "about": "columbine"
+        }
+      ]
+    },
+    {
+      "id": "bottlebrush",
+      "why": "Minnesota Board of Water and Soil Resources: good companion plants include early meadow rue, wild columbine and zigzag goldenrod.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Minnesota Board of Water and Soil Resources: featured plant, Bottlebrush Grass",
+          "url": "https://bwsr.state.mn.us/sites/default/files/2023-09/featured_plant_october_2023_bottlebrush_grass.pdf",
+          "about": "bottlebrush"
+        }
+      ]
+    },
+    {
+      "id": "goatsbeard",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "waterleaf",
+      "why": "Commonly found with wild columbine, wild ginger, wild geranium, woodland phlox and mayapple.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Waterleaf article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-waterleaf-hydrophyllum-virginianum/",
+          "about": "waterleaf"
+        }
+      ]
+    },
+    {
+      "id": "phlox",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "sunflower",
+      "why": "New Moon Nurseries: in lightly shaded gardens, companions include wild columbine, Pennsylvania sedge and lanceleaf coreopsis.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Woodland Sunflower",
+          "url": "https://newmoonnursery.com/plant/Helianthus-divaricatus",
+          "about": "sunflower"
+        }
+      ]
+    }
+  ]
+}

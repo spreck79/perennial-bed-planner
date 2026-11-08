@@ -1,0 +1,91 @@
+{
+  "id": "rattlesnake",
+  "facts": {
+    "code": "RaMa",
+    "name": "Rattlesnake Master",
+    "latin": "Eryngium yuccifolium",
+    "native": true,
+    "kind": "clump",
+    "hLo": 36,
+    "hHi": 48,
+    "spacing": 24,
+    "bloom": [7, 9],
+    "color": "Round greenish-white flower balls",
+    "hex": "#DCE3D2",
+    "txt": "#2E3A2C",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Dry to average",
+    "notes": "Yucca-like leaves and odd, spiky white globes that pollinators swarm in summer. A striking accent for a sunny spot.",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Eryngium yuccifolium rattlesnake master.JPG",
+      "by": "Sesamehoneytart",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Dryland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/dryland-species-2/",
+        "note": "Michigan seed grower; marks any species that is not native to Michigan."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "University of Illinois Extension: Deer Resistant Perennials",
+      "url": "https://extension.illinois.edu/media/3883/download",
+      "topic": "Deer",
+      "note": "Lists Rattlesnake Master (Eryngium) as deer resistant, while Rutgers rates Eryngium D. Because the two disagree, Rattlesnake Master and Sea Holly are left unrated."
+    }
+  ],
+  "companions": [
+    {
+      "id": "liatris",
+      "why": "Combines well with other prairie plants, such as Liatris and little bluestem.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Rattlesnake Master article",
+          "url": "https://hort.extension.wisc.edu/articles/rattlesnake-master-eryngium-yuccifolium/",
+          "about": "rattlesnake"
+        }
+      ]
+    },
+    {
+      "id": "bluestem",
+      "why": "Combines well with other prairie plants, such as Liatris and little bluestem.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Rattlesnake Master article",
+          "url": "https://hort.extension.wisc.edu/articles/rattlesnake-master-eryngium-yuccifolium/",
+          "about": "rattlesnake"
+        }
+      ]
+    },
+    {
+      "id": "mtnmint",
+      "why": "Minnesota Board of Water and Soil Resources: pairs well with other moist prairie plants, including rattlesnake master and swamp milkweed.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Minnesota Board of Water and Soil Resources: featured plant, Mountain Mint",
+          "url": "https://bwsr.state.mn.us/sites/default/files/2026-08/featured_plant_september_2026_virginia_mountain_mint.pdf",
+          "about": "mtnmint"
+        }
+      ]
+    }
+  ]
+}

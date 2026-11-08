@@ -1,0 +1,60 @@
+{
+  "id": "lambsear",
+  "facts": {
+    "code": "LaEa",
+    "name": "Lamb's Ear",
+    "latin": "Stachys byzantina",
+    "native": false,
+    "kind": "mat",
+    "hLo": 12,
+    "hHi": 18,
+    "spacing": 18,
+    "bloom": null,
+    "color": "Soft, fuzzy silver leaves",
+    "hex": "#BFC3B8",
+    "txt": "#2E3A2C",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Dry to average",
+    "notes": "Velvety silver leaves that kids love to touch, making a bright mat at the front of a sunny bed. Cut off the flower stalks to keep it neat.",
+    "deer": "A",
+    "toxic": null,
+    "zones": [4, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Stachys byzantina NBG LR.jpg",
+      "by": "PumpkinSky",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "English Gardens: Lamb's Ears",
+        "url": "https://www.englishgardens.com/lambs-ears/",
+        "note": "Sold at English Gardens (also at Wiegand's)."
+      }
+    ]
+  },
+  "care": {
+    "group": "tidy",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "liatris",
+      "why": "Combines with yellow flowers such as coreopsis and goldenrod, pink ones such as purple coneflower, prairie grasses and silver plants such as Stachys (lamb's ear).",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Blazing Star article",
+          "url": "https://hort.extension.wisc.edu/articles/liatris/",
+          "about": "liatris"
+        }
+      ]
+    }
+  ]
+}

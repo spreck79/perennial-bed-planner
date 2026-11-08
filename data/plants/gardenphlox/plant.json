@@ -1,0 +1,114 @@
+{
+  "id": "gardenphlox",
+  "facts": {
+    "code": "GaPh",
+    "name": "Garden Phlox",
+    "latin": "Phlox paniculata",
+    "native": false,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 24,
+    "bloom": [7, 9.3],
+    "color": "Fragrant pink, white or lavender heads",
+    "hex": "#E58FBF",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part shade",
+    "sun": ["full", "part"],
+    "moisture": "Average to moist",
+    "notes": "Big fragrant flower heads in midsummer that butterflies love. Pick mildew-resistant kinds such as 'David' or 'Jeana'.",
+    "deer": "C",
+    "toxic": null,
+    "zones": [4, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "(MHNT) Phlox paniculata famous light purple - Les Martels, Giroussens Tarn.jpg",
+      "by": "Didier Descouens",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "fall",
+    "trim": false,
+    "fall": {
+      "short": "bag mildewed leaves",
+      "why": "if the leaves had powdery mildew (a white coating), bag them instead of composting"
+    }
+  },
+  "sources": [
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    },
+    {
+      "title": "Purdue Extension: Cut Back Perennials Now or Later?",
+      "url": "https://www.purdue.edu/hla/sites/yardandgarden/cut-back-perennials-now-or-later/",
+      "topic": "Care timing",
+      "note": "Cut iris in fall to reduce iris borer sites; cut peonies, bee balm and phlox; otherwise wait until several hard frosts have killed the tops."
+    }
+  ],
+  "companions": [
+    {
+      "id": "penstemon",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: purple coneflower and Penstemon.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Garden Phlox companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=PHLUV",
+          "about": "gardenphlox"
+        }
+      ]
+    },
+    {
+      "id": "coneflower",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: purple coneflower and Penstemon.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Garden Phlox companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=PHLUV",
+          "about": "gardenphlox"
+        }
+      ]
+    },
+    {
+      "id": "rudbeckia",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Sedum 'Autumn Joy' and garden phlox.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Black-eyed Susan companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=RUDGO",
+          "about": "rudbeckia"
+        }
+      ]
+    },
+    {
+      "id": "caradonna",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Geranium 'Rozanne', Shasta daisy 'Becky' and garden phlox.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Salvia 'Caradonna' companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=SALCA",
+          "about": "caradonna"
+        }
+      ]
+    }
+  ]
+}

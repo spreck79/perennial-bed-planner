@@ -1,0 +1,66 @@
+{
+  "id": "spiderwort",
+  "facts": {
+    "code": "Spid",
+    "name": "Spiderwort",
+    "latin": "Tradescantia ohiensis",
+    "native": true,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 18,
+    "bloom": [5.5, 7.5],
+    "color": "Blue three-petaled flowers",
+    "hex": "#5A6FD0",
+    "txt": "#FFFFFF",
+    "light": "Full sun to part shade",
+    "sun": ["full", "part"],
+    "moisture": "Average",
+    "notes": "Blue flowers open each morning for weeks in early summer over grassy leaves. Cut it back after blooming to keep it tidy.",
+    "deer": "B",
+    "toxic": ["dogs", "cats"],
+    "toxSrc": "ASPCA lists inch plant, another Tradescantia, as toxic",
+    "zones": [4, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Spiderwort Blue Flower 2.JPG",
+      "by": "Jon Zander (Digon3)",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Dryland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/dryland-species-2/",
+        "note": "Michigan seed grower; marks any species that is not native to Michigan."
+      },
+      {
+        "title": "Michigan Wildflower Farm: Wetland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/wetland-species/",
+        "note": "Same grower, wetland list."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "penstemon",
+      "why": "Combines well with blue spiderworts, blue false indigo and prairie dropseed; try it with catmint and lady's mantle.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Foxglove Beardtongue article",
+          "url": "https://hort.extension.wisc.edu/articles/husker-red-foxglove-beardtongue-penstemon-digitalis-husker-red/",
+          "about": "penstemon"
+        }
+      ]
+    }
+  ]
+}

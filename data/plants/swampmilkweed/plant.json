@@ -1,0 +1,85 @@
+{
+  "id": "swampmilkweed",
+  "facts": {
+    "code": "SwMi",
+    "name": "Swamp Milkweed",
+    "latin": "Asclepias incarnata",
+    "native": true,
+    "kind": "clump",
+    "hLo": 36,
+    "hHi": 60,
+    "spacing": 24,
+    "bloom": [7, 8.5],
+    "color": "Rosy pink, vanilla-scented",
+    "hex": "#D46A92",
+    "txt": "#FFFFFF",
+    "light": "Full sun to part shade",
+    "sun": ["full", "part"],
+    "moisture": "Moist to wet",
+    "notes": "A clump-forming milkweed for moist spots, with fragrant pink flowers. A monarch host plant that does not run like common milkweed.",
+    "deer": "B",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "ASPCA lists milkweed as toxic",
+    "zones": [3, 6.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Swamp milkweed monarch.jpg",
+      "by": "Teune",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Wetland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/wetland-species/",
+        "note": "Same grower, wetland list."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "cardinal",
+      "why": "Combines well with great blue lobelia, irises and marsh milkweed; also found with purple coneflower, blazing star and foxglove beardtongue.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Cardinal Flower article",
+          "url": "https://hort.extension.wisc.edu/articles/cardinal-flower-lobelia-cardinalis/",
+          "about": "cardinal"
+        }
+      ]
+    },
+    {
+      "id": "mtnmint",
+      "why": "Minnesota Board of Water and Soil Resources: pairs well with other moist prairie plants, including rattlesnake master and swamp milkweed.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Minnesota Board of Water and Soil Resources: featured plant, Mountain Mint",
+          "url": "https://bwsr.state.mn.us/sites/default/files/2026-08/featured_plant_september_2026_virginia_mountain_mint.pdf",
+          "about": "mtnmint"
+        }
+      ]
+    },
+    {
+      "id": "palmsedge",
+      "why": "New Moon Nurseries: try pairing with swamp milkweed, turtlehead, Joe-Pye weed (Eupatorium purpureum) or great blue lobelia.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Palm Sedge",
+          "url": "https://newmoonnursery.com/plant/Carex-muskingumensis",
+          "about": "palmsedge"
+        }
+      ]
+    }
+  ]
+}

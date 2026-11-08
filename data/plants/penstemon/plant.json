@@ -1,0 +1,144 @@
+{
+  "id": "penstemon",
+  "facts": {
+    "code": "FoBe",
+    "name": "Foxglove Beardtongue",
+    "latin": "Penstemon digitalis",
+    "native": true,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 18,
+    "bloom": [5.5, 7],
+    "color": "White tubular flowers",
+    "hex": "#F1EDF2",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part shade",
+    "sun": ["full", "part"],
+    "moisture": "Average",
+    "notes": "Clouds of white tubular flowers in early summer over glossy leaves. A favorite of bumblebees.",
+    "deer": "C",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Penstemon digitalis.jpg",
+      "by": "Eric Hunt",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Dryland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/dryland-species-2/",
+        "note": "Michigan seed grower; marks any species that is not native to Michigan."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "catmint",
+      "why": "Combines well with blue spiderworts, blue false indigo and prairie dropseed; try it with catmint and lady's mantle.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Foxglove Beardtongue article",
+          "url": "https://hort.extension.wisc.edu/articles/husker-red-foxglove-beardtongue-penstemon-digitalis-husker-red/",
+          "about": "penstemon"
+        }
+      ]
+    },
+    {
+      "id": "ladysmantle",
+      "why": "Combines well with blue spiderworts, blue false indigo and prairie dropseed; try it with catmint and lady's mantle.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Foxglove Beardtongue article",
+          "url": "https://hort.extension.wisc.edu/articles/husker-red-foxglove-beardtongue-penstemon-digitalis-husker-red/",
+          "about": "penstemon"
+        }
+      ]
+    },
+    {
+      "id": "dropseed",
+      "why": "Combines well with blue spiderworts, blue false indigo and prairie dropseed; try it with catmint and lady's mantle.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Foxglove Beardtongue article",
+          "url": "https://hort.extension.wisc.edu/articles/husker-red-foxglove-beardtongue-penstemon-digitalis-husker-red/",
+          "about": "penstemon"
+        }
+      ]
+    },
+    {
+      "id": "spiderwort",
+      "why": "Combines well with blue spiderworts, blue false indigo and prairie dropseed; try it with catmint and lady's mantle.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Foxglove Beardtongue article",
+          "url": "https://hort.extension.wisc.edu/articles/husker-red-foxglove-beardtongue-penstemon-digitalis-husker-red/",
+          "about": "penstemon"
+        }
+      ]
+    },
+    {
+      "id": "baptisia",
+      "why": "Combines well with blue spiderworts, blue false indigo and prairie dropseed; try it with catmint and lady's mantle.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Foxglove Beardtongue article",
+          "url": "https://hort.extension.wisc.edu/articles/husker-red-foxglove-beardtongue-penstemon-digitalis-husker-red/",
+          "about": "penstemon"
+        }
+      ]
+    },
+    {
+      "id": "butterflyweed",
+      "why": "Combine with Penstemon 'Husker Red' or purple speedwells; works well with coreopsis, purple coneflower, blazing star, black-eyed Susan, little bluestem and prairie dropseed.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Butterfly Weed article",
+          "url": "https://hort.extension.wisc.edu/articles/butterflyweed-asclepias-tuberosa/",
+          "about": "butterflyweed"
+        }
+      ]
+    },
+    {
+      "id": "cardinal",
+      "why": "Combines well with great blue lobelia, irises and marsh milkweed; also found with purple coneflower, blazing star and foxglove beardtongue.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Cardinal Flower article",
+          "url": "https://hort.extension.wisc.edu/articles/cardinal-flower-lobelia-cardinalis/",
+          "about": "cardinal"
+        }
+      ]
+    },
+    {
+      "id": "gardenphlox",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: purple coneflower and Penstemon.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Garden Phlox companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=PHLUV",
+          "about": "gardenphlox"
+        }
+      ]
+    }
+  ]
+}

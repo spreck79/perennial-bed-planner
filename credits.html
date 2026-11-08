@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="plants-repo" content="spreck79/perennial-bed-planner">
 <title>Sources and photo credits · Perennial Bed Planner</title>
 <link rel="stylesheet" href="styles.css">
 <style>
@@ -52,7 +53,7 @@
   <p>The toxic tags in this planner come from these lists. Check the original list before you buy, because plants and advice change and some plants have look-alikes.</p>
   <ul>
     <li><a href="https://www.aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants" target="_blank" rel="noopener">ASPCA Toxic and Non-Toxic Plant List</a> (dogs, cats and horses)</li>
-    <li><a href="https://www.petpoisonhelpline.com/" target="_blank" rel="noopener">Pet Poison Helpline</a> (used for bleeding heart)</li>
+    <li><a href="https://www.petpoisonhelpline.com/" target="_blank" rel="noopener">Pet Poison Helpline</a> <span id="pphFor"></span></li>
   </ul>
   <div class="card"><table id="tox"><thead><tr><th>Toxic plant</th><th>Toxic to</th><th>Where this comes from</th></tr></thead><tbody></tbody></table></div>
   <p class="muted">A plant not marked toxic here is believed to be safe, but it has not been checked against every list. This planner is not veterinary or medical advice. If a pet or person eats part of a plant, call your vet, the ASPCA Animal Poison Control Center at 888-426-4435, or Poison Control at 1-800-222-1222.</p>
@@ -63,11 +64,11 @@
   <ol class="srclist" id="compsrc"></ol>
 
   <h2>Michigan native or garden favorite</h2>
-  <p>"Michigan native" means the plant is a true Michigan native. "Garden favorite" (marked ◆) means a plant that Michigan garden centers sell. Each status was checked against the sources below. Plants not named here are common, well-known Michigan woodland natives (such as the ferns, sedges, mayapple and jack-in-the-pulpit).</p>
+  <p>"Michigan native" means the plant is a true Michigan native. "Garden favorite" (marked ◆) means a plant that Michigan garden centers sell. Each status was checked against the sources below.<span id="unchecked"></span></p>
   <div class="card"><table id="status"><thead><tr><th>Source</th><th>What it shows</th><th>Plants checked</th></tr></thead><tbody></tbody></table></div>
 
   <h2>Deer, early-dormant plants and spring bulbs</h2>
-  <p>The antler icon marks plants deer often or sometimes eat. "Early-dormant" plants (Virginia Bluebells, Mayapple, Bleeding Heart and the spring bulbs) die back by early summer, so the bed plan lets them share space with later-growing plants without flagging them as too close.</p>
+  <p>The antler icon marks plants deer often or sometimes eat. "Early-dormant" plants<span id="dormantList"></span> die back by early summer, so the bed plan lets them share space with later-growing plants without flagging them as too close.</p>
   <div class="card"><table id="extra"><thead><tr><th>Source</th><th>Topic</th><th>What it shows</th></tr></thead><tbody></tbody></table></div>
   <div class="card"><table id="deer"><thead><tr><th>Plant</th><th>Rutgers deer rating</th></tr></thead><tbody></tbody></table></div>
 
@@ -80,12 +81,10 @@
     <li><a href="https://dejavu-fonts.github.io/" target="_blank" rel="noopener">DejaVu fonts</a>, used in the PDF, are free fonts based on Bitstream Vera.</li>
   </ul>
 </main>
-<script src="plants.js"></script>
-<script src="credits.js"></script>
-<script src="companions.js"></script>
-<script src="sources.js"></script>
+<script src="plant-data.js"></script>
 <script>
-(function () {
+PlantData.start([]).then(function (ok) {
+  if (!ok) return;
   var tb = document.querySelector("#photos tbody"), list = window.PLANTS.slice().sort(function (a, b) { return a.name.localeCompare(b.name); });
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   list.forEach(function (p) {
@@ -125,13 +124,23 @@
     tr.innerHTML = '<td class="p">' + esc(p.name) + "<small>" + esc(p.latin) + "</small></td><td>" + (p.deer ? esc(RT[p.deer]) : "Not rated") + (p.dormant ? " · early-dormant" : "") + "</td>";
     td.appendChild(tr);
   });
+  // sentences that name plants, worked out from the plant list so they always match the plants on the site
+  function andList(a) { return a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1]; }
+  var pph = window.PLANTS.filter(function (p) { return /Pet Poison Helpline/i.test(p.toxSrc || ""); }).map(function (p) { return p.name.toLowerCase(); });
+  document.getElementById("pphFor").textContent = pph.length ? " (used for " + andList(pph) + ")" : "";
+  var dorm = window.PLANTS.filter(function (p) { return p.dormant && p.kind !== "bulb"; }).map(function (p) { return p.name; });
+  if (window.PLANTS.some(function (p) { return p.kind === "bulb"; })) dorm.push("the spring bulbs");
+  document.getElementById("dormantList").textContent = dorm.length ? " (" + andList(dorm) + ")" : "";
+  var checked = {}; (window.STATUS_SOURCES || []).forEach(function (s) { s.plants.forEach(function (id) { checked[id] = 1; }); });
+  var notChecked = window.PLANTS.filter(function (p) { return !checked[p.id]; }).map(function (p) { return p.name; });
+  document.getElementById("unchecked").textContent = notChecked.length ? " Not checked against a source yet: " + andList(notChecked) + "." : "";
   var ts = document.querySelector("#status tbody");
   (window.STATUS_SOURCES || []).forEach(function (s) {
     var tr = document.createElement("tr");
     tr.innerHTML = '<td><a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.title) + "</a></td><td>" + esc(s.note) + "</td><td>" + s.plants.filter(function (id) { return byId[id]; }).map(function (id) { return esc(byId[id].name); }).join(", ") + "</td>";
     ts.appendChild(tr);
   });
-})();
+});
 </script>
 </body>
 </html>

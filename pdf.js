@@ -4,7 +4,7 @@
   const W = 612, H = 792, M = 42;
   const DAISY = "#B7791F";
   const deerEats = p => p.deer === "C" || p.deer === "D";
-  const deerText = p => (p.deer === "D" ? "Deer often eat it" : "Deer sometimes eat it") + (p.id === "tulip" ? " and squirrels dig the bulbs" : "") + ".";
+  const deerText = p => (p.deer === "D" ? "Deer often eat it" : "Deer sometimes eat it") + (p.squirrels ? " and squirrels dig the bulbs" : "") + ".";
   const marks = p => (p.native ? "" : " ◆") + (p.fam === "daisy" ? " ✿" : "");
   const C = { forest: "#3F6B3A", ink: "#2E3A2C", muted: "#6B7464", rule: "#D9D3C2", cream: "#F5F2E8", soft: "#EEF0E2", band: "#ECEFE0", leaf: "#5E8F4E", leaf2: "#8DB46F", leafD: "#41693A", berry: "#A8578A", soil: "#B89A74", stripe: "#F7F5EE" };
   const rgb = h => { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
@@ -637,15 +637,27 @@
     progress && progress(0.88, "How to plant");
     newPage();
     let hy = 62; heading("How to plant it", hy, 20); hy += 26;
+    // early-June jobs and watering, for the plants in this bed (from their plant files)
+    const andList = a => a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1];
+    const yearlyCare = (() => {
+      const jn = k => plants.filter(p => window.Care && Care.june && Care.june(p) === k).map(p => p.name);
+      const pinch = jn("pinch"), halve = jn("halve"), jobs = [];
+      if (pinch.length) jobs.push("pinch " + andList(pinch));
+      if (halve.length) jobs.push("cut " + andList(halve) + " back by half");
+      const wet = plants.filter(p => /^(moist|wet)/i.test(p.moisture || "")).map(p => p.name);
+      let t = jobs.length ? jobs.join(" and ").replace(/^./, c => c.toUpperCase()) + " in early June. " : "";
+      if (wet.length) t += "Water " + (wet.length > 2 ? wet.slice(0, 2).join(", ") + " and other moisture lovers" : andList(wet)) + " in dry spells. ";
+      return t;
+    })();
     const steps = [
       ["Prep the bed this fall (now is perfect)", "Mark the bed outline, mow the grass short, then lay cardboard over it and cover with 4 to 6 inches of shredded leaves or compost. By spring the grass underneath is dead and the soil is soft, with no digging out sod. Skip deep tilling, which pulls buried weed seeds to the surface."],
       ["Plant in spring (or early fall)", "Best windows in zone 6B are late April through early June, after the soil dries enough to work, or late August through September so roots settle in before winter."],
-      ["Buy the right plants", "For the natives, buy straight species from a native nursery; small plugs are cheap and root in fast. Garden favorites come in quart or gallon pots at most garden centers." + (plants.some(p => p.id === "bluebells") ? " Virginia bluebells are often sold as dormant roots." : "")],
+      ["Buy the right plants", "For the natives, buy straight species from a native nursery; small plugs are cheap and root in fast. Garden favorites come in quart or gallon pots at most garden centers." + [...new Set(plants.filter(p => p.buyNote).map(p => p.buyNote))].map(t => " " + t).join("")],
       ["Lay it out before digging", "Use the bed plan on page " + planPage + ": mark a few 1-ft grid lines with string or flour, set every pot on its drawn spot, then stand back and adjust until it looks right before digging."],
       ["Plant at the right depth", "Dig a hole about twice as wide as the pot and just as deep. Loosen circling roots, set the crown level with the soil, firm it in and water well."],
       ["Mulch lightly and water the first season", "Use 1 to 2 inches of shredded leaves, kept off the crowns. Water about an inch a week if it doesn't rain during the first summer; after that the plants mostly take care of themselves."],
       ["Be patient", "Perennials follow the old rule: the first year they sleep, the second year they creep, the third year they leap. The bed will look sparse at first and fill in by year three."],
-      ["Easy yearly care", "No fertilizer needed. Leave stems standing over winter for bees and birds, then cut them back in spring once days are steadily in the 50s. Pinch turtlehead and cut asters back by half in early June. Water astilbe, ferns and other moisture lovers in dry spells. The Care through the year page has the timing for each plant."],
+      ["Easy yearly care", "No fertilizer needed. Leave stems standing over winter for bees and birds, then cut them back in spring once days are steadily in the 50s. " + yearlyCare + "The Care through the year page has the timing for each plant."],
     ];
     steps.forEach(([t, d], i) => {
       sf("s", 9); const ls = wrap(d, W - 2 * M - 40), h = 20 + ls.length * 12;
@@ -673,7 +685,7 @@
         noteBox([["Allergy note: ", true], [list + (daisy.length === 1 ? " is" : " are") + " (marked ✿) in the daisy family along with ragweed. Most are pollinated by insects rather than wind, so they are a less common cause of hay fever than ragweed, but anyone with a daisy-family allergy should check with an allergist before planting them.", false]], "#FBF3DC", "#EBD9A0", "#6B520F");
       }
     }
-    if (toxicPlants.length) noteBox([["Toxic plants in this plan: ", true], [toxicPlants.map(p => p.name + " (" + toxLabel(p).replace(/^Toxic to /, "") + ")").join(", ") + ". Every part can make a pet or person sick if chewed or eaten. Plant them where pets and small children don't play, wear gloves when handling foxglove, hellebore and bleeding heart, and call your vet or the ASPCA Animal Poison Control Center (888-426-4435) if a pet eats one. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 (free, 24 hours; online at poisonhelp.org); if someone is unconscious, having trouble breathing or having a seizure, call 911 first.", false]], "#F8E4E1", "#E7B9B2", "#7A2A22");
+    if (toxicPlants.length) noteBox([["Toxic plants in this plan: ", true], [toxicPlants.map(p => p.name + " (" + toxLabel(p).replace(/^Toxic to /, "") + ")").join(", ") + ". Every part can make a pet or person sick if chewed or eaten. Plant them where pets and small children don't play, " + (() => { const g = plants.filter(p => p.gloves).map(p => p.name.toLowerCase()); return g.length ? "wear gloves when handling " + (g.length < 2 ? g[0] : g.slice(0, -1).join(", ") + " and " + g[g.length - 1]) + ", " : ""; })() + "and call your vet or the ASPCA Animal Poison Control Center (888-426-4435) if a pet eats one. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 (free, 24 hours; online at poisonhelp.org); if someone is unconscious, having trouble breathing or having a seizure, call 911 first.", false]], "#F8E4E1", "#E7B9B2", "#7A2A22");
     if (!safetyShown) noteBox([["Pets, people & wildlife: ", true], [toxicPlants.length ? "the plants not listed above are believed to be non-toxic to people, dogs and cats. Check each plant on the ASPCA toxic and non-toxic plant list (aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants) before buying. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 (free, 24 hours; online at poisonhelp.org); if someone is unconscious, having trouble breathing or having a seizure, call 911 first." : "every plant in this plan is believed to be non-toxic to people, dogs and cats, but lists change and look-alikes exist. Check each plant on the ASPCA toxic and non-toxic plant list before buying, and don't eat anything from the garden unless you know it is edible. Check the ASPCA list at aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants. For a person who has eaten a plant, call Poison Control at 1-800-222-1222 (free, 24 hours; online at poisonhelp.org); if someone is unconscious, having trouble breathing or having a seizure, call 911 first.", false]], C.cream, C.rule, C.ink);
 
     // ================= Credits =================

@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="plants-repo" content="spreck79/perennial-bed-planner">
 <title>Perennial Bed Planner</title>
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -193,18 +194,7 @@
 <div class="overlay" id="busy"><div class="modal"><h2 id="busyTitle">Making your PDF…</h2><div class="tip" id="busyText">Building pages</div><div class="progress"><i id="busyBar"></i></div></div></div>
 <div class="toast" id="toast"></div>
 
-<script src="lib/jspdf.umd.min.js"></script>
-<script src="plants.js"></script>
-<script src="plants/pages.js"></script>
-<script src="images.js"></script>
-<script src="credits.js"></script>
-<script src="companions.js"></script>
-<script src="fonts.js"></script>
-<script src="geometry.js"></script>
-<script src="care.js"></script>
-  <script src="charts.js"></script>
-<script src="plan.js"></script>
-<script src="pdf.js"></script>
-<script src="app.js"></script>
+<script src="plant-data.js"></script>
+<script>PlantData.start(["lib/jspdf.umd.min.js", "plant-rules.js", "fonts.js", "geometry.js", "care.js", "charts.js", "plan.js", "pdf.js", "app.js"]);</script>
 </body>
 </html>

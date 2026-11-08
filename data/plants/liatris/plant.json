@@ -1,0 +1,199 @@
+{
+  "id": "liatris",
+  "facts": {
+    "code": "BlSt",
+    "name": "Blazing Star",
+    "latin": "Liatris spicata",
+    "native": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 24,
+    "hHi": 48,
+    "spacing": 15,
+    "bloom": [7, 8.5],
+    "color": "Purple bottlebrush spikes",
+    "hex": "#9B59B6",
+    "txt": "#FFFFFF",
+    "light": "Full sun to light shade",
+    "sun": ["full", "part"],
+    "moisture": "Average to moist",
+    "notes": "Tall purple spikes that open from the top down, loved by bees and butterflies. Grows from a corm and stays narrow.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Liatris spicata 003.JPG",
+      "by": "H. Zell",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Wetland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/wetland-species/",
+        "note": "Same grower, wetland list."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "example": 2,
+  "companions": [
+    {
+      "id": "lambsear",
+      "why": "Combines with yellow flowers such as coreopsis and goldenrod, pink ones such as purple coneflower, prairie grasses and silver plants such as Stachys (lamb's ear).",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Blazing Star article",
+          "url": "https://hort.extension.wisc.edu/articles/liatris/",
+          "about": "liatris"
+        }
+      ]
+    },
+    {
+      "id": "coreopsis",
+      "why": "Combines with yellow flowers such as coreopsis and goldenrod, pink ones such as purple coneflower, prairie grasses and silver plants such as Stachys (lamb's ear).",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Blazing Star article",
+          "url": "https://hort.extension.wisc.edu/articles/liatris/",
+          "about": "liatris"
+        }
+      ]
+    },
+    {
+      "id": "bluestem",
+      "why": "Combines with yellow flowers such as coreopsis and goldenrod, pink ones such as purple coneflower, prairie grasses and silver plants such as Stachys (lamb's ear).",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Blazing Star article",
+          "url": "https://hort.extension.wisc.edu/articles/liatris/",
+          "about": "liatris"
+        }
+      ]
+    },
+    {
+      "id": "dropseed",
+      "why": "Combines with yellow flowers such as coreopsis and goldenrod, pink ones such as purple coneflower, prairie grasses and silver plants such as Stachys (lamb's ear).",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Blazing Star article",
+          "url": "https://hort.extension.wisc.edu/articles/liatris/",
+          "about": "liatris"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Dropseed article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-dropseed-sporobolus-heterolepis/",
+          "about": "dropseed"
+        }
+      ]
+    },
+    {
+      "id": "coneflower",
+      "why": "Combines with yellow flowers such as coreopsis and goldenrod, pink ones such as purple coneflower, prairie grasses and silver plants such as Stachys (lamb's ear).",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Blazing Star article",
+          "url": "https://hort.extension.wisc.edu/articles/liatris/",
+          "about": "liatris"
+        }
+      ]
+    },
+    {
+      "id": "butterflyweed",
+      "why": "Combine with Penstemon 'Husker Red' or purple speedwells; works well with coreopsis, purple coneflower, blazing star, black-eyed Susan, little bluestem and prairie dropseed.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Butterfly Weed article",
+          "url": "https://hort.extension.wisc.edu/articles/butterflyweed-asclepias-tuberosa/",
+          "about": "butterflyweed"
+        }
+      ]
+    },
+    {
+      "id": "cardinal",
+      "why": "Combines well with great blue lobelia, irises and marsh milkweed; also found with purple coneflower, blazing star and foxglove beardtongue.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Cardinal Flower article",
+          "url": "https://hort.extension.wisc.edu/articles/cardinal-flower-lobelia-cardinalis/",
+          "about": "cardinal"
+        }
+      ]
+    },
+    {
+      "id": "ladysmantle",
+      "why": "Contrasts nicely with vertical perennials such as iris, liatris, ferns and salvia.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lady's Mantle article",
+          "url": "https://hort.extension.wisc.edu/articles/ladys-mantle-alchemilla-mollis/",
+          "about": "ladysmantle"
+        }
+      ]
+    },
+    {
+      "id": "prairiesmoke",
+      "why": "Grows well with blazing star and little bluestem; often grows with prairie dropseed in natural settings.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Smoke article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-smoke-geum-triflorum/",
+          "about": "prairiesmoke"
+        }
+      ]
+    },
+    {
+      "id": "rattlesnake",
+      "why": "Combines well with other prairie plants, such as Liatris and little bluestem.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Rattlesnake Master article",
+          "url": "https://hort.extension.wisc.edu/articles/rattlesnake-master-eryngium-yuccifolium/",
+          "about": "rattlesnake"
+        }
+      ]
+    },
+    {
+      "id": "seaholly",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Liatris and Coreopsis.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Sea Holly companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=ERYBG",
+          "about": "seaholly"
+        }
+      ]
+    },
+    {
+      "id": "sneezeweed",
+      "why": "Combines well with ornamental grasses, anise hyssop, beebalm, daylilies, fall asters, liatris, purple coneflower and rudbeckias.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Sneezeweed article",
+          "url": "https://hort.extension.wisc.edu/articles/helenium-helenium-autumnale/",
+          "about": "sneezeweed"
+        }
+      ]
+    }
+  ]
+}

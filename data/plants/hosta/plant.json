@@ -1,0 +1,278 @@
+{
+  "id": "hosta",
+  "facts": {
+    "code": "Hsta",
+    "name": "Hosta",
+    "latin": "Hosta hybrids",
+    "native": false,
+    "kind": "clump",
+    "hLo": 12,
+    "hHi": 30,
+    "spacing": 24,
+    "bloom": [7, 8],
+    "color": "Lavender or white spikes; grown for leaves",
+    "hex": "#B3A6D9",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade",
+    "sun": ["part", "shade"],
+    "moisture": "Average to moist",
+    "notes": "Bold leaves in every shade of green, blue and gold. The backbone of many shade gardens. Deer and slugs love it too.",
+    "deer": "D",
+    "toxic": ["dogs", "cats"],
+    "toxSrc": "ASPCA lists hosta as toxic",
+    "zones": [3, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Hosta Bressingham Blue.JPG",
+      "by": "Qwertzy2",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "fall",
+    "trim": false,
+    "fall": {
+      "short": "rake up slug eggs",
+      "why": "dead hosta leaves hide slug eggs, so rake them all up"
+    },
+    "divide": "early-spring"
+  },
+  "example": 2,
+  "sources": [
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    },
+    {
+      "title": "University of Minnesota Extension: Dividing Perennials",
+      "url": "https://extension.umn.edu/planting-and-growing-guides/dividing-perennials",
+      "topic": "Care timing",
+      "note": "Divide fall bloomers in spring and spring and summer bloomers in fall, 4 to 6 weeks before the ground freezes; peonies and Siberian iris in fall; hostas in spring; avoid dividing baptisia."
+    }
+  ],
+  "companions": [
+    {
+      "id": "autumn",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Japanese forest grass, Heuchera, Hosta and foamflower.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Autumn Fern companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=DRYBR",
+          "about": "autumn"
+        }
+      ]
+    },
+    {
+      "id": "bleeding",
+      "why": "Pairs with Virginia bluebells in spring; ferns, hosta, hardy geranium and astilbe fill in as it dies back.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        }
+      ]
+    },
+    {
+      "id": "daffodil",
+      "why": "Purdue Extension: interplant daffodils with late-emerging, sturdy perennials such as hosta, grasses or daylilies.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    },
+    {
+      "id": "tulip",
+      "why": "Purdue Extension: plant tulips with later-emerging plants that hide the ripening foliage, especially hosta, daylily and ornamental grasses.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    },
+    {
+      "id": "foam",
+      "why": "Walters Gardens: foamflower pairs beautifully with hostas and ferns.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Plants to Pair with Hostas",
+          "url": "https://www.waltersgardens.com/photo_essay.php?ID=501",
+          "about": "foam"
+        }
+      ]
+    },
+    {
+      "id": "rozanne",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Heuchera, Hosta and Sedum.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Geranium 'Rozanne' companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=GERRO",
+          "about": "rozanne"
+        }
+      ]
+    },
+    {
+      "id": "anemone",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "forestgrass",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "hellebore",
+      "why": "Combines with barrenwort in spring; later a backdrop for hostas; shown among hardy geranium.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lenten Rose article",
+          "url": "https://hort.extension.wisc.edu/articles/lenten-rose-helleborus-xhybridus/",
+          "about": "hellebore"
+        }
+      ]
+    },
+    {
+      "id": "fern",
+      "why": "An excellent addition to hosta gardens.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Maidenhair Fern article",
+          "url": "https://hort.extension.wisc.edu/articles/northern-maidenhair-fern-adiantum-pedatum/",
+          "about": "fern"
+        }
+      ]
+    },
+    {
+      "id": "astrantia",
+      "why": "Combine with astilbe, ligularia and ferns in shade; fine foliage contrasts with hostas.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Masterwort article",
+          "url": "https://hort.extension.wisc.edu/articles/astrantia-astrantia-major/",
+          "about": "astrantia"
+        }
+      ]
+    },
+    {
+      "id": "solomon",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "toad",
+      "why": "Combines well with anemone, astilbe, ferns, hellebores, hosta and lungwort.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Toad Lily article",
+          "url": "https://hort.extension.wisc.edu/articles/hairy-toad-lily-tricyrtis-hirta/",
+          "about": "toad"
+        }
+      ]
+    },
+    {
+      "id": "bluebells",
+      "why": "Hostas and ferns both work well as companions; use other plants to hide gaps after it goes dormant.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Perennials.com: Virginia Bluebells profile",
+          "url": "https://www.perennials.com/plants/mertensia-virginica.html",
+          "about": "bluebells"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "phlox",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "columbine",
+      "why": "Combines well with hostas and astilbe in shade gardens, and with wild geranium and wild ginger in natural settings.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Columbine article",
+          "url": "https://hort.extension.wisc.edu/articles/eastern-red-columbine-aquilegia-canadensis/",
+          "about": "columbine"
+        }
+      ]
+    },
+    {
+      "id": "foxglove",
+      "why": "Combines with catmint and lady's mantle; in shade with astilbe, hosta or coral bells.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
+          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
+          "about": "foxglove"
+        }
+      ]
+    }
+  ]
+}

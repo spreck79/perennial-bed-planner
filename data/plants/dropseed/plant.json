@@ -1,0 +1,238 @@
+{
+  "id": "dropseed",
+  "facts": {
+    "code": "PrDr",
+    "name": "Prairie Dropseed",
+    "latin": "Sporobolus heterolepis",
+    "native": true,
+    "kind": "grass",
+    "hLo": 15,
+    "hHi": 30,
+    "spacing": 24,
+    "bloom": [8, 9.5],
+    "color": "Airy, fragrant pink-tan sprays",
+    "hex": "#C9B48A",
+    "txt": "#2E3A2C",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Dry to average",
+    "notes": "A fine-textured fountain of grass with airy late-summer flowers that smell faintly of popcorn. Slow to start, long-lived.",
+    "toxic": null,
+    "zones": [3, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Sporobolus heterolepis - Denver Botanic Gardens - DSC00886.JPG",
+      "by": "Daderot",
+      "lic": "Public domain",
+      "licUrl": ""
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Dryland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/dryland-species-2/",
+        "note": "Michigan seed grower; marks any species that is not native to Michigan."
+      }
+    ]
+  },
+  "care": {
+    "group": "grass",
+    "trim": false
+  },
+  "example": 2,
+  "companions": [
+    {
+      "id": "rudbeckia",
+      "why": "Combined with fall-blooming sedums; a great filler between purple coneflower, liatris, black-eyed Susan and butterfly weed.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Dropseed article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-dropseed-sporobolus-heterolepis/",
+          "about": "dropseed"
+        }
+      ]
+    },
+    {
+      "id": "liatris",
+      "why": "Combined with fall-blooming sedums; a great filler between purple coneflower, liatris, black-eyed Susan and butterfly weed.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Blazing Star article",
+          "url": "https://hort.extension.wisc.edu/articles/liatris/",
+          "about": "liatris"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Dropseed article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-dropseed-sporobolus-heterolepis/",
+          "about": "dropseed"
+        }
+      ]
+    },
+    {
+      "id": "butterflyweed",
+      "why": "Combined with fall-blooming sedums; a great filler between purple coneflower, liatris, black-eyed Susan and butterfly weed.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Butterfly Weed article",
+          "url": "https://hort.extension.wisc.edu/articles/butterflyweed-asclepias-tuberosa/",
+          "about": "butterflyweed"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Dropseed article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-dropseed-sporobolus-heterolepis/",
+          "about": "dropseed"
+        }
+      ]
+    },
+    {
+      "id": "coreopsis",
+      "why": "Combined with fall-blooming sedums; a great filler between purple coneflower, liatris, black-eyed Susan and butterfly weed.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Dropseed article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-dropseed-sporobolus-heterolepis/",
+          "about": "dropseed"
+        }
+      ]
+    },
+    {
+      "id": "bluestem",
+      "why": "Combined with fall-blooming sedums; a great filler between purple coneflower, liatris, black-eyed Susan and butterfly weed.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Dropseed article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-dropseed-sporobolus-heterolepis/",
+          "about": "dropseed"
+        }
+      ]
+    },
+    {
+      "id": "coneflower",
+      "why": "Combined with fall-blooming sedums; a great filler between purple coneflower, liatris, black-eyed Susan and butterfly weed.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Dropseed article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-dropseed-sporobolus-heterolepis/",
+          "about": "dropseed"
+        }
+      ]
+    },
+    {
+      "id": "sedum",
+      "why": "Combined with fall-blooming sedums; a great filler between purple coneflower, liatris, black-eyed Susan and butterfly weed.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Dropseed article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-dropseed-sporobolus-heterolepis/",
+          "about": "dropseed"
+        }
+      ]
+    },
+    {
+      "id": "allium",
+      "why": "Purdue Extension: alliums look good planted with grasses, in cottage plantings or English borders.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    },
+    {
+      "id": "hyssop",
+      "why": "Combines well with purple coneflower, bee balm and native grasses; in gardens with Japanese anemones.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Anise Hyssop article",
+          "url": "https://hort.extension.wisc.edu/articles/anise-hyssop-agastache-foeniculum/",
+          "about": "hyssop"
+        }
+      ]
+    },
+    {
+      "id": "daffodil",
+      "why": "Purdue Extension: interplant daffodils with late-emerging, sturdy perennials such as hosta, grasses or daylilies.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    },
+    {
+      "id": "tulip",
+      "why": "Purdue Extension: plant tulips with later-emerging plants that hide the ripening foliage, especially hosta, daylily and ornamental grasses.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    },
+    {
+      "id": "penstemon",
+      "why": "Combines well with blue spiderworts, blue false indigo and prairie dropseed; try it with catmint and lady's mantle.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Foxglove Beardtongue article",
+          "url": "https://hort.extension.wisc.edu/articles/husker-red-foxglove-beardtongue-penstemon-digitalis-husker-red/",
+          "about": "penstemon"
+        }
+      ]
+    },
+    {
+      "id": "anemone",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "prairiesmoke",
+      "why": "Grows well with blazing star and little bluestem; often grows with prairie dropseed in natural settings.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Smoke article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-smoke-geum-triflorum/",
+          "about": "prairiesmoke"
+        }
+      ]
+    },
+    {
+      "id": "sneezeweed",
+      "why": "Combines well with ornamental grasses, anise hyssop, beebalm, daylilies, fall asters, liatris, purple coneflower and rudbeckias.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Sneezeweed article",
+          "url": "https://hort.extension.wisc.edu/articles/helenium-helenium-autumnale/",
+          "about": "sneezeweed"
+        }
+      ]
+    }
+  ]
+}

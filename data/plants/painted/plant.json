@@ -1,0 +1,60 @@
+{
+  "id": "painted",
+  "facts": {
+    "code": "JPFe",
+    "name": "Japanese Painted Fern",
+    "latin": "Athyrium niponicum 'Pictum'",
+    "native": false,
+    "kind": "fern",
+    "hLo": 12,
+    "hHi": 18,
+    "spacing": 18,
+    "bloom": null,
+    "color": "Silver, burgundy and green fronds",
+    "hex": "#9DB7A5",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade; moist soil",
+    "sun": ["part", "shade"],
+    "moisture": "Moist",
+    "notes": "A showy fern with silver-gray fronds and burgundy stems. It brightens the shade and pairs well with coral bells and brunnera.",
+    "deer": "A",
+    "toxic": null,
+    "zones": [4, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Athyrium niponicum pictum 1.jpg",
+      "by": "Stan Shebs",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "English Gardens (Michigan garden center): Japanese Painted Fern",
+        "url": "https://plants.englishgardens.com/12150001/Plant/2157/Japanese_Painted_Fern/",
+        "note": "Sold at English Gardens."
+      }
+    ]
+  },
+  "care": {
+    "group": "fern",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "brunnera",
+      "why": "Contrasts nicely with Japanese painted fern; combines well with astilbes, bleeding heart and Heuchera.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Brunnera 'Jack Frost' article",
+          "url": "https://hort.extension.wisc.edu/articles/brunnera-macrophylla-jack-frost",
+          "about": "brunnera"
+        }
+      ]
+    }
+  ]
+}

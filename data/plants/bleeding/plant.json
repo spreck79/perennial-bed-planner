@@ -1,0 +1,237 @@
+{
+  "id": "bleeding",
+  "facts": {
+    "code": "BlHe",
+    "name": "Bleeding Heart",
+    "latin": "Lamprocapnos spectabilis",
+    "native": false,
+    "kind": "clump",
+    "dormant": true,
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 24,
+    "bloom": [4.5, 6],
+    "color": "Pink and white hearts",
+    "hex": "#E46A8F",
+    "txt": "#FFFFFF",
+    "light": "Part shade to shade",
+    "sun": ["part", "shade"],
+    "moisture": "Moist",
+    "notes": "Arching stems of heart-shaped flowers in spring. Goes dormant by midsummer, so pair it with ferns or hostas.",
+    "deer": "A",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "Pet Poison Helpline lists bleeding heart as toxic",
+    "gloves": true,
+    "zones": [3, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Dicentra-spectabilis.jpg",
+      "by": "Wuzur",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "ephemeral",
+    "trim": false,
+    "dormancy": {
+      "from": 7,
+      "short": "Jul"
+    }
+  },
+  "example": 2,
+  "sources": [
+    {
+      "title": "UW-Madison Extension: Bleeding heart",
+      "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+      "topic": "Early-dormant plants",
+      "note": "Ferns, hosta, hardy geranium and astilbe fill in as bleeding heart dies back."
+    }
+  ],
+  "companions": [
+    {
+      "id": "astilbe",
+      "why": "Pairs with Virginia bluebells in spring; ferns, hosta, hardy geranium and astilbe fill in as it dies back.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        }
+      ]
+    },
+    {
+      "id": "bigroot",
+      "why": "Pairs with Virginia bluebells in spring; ferns, hosta, hardy geranium and astilbe fill in as it dies back.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        }
+      ]
+    },
+    {
+      "id": "christmas",
+      "why": "Pairs with Virginia bluebells in spring; ferns, hosta, hardy geranium and astilbe fill in as it dies back.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        }
+      ]
+    },
+    {
+      "id": "cinnamon",
+      "why": "Pairs with Virginia bluebells in spring; ferns, hosta, hardy geranium and astilbe fill in as it dies back.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        }
+      ]
+    },
+    {
+      "id": "rozanne",
+      "why": "Pairs with Virginia bluebells in spring; ferns, hosta, hardy geranium and astilbe fill in as it dies back.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        }
+      ]
+    },
+    {
+      "id": "hosta",
+      "why": "Pairs with Virginia bluebells in spring; ferns, hosta, hardy geranium and astilbe fill in as it dies back.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        }
+      ]
+    },
+    {
+      "id": "lady",
+      "why": "Pairs with Virginia bluebells in spring; ferns, hosta, hardy geranium and astilbe fill in as it dies back.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        }
+      ]
+    },
+    {
+      "id": "fern",
+      "why": "Pairs with Virginia bluebells in spring; ferns, hosta, hardy geranium and astilbe fill in as it dies back.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        }
+      ]
+    },
+    {
+      "id": "ostrich",
+      "why": "Pairs with Virginia bluebells in spring; ferns, hosta, hardy geranium and astilbe fill in as it dies back.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        }
+      ]
+    },
+    {
+      "id": "bluebells",
+      "why": "Pairs with Virginia bluebells in spring; ferns, hosta, hardy geranium and astilbe fill in as it dies back.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "brunnera",
+      "why": "Contrasts nicely with Japanese painted fern; combines well with astilbes, bleeding heart and Heuchera.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Brunnera 'Jack Frost' article",
+          "url": "https://hort.extension.wisc.edu/articles/brunnera-macrophylla-jack-frost",
+          "about": "brunnera"
+        }
+      ]
+    },
+    {
+      "id": "anemone",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "solomon",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "phlox",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    }
+  ]
+}

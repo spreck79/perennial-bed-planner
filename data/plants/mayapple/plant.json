@@ -1,0 +1,87 @@
+{
+  "id": "mayapple",
+  "facts": {
+    "code": "Maya",
+    "name": "Mayapple",
+    "latin": "Podophyllum peltatum",
+    "native": true,
+    "kind": "mat",
+    "dormant": true,
+    "hLo": 12,
+    "hHi": 18,
+    "spacing": 18,
+    "bloom": [5, 5.7],
+    "color": "White flower hidden under the leaves",
+    "hex": "#F4F1EA",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade",
+    "sun": ["part", "shade"],
+    "moisture": "Average to moist",
+    "notes": "Umbrella-like leaves that carpet the woodland floor in spring, then die back by midsummer. Spreads into colonies.",
+    "deer": "A",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "ASPCA lists mayapple as toxic",
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Podophyllum peltatum Arkansas.jpg",
+      "by": "Eric Hunt",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Black Cap Plants (Onekama, Michigan): Species list of native plants",
+        "url": "https://www.blackcapplants.com/species-list",
+        "note": "Michigan native nursery; marks the few species it sells that have no natural Michigan range (none of these are marked). Checked November 2026."
+      },
+      {
+        "title": "Michigan Tech KISMA: Native species table",
+        "url": "https://www.mtu.edu/kisma/native-alternatives/native-species-table/",
+        "note": "Michigan Technological University table of plants native to the Upper Peninsula or the northern Great Lakes region (Heart-leaved Aster is not in it). Checked November 2026."
+      }
+    ]
+  },
+  "care": {
+    "group": "ephemeral",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Penn State Extension: Spring Ephemerals for Residential Gardens",
+      "url": "https://extension.psu.edu/spring-ephemerals-for-residential-gardens",
+      "topic": "Early-dormant plants",
+      "note": "Virginia bluebell foliage dies back by summer, so interplant with hostas or ferns; mayapple goes dormant in summer, so pair it with ferns or late-summer flowers."
+    }
+  ],
+  "companions": [
+    {
+      "id": "waterleaf",
+      "why": "Commonly found with wild columbine, wild ginger, wild geranium, woodland phlox and mayapple.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Waterleaf article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-waterleaf-hydrophyllum-virginianum/",
+          "about": "waterleaf"
+        }
+      ]
+    },
+    {
+      "id": "geranium",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    }
+  ]
+}

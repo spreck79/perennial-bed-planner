@@ -1,0 +1,73 @@
+{
+  "id": "lobelia",
+  "facts": {
+    "code": "GBLo",
+    "name": "Great Blue Lobelia",
+    "latin": "Lobelia siphilitica",
+    "native": true,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 12,
+    "bloom": [8, 9.8],
+    "color": "Blue flower spikes",
+    "hex": "#4F67C9",
+    "txt": "#FFFFFF",
+    "light": "Part shade to sun",
+    "sun": ["full", "part"],
+    "moisture": "Moist to wet",
+    "notes": "The blue cousin of cardinal flower, with spikes of blue in late summer that bumblebees love. Wants soil that stays damp.",
+    "deer": "B",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "ASPCA lists lobelia as toxic",
+    "zones": [4, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Lobelia siphilitica Lobelia wielka 01.jpg",
+      "by": "Agnieszka Kwiecień, Nova",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Wetland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/wetland-species/",
+        "note": "Same grower, wetland list."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "cardinal",
+      "why": "Combines well with great blue lobelia, irises and marsh milkweed; also found with purple coneflower, blazing star and foxglove beardtongue.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Cardinal Flower article",
+          "url": "https://hort.extension.wisc.edu/articles/cardinal-flower-lobelia-cardinalis/",
+          "about": "cardinal"
+        }
+      ]
+    },
+    {
+      "id": "palmsedge",
+      "why": "New Moon Nurseries: try pairing with swamp milkweed, turtlehead, Joe-Pye weed (Eupatorium purpureum) or great blue lobelia.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Palm Sedge",
+          "url": "https://newmoonnursery.com/plant/Carex-muskingumensis",
+          "about": "palmsedge"
+        }
+      ]
+    }
+  ]
+}

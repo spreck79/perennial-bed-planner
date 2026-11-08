@@ -1,0 +1,206 @@
+{
+  "id": "solomon",
+  "facts": {
+    "code": "SoSe",
+    "name": "Solomon's Seal",
+    "latin": "Polygonatum biflorum",
+    "native": true,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 18,
+    "bloom": [5, 6],
+    "color": "Creamy bells under arching stems",
+    "hex": "#E6EBD3",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade",
+    "sun": ["part", "shade"],
+    "moisture": "Dry to moist",
+    "notes": "Graceful arching stems hung with creamy bells in late spring, then blue-black berries. Tough in dry shade and spreads slowly into a colony.",
+    "deer": "C",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "The blue-black berries are poisonous (general references; not on the ASPCA list)",
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Polygonatum biflorum var commutatum NRCS-001.jpg",
+      "by": "Robert H. Mohlenbrock, USDA NRCS",
+      "lic": "Public domain",
+      "licUrl": ""
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Wild Cherry Farm (Michigan native nursery): Solomon's Seal",
+        "url": "https://www.wildcherryfarm.com/shop-native-plants/p/solomons-seal-polygonatum-biflorum",
+        "note": "Called a Michigan native plant."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "example": 2,
+  "companions": [
+    {
+      "id": "astilbe",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "bergenia",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "bleeding",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "christmas",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "cinnamon",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "hosta",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "lady",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "lungwort",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "fern",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "ostrich",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "ginger",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "bluebells",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "geranium",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    }
+  ]
+}

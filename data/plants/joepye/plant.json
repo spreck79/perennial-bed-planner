@@ -1,0 +1,80 @@
+{
+  "id": "joepye",
+  "facts": {
+    "code": "SJPW",
+    "name": "Sweet Joe-Pye Weed",
+    "latin": "Eutrochium purpureum",
+    "native": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 48,
+    "hHi": 72,
+    "spacing": 30,
+    "bloom": [7.5, 9.5],
+    "color": "Dusty mauve-pink domes",
+    "hex": "#C38BA8",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part shade",
+    "sun": ["full", "part"],
+    "moisture": "Average to moist",
+    "notes": "A big, stately back-row plant with vanilla-scented flower domes that are a butterfly magnet in late summer.",
+    "toxic": null,
+    "zones": [4, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Eutrochium purpureum.jpg",
+      "by": "Mason Brock (Masebrock)",
+      "lic": "Public domain",
+      "licUrl": ""
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Designs By Nature: Sweet Joe-Pye Weed",
+        "url": "https://designsbynaturellc.com/product/sweet-joe-pye-weed-eutrochium-purpureum/",
+        "note": "Native to Michigan."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    }
+  ],
+  "companions": [
+    {
+      "id": "anemone",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "palmsedge",
+      "why": "New Moon Nurseries: try pairing with swamp milkweed, turtlehead, Joe-Pye weed (Eupatorium purpureum) or great blue lobelia.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Palm Sedge",
+          "url": "https://newmoonnursery.com/plant/Carex-muskingumensis",
+          "about": "palmsedge"
+        }
+      ]
+    }
+  ]
+}

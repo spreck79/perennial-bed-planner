@@ -1,0 +1,85 @@
+{
+  "id": "sunflower",
+  "facts": {
+    "code": "WoSu",
+    "name": "Woodland Sunflower",
+    "latin": "Helianthus divaricatus",
+    "native": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 36,
+    "hHi": 60,
+    "spacing": 30,
+    "bloom": [7, 10],
+    "color": "Yellow daisies",
+    "hex": "#F2C230",
+    "txt": "#2E3A2C",
+    "light": "Part shade to sun; dry to average soil",
+    "sun": ["full", "part"],
+    "moisture": "Dry to average",
+    "notes": "A tall, easy sunflower for the back of a bed. It spreads by rhizomes and can take over, so best for a roomy bed.",
+    "deer": "C",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Helianthus divaricatus (34999433434).jpg",
+      "by": "Shenandoah National Park",
+      "lic": "Public domain",
+      "licUrl": ""
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Wild Ginger Woodlands: Woodland Sunflower",
+        "url": "https://www.wildgingerwoodlands.com/wild-ginger-woodlands-shop/p/nrccrx939b7u07jksq6ho64fng6vxn",
+        "note": "Native to Michigan, mostly the Lower Peninsula."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "coreopsis",
+      "why": "New Moon Nurseries: in lightly shaded gardens, companions include wild columbine, Pennsylvania sedge and lanceleaf coreopsis.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Woodland Sunflower",
+          "url": "https://newmoonnursery.com/plant/Helianthus-divaricatus",
+          "about": "sunflower"
+        }
+      ]
+    },
+    {
+      "id": "sedge",
+      "why": "New Moon Nurseries: in lightly shaded gardens, companions include wild columbine, Pennsylvania sedge and lanceleaf coreopsis.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Woodland Sunflower",
+          "url": "https://newmoonnursery.com/plant/Helianthus-divaricatus",
+          "about": "sunflower"
+        }
+      ]
+    },
+    {
+      "id": "columbine",
+      "why": "New Moon Nurseries: in lightly shaded gardens, companions include wild columbine, Pennsylvania sedge and lanceleaf coreopsis.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Woodland Sunflower",
+          "url": "https://newmoonnursery.com/plant/Helianthus-divaricatus",
+          "about": "sunflower"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "id": "zizia",
+  "facts": {
+    "code": "GoAl",
+    "name": "Golden Alexanders",
+    "latin": "Zizia aurea",
+    "native": true,
+    "kind": "clump",
+    "hLo": 12,
+    "hHi": 24,
+    "spacing": 15,
+    "bloom": [5, 6.5],
+    "color": "Flat yellow flower clusters",
+    "hex": "#E7CB3A",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part shade",
+    "sun": ["full", "part"],
+    "moisture": "Average to moist",
+    "notes": "Lacy yellow umbrellas in late spring that feed early bees and black swallowtail caterpillars. Easy, adaptable and reseeds gently.",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Zizia aurea 5zz.jpg",
+      "by": "David J. Stang",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Dryland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/dryland-species-2/",
+        "note": "Michigan seed grower; marks any species that is not native to Michigan."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "butterflyweed",
+      "why": "Plant at the edge of a meadow with butterfly weed and New England aster.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Mt. Cuba Center: Golden Alexanders",
+          "url": "https://mtcubacenter.org/plants/common-golden-alexanders/",
+          "about": "zizia"
+        }
+      ]
+    },
+    {
+      "id": "newengland",
+      "why": "Plant at the edge of a meadow with butterfly weed and New England aster.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Mt. Cuba Center: Golden Alexanders",
+          "url": "https://mtcubacenter.org/plants/common-golden-alexanders/",
+          "about": "zizia"
+        }
+      ]
+    }
+  ]
+}

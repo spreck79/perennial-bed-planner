@@ -1,0 +1,60 @@
+{
+  "id": "jacobs",
+  "facts": {
+    "code": "JaLa",
+    "name": "Jacob's Ladder",
+    "latin": "Polemonium reptans",
+    "native": true,
+    "kind": "clump",
+    "hLo": 12,
+    "hHi": 18,
+    "spacing": 13,
+    "bloom": [4.7, 6.3],
+    "color": "Sky-blue bells",
+    "hex": "#8DA2DE",
+    "txt": "#FFFFFF",
+    "light": "Part shade; moist soil",
+    "sun": ["part"],
+    "moisture": "Average to moist",
+    "notes": "Named for its ladder-like leaflets, which look neat all season. Reseeds lightly, never aggressively.",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "focus": [0.5, 0.45],
+    "credit": {
+      "file": "Polemonium reptans 001.JPG",
+      "by": "Meneerke bloem",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Wild Cherry Farm: Jacob's Ladder",
+        "url": "https://www.wildcherryfarm.com/shop-native-plants/p/jacobs-ladder-polemonium-reptans",
+        "note": "State threatened in Michigan."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "goatsbeard",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "id": "obedient",
+  "facts": {
+    "code": "ObPl",
+    "name": "Obedient Plant",
+    "latin": "Physostegia virginiana",
+    "native": true,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 48,
+    "spacing": 24,
+    "bloom": [7.5, 10],
+    "color": "Pink spikes",
+    "hex": "#E48DB8",
+    "txt": "#2E3A2C",
+    "light": "Part shade to sun; blooms best with 4+ hours of sun",
+    "sun": ["full", "part"],
+    "moisture": "Average to moist",
+    "notes": "Tall pink flower spikes in late summer. It spreads by rhizomes, so give it room or plan to divide it every few years.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [3, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Physostegiavirg.jpg",
+      "by": "Hardyplants",
+      "lic": "Public domain",
+      "licUrl": ""
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Black Cap Plants (Onekama, Michigan): Species list of native plants",
+        "url": "https://www.blackcapplants.com/species-list",
+        "note": "Michigan native nursery; marks the few species it sells that have no natural Michigan range (none of these are marked). Checked November 2026."
+      },
+      {
+        "title": "Michigan Tech KISMA: Native species table",
+        "url": "https://www.mtu.edu/kisma/native-alternatives/native-species-table/",
+        "note": "Michigan Technological University table of plants native to the Upper Peninsula or the northern Great Lakes region (Heart-leaved Aster is not in it). Checked November 2026."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "bluestem",
+      "why": "A border is brightened when obedient plant is planted alongside goldenrods, little bluestem and purple coneflower.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Mt. Cuba Center: Obedient Plant",
+          "url": "https://mtcubacenter.org/plants/obedient-plant/",
+          "about": "obedient"
+        }
+      ]
+    },
+    {
+      "id": "coneflower",
+      "why": "A border is brightened when obedient plant is planted alongside goldenrods, little bluestem and purple coneflower.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Mt. Cuba Center: Obedient Plant",
+          "url": "https://mtcubacenter.org/plants/obedient-plant/",
+          "about": "obedient"
+        }
+      ]
+    }
+  ]
+}

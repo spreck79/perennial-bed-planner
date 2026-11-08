@@ -1,0 +1,98 @@
+{
+  "id": "autumn",
+  "facts": {
+    "code": "AuFe",
+    "name": "Autumn Fern",
+    "latin": "Dryopteris erythrosora",
+    "native": false,
+    "kind": "fern",
+    "hLo": 18,
+    "hHi": 24,
+    "spacing": 18,
+    "bloom": null,
+    "color": "Copper-orange new fronds, dark green later",
+    "hex": "#C07A4A",
+    "txt": "#FFFFFF",
+    "light": "Part shade to shade; moist soil",
+    "sun": ["part", "shade"],
+    "moisture": "Average to moist",
+    "notes": "New fronds unfurl copper-orange and mature to glossy green, and the plant stays evergreen in mild winters.",
+    "toxic": null,
+    "zones": [6.5, 12.5],
+    "winter": {
+      "how": "mulch"
+    }
+  },
+  "photo": {
+    "credit": {
+      "file": "Autumn Brilliance Fern.jpg",
+      "by": "Liam Kaplan",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Ray Wiegand's Nursery: Autumn Fern",
+        "url": "http://plants.wiegandsnursery.com/12150006/Plant/3498/Autumn_Fern/",
+        "note": "Sold at Wiegand's."
+      }
+    ]
+  },
+  "care": {
+    "group": "evfern",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "coral",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Japanese forest grass, Heuchera, Hosta and foamflower.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Autumn Fern companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=DRYBR",
+          "about": "autumn"
+        }
+      ]
+    },
+    {
+      "id": "foam",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Japanese forest grass, Heuchera, Hosta and foamflower.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Autumn Fern companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=DRYBR",
+          "about": "autumn"
+        }
+      ]
+    },
+    {
+      "id": "hosta",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Japanese forest grass, Heuchera, Hosta and foamflower.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Autumn Fern companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=DRYBR",
+          "about": "autumn"
+        }
+      ]
+    },
+    {
+      "id": "forestgrass",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Japanese forest grass, Heuchera, Hosta and foamflower.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Autumn Fern companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=DRYBR",
+          "about": "autumn"
+        }
+      ]
+    }
+  ]
+}

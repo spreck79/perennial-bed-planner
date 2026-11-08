@@ -1,0 +1,79 @@
+{
+  "id": "seaholly",
+  "facts": {
+    "code": "SeHo",
+    "name": "Sea Holly",
+    "latin": "Eryngium planum",
+    "native": false,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 18,
+    "bloom": [7, 8.8],
+    "color": "Steel-blue spiky flower heads",
+    "hex": "#6F86B8",
+    "txt": "#FFFFFF",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Dry to average",
+    "notes": "Metallic blue thistle-like flowers in summer that bees adore and that dry well for bouquets. Wants sun and good drainage.",
+    "toxic": null,
+    "zones": [5, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Eryngium planum kz21.jpg",
+      "by": "Krzysztof Ziarnek, Kenraiz",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "University of Illinois Extension: Deer Resistant Perennials",
+      "url": "https://extension.illinois.edu/media/3883/download",
+      "topic": "Deer",
+      "note": "Lists Rattlesnake Master (Eryngium) as deer resistant, while Rutgers rates Eryngium D. Because the two disagree, Rattlesnake Master and Sea Holly are left unrated."
+    }
+  ],
+  "companions": [
+    {
+      "id": "liatris",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Liatris and Coreopsis.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Sea Holly companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=ERYBG",
+          "about": "seaholly"
+        }
+      ]
+    },
+    {
+      "id": "coreopsis",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Liatris and Coreopsis.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Sea Holly companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=ERYBG",
+          "about": "seaholly"
+        }
+      ]
+    }
+  ]
+}

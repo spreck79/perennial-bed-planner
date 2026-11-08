@@ -1,0 +1,110 @@
+{
+  "id": "yarrow",
+  "facts": {
+    "code": "Yarr",
+    "name": "Yarrow 'Moonshine'",
+    "latin": "Achillea 'Moonshine'",
+    "native": false,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 18,
+    "hHi": 24,
+    "spacing": 18,
+    "bloom": [6, 8.5],
+    "color": "Soft lemon yellow",
+    "hex": "#EBD660",
+    "txt": "#2E3A2C",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Dry to average",
+    "notes": "Flat lemon-yellow flower heads over ferny silver leaves. Drought tolerant and long blooming.",
+    "deer": "B",
+    "toxic": ["dogs", "cats"],
+    "toxSrc": "ASPCA lists yarrow as toxic",
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Achillea × 'Moonshine', Morris Arboretum 01.jpg",
+      "by": "Shuvaev",
+      "lic": "CC BY 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "fall",
+    "trim": false,
+    "fall": {
+      "short": "keep low base leaves",
+      "why": "cut the flower stalks but leave the low new leaves at the base"
+    }
+  },
+  "sources": [
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    }
+  ],
+  "companions": [
+    {
+      "id": "lavender",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, Shasta daisy, catmint 'Walker's Low' and Salvia nemorosa.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: English Lavender companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LAVHI",
+          "about": "lavender"
+        }
+      ]
+    },
+    {
+      "id": "bluestem",
+      "why": "Pair with dark-leaved Heuchera; combine with aster, tall sedums like 'Autumn Joy', yarrow, rudbeckias and purple coneflower.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Little Bluestem article",
+          "url": "https://hort.extension.wisc.edu/articles/little-bluestem-schizachyrium-scoparium/",
+          "about": "bluestem"
+        }
+      ]
+    },
+    {
+      "id": "salvia",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow and Shasta daisy 'Becky'.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Salvia 'May Night' companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=SALMN",
+          "about": "salvia"
+        }
+      ]
+    },
+    {
+      "id": "shasta",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, daylily, iris, catmint and sedum.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Shasta Daisy companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LEUBE",
+          "about": "shasta"
+        }
+      ]
+    }
+  ]
+}

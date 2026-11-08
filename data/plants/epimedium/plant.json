@@ -1,0 +1,68 @@
+{
+  "id": "epimedium",
+  "facts": {
+    "code": "Barr",
+    "name": "Barrenwort",
+    "latin": "Epimedium, garden hybrids",
+    "native": false,
+    "kind": "mat",
+    "hLo": 8,
+    "hHi": 12,
+    "spacing": 15,
+    "bloom": [4.3, 5.7],
+    "color": "Dainty yellow, pink or white",
+    "hex": "#F0C75E",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade; handles dry shade once established",
+    "sun": ["part", "shade"],
+    "moisture": "Dry to average",
+    "notes": "A tough, low plant with heart-shaped leaves that thrives under trees. Dainty spring flowers, and slow to spread.",
+    "deer": "A",
+    "toxic": null,
+    "zones": [5, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Epimedium franchetii 0804b.JPG",
+      "by": "SB Johnny",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "leavesEarly",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "UW Botanic Gardens: When and Why to Cut Leaves Off Epimediums and Hellebores",
+      "url": "https://botanicgardens.uw.edu/about/blog/2014/12/30/epimedium-hellebores",
+      "topic": "Care timing",
+      "note": "Cut epimedium foliage down by flowering time, in late winter."
+    }
+  ],
+  "companions": [
+    {
+      "id": "hellebore",
+      "why": "Combines with barrenwort in spring; later a backdrop for hostas; shown among hardy geranium.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lenten Rose article",
+          "url": "https://hort.extension.wisc.edu/articles/lenten-rose-helleborus-xhybridus/",
+          "about": "hellebore"
+        }
+      ]
+    }
+  ]
+}

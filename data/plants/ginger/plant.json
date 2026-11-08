@@ -1,0 +1,103 @@
+{
+  "id": "ginger",
+  "facts": {
+    "code": "WiGi",
+    "name": "Wild Ginger",
+    "latin": "Asarum canadense",
+    "native": true,
+    "kind": "mat",
+    "filler": true,
+    "hLo": 4,
+    "hHi": 8,
+    "spacing": 12,
+    "bloom": null,
+    "color": "Velvety heart-shaped leaves",
+    "hex": "#6F9A5A",
+    "txt": "#FFFFFF",
+    "light": "Part shade to shade",
+    "sun": ["part", "shade"],
+    "moisture": "Average to moist",
+    "notes": "A dense groundcover of soft, heart-shaped leaves for shade. The little maroon spring flowers hide at ground level under the leaves.",
+    "deer": "A",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "Not culinary ginger; contains aristolochic acid (general references; not on the ASPCA list)",
+    "zones": [4, 6.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Asarum canadense.jpg",
+      "by": "Chris S. Packard (Earthdirt)",
+      "lic": "CC BY 2.5",
+      "licUrl": "https://creativecommons.org/licenses/by/2.5/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Black Cap Plants (Onekama, Michigan): Species list of native plants",
+        "url": "https://www.blackcapplants.com/species-list",
+        "note": "Michigan native nursery; marks the few species it sells that have no natural Michigan range (none of these are marked). Checked November 2026."
+      },
+      {
+        "title": "Michigan Tech KISMA: Native species table",
+        "url": "https://www.mtu.edu/kisma/native-alternatives/native-species-table/",
+        "note": "Michigan Technological University table of plants native to the Upper Peninsula or the northern Great Lakes region (Heart-leaved Aster is not in it). Checked November 2026."
+      }
+    ]
+  },
+  "care": {
+    "group": "tidy",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "goatsbeard",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "solomon",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "waterleaf",
+      "why": "Commonly found with wild columbine, wild ginger, wild geranium, woodland phlox and mayapple.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Waterleaf article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-waterleaf-hydrophyllum-virginianum/",
+          "about": "waterleaf"
+        }
+      ]
+    },
+    {
+      "id": "columbine",
+      "why": "Combines well with hostas and astilbe in shade gardens, and with wild geranium and wild ginger in natural settings.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Columbine article",
+          "url": "https://hort.extension.wisc.edu/articles/eastern-red-columbine-aquilegia-canadensis/",
+          "about": "columbine"
+        }
+      ]
+    }
+  ]
+}

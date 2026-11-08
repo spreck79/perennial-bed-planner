@@ -1,0 +1,191 @@
+{
+  "id": "ostrich",
+  "facts": {
+    "code": "OsFe",
+    "name": "Ostrich Fern",
+    "latin": "Matteuccia struthiopteris",
+    "native": true,
+    "kind": "fern",
+    "hLo": 36,
+    "hHi": 60,
+    "spacing": 30,
+    "bloom": null,
+    "color": "Tall green vase of fronds",
+    "hex": "#4F8A4A",
+    "txt": "#FFFFFF",
+    "light": "Part shade to shade; likes moist soil",
+    "sun": ["part", "shade"],
+    "moisture": "Moist to wet",
+    "notes": "A tall, dramatic fern for the back of the bed. Spreads by runners, so give it room or a barrier. The young fiddleheads are edible when cooked.",
+    "deer": "A",
+    "toxic": null,
+    "zones": [3, 7.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Matteuccia struthiopteris (4).JPG",
+      "by": "Griensteidl",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Black Cap Plants (Onekama, Michigan): Species list of native plants",
+        "url": "https://www.blackcapplants.com/species-list",
+        "note": "Michigan native nursery; marks the few species it sells that have no natural Michigan range (none of these are marked). Checked November 2026."
+      },
+      {
+        "title": "Michigan Tech KISMA: Native species table",
+        "url": "https://www.mtu.edu/kisma/native-alternatives/native-species-table/",
+        "note": "Michigan Technological University table of plants native to the Upper Peninsula or the northern Great Lakes region (Heart-leaved Aster is not in it). Checked November 2026."
+      }
+    ]
+  },
+  "care": {
+    "group": "fern",
+    "trim": false
+  },
+  "example": 1,
+  "companions": [
+    {
+      "id": "bleeding",
+      "why": "Pairs with Virginia bluebells in spring; ferns, hosta, hardy geranium and astilbe fill in as it dies back.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        }
+      ]
+    },
+    {
+      "id": "foam",
+      "why": "Walters Gardens: foamflower pairs beautifully with hostas and ferns.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Plants to Pair with Hostas",
+          "url": "https://www.waltersgardens.com/photo_essay.php?ID=501",
+          "about": "foam"
+        }
+      ]
+    },
+    {
+      "id": "goatsbeard",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    },
+    {
+      "id": "forestgrass",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "ladysmantle",
+      "why": "Contrasts nicely with vertical perennials such as iris, liatris, ferns and salvia.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lady's Mantle article",
+          "url": "https://hort.extension.wisc.edu/articles/ladys-mantle-alchemilla-mollis/",
+          "about": "ladysmantle"
+        }
+      ]
+    },
+    {
+      "id": "astrantia",
+      "why": "Combine with astilbe, ligularia and ferns in shade; fine foliage contrasts with hostas.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Masterwort article",
+          "url": "https://hort.extension.wisc.edu/articles/astrantia-astrantia-major/",
+          "about": "astrantia"
+        }
+      ]
+    },
+    {
+      "id": "solomon",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "toad",
+      "why": "Combines well with anemone, astilbe, ferns, hellebores, hosta and lungwort.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Toad Lily article",
+          "url": "https://hort.extension.wisc.edu/articles/hairy-toad-lily-tricyrtis-hirta/",
+          "about": "toad"
+        }
+      ]
+    },
+    {
+      "id": "bluebells",
+      "why": "Hostas and ferns both work well as companions; use other plants to hide gaps after it goes dormant.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Perennials.com: Virginia Bluebells profile",
+          "url": "https://www.perennials.com/plants/mertensia-virginica.html",
+          "about": "bluebells"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "phlox",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    },
+    {
+      "id": "geranium",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    }
+  ]
+}

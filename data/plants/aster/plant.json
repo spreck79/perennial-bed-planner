@@ -1,0 +1,75 @@
+{
+  "id": "aster",
+  "facts": {
+    "code": "HeAs",
+    "name": "Heart-leaved Aster",
+    "latin": "Symphyotrichum cordifolium",
+    "native": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 18,
+    "bloom": [9, 11],
+    "color": "Pale blue-lavender",
+    "hex": "#C2C5EE",
+    "txt": "#2E3A2C",
+    "light": "Part shade; average soil",
+    "sun": ["part"],
+    "moisture": "Average",
+    "notes": "Clouds of small daisies that feed bees and migrating monarchs late in the year. Cut back by half in early June for a shorter, fuller plant.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "focus": [0.5, 0.5],
+    "credit": {
+      "file": "Aster-cordifolius.JPG",
+      "by": "Sten",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Black Cap Plants (Onekama, Michigan): Species list of native plants",
+        "url": "https://www.blackcapplants.com/species-list",
+        "note": "Michigan native nursery; marks the few species it sells that have no natural Michigan range (none of these are marked). Checked November 2026."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false,
+    "june": "halve"
+  },
+  "companions": [
+    {
+      "id": "anemone",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "goldenrod",
+      "why": "New Moon Nurseries: at a woods edge, try pairing zigzag goldenrod with heart-leaved aster (Aster cordifolius).",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Zigzag Goldenrod",
+          "url": "https://newmoonnursery.com/plant/Solidago-flexicaulis",
+          "about": "goldenrod"
+        }
+      ]
+    }
+  ]
+}

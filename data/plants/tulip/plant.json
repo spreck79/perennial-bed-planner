@@ -1,0 +1,149 @@
+{
+  "id": "tulip",
+  "facts": {
+    "code": "DHTu",
+    "name": "Darwin Hybrid Tulip",
+    "latin": "Tulipa, Darwin hybrids (such as 'Apeldoorn')",
+    "native": false,
+    "kind": "bulb",
+    "dormant": true,
+    "clump": 6,
+    "hLo": 20,
+    "hHi": 24,
+    "spacing": 10,
+    "bloom": [4.5, 5.5],
+    "color": "Red, pink, yellow or orange cups",
+    "hex": "#C8324B",
+    "txt": "#FFFFFF",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Average, well drained",
+    "notes": "The longest-lasting of the big hybrid tulips, though most still fade after 2 or 3 springs. Plant 6 to 8 inches deep in October. Squirrels dig the bulbs and deer eat the flowers.",
+    "deer": "D",
+    "squirrels": true,
+    "toxic": ["dogs", "cats"],
+    "toxSrc": "ASPCA lists tulip as toxic",
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Tulp R01.jpg",
+      "by": "Marc Ryckaert (MJJR)",
+      "lic": "CC BY (attribution required)",
+      "licUrl": "https://commons.wikimedia.org/wiki/File:Tulp_R01.jpg"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "English Gardens (Detroit-area garden centers): Fall is for planting",
+        "url": "https://www.englishgardens.com/fall-is-for-planting/",
+        "note": "Michigan garden center; names tulips and daffodils among the fall bulbs to plant."
+      },
+      {
+        "title": "English Gardens plant finder: Tulipa 'Apeldoorn' (Darwin hybrid)",
+        "url": "https://plants.englishgardens.com/12150001/Plant/Print?id=10785",
+        "note": "Darwin hybrid tulip in the English Gardens plant finder: about 24 in tall in flower, set 6 in apart."
+      }
+    ]
+  },
+  "care": {
+    "group": "bulb",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Mississippi State Extension: Don't Touch the Daffodils",
+      "url": "https://extension.msstate.edu/blogs/extension-for-real-life/dont-touch-the-daffodils",
+      "topic": "Care timing",
+      "note": "Leave bulb leaves untouched for at least six weeks after they start to look dried up."
+    },
+    {
+      "title": "Purdue Extension (Marion County): Gardening with Bulbs",
+      "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+      "topic": "Spring bulbs",
+      "note": "Daffodils naturalize and are squirrel and deer resistant; hybrid tulips are 'like candy to squirrels and deer'; squirrels don't eat alliums; interplant bulbs with later perennials that hide the ripening leaves; plant from mid-October."
+    },
+    {
+      "title": "UW-Madison Extension: Plant Bulbs Now for Spring Color",
+      "url": "https://hort.extension.wisc.edu/2021/10/06/planting-spring-bulbs/",
+      "topic": "Spring bulbs",
+      "note": "Plant large bulbs 6 to 8 in deep in clumps of 5 to 8; squirrels are less likely to dig daffodils than tulips."
+    },
+    {
+      "title": "Iowa State Extension: Bulbs FAQ",
+      "url": "https://yardandgarden.extension.iastate.edu/faq/bulbs",
+      "topic": "Spring bulbs",
+      "note": "Most modern tulips bloom well for only 3 or 4 years; Darwin hybrids are generally the longest lasting."
+    },
+    {
+      "title": "Longfield Gardens: What Makes Darwin Hybrid Tulips Special",
+      "url": "https://www.longfield-gardens.com/article/What-Makes-Darwin-Hybrid-Tulips-Special",
+      "topic": "Spring bulbs",
+      "note": "Darwin hybrids stand 20 to 24 in tall and flower mid-April to mid-May."
+    },
+    {
+      "title": "ASPCA: Daffodil, Tulip and Onion plant pages",
+      "url": "https://www.aspca.org/pet-care/aspca-poison-control/toxic-and-non-toxic-plants/daffodil",
+      "topic": "Spring bulbs",
+      "note": "Daffodil (Narcissus), tulip (Tulipa) and onion (Allium) are all listed as toxic to dogs, cats and horses."
+    },
+    {
+      "title": "University of Minnesota Extension: Upper Midwest Home Garden Care Calendar",
+      "url": "https://extension.umn.edu/gardening-minnesota/upper-midwest-home-garden-care-calendar",
+      "topic": "Care timing",
+      "note": "Divide bearded iris late July to early August and peonies from late August; plant spring bulbs from September to mid-November."
+    }
+  ],
+  "companions": [
+    {
+      "id": "daylily",
+      "why": "Purdue Extension: plant tulips with later-emerging plants that hide the ripening foliage, especially hosta, daylily and ornamental grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    },
+    {
+      "id": "hosta",
+      "why": "Purdue Extension: plant tulips with later-emerging plants that hide the ripening foliage, especially hosta, daylily and ornamental grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    },
+    {
+      "id": "bluestem",
+      "why": "Purdue Extension: plant tulips with later-emerging plants that hide the ripening foliage, especially hosta, daylily and ornamental grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    },
+    {
+      "id": "dropseed",
+      "why": "Purdue Extension: plant tulips with later-emerging plants that hide the ripening foliage, especially hosta, daylily and ornamental grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    }
+  ]
+}

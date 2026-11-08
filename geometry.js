@@ -326,7 +326,7 @@
       for (let i = 0; i < blocks.length; i++) if (objDist(blocks[i], x, y) < r * 0.7) return false;
       for (let i = 0; i < placed.length; i++) {
         const q = placed[i];
-        // early-dormant plants (spring bulbs, bluebells) may share space with later-growing plants
+        // early-dormant plants (spring bulbs and spring ephemerals) may share space with later-growing plants
         const mix = !!byId[id].dormant !== !!byId[q.id].dormant, f = mix ? factor * 0.3 : factor;
         if (Math.hypot(x - q.x, y - q.y) < (spFt(byId[id]) + spFt(byId[q.id])) / 2 * f) return false;
       }

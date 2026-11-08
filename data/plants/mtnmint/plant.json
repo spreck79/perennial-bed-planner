@@ -1,0 +1,77 @@
+{
+  "id": "mtnmint",
+  "facts": {
+    "code": "MoMi",
+    "name": "Mountain Mint",
+    "latin": "Pycnanthemum virginianum",
+    "native": true,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 18,
+    "bloom": [7, 9],
+    "color": "Small white flower heads",
+    "hex": "#EFEDE4",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part shade",
+    "sun": ["full", "part"],
+    "moisture": "Average to moist",
+    "notes": "Minty-smelling leaves and flat white flower heads that hum with pollinators all summer. Spreads, so give it space.",
+    "toxic": ["dogs", "cats"],
+    "toxSrc": "ASPCA lists mint as toxic; mountain mint is a close relative",
+    "zones": [3, 7.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Pycnanthemum virginianum - Virginia Mountain Mint 01.jpg",
+      "by": "Jasper Shide",
+      "lic": "CC0",
+      "licUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Dryland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/dryland-species-2/",
+        "note": "Michigan seed grower; marks any species that is not native to Michigan."
+      },
+      {
+        "title": "Michigan Wildflower Farm: Wetland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/wetland-species/",
+        "note": "Same grower, wetland list."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "rattlesnake",
+      "why": "Minnesota Board of Water and Soil Resources: pairs well with other moist prairie plants, including rattlesnake master and swamp milkweed.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Minnesota Board of Water and Soil Resources: featured plant, Mountain Mint",
+          "url": "https://bwsr.state.mn.us/sites/default/files/2026-08/featured_plant_september_2026_virginia_mountain_mint.pdf",
+          "about": "mtnmint"
+        }
+      ]
+    },
+    {
+      "id": "swampmilkweed",
+      "why": "Minnesota Board of Water and Soil Resources: pairs well with other moist prairie plants, including rattlesnake master and swamp milkweed.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Minnesota Board of Water and Soil Resources: featured plant, Mountain Mint",
+          "url": "https://bwsr.state.mn.us/sites/default/files/2026-08/featured_plant_september_2026_virginia_mountain_mint.pdf",
+          "about": "mtnmint"
+        }
+      ]
+    }
+  ]
+}

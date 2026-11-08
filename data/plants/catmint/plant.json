@@ -1,0 +1,163 @@
+{
+  "id": "catmint",
+  "facts": {
+    "code": "Catm",
+    "name": "Catmint 'Walker's Low'",
+    "latin": "Nepeta × faassenii",
+    "native": false,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 30,
+    "spacing": 24,
+    "bloom": [5.5, 9],
+    "color": "Lavender-blue haze",
+    "hex": "#9AA0D8",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part shade",
+    "sun": ["full", "part"],
+    "moisture": "Dry to average",
+    "notes": "Billowing gray-green mounds with lavender-blue flowers for months; shear back after the first flush. Cats may roll in it.",
+    "deer": "A",
+    "toxic": ["cats"],
+    "toxSrc": "ASPCA lists catnip (catmint) as toxic to cats",
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Nepeta faassenii6.jpg",
+      "by": "KENPEI",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": true
+  },
+  "sources": [
+    {
+      "title": "University of Nebraska Extension: Early Summer Maintenance for Perennials",
+      "url": "https://extension.unl.edu/statewide/buffalo/Early%20Summer%20Maintenance%20for%20Perennials%2C%20July%207%2C%202012.pdf",
+      "topic": "Care timing",
+      "note": "Shear perennial salvia, coreopsis, Shasta daisy, columbine, coral bells, hardy geranium and catmint after flowering; many rebloom in 5 to 6 weeks."
+    }
+  ],
+  "companions": [
+    {
+      "id": "daylily",
+      "why": "Combines well with beebalm and Shasta daisies; harmonizes with yellow foxglove, Coreopsis and lemon daylilies.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Catmint 'Walker's Low' article",
+          "url": "https://hort.extension.wisc.edu/articles/nepeta-x-faassenii-walkers-low/",
+          "about": "catmint"
+        }
+      ]
+    },
+    {
+      "id": "coreopsis",
+      "why": "Combines well with beebalm and Shasta daisies; harmonizes with yellow foxglove, Coreopsis and lemon daylilies.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Catmint 'Walker's Low' article",
+          "url": "https://hort.extension.wisc.edu/articles/nepeta-x-faassenii-walkers-low/",
+          "about": "catmint"
+        }
+      ]
+    },
+    {
+      "id": "shasta",
+      "why": "Combines well with beebalm and Shasta daisies; harmonizes with yellow foxglove, Coreopsis and lemon daylilies.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Catmint 'Walker's Low' article",
+          "url": "https://hort.extension.wisc.edu/articles/nepeta-x-faassenii-walkers-low/",
+          "about": "catmint"
+        },
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Shasta Daisy companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LEUBE",
+          "about": "shasta"
+        }
+      ]
+    },
+    {
+      "id": "bergamot",
+      "why": "Combines well with beebalm and Shasta daisies; harmonizes with yellow foxglove, Coreopsis and lemon daylilies.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Catmint 'Walker's Low' article",
+          "url": "https://hort.extension.wisc.edu/articles/nepeta-x-faassenii-walkers-low/",
+          "about": "catmint"
+        }
+      ]
+    },
+    {
+      "id": "foxglove",
+      "why": "Combines well with beebalm and Shasta daisies; harmonizes with yellow foxglove, Coreopsis and lemon daylilies.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
+          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
+          "about": "foxglove"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Catmint 'Walker's Low' article",
+          "url": "https://hort.extension.wisc.edu/articles/nepeta-x-faassenii-walkers-low/",
+          "about": "catmint"
+        }
+      ]
+    },
+    {
+      "id": "lavender",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, Shasta daisy, catmint 'Walker's Low' and Salvia nemorosa.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: English Lavender companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LAVHI",
+          "about": "lavender"
+        }
+      ]
+    },
+    {
+      "id": "penstemon",
+      "why": "Combines well with blue spiderworts, blue false indigo and prairie dropseed; try it with catmint and lady's mantle.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Foxglove Beardtongue article",
+          "url": "https://hort.extension.wisc.edu/articles/husker-red-foxglove-beardtongue-penstemon-digitalis-husker-red/",
+          "about": "penstemon"
+        }
+      ]
+    },
+    {
+      "id": "peony",
+      "why": "NDSU Extension: plants that pair well with peonies include irises, catmint, coral bells and June-blooming alliums.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "NDSU Extension (North Dakota State University): Peonies",
+          "url": "https://ndsu.edu/agriculture/sites/default/files/2024-10/h2245.pdf",
+          "about": "peony"
+        }
+      ]
+    }
+  ]
+}

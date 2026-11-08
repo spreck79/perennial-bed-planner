@@ -1,0 +1,79 @@
+{
+  "id": "turtle",
+  "facts": {
+    "code": "WhTu",
+    "name": "White Turtlehead",
+    "latin": "Chelone glabra",
+    "native": true,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 21,
+    "bloom": [8, 11],
+    "color": "White, blushed pink",
+    "hex": "#EADCE0",
+    "txt": "#2E3A2C",
+    "light": "Part shade; moist to wet soil",
+    "sun": ["part"],
+    "moisture": "Moist to wet",
+    "notes": "Hooded flowers shaped like a turtle's head. Pinch stem tips in early June for bushier plants. Host plant of the Baltimore checkerspot butterfly.",
+    "deer": "C",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "focus": [0.45, 0.4],
+    "credit": {
+      "file": "Chelone glabra - White Turtlehead.jpg",
+      "by": "Fritzflohrreynolds",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Black Cap Plants (Onekama, Michigan): Species list of native plants",
+        "url": "https://www.blackcapplants.com/species-list",
+        "note": "Michigan native nursery; marks the few species it sells that have no natural Michigan range (none of these are marked). Checked November 2026."
+      },
+      {
+        "title": "Michigan Tech KISMA: Native species table",
+        "url": "https://www.mtu.edu/kisma/native-alternatives/native-species-table/",
+        "note": "Michigan Technological University table of plants native to the Upper Peninsula or the northern Great Lakes region (Heart-leaved Aster is not in it). Checked November 2026."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false,
+    "june": "pinch"
+  },
+  "companions": [
+    {
+      "id": "shasta",
+      "why": "Combines well with Shasta daisy 'Becky'.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): White Turtlehead article",
+          "url": "https://hort.extension.wisc.edu/articles/turtlehead-chelone-spp/",
+          "about": "turtle"
+        }
+      ]
+    },
+    {
+      "id": "palmsedge",
+      "why": "New Moon Nurseries: try pairing with swamp milkweed, turtlehead, Joe-Pye weed (Eupatorium purpureum) or great blue lobelia.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Palm Sedge",
+          "url": "https://newmoonnursery.com/plant/Carex-muskingumensis",
+          "about": "palmsedge"
+        }
+      ]
+    }
+  ]
+}

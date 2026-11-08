@@ -1,0 +1,137 @@
+{
+  "id": "daffodil",
+  "facts": {
+    "code": "Daff",
+    "name": "Daffodil",
+    "latin": "Narcissus, garden hybrids",
+    "native": false,
+    "kind": "bulb",
+    "dormant": true,
+    "clump": 6,
+    "hLo": 12,
+    "hHi": 20,
+    "spacing": 10,
+    "bloom": [4, 4.9],
+    "color": "Yellow, white or bicolor trumpets",
+    "hex": "#F2C230",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part shade",
+    "sun": ["full", "part"],
+    "moisture": "Average, well drained",
+    "notes": "Plant bulbs in October, 6 to 8 inches deep, in clumps of 5 to 8. Comes back and spreads for years, and deer and squirrels leave it alone. Let the leaves yellow before cutting them back.",
+    "deer": "A",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "ASPCA lists daffodil (Narcissus) as toxic",
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Narzisse.jpg",
+      "by": "Martin Hirtreiter",
+      "lic": "CC BY 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "English Gardens (Detroit-area garden centers): Fall is for planting",
+        "url": "https://www.englishgardens.com/fall-is-for-planting/",
+        "note": "Michigan garden center; names tulips and daffodils among the fall bulbs to plant."
+      }
+    ]
+  },
+  "care": {
+    "group": "bulb",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Mississippi State Extension: Don't Touch the Daffodils",
+      "url": "https://extension.msstate.edu/blogs/extension-for-real-life/dont-touch-the-daffodils",
+      "topic": "Care timing",
+      "note": "Leave bulb leaves untouched for at least six weeks after they start to look dried up."
+    },
+    {
+      "title": "Purdue Extension (Marion County): Gardening with Bulbs",
+      "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+      "topic": "Spring bulbs",
+      "note": "Daffodils naturalize and are squirrel and deer resistant; hybrid tulips are 'like candy to squirrels and deer'; squirrels don't eat alliums; interplant bulbs with later perennials that hide the ripening leaves; plant from mid-October."
+    },
+    {
+      "title": "UW-Madison Extension: Plant Bulbs Now for Spring Color",
+      "url": "https://hort.extension.wisc.edu/2021/10/06/planting-spring-bulbs/",
+      "topic": "Spring bulbs",
+      "note": "Plant large bulbs 6 to 8 in deep in clumps of 5 to 8; squirrels are less likely to dig daffodils than tulips."
+    },
+    {
+      "title": "NC State Extension Plant Toolbox: Daffodils",
+      "url": "https://plants.ces.ncsu.edu/plants/narcissus/common-name/daffodils",
+      "topic": "Spring bulbs",
+      "note": "Daffodils are deer and rabbit resistant and toxic to cats, dogs and horses (bulbs most of all)."
+    },
+    {
+      "title": "ASPCA: Daffodil, Tulip and Onion plant pages",
+      "url": "https://www.aspca.org/pet-care/aspca-poison-control/toxic-and-non-toxic-plants/daffodil",
+      "topic": "Spring bulbs",
+      "note": "Daffodil (Narcissus), tulip (Tulipa) and onion (Allium) are all listed as toxic to dogs, cats and horses."
+    },
+    {
+      "title": "University of Minnesota Extension: Upper Midwest Home Garden Care Calendar",
+      "url": "https://extension.umn.edu/gardening-minnesota/upper-midwest-home-garden-care-calendar",
+      "topic": "Care timing",
+      "note": "Divide bearded iris late July to early August and peonies from late August; plant spring bulbs from September to mid-November."
+    }
+  ],
+  "companions": [
+    {
+      "id": "daylily",
+      "why": "Purdue Extension: interplant daffodils with late-emerging, sturdy perennials such as hosta, grasses or daylilies.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    },
+    {
+      "id": "hosta",
+      "why": "Purdue Extension: interplant daffodils with late-emerging, sturdy perennials such as hosta, grasses or daylilies.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    },
+    {
+      "id": "bluestem",
+      "why": "Purdue Extension: interplant daffodils with late-emerging, sturdy perennials such as hosta, grasses or daylilies.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    },
+    {
+      "id": "dropseed",
+      "why": "Purdue Extension: interplant daffodils with late-emerging, sturdy perennials such as hosta, grasses or daylilies.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Purdue Extension: Gardening with Bulbs",
+          "url": "https://extension.purdue.edu/county/marion/_docs/handout-gardening-with-bulbs-2-15-22.pdf",
+          "about": "daffodil"
+        }
+      ]
+    }
+  ]
+}

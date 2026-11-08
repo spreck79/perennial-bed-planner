@@ -1,0 +1,85 @@
+{
+  "id": "bigroot",
+  "facts": {
+    "code": "BiGe",
+    "name": "Bigroot Geranium",
+    "latin": "Geranium macrorrhizum",
+    "native": false,
+    "kind": "mat",
+    "hLo": 12,
+    "hHi": 18,
+    "spacing": 24,
+    "bloom": [5.2, 7],
+    "color": "Magenta-pink",
+    "hex": "#D86AA8",
+    "txt": "#FFFFFF",
+    "light": "Part shade to sun; handles dry shade",
+    "sun": ["full", "part"],
+    "moisture": "Dry to average",
+    "notes": "A fragrant, spreading groundcover that crowds out weeds, with leaves that turn red in fall. Handles dry shade well.",
+    "deer": "B",
+    "toxic": null
+  },
+  "photo": {
+    "credit": {
+      "file": "Geranium macrorrhizum Dolene.jpg",
+      "by": "Спасимир",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Ray Wiegand's Nursery: Bigroot Geranium",
+        "url": "http://plants.wiegandsnursery.com/12150006/Plant/6460/Bevans_Variety_Cranesbill",
+        "note": "Sold at Wiegand's."
+      }
+    ]
+  },
+  "care": {
+    "group": "tidy",
+    "trim": true
+  },
+  "sources": [
+    {
+      "title": "University of Nebraska Extension: Early Summer Maintenance for Perennials",
+      "url": "https://extension.unl.edu/statewide/buffalo/Early%20Summer%20Maintenance%20for%20Perennials%2C%20July%207%2C%202012.pdf",
+      "topic": "Care timing",
+      "note": "Shear perennial salvia, coreopsis, Shasta daisy, columbine, coral bells, hardy geranium and catmint after flowering; many rebloom in 5 to 6 weeks."
+    },
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    }
+  ],
+  "companions": [
+    {
+      "id": "bleeding",
+      "why": "Pairs with Virginia bluebells in spring; ferns, hosta, hardy geranium and astilbe fill in as it dies back.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        }
+      ]
+    },
+    {
+      "id": "hellebore",
+      "why": "Combines with barrenwort in spring; later a backdrop for hostas; shown among hardy geranium.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lenten Rose article",
+          "url": "https://hort.extension.wisc.edu/articles/lenten-rose-helleborus-xhybridus/",
+          "about": "hellebore"
+        }
+      ]
+    }
+  ]
+}

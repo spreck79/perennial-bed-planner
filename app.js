@@ -9,19 +9,12 @@
   // steps 1 to 4 fold down to a one-line summary once they're done; openSteps holds the ones opened again
   const STEPS_UI = { name: "#nameCard", kind: "#prefCard", avoid: "#avoidCard", bed: "#bedPanel", objects: "#objCard", sun: "#sunCard" };
   const openSteps = new Set();
-  // Full-size photos live in the photos folder, one small script per plant, and load only when needed
-  // (enlarging a photo, making the PDF). Everywhere else uses the quick 240 x 180 previews in images.js.
+  // Full-size photos (full.jpg in each plant's folder) load only when needed: enlarging a photo, making the PDF.
+  // Everywhere else uses the quick 240 x 180 previews (preview.jpg).
   const fullWait = {};
   function loadFull(id) {
-    window.PHOTO_FULL = window.PHOTO_FULL || {};
     if (window.PHOTO_FULL[id]) return Promise.resolve(window.PHOTO_FULL[id]);
-    if (fullWait[id]) return fullWait[id];
-    return (fullWait[id] = new Promise(res => {
-      const sc = document.createElement("script"); sc.src = "photos/" + encodeURIComponent(id) + ".js";
-      sc.onload = () => res(window.PHOTO_FULL[id] || null);
-      sc.onerror = () => { delete fullWait[id]; sc.remove(); res(null); };   // missing file: the preview is used instead
-      document.head.appendChild(sc);
-    }));
+    return fullWait[id] || (fullWait[id] = window.loadFullPhoto(id).then(u => { if (!u) delete fullWait[id]; return u; }));
   }
   const TOUCH = window.Plan.touch;   // phone or tablet: "press and hold" in place of right-click
   if (TOUCH) $("#toolsHint").textContent = "Tip: press and hold any plant, object or empty spot on the bed. Pinch to zoom.";
@@ -71,18 +64,13 @@
     }
     return cells;
   }
-  // a sunny prairie trio-plus-companions, a shade-to-sun transition grouping, and a woodland-shade grouping;
-  // every pairing within a zone is a real companion match pulled from COMPANIONS
-  const DEFAULT_COUNTS = {
-    liatris: 2, bluestem: 2, coneflower: 3, rudbeckia: 3, butterflyweed: 2, dropseed: 2, coreopsis: 3,
-    hosta: 2, bleeding: 2, astilbe: 3, columbine: 2, geranium: 3, coral: 2, phlox: 3,
-    goatsbeard: 1, ostrich: 1, solomon: 2, bluebells: 3, christmas: 1, fern: 3, foam: 4
-  };
+  // the example garden's plants and how many of each come from the plant files ("example" in data/plants/<id>/plant.json)
+  const EXAMPLE_PLANTS = window.EXAMPLE_PLANTS || [];
 
   // little icons with hover labels: sun needs (leading), native leaf, garden favorite, daisy family, toxic
   const deerEats = p => p.deer === "C" || p.deer === "D";
   const DEER = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 11V6.2M6 6.2 3.2 2M4.3 3.7 2 4.2M6 6.2 8.8 2M7.7 3.7 10 4.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>';
-  const deerTip = p => (p.deer === "D" ? "Deer often eat this" : "Deer sometimes eat this") + (p.id === "tulip" ? "; squirrels dig up the bulbs" : "");
+  const deerTip = p => (p.deer === "D" ? "Deer often eat this" : "Deer sometimes eat this") + (p.squirrels ? "; squirrels dig up the bulbs" : "");
   const LEAF = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M10.6 1.4C5.2 1.2 1.6 3.9 1.7 8c0 .9.3 1.7.7 2.3.5-2.6 2.3-4.6 4.9-5.8-2.1 1.5-3.6 3.4-4.2 6 .5.2 1.1.3 1.7.3 4 0 6-3.4 5.8-9.4z" fill="currentColor"/></svg>';
   // sun-needs icon: a white sun glyph on a badge colored (or, for a plant that spans more than one
   // light level, blended left-to-right) by every light level the plant tolerates, full sun to shade.
@@ -2422,7 +2410,9 @@
     normalizeExtras(); objSel = -1; objArmed = null; pathDraw = null; paint = null; renderPaintBar(); openSteps.clear();
     bed = Geo.buildBed(S); attachExtras();
     if (fresh && example) {
-      const items = Object.keys(DEFAULT_COUNTS).map(id => ({ plant: byId[id], n: DEFAULT_COUNTS[id] }));
+      // sunny plants first, then part shade, then shade (as the bed's sun zones run), each group in name order
+      const sunRank = p => ({ full: 0, part: 1, shade: 2 })[p.sun[0]];
+      const items = EXAMPLE_PLANTS.filter(([id]) => byId[id]).map(([id, n]) => ({ plant: byId[id], n })).sort((a, b) => sunRank(a.plant) - sunRank(b.plant));
       relayout(false, items);
     }
     armed = null; selIdx = -1; hoverId = null;
@@ -2455,9 +2445,9 @@
     function openId(id, src) {
       const p = byId[id]; if (!p) return;
       const big = lb.querySelector("img"); big.src = src || window.PHOTOS[id]; big.dataset.id = id; lb.querySelector("figcaption").textContent = p.name + " · " + p.latin;
-      // plants with their own page (plants/<id>.html) get a More info button
+      // every plant has its own page (plant.html?id=<id>): a More info button
       const more = lb.querySelector(".lbmore"), hasPage = (window.PLANT_PAGES || []).includes(id);
-      more.hidden = !hasPage; if (hasPage) { more.href = "plants/" + id + ".html"; more.setAttribute("aria-label", "More info about " + p.name); }
+      more.hidden = !hasPage; if (hasPage) { more.href = "plant.html?id=" + encodeURIComponent(id); more.setAttribute("aria-label", "More info about " + p.name); }
       lb.classList.add("on");
       loadFull(id).then(u => { if (u && big.dataset.id === id && lb.classList.contains("on")) big.src = u; });   // sharpen to the full photo
     }

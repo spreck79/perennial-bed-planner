@@ -1,0 +1,116 @@
+{
+  "id": "caradonna",
+  "facts": {
+    "code": "SaCa",
+    "name": "Salvia 'Caradonna'",
+    "latin": "Salvia nemorosa 'Caradonna'",
+    "native": false,
+    "kind": "clump",
+    "hLo": 18,
+    "hHi": 24,
+    "spacing": 18,
+    "bloom": [5.5, 7.5],
+    "color": "Violet spikes on dark stems",
+    "hex": "#5B3FA0",
+    "txt": "#FFFFFF",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Dry to average",
+    "notes": "Upright violet spikes on near-black stems in early summer. Cut it back after the first flush for a second round. Bees love it.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [4, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Salvia nemorosa Caradonna 3zz.jpg",
+      "by": "David J. Stang",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": true
+  },
+  "sources": [
+    {
+      "title": "University of Nebraska Extension: Early Summer Maintenance for Perennials",
+      "url": "https://extension.unl.edu/statewide/buffalo/Early%20Summer%20Maintenance%20for%20Perennials%2C%20July%207%2C%202012.pdf",
+      "topic": "Care timing",
+      "note": "Shear perennial salvia, coreopsis, Shasta daisy, columbine, coral bells, hardy geranium and catmint after flowering; many rebloom in 5 to 6 weeks."
+    }
+  ],
+  "companions": [
+    {
+      "id": "gardenphlox",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Geranium 'Rozanne', Shasta daisy 'Becky' and garden phlox.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Salvia 'Caradonna' companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=SALCA",
+          "about": "caradonna"
+        }
+      ]
+    },
+    {
+      "id": "rozanne",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Geranium 'Rozanne', Shasta daisy 'Becky' and garden phlox.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Salvia 'Caradonna' companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=SALCA",
+          "about": "caradonna"
+        }
+      ]
+    },
+    {
+      "id": "shasta",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Geranium 'Rozanne', Shasta daisy 'Becky' and garden phlox.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Salvia 'Caradonna' companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=SALCA",
+          "about": "caradonna"
+        }
+      ]
+    },
+    {
+      "id": "lavender",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: yarrow, Shasta daisy, catmint 'Walker's Low' and Salvia nemorosa.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: English Lavender companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=LAVHI",
+          "about": "lavender"
+        }
+      ]
+    },
+    {
+      "id": "ladysmantle",
+      "why": "Contrasts nicely with vertical perennials such as iris, liatris, ferns and salvia.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lady's Mantle article",
+          "url": "https://hort.extension.wisc.edu/articles/ladys-mantle-alchemilla-mollis/",
+          "about": "ladysmantle"
+        }
+      ]
+    }
+  ]
+}

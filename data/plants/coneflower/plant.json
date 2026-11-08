@@ -1,0 +1,190 @@
+{
+  "id": "coneflower",
+  "facts": {
+    "code": "PuCo",
+    "name": "Purple Coneflower",
+    "latin": "Echinacea purpurea",
+    "native": false,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 18,
+    "bloom": [6.5, 9],
+    "color": "Rosy purple with orange cone",
+    "hex": "#C9549A",
+    "txt": "#FFFFFF",
+    "light": "Full sun to part shade",
+    "sun": ["full", "part"],
+    "moisture": "Dry to average",
+    "notes": "A long-blooming prairie classic, native to the central U.S. Leave the seed heads standing for goldfinches.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Echinacea purpurea Grandview Prairie.jpg",
+      "by": "Eric Hunt",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "example": 3,
+  "sources": [
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    }
+  ],
+  "companions": [
+    {
+      "id": "hyssop",
+      "why": "Combines well with purple coneflower, bee balm and native grasses; in gardens with Japanese anemones.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Anise Hyssop article",
+          "url": "https://hort.extension.wisc.edu/articles/anise-hyssop-agastache-foeniculum/",
+          "about": "hyssop"
+        }
+      ]
+    },
+    {
+      "id": "liatris",
+      "why": "Combines with yellow flowers such as coreopsis and goldenrod, pink ones such as purple coneflower, prairie grasses and silver plants such as Stachys (lamb's ear).",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Blazing Star article",
+          "url": "https://hort.extension.wisc.edu/articles/liatris/",
+          "about": "liatris"
+        }
+      ]
+    },
+    {
+      "id": "butterflyweed",
+      "why": "Combine with Penstemon 'Husker Red' or purple speedwells; works well with coreopsis, purple coneflower, blazing star, black-eyed Susan, little bluestem and prairie dropseed.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Butterfly Weed article",
+          "url": "https://hort.extension.wisc.edu/articles/butterflyweed-asclepias-tuberosa/",
+          "about": "butterflyweed"
+        }
+      ]
+    },
+    {
+      "id": "cardinal",
+      "why": "Combines well with great blue lobelia, irises and marsh milkweed; also found with purple coneflower, blazing star and foxglove beardtongue.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Cardinal Flower article",
+          "url": "https://hort.extension.wisc.edu/articles/cardinal-flower-lobelia-cardinalis/",
+          "about": "cardinal"
+        }
+      ]
+    },
+    {
+      "id": "culvers",
+      "why": "Pair with purple coneflower for an interplay of flower and foliage.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Mt. Cuba Center: Culver's Root",
+          "url": "https://mtcubacenter.org/plants/culvers-root/",
+          "about": "culvers"
+        }
+      ]
+    },
+    {
+      "id": "gardenphlox",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: purple coneflower and Penstemon.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Garden Phlox companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=PHLUV",
+          "about": "gardenphlox"
+        }
+      ]
+    },
+    {
+      "id": "bluestem",
+      "why": "Pair with dark-leaved Heuchera; combine with aster, tall sedums like 'Autumn Joy', yarrow, rudbeckias and purple coneflower.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Little Bluestem article",
+          "url": "https://hort.extension.wisc.edu/articles/little-bluestem-schizachyrium-scoparium/",
+          "about": "bluestem"
+        }
+      ]
+    },
+    {
+      "id": "obedient",
+      "why": "A border is brightened when obedient plant is planted alongside goldenrods, little bluestem and purple coneflower.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Mt. Cuba Center: Obedient Plant",
+          "url": "https://mtcubacenter.org/plants/obedient-plant/",
+          "about": "obedient"
+        }
+      ]
+    },
+    {
+      "id": "dropseed",
+      "why": "Combined with fall-blooming sedums; a great filler between purple coneflower, liatris, black-eyed Susan and butterfly weed.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Dropseed article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-dropseed-sporobolus-heterolepis/",
+          "about": "dropseed"
+        }
+      ]
+    },
+    {
+      "id": "sneezeweed",
+      "why": "Combines well with ornamental grasses, anise hyssop, beebalm, daylilies, fall asters, liatris, purple coneflower and rudbeckias.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Sneezeweed article",
+          "url": "https://hort.extension.wisc.edu/articles/helenium-helenium-autumnale/",
+          "about": "sneezeweed"
+        }
+      ]
+    },
+    {
+      "id": "strawberry",
+      "why": "Izel Native Plants: plant wild strawberry intermingled with lanceleaf coreopsis and purple coneflower.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Izel Native Plants: Wild Strawberry",
+          "url": "https://www.izelplants.com/fragaria-virginiana-wild-strawberry/",
+          "about": "strawberry"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "id": "culvers",
+  "facts": {
+    "code": "CuRo",
+    "name": "Culver's Root",
+    "latin": "Veronicastrum virginicum",
+    "native": true,
+    "kind": "clump",
+    "hLo": 48,
+    "hHi": 72,
+    "spacing": 24,
+    "bloom": [7, 9],
+    "color": "White candle spires",
+    "hex": "#EDEFF5",
+    "txt": "#2E3A2C",
+    "light": "Sun to light shade; needs about 4 hours of sun",
+    "sun": ["full", "part"],
+    "moisture": "Average to moist",
+    "notes": "Tall white spires that rise above everything else. Strong stems, clumping, and loved by bees and butterflies.",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Veronicastrum virginicum01.jpg",
+      "by": "Meneerke bloem",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Dryland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/dryland-species-2/",
+        "note": "Michigan seed grower; marks any species that is not native to Michigan."
+      },
+      {
+        "title": "Michigan Wildflower Farm: Wetland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/wetland-species/",
+        "note": "Same grower, wetland list."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "coneflower",
+      "why": "Pair with purple coneflower for an interplay of flower and foliage.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Mt. Cuba Center: Culver's Root",
+          "url": "https://mtcubacenter.org/plants/culvers-root/",
+          "about": "culvers"
+        }
+      ]
+    }
+  ]
+}

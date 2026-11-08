@@ -1,0 +1,181 @@
+{
+  "id": "forestgrass",
+  "facts": {
+    "code": "JFGr",
+    "name": "Japanese Forest Grass",
+    "latin": "Hakonechloa macra 'Aureola'",
+    "native": false,
+    "kind": "grass",
+    "hLo": 12,
+    "hHi": 18,
+    "spacing": 18,
+    "bloom": null,
+    "color": "Golden, cascading blades",
+    "hex": "#DCC85A",
+    "txt": "#2E3A2C",
+    "light": "Part shade; moist, rich soil",
+    "sun": ["part"],
+    "moisture": "Average to moist",
+    "notes": "Gold blades spill over the bed edge like a waterfall and turn coppery in fall. Slow to get going, but long-lived.",
+    "deer": "A",
+    "toxic": null,
+    "zones": [5, 9.5]
+  },
+  "photo": {
+    "focus": [0.5, 0.5],
+    "credit": {
+      "file": "Hakonechloa macra Aureola 0zz.jpg",
+      "by": "David J. Stang",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "English Gardens: Golden Variegated Hakone Grass",
+        "url": "https://plants.englishgardens.com/12150001/Plant/2380/Golden_Variegated_Hakone_Grass/",
+        "note": "Sold at English Gardens."
+      }
+    ]
+  },
+  "care": {
+    "group": "grass",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "astilbe",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "brunnera",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "christmas",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "cinnamon",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "coral",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "hosta",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "lady",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "lungwort",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "fern",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "ostrich",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "autumn",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Japanese forest grass, Heuchera, Hosta and foamflower.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Autumn Fern companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=DRYBR",
+          "about": "autumn"
+        }
+      ]
+    }
+  ]
+}

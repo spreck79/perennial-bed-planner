@@ -1,0 +1,141 @@
+{
+  "id": "hellebore",
+  "facts": {
+    "code": "LeRo",
+    "name": "Lenten Rose",
+    "latin": "Helleborus × hybridus",
+    "native": false,
+    "kind": "clump",
+    "hLo": 12,
+    "hHi": 18,
+    "spacing": 18,
+    "bloom": [4, 5],
+    "color": "Plum, pink, cream or white",
+    "hex": "#9E5A7D",
+    "txt": "#FFFFFF",
+    "light": "Part shade to shade",
+    "sun": ["part", "shade"],
+    "moisture": "Average to moist",
+    "notes": "The first flowers of the year, often open in March, with evergreen leaves. Long-lived and deer resistant.",
+    "deer": "A",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "ASPCA lists hellebore as toxic",
+    "gloves": true
+  },
+  "photo": {
+    "credit": {
+      "file": "Lenteroos (Helleborus orientalis) 03.JPG",
+      "by": "Dominicus Johannes Bergsma",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "leavesAtBud",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "University of Vermont Extension: Growing Hellebores",
+      "url": "https://www.uvm.edu/extension/news/growing-hellebores",
+      "topic": "Care timing",
+      "note": "Remove the last of the prior year's leaves in early spring to make room for new growth."
+    },
+    {
+      "title": "UW Botanic Gardens: When and Why to Cut Leaves Off Epimediums and Hellebores",
+      "url": "https://botanicgardens.uw.edu/about/blog/2014/12/30/epimedium-hellebores",
+      "topic": "Care timing",
+      "note": "Cut epimedium foliage down by flowering time, in late winter."
+    },
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    }
+  ],
+  "companions": [
+    {
+      "id": "epimedium",
+      "why": "Combines with barrenwort in spring; later a backdrop for hostas; shown among hardy geranium.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lenten Rose article",
+          "url": "https://hort.extension.wisc.edu/articles/lenten-rose-helleborus-xhybridus/",
+          "about": "hellebore"
+        }
+      ]
+    },
+    {
+      "id": "bigroot",
+      "why": "Combines with barrenwort in spring; later a backdrop for hostas; shown among hardy geranium.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lenten Rose article",
+          "url": "https://hort.extension.wisc.edu/articles/lenten-rose-helleborus-xhybridus/",
+          "about": "hellebore"
+        }
+      ]
+    },
+    {
+      "id": "rozanne",
+      "why": "Combines with barrenwort in spring; later a backdrop for hostas; shown among hardy geranium.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lenten Rose article",
+          "url": "https://hort.extension.wisc.edu/articles/lenten-rose-helleborus-xhybridus/",
+          "about": "hellebore"
+        }
+      ]
+    },
+    {
+      "id": "hosta",
+      "why": "Combines with barrenwort in spring; later a backdrop for hostas; shown among hardy geranium.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Lenten Rose article",
+          "url": "https://hort.extension.wisc.edu/articles/lenten-rose-helleborus-xhybridus/",
+          "about": "hellebore"
+        }
+      ]
+    },
+    {
+      "id": "toad",
+      "why": "Combines well with anemone, astilbe, ferns, hellebores, hosta and lungwort.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Toad Lily article",
+          "url": "https://hort.extension.wisc.edu/articles/hairy-toad-lily-tricyrtis-hirta/",
+          "about": "toad"
+        }
+      ]
+    },
+    {
+      "id": "phlox",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    }
+  ]
+}

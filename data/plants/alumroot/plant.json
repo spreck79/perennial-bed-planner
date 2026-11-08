@@ -1,0 +1,86 @@
+{
+  "id": "alumroot",
+  "facts": {
+    "code": "PrAl",
+    "name": "Prairie Alumroot",
+    "latin": "Heuchera richardsonii",
+    "native": true,
+    "kind": "clump",
+    "hLo": 18,
+    "hHi": 30,
+    "spacing": 15,
+    "bloom": [5.3, 7.3],
+    "color": "Green-cream flower wands over scalloped leaves",
+    "hex": "#A9B47C",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part shade",
+    "sun": ["full", "part"],
+    "moisture": "Dry to average",
+    "notes": "The Michigan native cousin of coral bells: a low mound of scalloped leaves with tall, airy flower wands in late spring that bees and hummingbirds visit. Tough in dry soil.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [3, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Heuchera richardsonii 2.jpg",
+      "by": "Frank Mayfield",
+      "lic": "CC BY-SA 2.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/2.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Wild Cherry Farm: Prairie Alumroot",
+        "url": "https://www.wildcherryfarm.com/shop-native-plants/p/prairie-alumroot-heuchera-richardsonii",
+        "note": "Called a Michigan native plant."
+      }
+    ]
+  },
+  "care": {
+    "group": "tidy",
+    "trim": true
+  },
+  "sources": [
+    {
+      "title": "University of Nebraska Extension: Early Summer Maintenance for Perennials",
+      "url": "https://extension.unl.edu/statewide/buffalo/Early%20Summer%20Maintenance%20for%20Perennials%2C%20July%207%2C%202012.pdf",
+      "topic": "Care timing",
+      "note": "Shear perennial salvia, coreopsis, Shasta daisy, columbine, coral bells, hardy geranium and catmint after flowering; many rebloom in 5 to 6 weeks."
+    },
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    }
+  ],
+  "companions": [
+    {
+      "id": "bluestem",
+      "why": "Pair with dark-leaved Heuchera; combine with aster, tall sedums like 'Autumn Joy', yarrow, rudbeckias and purple coneflower.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Little Bluestem article",
+          "url": "https://hort.extension.wisc.edu/articles/little-bluestem-schizachyrium-scoparium/",
+          "about": "bluestem"
+        }
+      ]
+    },
+    {
+      "id": "phlox",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    }
+  ]
+}

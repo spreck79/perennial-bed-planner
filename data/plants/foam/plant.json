@@ -1,0 +1,152 @@
+{
+  "id": "foam",
+  "facts": {
+    "code": "Foam",
+    "name": "Foamflower",
+    "latin": "Tiarella cordifolia",
+    "native": true,
+    "kind": "mat",
+    "filler": true,
+    "hLo": 6,
+    "hHi": 12,
+    "spacing": 12,
+    "bloom": [4.75, 6.4],
+    "color": "White spikes, pink-tinged",
+    "hex": "#F4E6EC",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade; moist, rich soil",
+    "sun": ["part", "shade"],
+    "moisture": "Average to moist",
+    "notes": "Frothy flower spikes over a low mat of lobed leaves that stay good-looking into fall. A natural edging plant.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [4, 9.5]
+  },
+  "photo": {
+    "focus": [0.5, 0.45],
+    "credit": {
+      "file": "Tiarella cordifolia Oakleaf 4zz.jpg",
+      "by": "David J. Stang",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Black Cap Plants (Onekama, Michigan): Species list of native plants",
+        "url": "https://www.blackcapplants.com/species-list",
+        "note": "Michigan native nursery; marks the few species it sells that have no natural Michigan range (none of these are marked). Checked November 2026."
+      },
+      {
+        "title": "Michigan Tech KISMA: Native species table",
+        "url": "https://www.mtu.edu/kisma/native-alternatives/native-species-table/",
+        "note": "Michigan Technological University table of plants native to the Upper Peninsula or the northern Great Lakes region (Heart-leaved Aster is not in it). Checked November 2026."
+      }
+    ]
+  },
+  "care": {
+    "group": "tidy",
+    "trim": false
+  },
+  "example": 4,
+  "companions": [
+    {
+      "id": "christmas",
+      "why": "Walters Gardens: foamflower pairs beautifully with hostas and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Plants to Pair with Hostas",
+          "url": "https://www.waltersgardens.com/photo_essay.php?ID=501",
+          "about": "foam"
+        }
+      ]
+    },
+    {
+      "id": "cinnamon",
+      "why": "Walters Gardens: foamflower pairs beautifully with hostas and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Plants to Pair with Hostas",
+          "url": "https://www.waltersgardens.com/photo_essay.php?ID=501",
+          "about": "foam"
+        }
+      ]
+    },
+    {
+      "id": "hosta",
+      "why": "Walters Gardens: foamflower pairs beautifully with hostas and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Plants to Pair with Hostas",
+          "url": "https://www.waltersgardens.com/photo_essay.php?ID=501",
+          "about": "foam"
+        }
+      ]
+    },
+    {
+      "id": "lady",
+      "why": "Walters Gardens: foamflower pairs beautifully with hostas and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Plants to Pair with Hostas",
+          "url": "https://www.waltersgardens.com/photo_essay.php?ID=501",
+          "about": "foam"
+        }
+      ]
+    },
+    {
+      "id": "fern",
+      "why": "Walters Gardens: foamflower pairs beautifully with hostas and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Plants to Pair with Hostas",
+          "url": "https://www.waltersgardens.com/photo_essay.php?ID=501",
+          "about": "foam"
+        }
+      ]
+    },
+    {
+      "id": "ostrich",
+      "why": "Walters Gardens: foamflower pairs beautifully with hostas and ferns.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Plants to Pair with Hostas",
+          "url": "https://www.waltersgardens.com/photo_essay.php?ID=501",
+          "about": "foam"
+        }
+      ]
+    },
+    {
+      "id": "autumn",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Japanese forest grass, Heuchera, Hosta and foamflower.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Autumn Fern companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=DRYBR",
+          "about": "autumn"
+        }
+      ]
+    },
+    {
+      "id": "geranium",
+      "why": "Found with Solomon's seal, ferns, mayapple and woodland phlox; combines with celandine poppy, columbine, foamflower and goat's beard.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Geranium article",
+          "url": "https://hort.extension.wisc.edu/articles/wild-geranium-geranium-maculatum/",
+          "about": "geranium"
+        }
+      ]
+    }
+  ]
+}

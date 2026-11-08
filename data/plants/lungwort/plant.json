@@ -1,0 +1,95 @@
+{
+  "id": "lungwort",
+  "facts": {
+    "code": "Lung",
+    "name": "Lungwort",
+    "latin": "Pulmonaria saccharata",
+    "native": false,
+    "kind": "mat",
+    "hLo": 9,
+    "hHi": 12,
+    "spacing": 15,
+    "bloom": [4, 5.5],
+    "color": "Pink buds open to blue",
+    "hex": "#7C8ED6",
+    "txt": "#FFFFFF",
+    "light": "Part shade to shade",
+    "sun": ["part", "shade"],
+    "moisture": "Average to moist",
+    "notes": "One of the first flowers of spring, pink and blue on the same plant, over silver-spotted leaves that brighten shade all season.",
+    "deer": "A",
+    "toxic": null
+  },
+  "photo": {
+    "credit": {
+      "file": "Pulmonaria saccharata Mrs 0zz.jpg",
+      "by": "David J. Stang",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "tidy",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "forestgrass",
+      "why": "Combines well with hosta and ferns; eye-catching near dark-leaved Heuchera, Pulmonaria or Brunnera; a backdrop for dark astilbe.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Forest Grass article",
+          "url": "https://hort.extension.wisc.edu/articles/japanese-forest-grass-hakonechloa-macra/",
+          "about": "forestgrass"
+        }
+      ]
+    },
+    {
+      "id": "solomon",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    },
+    {
+      "id": "toad",
+      "why": "Combines well with anemone, astilbe, ferns, hellebores, hosta and lungwort.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Toad Lily article",
+          "url": "https://hort.extension.wisc.edu/articles/hairy-toad-lily-tricyrtis-hirta/",
+          "about": "toad"
+        }
+      ]
+    },
+    {
+      "id": "phlox",
+      "why": "Goes well with Jack-in-the-pulpit; combine with hosta, astilbe, bleeding heart, columbine, hellebore, heuchera, lungwort and ferns.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Wild Blue Phlox article",
+          "url": "https://hort.extension.wisc.edu/articles/woodland-phlox-phlox-divaricata/",
+          "about": "phlox"
+        }
+      ]
+    }
+  ]
+}

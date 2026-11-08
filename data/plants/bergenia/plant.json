@@ -1,0 +1,72 @@
+{
+  "id": "bergenia",
+  "facts": {
+    "code": "Berg",
+    "name": "Bergenia",
+    "latin": "Bergenia cordifolia",
+    "native": false,
+    "kind": "mat",
+    "hLo": 12,
+    "hHi": 18,
+    "spacing": 18,
+    "bloom": [4.2, 5.7],
+    "color": "Pink flower clusters on thick stems",
+    "hex": "#D77A9A",
+    "txt": "#FFFFFF",
+    "light": "Part shade; average soil",
+    "sun": ["part"],
+    "moisture": "Average",
+    "notes": "Big, glossy, leathery leaves that often turn burgundy in winter. Early pink flowers in spring.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Bergenia cordifolia HB.jpg",
+      "by": "Hans B.",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "tidy",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "creepphlox",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Bergenia and bearded iris.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Creeping Phlox companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=PHSBE",
+          "about": "creepphlox"
+        }
+      ]
+    },
+    {
+      "id": "solomon",
+      "why": "Combines well with bleeding hearts, ferns, lungworts, bergenia, wild ginger, astilbes and hostas.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Solomon's Seal article",
+          "url": "https://hort.extension.wisc.edu/articles/solomons-seal-polygonatum-spp/",
+          "about": "solomon"
+        }
+      ]
+    }
+  ]
+}

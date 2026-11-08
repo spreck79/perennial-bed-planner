@@ -1,0 +1,142 @@
+{
+  "id": "coreopsis",
+  "facts": {
+    "code": "LaCo",
+    "name": "Lanceleaf Coreopsis",
+    "latin": "Coreopsis lanceolata",
+    "native": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 12,
+    "hHi": 24,
+    "spacing": 15,
+    "bloom": [5.5, 7.5],
+    "color": "Bright yellow daisies",
+    "hex": "#F2C230",
+    "txt": "#2E3A2C",
+    "light": "Full sun",
+    "sun": ["full"],
+    "moisture": "Dry to average",
+    "notes": "Cheerful yellow flowers from late spring into summer; cut back spent stems for more blooms. Thrives in poor, dry soil.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [4, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Coreopsis lanceolata Sterntaler.JPG",
+      "by": "Qwertzy2",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Dryland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/dryland-species-2/",
+        "note": "Michigan seed grower; marks any species that is not native to Michigan."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": true
+  },
+  "example": 3,
+  "sources": [
+    {
+      "title": "University of Nebraska Extension: Early Summer Maintenance for Perennials",
+      "url": "https://extension.unl.edu/statewide/buffalo/Early%20Summer%20Maintenance%20for%20Perennials%2C%20July%207%2C%202012.pdf",
+      "topic": "Care timing",
+      "note": "Shear perennial salvia, coreopsis, Shasta daisy, columbine, coral bells, hardy geranium and catmint after flowering; many rebloom in 5 to 6 weeks."
+    }
+  ],
+  "companions": [
+    {
+      "id": "liatris",
+      "why": "Combines with yellow flowers such as coreopsis and goldenrod, pink ones such as purple coneflower, prairie grasses and silver plants such as Stachys (lamb's ear).",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Blazing Star article",
+          "url": "https://hort.extension.wisc.edu/articles/liatris/",
+          "about": "liatris"
+        }
+      ]
+    },
+    {
+      "id": "butterflyweed",
+      "why": "Combine with Penstemon 'Husker Red' or purple speedwells; works well with coreopsis, purple coneflower, blazing star, black-eyed Susan, little bluestem and prairie dropseed.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Butterfly Weed article",
+          "url": "https://hort.extension.wisc.edu/articles/butterflyweed-asclepias-tuberosa/",
+          "about": "butterflyweed"
+        }
+      ]
+    },
+    {
+      "id": "catmint",
+      "why": "Combines well with beebalm and Shasta daisies; harmonizes with yellow foxglove, Coreopsis and lemon daylilies.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Catmint 'Walker's Low' article",
+          "url": "https://hort.extension.wisc.edu/articles/nepeta-x-faassenii-walkers-low/",
+          "about": "catmint"
+        }
+      ]
+    },
+    {
+      "id": "dropseed",
+      "why": "Combined with fall-blooming sedums; a great filler between purple coneflower, liatris, black-eyed Susan and butterfly weed.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Prairie Dropseed article",
+          "url": "https://hort.extension.wisc.edu/articles/prairie-dropseed-sporobolus-heterolepis/",
+          "about": "dropseed"
+        }
+      ]
+    },
+    {
+      "id": "seaholly",
+      "why": "Walters Gardens (Zeeland, Michigan) lists varieties of these as companions: Liatris and Coreopsis.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Walters Gardens, Zeeland, Michigan: Sea Holly companions",
+          "url": "https://www.waltersgardens.com/variety.php?ID=ERYBG",
+          "about": "seaholly"
+        }
+      ]
+    },
+    {
+      "id": "strawberry",
+      "why": "Izel Native Plants: plant wild strawberry intermingled with lanceleaf coreopsis and purple coneflower.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Izel Native Plants: Wild Strawberry",
+          "url": "https://www.izelplants.com/fragaria-virginiana-wild-strawberry/",
+          "about": "strawberry"
+        }
+      ]
+    },
+    {
+      "id": "sunflower",
+      "why": "New Moon Nurseries: in lightly shaded gardens, companions include wild columbine, Pennsylvania sedge and lanceleaf coreopsis.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Woodland Sunflower",
+          "url": "https://newmoonnursery.com/plant/Helianthus-divaricatus",
+          "about": "sunflower"
+        }
+      ]
+    }
+  ]
+}

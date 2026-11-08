@@ -1,0 +1,78 @@
+{
+  "id": "cohosh",
+  "facts": {
+    "code": "BlCo",
+    "name": "Black Cohosh",
+    "latin": "Actaea racemosa",
+    "native": false,
+    "kind": "clump",
+    "hLo": 48,
+    "hHi": 72,
+    "spacing": 24,
+    "bloom": [7, 8.3],
+    "color": "Tall white flower candles",
+    "hex": "#F3F1E6",
+    "txt": "#2E3A2C",
+    "light": "Part shade to shade; rich soil",
+    "sun": ["part", "shade"],
+    "moisture": "Average to moist",
+    "notes": "Wiry white flower spikes rise high above lacy leaves in midsummer. Slow to settle in, then lives for decades. Native to the eastern U.S., not Michigan.",
+    "deer": "B",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "Related to baneberry and considered poisonous (general references; not on the ASPCA list)",
+    "zones": [3, 8.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "Actaea racemosa - Black Cohosh.jpg",
+      "by": "Fritzflohrreynolds",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Wild Ginger Woodlands: Black Cohosh",
+        "url": "https://www.wildgingerwoodlands.com/wild-ginger-woodlands-shop/p/black-cohosh-actaea-racemosa",
+        "note": "Not native to Michigan, so listed here as a garden favorite."
+      },
+      {
+        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
+        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
+        "note": "Current perennial list from a Michigan garden center."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "anemone",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "bluebells",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    }
+  ]
+}

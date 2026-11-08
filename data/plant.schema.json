@@ -1,0 +1,686 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "plant.schema.json",
+  "title": "Perennial Bed Planner plant",
+  "description": "One plant: data/plants/<id>/plant.json. See data/SCHEMA.md for the full rules; build/validate.js also checks things JSON Schema can't (unique codes, the code pattern, folder names matching ids, the photo files and their sizes, sources written the same everywhere).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "facts",
+    "photo",
+    "status",
+    "care",
+    "companions"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Matches the file name. Never changes once published."
+    },
+    "facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "name",
+        "latin",
+        "native",
+        "kind",
+        "hLo",
+        "hHi",
+        "spacing",
+        "bloom",
+        "color",
+        "hex",
+        "txt",
+        "light",
+        "sun",
+        "moisture",
+        "notes",
+        "toxic"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Za-z]{1,3}$",
+          "description": "2 to 4 letters from the common name; see SCHEMA.md"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "description": "Common name"
+        },
+        "latin": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "description": "Botanical name"
+        },
+        "native": {
+          "type": "boolean",
+          "description": "true = Michigan native, false = garden favorite"
+        },
+        "kind": {
+          "enum": [
+            "clump",
+            "fern",
+            "grass",
+            "mat",
+            "bulb"
+          ]
+        },
+        "filler": {
+          "const": true
+        },
+        "dormant": {
+          "const": true
+        },
+        "clump": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Bulbs only: bulbs per spot"
+        },
+        "fam": {
+          "const": "daisy"
+        },
+        "hLo": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "inches"
+        },
+        "hHi": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "inches, at least hLo"
+        },
+        "spacing": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "inches, center to center"
+        },
+        "bloom": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 3,
+                "maximum": 12
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          ],
+          "description": "[start, end] months (start before end), or null for a foliage plant"
+        },
+        "color": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "description": "Color in words"
+        },
+        "hex": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "description": "Plant color"
+        },
+        "txt": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "description": "Text color that reads on hex"
+        },
+        "light": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "description": "Light and soil in words"
+        },
+        "sun": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "full",
+              "part",
+              "shade"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "moisture": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "description": "Soil moisture in words"
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "description": "Description"
+        },
+        "deer": {
+          "enum": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "description": "Rutgers rating; leave out if not rated"
+        },
+        "squirrels": {
+          "const": true,
+          "description": "Only for bulbs squirrels dig up"
+        },
+        "toxic": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "people",
+                  "dogs",
+                  "cats",
+                  "horses"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          ]
+        },
+        "toxSrc": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "description": "Where the toxicity comes from"
+        },
+        "gloves": {
+          "const": true,
+          "description": "Toxic plant to handle with gloves"
+        },
+        "zones": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 13.5,
+            "multipleOf": 0.5
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "[coldest, warmest] USDA zones, .5 = b"
+        },
+        "winter": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "how"
+          ],
+          "properties": {
+            "how": {
+              "enum": [
+                "dig",
+                "pot",
+                "annual",
+                "mulch"
+              ]
+            },
+            "text": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S",
+              "description": "Instructions that replace the standard ones"
+            },
+            "lift": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 12.99
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "months"
+            },
+            "replant": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 12.99
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "months"
+            },
+            "mulch": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 12.99
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "months"
+            }
+          }
+        },
+        "buyNote": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "description": "Buying tip for the PDF"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "toxic": {
+                "type": "array"
+              }
+            },
+            "required": [
+              "toxic"
+            ]
+          },
+          "then": {
+            "required": [
+              "toxSrc"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "toxSrc"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "clump"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "bulb"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "photo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "credit"
+      ],
+      "properties": {
+        "focus": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "[x, y] crop center, 0 to 1"
+        },
+        "credit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "file",
+            "by",
+            "lic",
+            "licUrl"
+          ],
+          "properties": {
+            "file": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S",
+              "description": "File name on Wikimedia Commons"
+            },
+            "by": {
+              "type": "string"
+            },
+            "lic": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S",
+              "description": "License"
+            },
+            "licUrl": {
+              "type": "string"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "not": {
+                  "properties": {
+                    "lic": {
+                      "enum": [
+                        "Public domain",
+                        "CC0"
+                      ]
+                    }
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "by": {
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "not": {
+                  "properties": {
+                    "lic": {
+                      "const": "Public domain"
+                    }
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "licUrl": {
+                    "type": "string",
+                    "pattern": "^https?://\\S+$"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "sources"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "native",
+            "garden"
+          ],
+          "description": "Must agree with facts.native"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "title",
+              "url",
+              "note"
+            ],
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S",
+                "description": "Source title"
+              },
+              "url": {
+                "type": "string",
+                "pattern": "^https?://\\S+$"
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S",
+                "description": "What the source shows"
+              }
+            }
+          }
+        }
+      }
+    },
+    "care": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "group",
+        "trim"
+      ],
+      "properties": {
+        "group": {
+          "enum": [
+            "spring",
+            "fall",
+            "grass",
+            "sedge",
+            "fern",
+            "evfern",
+            "tidy",
+            "leavesAtBud",
+            "leavesEarly",
+            "pruneInMay",
+            "marginal",
+            "late",
+            "ephemeral",
+            "bulb"
+          ]
+        },
+        "trim": {
+          "type": "boolean"
+        },
+        "fall": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "short",
+            "why"
+          ],
+          "properties": {
+            "short": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S",
+              "description": "A few words"
+            },
+            "why": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S",
+              "description": "Why it's cut in fall"
+            }
+          }
+        },
+        "divide": {
+          "enum": [
+            "never",
+            "fleshy",
+            "summer",
+            "early-spring"
+          ],
+          "description": "Only when the usual dividing advice is wrong"
+        },
+        "divideNote": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "description": "Sentence added to the dividing advice"
+        },
+        "evergreen": {
+          "const": true,
+          "description": "Evergreen sedge"
+        },
+        "dormancy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "from",
+            "short"
+          ],
+          "properties": {
+            "from": {
+              "type": "number",
+              "minimum": 5,
+              "maximum": 9
+            },
+            "short": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            }
+          },
+          "description": "When an ephemeral plant leaves are cleared"
+        },
+        "june": {
+          "enum": [
+            "pinch",
+            "halve"
+          ],
+          "description": "Early-June job for the PDF"
+        }
+      },
+      "if": {
+        "properties": {
+          "group": {
+            "const": "fall"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "fall"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "fall"
+          ]
+        }
+      }
+    },
+    "example": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "description": "How many go in the example garden"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "url",
+          "topic",
+          "note"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https?://"
+          },
+          "topic": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "note": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        }
+      },
+      "description": "Research about this plant shown on the credits page"
+    },
+    "companions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "why",
+          "aboutThisPlant",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "why": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "description": "The source's sentence"
+          },
+          "aboutThisPlant": {
+            "type": "boolean"
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "title",
+                "url"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S",
+                  "description": "Source title"
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https?://\\S+$"
+                },
+                "about": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9-]+$"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

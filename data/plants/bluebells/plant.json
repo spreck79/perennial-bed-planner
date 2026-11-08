@@ -1,0 +1,239 @@
+{
+  "id": "bluebells",
+  "facts": {
+    "code": "ViBl",
+    "name": "Virginia Bluebells",
+    "latin": "Mertensia virginica",
+    "native": true,
+    "kind": "clump",
+    "dormant": true,
+    "hLo": 12,
+    "hHi": 24,
+    "spacing": 15,
+    "bloom": [4, 5.9],
+    "color": "Pink buds open to blue",
+    "hex": "#4E73CC",
+    "txt": "#FFFFFF",
+    "light": "Part shade to shade; moist soil",
+    "sun": ["part", "shade"],
+    "moisture": "Moist",
+    "notes": "Goes fully dormant by early July, so tuck it between ferns or phlox that will fill the gap. Often sold as dormant roots.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [3, 8.5],
+    "buyNote": "Virginia bluebells are often sold as dormant roots."
+  },
+  "photo": {
+    "focus": [0.55, 0.45],
+    "credit": {
+      "file": "Virginia Bluebells (Mertensia virginica) - Oakville, Ontario 2017-05-12 (02).jpg",
+      "by": "Ryan Hodnett",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Wild Ginger Woodlands (Michigan nursery): Virginia Bluebells",
+        "url": "https://www.wildgingerwoodlands.com/wild-ginger-woodlands-shop/p/virginia-bluebells-mertensia-virginica",
+        "note": "Threatened in Michigan; seed from Michigan."
+      }
+    ]
+  },
+  "care": {
+    "group": "ephemeral",
+    "trim": false
+  },
+  "example": 3,
+  "sources": [
+    {
+      "title": "Penn State Extension: Spring Ephemerals for Residential Gardens",
+      "url": "https://extension.psu.edu/spring-ephemerals-for-residential-gardens",
+      "topic": "Early-dormant plants",
+      "note": "Virginia bluebell foliage dies back by summer, so interplant with hostas or ferns; mayapple goes dormant in summer, so pair it with ferns or late-summer flowers."
+    }
+  ],
+  "companions": [
+    {
+      "id": "astilbe",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "cohosh",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "bleeding",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Bleeding Heart article",
+          "url": "https://hort.extension.wisc.edu/articles/bleeding-heart-dicentra-spectabilis/",
+          "about": "bleeding"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "celandine",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "christmas",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Perennials.com: Virginia Bluebells profile",
+          "url": "https://www.perennials.com/plants/mertensia-virginica.html",
+          "about": "bluebells"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "cinnamon",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Perennials.com: Virginia Bluebells profile",
+          "url": "https://www.perennials.com/plants/mertensia-virginica.html",
+          "about": "bluebells"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "hosta",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Perennials.com: Virginia Bluebells profile",
+          "url": "https://www.perennials.com/plants/mertensia-virginica.html",
+          "about": "bluebells"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "lady",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Perennials.com: Virginia Bluebells profile",
+          "url": "https://www.perennials.com/plants/mertensia-virginica.html",
+          "about": "bluebells"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "fern",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Perennials.com: Virginia Bluebells profile",
+          "url": "https://www.perennials.com/plants/mertensia-virginica.html",
+          "about": "bluebells"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "ostrich",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Perennials.com: Virginia Bluebells profile",
+          "url": "https://www.perennials.com/plants/mertensia-virginica.html",
+          "about": "bluebells"
+        },
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "solomon",
+      "why": "Combines with bleeding heart and celandine poppy; hosta, astilbe, bugbane, Solomon's seal or ferns fill the gap after it goes dormant.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Virginia Bluebells article",
+          "url": "https://hort.extension.wisc.edu/articles/virginia-bluebells-mertensia-virginica/",
+          "about": "bluebells"
+        }
+      ]
+    },
+    {
+      "id": "goatsbeard",
+      "why": "Combines well with astilbe, columbine and ferns; plant with wild ginger, Virginia bluebells, Jacob's ladder and wild geranium; mix with iris.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Goat's Beard article",
+          "url": "https://hort.extension.wisc.edu/articles/goatsbeard-aruncus-dioicus/",
+          "about": "goatsbeard"
+        }
+      ]
+    }
+  ]
+}
