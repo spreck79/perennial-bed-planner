@@ -42,7 +42,7 @@
   // The starter garden shown on first visit and after "Start over": a drawn (not rectangular) border that
   // bows out in the middle, with all three sun zones painted left to right (full sun, part shade, shade)
   // and a short hedge, a birdbath and a couple of stepping stones for structure. Plant picks are grouped by
-  // zone and chosen from real "goes well with" companion pairings (see companions.js) in that light.
+  // zone and chosen from real "goes well with" companion pairings (from the plant folders) in that light.
   // The outline is stored the way the outline editor stores it: 10 handles (on its half-foot grid) smoothed
   // with the editor's own curve, so "Edit the outline" opens with a few easy-to-drag dots, not dozens.
   const DEFAULT_FREECTRL = [[0, 2], [5.5, 1], [11, 0], [16.5, 1], [22, 2], [22, 5], [16.5, 5.5], [11, 7], [5.5, 7.5], [0, 6.5]];
@@ -2612,7 +2612,10 @@
   })();
   $("#btnTour").addEventListener("click", () => Tour.start());
   const saved = load();
-  if (saved && saved.placements && saved.shape && saved.placements.every(p => byId[p.id])) { S = Object.assign(freshState(), saved); S.prefs = Object.assign(freshState().prefs, saved.prefs || {}); S.waiting = cleanWaiting(S.waiting); migratePrefs(saved.prefs); init(false); }
+  // a plant whose folder has been deleted is taken out of the saved garden; the rest of the garden stays
+  const gone = saved && Array.isArray(saved.placements) ? [...new Set(saved.placements.filter(p => !byId[p.id]).map(p => p.id))] : [];
+  if (saved && gone.length) saved.placements = saved.placements.filter(p => byId[p.id]);
+  if (saved && saved.placements && saved.shape) { S = Object.assign(freshState(), saved); S.prefs = Object.assign(freshState().prefs, saved.prefs || {}); S.waiting = cleanWaiting(S.waiting); migratePrefs(saved.prefs); init(false); if (gone.length) { save(); toast(gone.length === 1 ? "One plant in your garden is no longer on the site, so it was taken out." : gone.length + " plants in your garden are no longer on the site, so they were taken out.", 5000); } }
   else { S = freshState(); init(true); Tour.start(); }
   window.__app = { get S() { return S; }, get bed() { return bed; } };
 })();

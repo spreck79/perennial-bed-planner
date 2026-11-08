@@ -113,7 +113,7 @@
   // which plant folders there are right now, and how to fetch their files
   async function findFolders() {
     if (location.protocol === "file:") return { kind: "file" };
-    try {      // the local server on this computer (build/serve.js)
+    if (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) try {      // the local server on this computer (build/serve.js)
       const r = await fetch("__plants", { cache: "no-store" });
       if (r.ok) { const j = await r.json(); return { kind: "local", ids: j.ids, version: j.version, file: f => abs(f) }; }
     } catch (e) {}
