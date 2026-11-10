@@ -1,0 +1,175 @@
+{
+  "id": "bluestar",
+  "facts": {
+    "code": "EBSt",
+    "name": "Eastern Blue Star",
+    "latin": "Amsonia tabernaemontana",
+    "native": false,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 30,
+    "bloom": [5, 6.5],
+    "color": "Pale blue star-shaped flowers; golden fall leaves",
+    "hex": "#9DB8DE",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part shade; blooms best in sun and may flop in deep shade",
+    "sun": ["full", "part"],
+    "moisture": "Average to moist; drought tolerant once established",
+    "notes": "A long-lived clump of willow-like leaves topped with clusters of pale blue star flowers in late spring, then golden-yellow fall color. Deer usually leave it alone because of its milky sap. Native to the eastern and central U.S., but not to Michigan.",
+    "toxic": ["people", "dogs", "cats"],
+    "toxSrc": "Its milky latex sap is toxic (UW–Madison Extension); not on the ASPCA list",
+    "zones": [3, 9.5]
+  },
+  "photo": {
+    "credit": {
+      "file": "2023-05-30 15 14 50 Eastern bluestar flowers along Lochatong Road in the Mountainview section of Ewing Township, Mercer County, New Jersey.jpg",
+      "by": "Famartin",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "English Gardens (Michigan garden center): Blue Ice Star Flower",
+        "url": "https://plants.englishgardens.com/12150001/Plant/8710/Blue_Ice_Star_Flower",
+        "note": "A Michigan garden center sells the 'Blue Ice' variety of this plant. Not native to Michigan (Wildflower Center range), so listed as a garden favorite."
+      },
+      {
+        "title": "MSU Horticulture Gardens: Perennial inventory, spring plant sale 2021",
+        "url": "https://www.canr.msu.edu/hrt/uploads/Perennial%20Inventory%2012April2021.pdf",
+        "note": "Michigan State's plant sale lists the 'Storm Cloud' variety: zones 4 to 9, full to part sun, late spring to early summer, 24 to 30 in tall."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Wisconsin Horticulture (UW–Madison Extension): Willowleaf bluestar",
+      "url": "https://hort.extension.wisc.edu/articles/willowleaf-bluestar-amsonia-tabernaemontana/",
+      "topic": "Plant facts and care",
+      "note": "2 to 3 ft tall and wide; pale blue flowers mid-spring into early summer; sun to light shade; moist loam but adapts, drought tolerant once established; zones 3a to 9b; golden fall color; deer avoid it (latex). Deadhead or cut back by a third to a half after flowering; rarely needs dividing. Leaves and stems exude a toxic white latex."
+    },
+    {
+      "title": "Lady Bird Johnson Wildflower Center: Amsonia tabernaemontana",
+      "url": "https://www.wildflower.org/plants/result.php?id_plant=amta2",
+      "topic": "Native range",
+      "note": "Native from Maryland and Virginia to southern Illinois, Kansas, Florida and Texas; Michigan is not in its native range."
+    },
+    {
+      "title": "Chicago Botanic Garden: Amsonia tabernaemontana",
+      "url": "https://www.chicagobotanic.org/plant-information/plant-finder/amsonia-tabernaemontana-blue-star",
+      "topic": "Plant facts",
+      "note": "Blooms May to June; full sun or part shade; zones 3 to 9; golden-yellow fall color; deer resistant."
+    },
+    {
+      "title": "Perennials.com (Walters Gardens): Amsonia tabernaemontana",
+      "url": "https://www.perennials.com/plants/amsonia-tabernaemontana.html",
+      "topic": "Size",
+      "note": "23 to 35 in tall, 29 to 35 in wide; light blue flowers late spring and early summer; zones 3 to 9; deer resistant."
+    }
+  ],
+  "companions": [
+    {
+      "id": "siberianiris",
+      "why": "Try combining it with Siberian iris, butterfly weed, daylilies and dark-colored heucheras; in woodland gardens it goes with ferns, bleeding heart and sedges.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Willowleaf bluestar, Amsonia tabernaemontana",
+          "url": "https://hort.extension.wisc.edu/articles/willowleaf-bluestar-amsonia-tabernaemontana/",
+          "about": "bluestar"
+        }
+      ]
+    },
+    {
+      "id": "butterflyweed",
+      "why": "Try combining it with Siberian iris, butterfly weed, daylilies and dark-colored heucheras; in woodland gardens it goes with ferns, bleeding heart and sedges.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Willowleaf bluestar, Amsonia tabernaemontana",
+          "url": "https://hort.extension.wisc.edu/articles/willowleaf-bluestar-amsonia-tabernaemontana/",
+          "about": "bluestar"
+        }
+      ]
+    },
+    {
+      "id": "daylily",
+      "why": "Try combining it with Siberian iris, butterfly weed, daylilies and dark-colored heucheras; in woodland gardens it goes with ferns, bleeding heart and sedges.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Willowleaf bluestar, Amsonia tabernaemontana",
+          "url": "https://hort.extension.wisc.edu/articles/willowleaf-bluestar-amsonia-tabernaemontana/",
+          "about": "bluestar"
+        }
+      ]
+    },
+    {
+      "id": "coral",
+      "why": "Try combining it with Siberian iris, butterfly weed, daylilies and dark-colored heucheras; in woodland gardens it goes with ferns, bleeding heart and sedges.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Willowleaf bluestar, Amsonia tabernaemontana",
+          "url": "https://hort.extension.wisc.edu/articles/willowleaf-bluestar-amsonia-tabernaemontana/",
+          "about": "bluestar"
+        }
+      ]
+    },
+    {
+      "id": "bleeding",
+      "why": "Try combining it with Siberian iris, butterfly weed, daylilies and dark-colored heucheras; in woodland gardens it goes with ferns, bleeding heart and sedges.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Willowleaf bluestar, Amsonia tabernaemontana",
+          "url": "https://hort.extension.wisc.edu/articles/willowleaf-bluestar-amsonia-tabernaemontana/",
+          "about": "bluestar"
+        }
+      ]
+    },
+    {
+      "id": "baptisia",
+      "why": "Its blooms come at the same time as false indigo and beardtongue.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "New Moon Nurseries: Amsonia tabernaemontana",
+          "url": "https://newmoonnursery.com/plant/Amsonia-tabernaemontana",
+          "about": "bluestar"
+        }
+      ]
+    },
+    {
+      "id": "penstemon",
+      "why": "Its blooms come at the same time as false indigo and beardtongue.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "New Moon Nurseries: Amsonia tabernaemontana",
+          "url": "https://newmoonnursery.com/plant/Amsonia-tabernaemontana",
+          "about": "bluestar"
+        }
+      ]
+    },
+    {
+      "id": "newengland",
+      "why": "Its golden fall leaves pair well with fall asters.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "New Moon Nurseries: Amsonia tabernaemontana",
+          "url": "https://newmoonnursery.com/plant/Amsonia-tabernaemontana",
+          "about": "bluestar"
+        }
+      ]
+    }
+  ]
+}
