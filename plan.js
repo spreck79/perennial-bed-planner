@@ -247,7 +247,7 @@
     if (g) {
       const idx = +g.dataset.idx, p = ctx.placements[idx], add = e.ctrlKey || e.metaKey || e.shiftKey || !!(cb.isMulti && cb.isMulti());
       const wasOnly = !add && !!(cb.isOnlySelected && cb.isOnlySelected(idx));   // a second click on the selected plant lets it go
-      cb.onSelect && cb.onSelect(idx, add);
+      cb.onSelect && cb.onSelect(idx, add, e.shiftKey);   // Shift picks every plant of that kind
       drag = { idx, dx: p.x - pt.x, dy: p.y - pt.y, moved: false, g: svg.querySelector(`.pl[data-idx="${idx}"]`) || g, sx: e.clientX, sy: e.clientY, wasOnly };
       svg.setPointerCapture(e.pointerId);
       e.preventDefault(); return;
@@ -341,18 +341,34 @@
     if (t) { t.setAttribute("x", p.x); t.setAttribute("y", ctx.H - p.y + ctx.fs * 0.35); }
     g.querySelectorAll(".tx").forEach(e => { const ox = +e.dataset.ox, oy = +e.dataset.oy; if (e.tagName === "g") { e.setAttribute("transform", `translate(${p.x + ox} ${ctx.H - p.y + oy})`); } else if (e.tagName === "circle") { e.setAttribute("cx", p.x + ox); e.setAttribute("cy", ctx.H - p.y + oy); } else { e.setAttribute("x", p.x + ox); e.setAttribute("y", ctx.H - p.y + oy); } });
   }
-  // while a plant is dragged, the painted sun zones that suit it stay bright and the others fade
-  function zonesFor(idx) { const pl = ctx.byId[ctx.placements[idx].id]; if (pl) zonesForSun(pl.sun); }
-  function zonesForSun(sun) {
-    const zs = svg.querySelectorAll(".zlayer .ztip"); if (!zs.length) return;
-    zs.forEach(g => g.classList.toggle("zok", !!(sun && sun.includes(g.dataset.z))));
-    svg.classList.add("zdrag");
+  // while a plant is dragged, the sun areas that suit it (and the plants in them) stay as they are, and the rest of
+  // the bed is covered with a dull gray veil; the plant being dragged stays on top
+  let zlift = null;   // the dragged plant, lifted above the veil: { g, next } to put it back
+  function zonesFor(idx) {
+    const pl = ctx.byId[ctx.placements[idx].id]; if (!pl) return;
+    zonesForSun(pl.sun);
+    const g = svg.querySelector(`.pl[data-idx="${idx}"]`), veil = svg.querySelector(".zveil");
+    if (g && veil) { zlift = { g, parent: g.parentNode, next: g.nextSibling }; veil.parentNode.insertBefore(g, veil.nextSibling); }
+  }
+  // look: true when it's only a look (pointing at a plant in the Plants list), so the plan's own highlighting stays
+  function zonesForSun(sun, look) {
+    const zs = svg.querySelectorAll(".zlayer .ztip"), player = svg.querySelector(".player"); if (!zs.length || !player) return;
+    zonesOff();
+    const veil = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    veil.setAttribute("class", "zveil"); veil.setAttribute("clip-path", "url(#bedclip)"); veil.setAttribute("pointer-events", "none");
+    zs.forEach(g => { if (!(sun && sun.includes(g.dataset.z))) g.querySelectorAll("rect").forEach(r => veil.appendChild(r.cloneNode(false))); });
+    player.parentNode.insertBefore(veil, player.nextSibling);
+    svg.classList.add(look ? "zlook" : "zdrag");
   }
   // for dropping a plant dragged in from the Plants list: a point on the screen in bed feet, and how many screen
   // pixels one foot takes at the current zoom
   function clientToBed(cx, cy) { return toBed({ clientX: cx, clientY: cy }); }
   function pxPerFt() { const m = svg.getScreenCTM(); return m ? Math.hypot(m.a, m.b) : 30; }
-  function zonesOff() { svg.classList.remove("zdrag"); }
+  function zonesOff() {
+    svg.classList.remove("zdrag", "zlook");
+    svg.querySelectorAll(".zveil").forEach(v => v.remove());
+    if (zlift) { if (zlift.parent.isConnected) zlift.parent.insertBefore(zlift.g, zlift.next && zlift.next.parentNode === zlift.parent ? zlift.next : null); zlift = null; }
+  }
   function onUp(e) {
     if (draw) { drawUp(e); return; }
     const rel = () => { try { svg.releasePointerCapture(e.pointerId); } catch (_) {} };

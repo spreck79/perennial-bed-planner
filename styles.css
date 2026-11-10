@@ -862,8 +862,13 @@ body.touring .step .stepfoot { display: none; }
 .brow .badl { display: block; font-style: normal; font-size: 10.5px; font-weight: 700; color: #9A6B00; margin-top: 1px; }
 
 /* dragging a plant on the bed plan: the sun zones that suit it stay bright, the rest fade */
-#plan.zdrag .zlayer .ztip { opacity: .28; transition: opacity .15s; }
-#plan.zdrag .zlayer .ztip.zok { opacity: 1; }
+/* dragging a plant: the sun areas that don't suit it, and everything in them, go under one dull gray veil */
+#plan .zveil rect { fill: #8C8C86; fill-opacity: .82; }
+/* while dragging a plant, or pointing at one in the Plants list, nothing else fades: only the veil dims */
+#plan.zdrag .zlayer, #plan.zdrag .glayer, #plan.zdrag .olayer, #plan.zdrag .clayer, #plan.zdrag .bedrim, #plan.zdrag .soil,
+#plan.zdrag .pl circle.pc, #plan.zdrag .pl text, #plan.zdrag .pl .tx,
+#plan.zlook .zlayer, #plan.zlook .glayer, #plan.zlook .olayer, #plan.zlook .clayer, #plan.zlook .bedrim, #plan.zlook .soil,
+#plan.zlook .pl circle.pc, #plan.zlook .pl text, #plan.zlook .pl .tx { opacity: 1; }
 /* dragging a plant's row between the sun sections of the Garden Timeline */
 .brow.canmove .lab { cursor: grab; touch-action: none; }
 body.rowdragging, body.rowdragging * { cursor: grabbing !important; user-select: none; }

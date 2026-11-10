@@ -20,7 +20,7 @@ Then **pick plants** from the Plants list beside the bed plan, or let **Suggest 
 
 On the bed plan:
 - Right-click any plant, object or empty spot for a menu; click one for a card with what it is, its sun needs and plants that go well with it (each pairing from a published source).
-- Drag to rearrange; Ctrl- or Shift-click to work on several plants at once. Undo and redo any change.
+- Drag to rearrange; Ctrl-click to work on several plants at once, or Shift-click to pick every plant of that kind (also "Select all" in the right-click menu). Undo and redo any change.
 - Zoom with Ctrl + scroll or the buttons in the corner.
 - Works on phones and tablets: press and hold for the menus, pinch to zoom, and "Select more plants" to pick several.
 - Small icons show sun needs, native, garden favorite, daisy family, toxic and deer-eaten plants; hover one for what it means.

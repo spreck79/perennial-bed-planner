@@ -322,8 +322,21 @@
   // where there's no Ctrl or Shift key. It ends with Done, Esc, or when nothing is selected any more.
   let multiTap = false;
   function clearSel() { selIdx = -1; extraSel = []; multiTap = false; }
+  // Shift-click (or "Select all ..." in the menu): add every plant of that kind to what's picked; if they're all
+  // picked already, take them all out again
+  const sameKind = i => S.placements.map((q, j) => (q.id === S.placements[i].id && !q.c ? j : -1)).filter(j => j >= 0);
+  function selectKind(i) {
+    if (!S.placements[i]) return;
+    const kind = sameKind(i), cur = selAll();
+    const next = kind.every(j => cur.includes(j)) ? cur.filter(j => !kind.includes(j)) : cur.concat(kind.filter(j => !cur.includes(j)));
+    const first = next.includes(i) ? i : next[next.length - 1];
+    selIdx = first === undefined ? -1 : first; extraSel = next.filter(j => j !== selIdx);
+    if (selIdx >= 0) optMode = "idle";
+  }
   // kinds of plant in the current selection, and selecting every planted one of some kinds
   const selIds = () => { const s = []; selAll().forEach(i => { const id = S.placements[i] && S.placements[i].id; if (id && !s.includes(id)) s.push(id); }); return s; };
+  // pick exactly these plants on the bed plan (the "Select them" buttons in the notes under the plan)
+  function selectIdx(idx) { idx = idx.filter(i => S.placements[i]); selIdx = idx.length ? idx[0] : -1; extraSel = idx.slice(1); multiTap = false; objSel = -1; if (selIdx >= 0) optMode = "idle"; renderPlan(); }
   function selectIds(ids) {
     const idx = []; S.placements.forEach((p, i) => { if (ids.includes(p.id)) idx.push(i); });
     selIdx = idx.length ? idx[0] : -1; extraSel = idx.slice(1); if (selIdx >= 0) optMode = "idle";
@@ -1140,7 +1153,9 @@
       d.addEventListener("pointerdown", e => libDragDown(e, p)); d.addEventListener("dragstart", e => e.preventDefault());   // no browser image-drag
       if (on) { d.querySelector(".q-").onclick = e => { e.stopPropagation(); setQty(p.id, -1); }; d.querySelector(".q\\+").onclick = e => { e.stopPropagation(); setQty(p.id, 1); }; }
       d.title = on ? `${n} in the bed. Use − and + to change how many.` : `Click to add ${p.name}`;
-      d.onmouseenter = () => setHover(p.id); d.onmouseleave = () => setHover(null);
+      // pointing at a plant shades the parts of the bed whose light doesn't suit it
+      d.onmouseenter = () => { setHover(p.id); if (!libDrag && window.Plan.zonesForSun) window.Plan.zonesForSun(p.sun, true); };
+      d.onmouseleave = () => { setHover(null); if (!libDrag && window.Plan.zonesOff) window.Plan.zonesOff(); };
       box.appendChild(d);
     });
   }
@@ -1323,7 +1338,11 @@
     const n = document.querySelector("#plan .pl.bad") ? document.querySelectorAll("#plan .pl.bad").length : 0;
     if (n) msgs.push(`${n} plant${n > 1 ? "s are" : " is"} drawn with a dashed red edge because ${n > 1 ? "they are" : "it is"} closer to another plant than the spacing allows, or sitting on an object. Drag ${n > 1 ? "them" : "it"} clear, or remove one.`);
     const box = $("#notice"); box.style.display = msgs.length ? "block" : "none"; box.innerHTML = msgs.map(esc).join("<br>");
-    if (n) { box.insertAdjacentHTML("beforeend", ` <button class="btn small" id="ovFix" type="button">Fix it</button>`); $("#ovFix").onclick = openOverlapFix; }
+    if (n) {
+      const ovIdx = [...document.querySelectorAll("#plan .pl.bad")].map(g => +g.dataset.idx);
+      box.insertAdjacentHTML("beforeend", ` <button class="btn small" id="ovFix" type="button">Fix it</button> <button class="btn small" id="ovSel" type="button">Select ${n > 1 ? "them" : "it"}</button>`);
+      $("#ovFix").onclick = openOverlapFix; $("#ovSel").onclick = () => selectIdx(ovIdx);
+    }
     const outObjs = S.objects.filter(o => !Geo.pip(bed.poly, o.x, o.y));
     if (outObjs.length) {
       box.style.display = "block";
@@ -1336,7 +1355,8 @@
       const kinds2 = {}; lb.forEach(i => { const id = S.placements[i].id; kinds2[id] = (kinds2[id] || 0) + 1; });
       const nm = Object.keys(kinds2).map(id => byId[id].name + (kinds2[id] > 1 ? " ×" + kinds2[id] : "")).join(", ");
       box.style.display = "block";
-      box.insertAdjacentHTML("beforeend", (box.innerHTML ? "<br>" : "") + `${lb.length} plant${lb.length > 1 ? "s sit" : " sits"} in light that doesn't suit ${lb.length > 1 ? "them" : "it"} (dotted gold edge): ${esc(nm)}. <button class="btn small" id="lbFix" type="button">Move ${lb.length > 1 ? "them" : "it"}</button>`);
+      box.insertAdjacentHTML("beforeend", (box.innerHTML ? "<br>" : "") + `${lb.length} plant${lb.length > 1 ? "s sit" : " sits"} in light that doesn't suit ${lb.length > 1 ? "them" : "it"} (dotted gold edge): ${esc(nm)}. <button class="btn small" id="lbFix" type="button">Move ${lb.length > 1 ? "them" : "it"}</button> <button class="btn small" id="lbSel" type="button">Select ${lb.length > 1 ? "them" : "it"}</button>`);
+      $("#lbSel").onclick = () => selectIdx(lb);
       $("#lbFix").onclick = () => {
         let moved = 0, stuck = 0;
         lb.map(i => S.placements[i]).forEach(pl => { if (pl.lock) { stuck++; return; } if (moveToLight(pl)) moved++; else stuck++; });
@@ -1499,7 +1519,9 @@
     optMode = "idle"; renderPlan();
     const group = selAll().map(i => S.placements[i]).filter(Boolean), n = group.length;
     const more = { label: multiTap ? "Stop selecting more" : "Select more plants…", hint: multiTap || TOUCH ? "" : "or Ctrl-click", fn: () => { multiTap = !multiTap; renderPlan(); if (multiTap) toast("Tap other plants to add them to the selection. Tap one again to drop it. Done when finished.", 4000); } };
-    const m = showMenu((n > 1 ? [{ head: n + " plants selected" }] : [{ head: byId[group[0].id].name }]).concat([more, { sep: true }], plantActions(group)), { x: cx, y: cy });
+    const kind = sameKind(idx), all = kind.length > 1 && !kind.every(j => selAll().includes(j))
+      ? [{ label: "Select all " + byId[S.placements[idx].id].name + " (" + kind.length + ")", hint: TOUCH ? "" : "or Shift-click", fn: () => { selectKind(idx); renderPlan(); } }] : [];
+    const m = showMenu((n > 1 ? [{ head: n + " plants selected" }] : [{ head: byId[group[0].id].name }]).concat([more], all, [{ sep: true }], plantActions(group)), { x: cx, y: cy });
     m.dataset.ctx = "1"; renderSelCard();   // just the menu while it's open, not the card as well
   }
   // what you can do with a placed object
@@ -1726,9 +1748,10 @@
 
   // ---------- plan callbacks ----------
   window.Plan.init($("#plan"), {
-    onSelect(i, add) {
+    onSelect(i, add, kind) {
       objSel = -1;
       if (i < 0) { clearSel(); }
+      else if (kind) selectKind(i);
       else if (add) {
         const cur = selAll();
         if (cur.includes(i)) { const rest = cur.filter(x => x !== i); selIdx = rest.length ? rest[rest.length - 1] : -1; extraSel = rest.slice(0, -1); }
@@ -1927,7 +1950,7 @@
       card.appendChild(f);
       cardActs(card, plantActions(group));
       cardCompanions(card, idxs[0]);
-      cardTip(card, TOUCH ? "To pick several, press and hold a plant and choose Select more plants." : "Ctrl- or Shift-click more plants to select several.");
+      cardTip(card, TOUCH ? "To pick several, press and hold a plant and choose Select more plants." : "Ctrl-click more plants to select several, or Shift-click to select every plant of a kind.");
     } else {
       cardHead(card, `<div><div class="sc-name">${idxs.length} plants selected</div><div class="sc-sub">${ids.length} kind${ids.length > 1 ? "s" : ""}. Click a name to remove it from the selection.</div></div>`, deselect);
       const chips = document.createElement("div"); chips.className = "sc-chips";
@@ -1935,7 +1958,7 @@
         b.onclick = e => { e.stopPropagation(); const rest = idxs.filter(i => S.placements[i].id !== id); if (!rest.length) clearSel(); else { selIdx = rest[rest.length - 1]; extraSel = rest.slice(0, -1); } renderPlan(); }; chips.appendChild(b); });
       card.appendChild(chips);
       cardActs(card, plantActions(group));
-      cardTip(card, TOUCH || multiTap ? "Tap plants to add or remove them" + (multiTap ? "" : " (press and hold one, then Select more plants)") + ". Drag the card by its top to move it out of the way." : "Hold Ctrl or Shift and click plants to add or remove them. While you hold the key this card fades, so you can click plants under it. You can also drag the card by its top.");
+      cardTip(card, TOUCH || multiTap ? "Tap plants to add or remove them" + (multiTap ? "" : " (press and hold one, then Select more plants)") + ". Drag the card by its top to move it out of the way." : "Ctrl-click plants to add or remove them; Shift-click to add or remove every plant of a kind. While you hold the key this card fades, so you can click plants under it. You can also drag the card by its top.");
     }
   }
   // researched good neighbors for the selected plant; click one to plant it right beside
