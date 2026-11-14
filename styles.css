@@ -307,6 +307,9 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 
 .sitefoot { margin: 24px 0 0; padding: 14px max(20px, calc((100% - 1700px) / 2 + 20px)); display: flex; gap: 16px; flex-wrap: wrap; align-items: center; justify-content: space-between; background: rgba(246,243,234,.95); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border-top: 1px solid var(--rule); color: var(--muted); font-size: 12.5px; }   /* a bar like the top bar, so it reads over the flower background */
 .sitefoot a { color: var(--forest); font-weight: 600; }
+.sitefoot .footr { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.sitefoot a.s79 { display: flex; align-items: center; gap: 10px; color: #5E5245; font: 400 12.5px "Trebuchet MS", "Segoe UI", sans-serif; text-decoration: none; }   /* the spreck79 sign-off, in its own brand font and colors */
+.sitefoot a.s79 img { height: 38px; width: auto; display: block; }
 @media print { .sitefoot { display: none; } }
 .fillpick .fp-desc { flex-basis: 100%; font-size: 13px; color: #2E3A2C; }
 .fillpick .fp-desc p { margin: 0 0 9px; }
