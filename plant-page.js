@@ -153,7 +153,7 @@
     y = heading("Sources", y) + 4 * k;
     S.sources.forEach(([lab, t]) => { y = flow([[lab + ": ", "sb", C.muted], [t, "s", C.muted]], M, y, W - 2 * M, 7.2, 9.4 * k); });
     sf("s", 6.6); color(C.muted);
-    text("Made with Perennial Bed Planner (beta) · spreck79.github.io/perennial-bed-planner · Photos have their own licenses", W / 2, H - 20, { align: "center" });
+    text("Made with Perennial Bed Planner (beta) · pbp.spreck79.com · Photos have their own licenses", W / 2, H - 20, { align: "center" });
     return { doc, end: y };
   }
 
