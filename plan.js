@@ -2,7 +2,7 @@
 (function () {
   const NS = "http://www.w3.org/2000/svg";
   let svg, wrap, cb = {}, ctx = null, drag = null, draw = null, ui = null;
-  let objDrag = null, paintDrag = false, brushEl = null, rubberEl = null, curDefs = null, ctxEat = 0;
+  let objDrag = null, paintDrag = false, brushEl = null, brushAt = null, rubberEl = null, curDefs = null, ctxEat = 0;
   const sp = p => p.spacing / 12;
   const LEAFD = "M10.6 1.4C5.2 1.2 1.6 3.9 1.7 8c0 .9.3 1.7.7 2.3.5-2.6 2.3-4.6 4.9-5.8-2.1 1.5-3.6 3.4-4.2 6 .5.2 1.1.3 1.7.3 4 0 6-3.4 5.8-9.4z";
   const DEERD = "M6 11V6.2M6 6.2 3.2 2M4.3 3.7 2 4.2M6 6.2 8.8 2M7.7 3.7 10 4.2";
@@ -137,7 +137,7 @@
     svg.addEventListener("pointercancel", tUp);
     svg.addEventListener("dblclick", onDbl);
     svg.addEventListener("pointerover", e => { if (draw || (ctx && ctx.paint)) return; const g = near(e, ".pl"); cb.onHover && cb.onHover(g ? g.dataset.id : null); });
-    svg.addEventListener("pointerleave", () => { cb.onHover && cb.onHover(null); if (brushEl) brushEl.setAttribute("visibility", "hidden"); });
+    svg.addEventListener("pointerleave", () => { cb.onHover && cb.onHover(null); brushAt = null; if (brushEl) brushEl.setAttribute("visibility", "hidden"); });
     svg.addEventListener("contextmenu", e => { if (draw || near(e, ".pl") || near(e, ".ob")) e.preventDefault(); });
     // Our own menu opens on the right-button press. Near the window edge it gets nudged to fit and lands
     // under the pointer, so the browser's menu event that follows fires on our menu instead of the plant.
@@ -281,8 +281,10 @@
     }
     if (ctx.paint) {
       const pt = toBed(e);
-      if (brushEl) { brushEl.setAttribute("visibility", "visible"); brushEl.setAttribute("cx", pt.x); brushEl.setAttribute("cy", ctx.H - pt.y); }
+      brushAt = pt;
       if (paintDrag) cb.onPaint && cb.onPaint(pt.x, pt.y);
+      // after painting (which redraws the plan), so the dashed brush circle stays under the pointer
+      if (brushEl) { brushEl.setAttribute("visibility", "visible"); brushEl.setAttribute("cx", pt.x); brushEl.setAttribute("cy", ctx.H - pt.y); }
       return;
     }
     if (ctx.pathDraw) {
@@ -650,7 +652,7 @@
     // legend: a row of HTML under the plan (so the plan window holds just the bed), same badges and colors
     renderLegend(lgItems);
     // paint brush outline
-    if (c.paint) { brushEl = el("circle", { class: "brushc", cx: -99, cy: -99, r: Math.max(0.25, c.paint.size / 2), fill: "none", stroke: "#2E3A2C", "stroke-width": 0.06, "stroke-dasharray": "0.15 0.1", "pointer-events": "none", visibility: "hidden" }, root); }
+    if (c.paint) { brushEl = el("circle", { class: "brushc", cx: brushAt ? brushAt.x : -99, cy: brushAt ? c.H - brushAt.y : -99, r: Math.max(0.25, c.paint.size / 2), fill: "none", stroke: "#2E3A2C", "stroke-width": 0.06, "stroke-dasharray": "0.15 0.1", "pointer-events": "none", visibility: brushAt ? "visible" : "hidden" }, root); }
     svg.classList.toggle("placing", !!(c.armed || c.objArmed || c.pathDraw));
     svg.classList.toggle("painting", !!c.paint);
     svg.classList.remove("drawing");

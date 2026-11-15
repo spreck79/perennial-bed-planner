@@ -19,7 +19,7 @@
 <link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <title>Perennial Bed Planner</title>
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body class="planner">
 <header class="top">
@@ -28,6 +28,7 @@
     <div class="sub" id="hdrSub">All perennials · Zone 6B · Southern Michigan</div>
   </div>
   <div class="actions">
+    <a class="btn" href="help.html" title="How to use the planner, what the icons mean, and questions">Help</a>
     <button class="btn" id="btnTour" title="Walk through the steps one at a time">Guided tour</button>
     <button class="btn primary" id="btnPdf">Create PDF guide</button>
     <button class="btn" id="btnSave">Save plan</button>
@@ -208,6 +209,8 @@
 <div class="overlay" id="busy"><div class="modal"><h2 id="busyTitle">Making your PDF…</h2><div class="tip" id="busyText">Building pages</div><div class="progress"><i id="busyBar"></i></div></div></div>
 <div class="toast" id="toast"></div>
 
+<script src="fit-note.js"></script>
+<script src="step-help.js"></script>
 <script src="plant-data.js"></script>
 <script>PlantData.start(["lib/jspdf.umd.min.js", "plant-rules.js", "fonts.js", "geometry.js", "care.js", "charts.js", "plan.js", "pdf.js", "app.js"]);</script>
 </body>

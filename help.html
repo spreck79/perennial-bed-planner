@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="plants-repo" content="spreck79/perennial-bed-planner">
+<meta name="description" content="Plan a perennial bed for Southern Michigan, Zone 6B. Pick plants, place them in sun and shade, and get a printable care guide. Free beta.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Perennial Bed Planner">
+<meta property="og:title" content="Help · Perennial Bed Planner">
+<meta property="og:description" content="Plan a perennial bed for Southern Michigan, Zone 6B. Pick plants, place them in sun and shade, and get a printable care guide. Free beta.">
+<meta property="og:url" content="https://pbp.spreck79.com/help.html">
+<meta property="og:image" content="https://pbp.spreck79.com/img/card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Perennial Bed Planner: a garden bed plan with plants placed in sun and shade">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<title>Help · Perennial Bed Planner</title>
+<link rel="stylesheet" href="styles.css?v=9">
+<style>
+  :root { --forest:#3F6B3A; --ink:#2E3A2C; --muted:#6F7667; --cream:#F6F3EA; --rule:#DDD7C4; --soft:#EEF0E4; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--cream); color: var(--ink); font: 15px/1.5 "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 28px 20px 60px; }
+  main h1, main h2 { font-family: var(--serif); font-weight: 400; letter-spacing: -.01em; color: var(--forest); margin: 0; }
+  main h1 { font-size: 30px; } main h2 { font-size: 21px; margin: 34px 0 8px; }
+  p { margin: 8px 0; } .muted { color: var(--muted); }
+  a { color: var(--forest); } a:hover { color: #2F5430; }
+  .top .btn { text-decoration: none; color: var(--ink); }
+  .card { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 6px 16px 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding: 10px 8px 6px; border-bottom: 2px solid var(--rule); }
+  td { padding: 7px 8px; border-bottom: 1px solid #f0ecdd; vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.p { font-weight: 700; } td.p small { display: block; font-weight: 400; font-style: italic; color: var(--muted); }
+  ul { padding-left: 20px; } li { margin: 4px 0; }
+  .note { background: var(--soft); border: 1px solid #dfe4cf; border-radius: 10px; padding: 10px 14px; margin: 12px 0; font-size: 14px; }
+  sup { font-size: 10px; margin-left: 1px; } sup a { text-decoration: none; }
+  .srclist { font-size: 13px; columns: 2; column-gap: 28px; margin: 12px 0 0; padding-left: 26px; } .srclist li { break-inside: avoid; }
+  @media (max-width: 640px) { .srclist { columns: 1; } }
+  @media (max-width: 640px) { th:nth-child(4), td:nth-child(4) { display: none; } }
+  .steps { counter-reset: s; list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .steps li { counter-increment: s; background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 12px 14px 12px 52px; position: relative; margin: 0; }
+  .steps li::before { content: counter(s); position: absolute; left: 14px; top: 12px; width: 26px; height: 26px; border-radius: 50%; background: var(--forest); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .steps b { display: block; font-family: var(--serif); font-size: 17px; font-weight: 400; color: var(--forest); }
+  details { background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 10px 14px; margin: 8px 0; }
+  summary { cursor: pointer; font-weight: 600; } details p { margin: 8px 0 2px; }
+  .keybox { background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 12px 14px; line-height: 2.2; }
+  .jump { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 0; } .jump a { background: #fff; border: 1px solid var(--rule); border-radius: 999px; padding: 4px 12px; text-decoration: none; font-size: 14px; }
+  @media (max-width: 640px) { .steps { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div>
+    <div class="ttl"><svg class="logo" viewBox="0 0 32 32" fill="none" stroke="#4F6B45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 29V14"/><path d="M16 18c-6 0-9-3-9-8 6 0 9 3 9 8z"/><path d="M16 14c0-5 3-8 9-8 0 5-3 8-9 8z"/></svg><h1>Perennial Bed Planner</h1><span class="beta" title="Early test version: things may still change">Beta</span></div>
+    <div class="sub">All perennials · Zone 6B · Southern Michigan</div>
+  </div>
+  <div class="actions"><a class="btn" href="index.html">← Back to the planner</a></div>
+</header>
+<main>
+  <h1>Help</h1>
+  <p class="muted">How to use the Perennial Bed Planner (beta).</p>
+  <div class="jump"><a href="#start">Quick start</a><a href="#icons">What the icons mean</a><a href="#faq">Questions</a><a href="#facts">Where the facts come from</a><a href="#feedback">Feedback</a></div>
+
+  <h2 id="start">Quick start</h2>
+  <p>Work down the steps on the left of the planner. Want to see it walked through? Press <b>Guided tour</b> at the top of the planner. Just looking around? <b>Load an example garden</b> in step 1.</p>
+  <ol class="steps">
+    <li><b>Name your garden</b>Optional. It goes at the top of the planner and on your PDF guide.</li>
+    <li><b>What kind of garden?</b>Michigan natives, garden favorites or both, and the kinds of plants you like.</li>
+    <li><b>Plants to watch out for</b>Leave out plants that are toxic to pets or people, that deer eat, that need winter care, or that bother ragweed allergies.</li>
+    <li><b>Build your bed</b>A rectangle, a round island, or draw your own. Set the size with − and +.</li>
+    <li><b>Add objects</b>Paths, stepping stones, rocks, a birdbath, shrubs or trees. Plants are laid out around them.</li>
+    <li><b>Add the sun</b>Paint full sun (6+ hours), part shade (3 to 6) and shade (under 3) onto the bed.</li>
+  </ol>
+  <p>Then <b>pick your plants</b>: press <b>+ Add</b> on any plant and it's placed for you, or use <b>Plan it ▾ → Suggest a planting</b> to let the planner choose. When you're happy, press <b>Create PDF guide</b> for a printable plan, plant list and care calendar.</p>
+
+  <h2 id="icons">What the icons mean</h2>
+  <div class="keybox"><span class="ickey"><span class="ic ic-sun" data-k="sun" style="background:#F2C40C" data-tip="Full sun: 6 or more hours of direct sun a day"><svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="2.5" fill="currentColor"></circle><path d="M6 .8V2.4M6 9.6v1.6M.8 6h1.6M9.6 6h1.6M2.3 2.3 3.4 3.4M8.6 8.6l1.1 1.1M2.3 9.7 3.4 8.6M8.6 3.4l1.1-1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path></svg></span> full sun <span class="ic ic-sun" data-k="sun" style="background:#B5A153" data-tip="Part shade: 3 to 6 hours of direct sun a day"><svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="2.5" fill="currentColor"></circle><path d="M6 .8V2.4M6 9.6v1.6M.8 6h1.6M9.6 6h1.6M2.3 2.3 3.4 3.4M8.6 8.6l1.1 1.1M2.3 9.7 3.4 8.6M8.6 3.4l1.1-1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path></svg></span> part shade <span class="ic ic-sun" data-k="sun" style="background:#6E6E6E" data-tip="Shade: little or no direct sun, under 3 hours a day"><svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="2.5" fill="currentColor"></circle><path d="M6 .8V2.4M6 9.6v1.6M.8 6h1.6M9.6 6h1.6M2.3 2.3 3.4 3.4M8.6 8.6l1.1 1.1M2.3 9.7 3.4 8.6M8.6 3.4l1.1-1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path></svg></span> shade (blended if it takes more than one) <span class="ic ic-nat" data-k="nat" data-tip="Michigan native"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M10.6 1.4C5.2 1.2 1.6 3.9 1.7 8c0 .9.3 1.7.7 2.3.5-2.6 2.3-4.6 4.9-5.8-2.1 1.5-3.6 3.4-4.2 6 .5.2 1.1.3 1.7.3 4 0 6-3.4 5.8-9.4z" fill="currentColor"></path></svg></span></span> native <span class="ic ic-gar" data-k="gar" data-tip="Garden favorite (not native)">◆</span> garden favorite <span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span> daisy family <span class="ic ic-deer" data-k="deer" data-tip="Deer often or sometimes eat this"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 11V6.2M6 6.2 3.2 2M4.3 3.7 2 4.2M6 6.2 8.8 2M7.7 3.7 10 4.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"></path></svg></span> deer often eat <span class="ic ic-tox" data-k="tox" data-tip="Toxic plant">!</span> toxic <span class="ic ic-cold" data-k="cold" data-tip="Not winter-hardy here: needs winter care">❄</span> needs winter care</div>
+  <p class="muted">Hover over (or tap) any icon in the planner to see what it means.</p>
+
+  <h2 id="faq">Questions</h2>
+  <details open><summary>Is my plan saved?</summary><p>Yes, in this browser on this computer, automatically. To keep a copy, move it to another computer, or share it, press <b>Save plan</b>: it downloads a small file. Press <b>Open plan</b> to load it again.</p></details>
+  <details><summary>Why can't I put a plant in some spots?</summary><p>Each plant only goes where the light suits it. While you drag a plant, the spots that don't suit it turn gray. A plant may also need more room than is free.</p></details>
+  <details><summary>How do I move, copy or remove plants?</summary><p>Drag a plant to move it. Right-click any plant, object or empty spot for more choices. Shift-click a plant to select every plant of that kind. Undo and redo are just above the bed (Ctrl+Z and Ctrl+Y).</p></details>
+  <details><summary>Does it work on a phone?</summary><p>It's made for a computer, or an iPad or other tablet turned sideways. A phone can look around, but the bed is hard to work with on a small screen.</p></details>
+  <details><summary>How do I start over?</summary><p>Press <b>Start over</b> at the top of the planner. Save your plan first if you want to keep it.</p></details>
+
+  <h2 id="facts">Where the facts come from</h2>
+  <p>Plant facts come from Michigan sources first, such as Michigan native plant nurseries and garden centers, then university extension services in nearby states. Every source and photo credit is listed on the <a href="credits.html">Sources and photo credits</a> page.</p>
+
+  <h2 id="feedback">Feedback</h2>
+  <p>This is a beta, so things may still change. Found a mistake or have an idea? Email <a href="mailto:feedback@spreck79.com?subject=Perennial%20Bed%20Planner%20feedback">feedback@spreck79.com</a>. The link fills in the subject "Perennial Bed Planner feedback" for you.</p>
+  <p class="muted">Your email address is only used to reply to you. It's never added to a mailing list, shared, or used for anything else.</p>
+</main>
+<footer class="sitefoot">
+  <span>Perennial Bed Planner (beta) · Zone 6B · Southern Michigan · © 2026 <a href="https://spreck79.com" target="_blank" rel="noopener">spreck79</a> · <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a> (photos have their own licenses)</span>
+  <span class="footr"><a class="gh" href="https://github.com/spreck79/perennial-bed-planner" target="_blank" rel="noopener" title="See the code on GitHub"><img src="img/github.svg" alt="" width="18" height="18">GitHub</a><a class="s79" href="https://spreck79.com" target="_blank" rel="noopener"><span>A side quest by</span><img src="img/spreck79.svg" alt="spreck79" width="61" height="38"></a></span>
+</footer>
+</body>
+</html>
