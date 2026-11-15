@@ -11,6 +11,7 @@
     "spacing": 12,
     "bloom": [4.7, 6],
     "color": "Green and purple hooded flower",
+    "colors": ["purple", "green"],
     "hex": "#6E7F4A",
     "txt": "#FFFFFF",
     "light": "Part shade to shade",

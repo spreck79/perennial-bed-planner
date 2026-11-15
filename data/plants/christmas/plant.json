@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": null,
     "color": "Glossy evergreen fronds",
+    "colors": ["green"],
     "hex": "#3F7A45",
     "txt": "#FFFFFF",
     "light": "Part shade to shade; handles dry shade",

@@ -12,6 +12,7 @@
     "spacing": 18,
     "bloom": [6, 8.5],
     "color": "Soft lemon yellow",
+    "colors": ["yellow"],
     "hex": "#EBD660",
     "txt": "#2E3A2C",
     "light": "Full sun",

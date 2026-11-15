@@ -11,6 +11,7 @@
     "spacing": 15,
     "bloom": [4.5, 6.3],
     "color": "Bright yellow poppies",
+    "colors": ["yellow"],
     "hex": "#F2C230",
     "txt": "#2E3A2C",
     "light": "Part shade to shade",

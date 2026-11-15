@@ -11,6 +11,7 @@
     "spacing": 30,
     "bloom": null,
     "color": "Green vase, cinnamon-brown spikes",
+    "colors": ["green"],
     "hex": "#7D9A4A",
     "txt": "#FFFFFF",
     "light": "Part shade to sun; likes wet to moist soil",

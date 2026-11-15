@@ -12,6 +12,7 @@
     "spacing": 12,
     "bloom": [4.75, 6.4],
     "color": "White spikes, pink-tinged",
+    "colors": ["white", "pink"],
     "hex": "#F4E6EC",
     "txt": "#2E3A2C",
     "light": "Part shade to shade; moist, rich soil",

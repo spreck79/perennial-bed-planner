@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [6.8, 9.5],
     "color": "Lavender-blue spikes",
+    "colors": ["purple", "blue"],
     "hex": "#8F7CC8",
     "txt": "#FFFFFF",
     "light": "Full sun to part shade",

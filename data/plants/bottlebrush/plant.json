@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": [6.5, 8],
     "color": "Bristly green flower spikes",
+    "colors": ["green"],
     "hex": "#C8BE78",
     "txt": "#2E3A2C",
     "light": "Part shade to shade; handles dry shade",

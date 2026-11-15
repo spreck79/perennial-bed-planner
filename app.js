@@ -117,7 +117,7 @@
   // A new garden (first visit, Start over) is an empty rectangle with nothing on it; the steps build it up.
   function freshState() {
     return { shape: "rect", dims: {}, freePoly: null, freeView: "border", placements: [], seed: 7, fill: true, view: "codes",
-      filter: { q: "", height: "", month: "", sun: "" }, bloomFilter: "sel", bloomSort: "start",
+      filter: { q: "", height: "", sun: "", color: "", group: "season" }, bloomFilter: "sel", bloomSort: "start",
       name: "", prefs: { sun: ["full", "part", "shade"], origin: ["nat", "gar"], kinds: ["clump", "fern", "grass", "mat", "bulb"], toxic: true, daisy: true, deer: true, tender: true, v2: true }, waiting: {}, showGrid: true,
       objects: [], sun: { res: 0.5, cells: {} }, sunBase: null, showSun: true, fillMode: "ground", compSkip: [], freeCtrl: null, freeSmooth: true, done: {} };
   }
@@ -778,8 +778,8 @@
     if (f.height === "low" && !(p.hHi < 12)) return false;
     if (f.height === "mid" && !(h >= 12 && h <= 30)) return false;
     if (f.height === "tall" && !(p.hHi >= 30)) return false;
-    if (f.month) { const m = +f.month; if (!p.bloom || Math.min(p.bloom[1], m + 1) - Math.max(p.bloom[0], m) < 0.35) return false; }
-    if (f.q) { const q = f.q.toLowerCase(); if (!(p.name + " " + p.latin + " " + p.color).toLowerCase().includes(q)) return false; }
+    if (f.color && !(p.colors || []).includes(f.color)) return false;
+    if (f.q) { const q = f.q.toLowerCase(); if (!(p.name + " " + p.latin + " " + p.color + " " + (p.colors || []).join(" ")).toLowerCase().includes(q)) return false; }
     return true;
   }
   const SUNS = [["full", "Full sun (6+ hours)"], ["part", "Part shade (3–6 hours)"], ["shade", "Shade (under 3 hours)"]];
@@ -1165,7 +1165,7 @@
   // ---------- the Plants list ----------
   // Two tabs (everything that fits, or just what's in the bed), search, filters and a sort. Each plant shows
   // "+ Add", or a - count + stepper once it's in the bed. Every matching plant is listed; the column scrolls.
-  let showKey = false;
+  let showKey = false, libFoundSig = "", libFoundOpen = {};
   function renderLibrary() {
     const c = counts(), f = S.filter, tab = f.tab === "bed" ? "bed" : "all";
     const nMatch = PL.filter(matchesPrefs).length, inBed = PL.filter(p => c[p.id] > 0), outside = inBed.filter(p => !matchesPrefs(p)).length;
@@ -1184,14 +1184,82 @@
     const sorters = { name: (a, b) => a.name.localeCompare(b.name), height: (a, b) => Geo.hMean(a) - Geo.hMean(b) || a.name.localeCompare(b.name), bloom: (a, b) => (a.bloom ? a.bloom[0] : 99) - (b.bloom ? b.bloom[0] : 99) || a.name.localeCompare(b.name) };
     list.sort(sorters[f.sort] || sorters.name);
     $("#libN").textContent = list.length + (list.length === 1 ? " plant" : " plants");
-    $("#fReset").disabled = !(f.q || f.height || f.month || f.sun);
+    $("#fReset").disabled = !(f.q || f.height || f.sun || f.color);
+    renderColorDots();
     const box = $("#lib"); box.style.minHeight = box.offsetHeight + "px"; box.innerHTML = "";
     requestAnimationFrame(() => { box.style.minHeight = ""; });
     if (!list.length) {
-      box.innerHTML = `<div class="empty">${tab === "bed" && !inBed.length ? "Nothing in your bed yet. Switch to <b>All that fit</b> and add some plants." : "No plants match. Try clearing the search or the height and month filters."}</div>`;
+      box.innerHTML = `<div class="empty">${tab === "bed" && !inBed.length ? "Nothing in your bed yet. Switch to <b>All that fit</b> and add some plants." : "No plants match. Try Reset filters."}</div>`;
       return;
     }
-    list.forEach(p => {
+    // folding groups by bloom season (or one plain list); a search or a color opens every group with a match
+    const gby = GROUPINGS[f.group] ? f.group : f.group === "none" ? "none" : "season";
+    const groups = gby === "none" ? [{ key: "", plants: list }] : GROUPINGS[gby].groups.map(([key, t, sub, test]) => ({ key: gby + ":" + key, t, sub, plants: list.filter(test) })).filter(g => g.plants.length);
+    if (!S.libOpen || S.libOpen.spring !== undefined) S.libOpen = {};   // (older saves kept the open groups under bare names)
+    const open = S.libOpen, forced = !!(f.q || f.color), sig = (f.q || "") + "|" + (f.color || "");
+    // while searching or picking a color, every group with a match starts open, and can still be folded
+    if (forced && libFoundSig !== sig) { libFoundSig = sig; libFoundOpen = {}; }
+    groups.forEach((g, gi) => {
+      if (g.key) {
+        if (open[g.key] === undefined && gi === 0 && !groups.some(x => open[x.key] !== undefined)) open[g.key] = true;   // first look: the first group open
+        const isOpen = forced ? libFoundOpen[g.key] !== false : !!open[g.key], h = document.createElement("button");
+        h.type = "button"; h.className = "lgroup" + (isOpen ? " open" : "");
+        h.innerHTML = `<span class="lg-arr">▸</span><span class="lg-t">${g.t}</span>${g.sub ? `<span class="lg-sub">${g.sub}</span>` : ""}<span class="lg-n">${g.plants.length}</span>`;
+        h.onclick = () => { if (forced) libFoundOpen[g.key] = !isOpen; else open[g.key] = !open[g.key]; renderLibrary(); save(); };
+        box.appendChild(h);
+        if (!isOpen) return;
+      }
+      g.plants.forEach(p => box.appendChild(plantCard(p, c)));
+    });
+  }
+  // the Bloom season groups, by the month a plant starts blooming
+  const bStart = p => p.bloom ? p.bloom[0] : null;
+  const SEASONS = [
+    ["spring", "Spring", "March to May", p => bStart(p) !== null && bStart(p) < 6],
+    ["early", "Early summer", "June", p => bStart(p) >= 6 && bStart(p) < 7],
+    ["mid", "Midsummer", "July and August", p => bStart(p) >= 7 && bStart(p) < 9],
+    ["fall", "Fall", "September on", p => bStart(p) >= 9],
+    ["leaves", "Grown for leaves", "ferns, grasses, sedges", p => bStart(p) === null]];
+  // the other ways to group the list
+  const GROUPINGS = {
+    season: { label: "Bloom season", groups: SEASONS },
+    type: { label: "Plant type", groups: [
+      ["clump", "Perennials", "flowers and leafy clumps", p => p.kind === "clump"],
+      ["grass", "Grasses and sedges", "", p => p.kind === "grass"],
+      ["fern", "Ferns", "", p => p.kind === "fern"],
+      ["mat", "Groundcovers", "low and spreading", p => p.kind === "mat"],
+      ["bulb", "Bulbs", "plant in fall", p => p.kind === "bulb"]] },
+    origin: { label: "Native status", groups: [
+      ["nat", "Michigan natives", "from a native nursery", p => p.native && !p.gfav],
+      ["both", "Natives sold at garden centers", "both marks", p => p.native && p.gfav],
+      ["gar", "Garden favorites", "not native", p => !p.native]] },
+    light: { label: "Light", groups: [
+      ["full", "Full sun", "6 or more hours", p => p.sun.includes("full")],
+      ["part", "Part shade", "3 to 6 hours", p => p.sun.includes("part")],
+      ["shade", "Shade", "under 3 hours", p => p.sun.includes("shade")]] },
+    deer: { label: "Deer", groups: [
+      ["ok", "Deer seldom eat", "Rutgers A or B", p => p.deer === "A" || p.deer === "B"],
+      ["some", "Deer sometimes eat", "Rutgers C", p => p.deer === "C"],
+      ["often", "Deer often eat", "Rutgers D", p => p.deer === "D"],
+      ["nr", "Not rated", "no Rutgers rating", p => !p.deer]] },
+    cleanup: { label: "Fall cleanup", groups: [
+      ["stand", "Leave standing for winter", "cut back in spring", p => !inCut(p, "fall") && !inCut(p, "bulb") && !inCut(p, "ephemeral")],
+      ["fall", "Cut back in fall", "after a few hard frosts", p => inCut(p, "fall")],
+      ["fades", "Fades away by summer", "bulbs and spring ephemerals", p => inCut(p, "bulb") || inCut(p, "ephemeral")]] },
+  };
+  const inCut = (p, g) => !!(window.CARE_DATA && window.CARE_DATA.CUT[g] && window.CARE_DATA.CUT[g].includes(p.id));
+  const COLORS = [["white", "White", "#F6F3EA"], ["yellow", "Yellow", "#F2C94C"], ["orange", "Orange", "#E8833A"], ["red", "Red", "#C8343A"], ["pink", "Pink", "#E58BB5"], ["purple", "Purple", "#8E5BB5"], ["blue", "Blue", "#5B7FD1"], ["green", "Green flowers or leaves", "#6E9B5A"]];
+  function renderColorDots() {
+    const box = $("#fColor"); if (!box) return; box.innerHTML = "";
+    COLORS.forEach(([v, t, hex]) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "lc-dot" + (S.filter.color === v ? " on" : "");
+      b.style.background = hex; b.title = S.filter.color === v ? t + " (click again to show all colors)" : t; b.setAttribute("aria-label", t);
+      b.onclick = () => { S.filter.color = S.filter.color === v ? "" : v; renderLibrary(); save(); };
+      box.appendChild(b);
+    });
+  }
+  function plantCard(p, c) {
+    {
       const n = c[p.id] || 0, on = n > 0, d = document.createElement("div");
       d.className = "pcard" + (on ? " on" : ""); d.dataset.id = p.id;
       d.innerHTML = `<img src="${imgSrc(p.id)}" alt=""><div class="pc-main"><div class="nm">${esc(p.name)}${icons(p, !matchesPrefs(p))}</div><div class="meta">${Ch.heightText(p)} · ${esc(Ch.bloomText(p))}</div></div>` +
@@ -1203,9 +1271,13 @@
       // pointing at a plant shades the parts of the bed whose light doesn't suit it
       d.onmouseenter = () => { setHover(p.id); if (!libDrag && window.Plan.zonesForSun) window.Plan.zonesForSun(p.sun, true); };
       d.onmouseleave = () => { setHover(null); if (!libDrag && window.Plan.zonesOff) window.Plan.zonesOff(); };
-      box.appendChild(d);
-    });
+      return d;
+    }
   }
+  const refreshLibGroup = bindSelectBtn("libGroup",
+    () => Object.entries(GROUPINGS).map(([value, g]) => ({ value, label: g.label })).concat([{ value: "none", label: "No groups" }]),
+    () => S.filter.group || "season",
+    v => { S.filter.group = v; renderLibrary(); save(); });
   const refreshLibSort = bindSelectBtn("libSort",
     () => [{ value: "name", label: "A to Z" }, { value: "height", label: "Short to tall" }, { value: "bloom", label: "First to bloom" }],
     () => S.filter.sort || "name",
@@ -1706,10 +1778,6 @@
     () => [{ value: "", label: "Any light" }, { value: "full", label: "Full sun" }, { value: "part", label: "Part shade" }, { value: "shade", label: "Shade" }],
     () => S.filter.sun || "",
     v => { S.filter.sun = v; renderLibrary(); save(); });
-  const refreshMonth = bindSelectBtn("fMonth",
-    () => [{ value: "", label: "Any bloom month" }].concat(Ch.MONTHS.map((m, i) => ({ value: String(4 + i), label: "Blooms in " + m }))),
-    () => S.filter.month || "",
-    v => { S.filter.month = v; renderLibrary(); save(); });
   const refreshBloomSort = bindSelectBtn("bloomSort",
     () => [{ value: "start", label: "by first bloom" }, { value: "name", label: "by name" }, { value: "height", label: "by height" }],
     () => S.bloomSort || "start",
@@ -1886,7 +1954,7 @@
   });
   $("#q").addEventListener("input", e => { S.filter.q = e.target.value; renderLibrary(); save(); });
   // one click puts the Plants filters back to showing everything (the sort order stays)
-  $("#fReset").onclick = () => { Object.assign(S.filter, { q: "", height: "", month: "", sun: "" }); $("#q").value = ""; refreshHeight(); refreshMonth(); refreshSun(); renderLibrary(); save(); };
+  $("#fReset").onclick = () => { Object.assign(S.filter, { q: "", height: "", sun: "", color: "" }); $("#q").value = ""; refreshHeight(); refreshSun(); renderLibrary(); save(); };
   $("#bloomFilter").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; S.bloomFilter = b.dataset.f; document.querySelectorAll("#bloomFilter button").forEach(x => x.classList.toggle("on", x === b)); renderBloom(); save(); });
   // groundcovers to offer: low plants that suit the step-2 choices (sun, origin, safety)
   function groundcovers() {
@@ -2486,7 +2554,7 @@
     }
     armed = null; selIdx = -1; hoverId = null;
     document.querySelectorAll("#bloomFilter button").forEach(x => x.classList.toggle("on", x.dataset.f === S.bloomFilter));
-    refreshBloomSort(); $("#q").value = S.filter.q || ""; refreshHeight(); refreshMonth(); refreshSun(); refreshLibSort();
+    refreshBloomSort(); $("#q").value = S.filter.q || ""; refreshHeight(); refreshSun(); refreshLibSort(); refreshLibGroup();
     renderName();
     fullRender();
   }

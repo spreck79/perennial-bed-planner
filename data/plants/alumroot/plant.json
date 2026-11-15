@@ -11,6 +11,7 @@
     "spacing": 15,
     "bloom": [5.3, 7.3],
     "color": "Green-cream flower wands over scalloped leaves",
+    "colors": ["white", "green"],
     "hex": "#A9B47C",
     "txt": "#2E3A2C",
     "light": "Full sun to part shade",

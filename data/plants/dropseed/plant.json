@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": [8, 9.5],
     "color": "Airy, fragrant pink-tan sprays",
+    "colors": ["pink"],
     "hex": "#C9B48A",
     "txt": "#2E3A2C",
     "light": "Full sun",

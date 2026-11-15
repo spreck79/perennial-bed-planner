@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [5.3, 6.5],
     "color": "Pale lavender clusters",
+    "colors": ["purple"],
     "hex": "#CDBEE3",
     "txt": "#2E3A2C",
     "light": "Part shade to shade",

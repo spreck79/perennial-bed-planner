@@ -11,6 +11,7 @@
     "spacing": 30,
     "bloom": null,
     "color": "Tall green vase of fronds",
+    "colors": ["green"],
     "hex": "#4F8A4A",
     "txt": "#FFFFFF",
     "light": "Part shade to shade; likes moist soil",

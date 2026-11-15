@@ -11,6 +11,7 @@
     "spacing": 12,
     "bloom": [4.5, 6],
     "color": "Red and yellow nodding bells",
+    "colors": ["yellow", "red"],
     "hex": "#D9443A",
     "txt": "#FFFFFF",
     "light": "Sun, part shade or shade",

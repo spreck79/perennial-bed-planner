@@ -11,6 +11,7 @@
     "spacing": 21,
     "bloom": [8, 11],
     "color": "White, blushed pink",
+    "colors": ["white", "pink"],
     "hex": "#EADCE0",
     "txt": "#2E3A2C",
     "light": "Part shade; moist to wet soil",

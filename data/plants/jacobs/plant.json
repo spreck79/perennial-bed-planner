@@ -11,6 +11,7 @@
     "spacing": 13,
     "bloom": [4.7, 6.3],
     "color": "Sky-blue bells",
+    "colors": ["blue"],
     "hex": "#8DA2DE",
     "txt": "#FFFFFF",
     "light": "Part shade; moist soil",

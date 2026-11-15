@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [8.3, 10.5],
     "color": "Pink heads aging to rust",
+    "colors": ["pink"],
     "hex": "#B5536A",
     "txt": "#FFFFFF",
     "light": "Full sun",

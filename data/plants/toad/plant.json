@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": [9, 11],
     "color": "Purple-spotted orchid-like flowers",
+    "colors": ["purple"],
     "hex": "#B07AB8",
     "txt": "#FFFFFF",
     "light": "Part shade to shade; moist, rich soil",

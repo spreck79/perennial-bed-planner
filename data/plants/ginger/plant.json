@@ -12,6 +12,7 @@
     "spacing": 12,
     "bloom": null,
     "color": "Velvety heart-shaped leaves",
+    "colors": ["green"],
     "hex": "#6F9A5A",
     "txt": "#FFFFFF",
     "light": "Part shade to shade",

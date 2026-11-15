@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": null,
     "color": "Bright green fans, black stems",
+    "colors": ["green"],
     "hex": "#7FAA6C",
     "txt": "#FFFFFF",
     "light": "Part shade to shade; rich, moist soil",

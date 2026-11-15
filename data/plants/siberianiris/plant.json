@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [5.7, 6.5],
     "color": "Blue-violet flowers",
+    "colors": ["purple", "blue"],
     "hex": "#4C4FB2",
     "txt": "#FFFFFF",
     "light": "Full sun to part shade",

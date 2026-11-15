@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [4.3, 5.9],
     "color": "Tiny blue flowers, silver leaves",
+    "colors": ["blue"],
     "hex": "#C8D4CB",
     "txt": "#2E3A2C",
     "light": "Part shade to shade; moist soil",

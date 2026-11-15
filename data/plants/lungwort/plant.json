@@ -11,6 +11,7 @@
     "spacing": 15,
     "bloom": [4, 5.5],
     "color": "Pink buds open to blue",
+    "colors": ["pink", "blue"],
     "hex": "#7C8ED6",
     "txt": "#FFFFFF",
     "light": "Part shade to shade",

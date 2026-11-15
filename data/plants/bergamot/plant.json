@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": [7, 9],
     "color": "Lavender pom-poms",
+    "colors": ["purple"],
     "hex": "#B58AD0",
     "txt": "#FFFFFF",
     "light": "Sun to light shade; needs about 4 hours of sun",

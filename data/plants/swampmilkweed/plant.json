@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": [7, 8.5],
     "color": "Rosy pink, vanilla-scented",
+    "colors": ["pink"],
     "hex": "#D46A92",
     "txt": "#FFFFFF",
     "light": "Full sun to part shade",

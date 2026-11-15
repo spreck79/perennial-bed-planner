@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [4.2, 5.7],
     "color": "Pink flower clusters on thick stems",
+    "colors": ["pink"],
     "hex": "#D77A9A",
     "txt": "#FFFFFF",
     "light": "Part shade; average soil",

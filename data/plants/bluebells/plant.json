@@ -12,6 +12,7 @@
     "spacing": 15,
     "bloom": [4, 5.9],
     "color": "Pink buds open to blue",
+    "colors": ["pink", "blue"],
     "hex": "#4E73CC",
     "txt": "#FFFFFF",
     "light": "Part shade to shade; moist soil",

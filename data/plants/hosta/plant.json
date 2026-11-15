@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": [7, 8],
     "color": "Lavender or white spikes; grown for leaves",
+    "colors": ["white", "purple", "green"],
     "hex": "#B3A6D9",
     "txt": "#2E3A2C",
     "light": "Part shade to shade",

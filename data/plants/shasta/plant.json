@@ -12,6 +12,7 @@
     "spacing": 18,
     "bloom": [6, 8.5],
     "color": "White with yellow centers",
+    "colors": ["white"],
     "hex": "#F7F5EC",
     "txt": "#2E3A2C",
     "light": "Full sun",

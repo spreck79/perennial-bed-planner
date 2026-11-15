@@ -11,6 +11,7 @@
     "spacing": 13,
     "bloom": [5, 7.6],
     "color": "Pink wands; purple or lime leaves",
+    "colors": ["pink"],
     "hex": "#9C566F",
     "txt": "#FFFFFF",
     "light": "Part shade; well-drained soil, not soggy",

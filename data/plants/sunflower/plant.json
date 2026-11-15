@@ -12,6 +12,7 @@
     "spacing": 30,
     "bloom": [7, 10],
     "color": "Yellow daisies",
+    "colors": ["yellow"],
     "hex": "#F2C230",
     "txt": "#2E3A2C",
     "light": "Part shade to sun; dry to average soil",

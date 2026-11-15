@@ -11,6 +11,7 @@
     "spacing": 12,
     "bloom": [8, 9.8],
     "color": "Blue flower spikes",
+    "colors": ["blue"],
     "hex": "#4F67C9",
     "txt": "#FFFFFF",
     "light": "Part shade to sun",

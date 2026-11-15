@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": [7.5, 10],
     "color": "Pink spikes",
+    "colors": ["pink"],
     "hex": "#E48DB8",
     "txt": "#2E3A2C",
     "light": "Part shade to sun; blooms best with 4+ hours of sun",

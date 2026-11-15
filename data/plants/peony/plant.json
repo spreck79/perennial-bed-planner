@@ -11,6 +11,7 @@
     "spacing": 36,
     "bloom": [5.5, 6.3],
     "color": "Pink, white or red, fragrant",
+    "colors": ["white", "red", "pink"],
     "hex": "#F2A7BB",
     "txt": "#2E3A2C",
     "light": "Full sun",

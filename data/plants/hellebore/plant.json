@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [4, 5],
     "color": "Plum, pink, cream or white",
+    "colors": ["white", "pink", "purple"],
     "hex": "#9E5A7D",
     "txt": "#FFFFFF",
     "light": "Part shade to shade",

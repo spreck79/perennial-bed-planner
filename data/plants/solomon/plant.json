@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [5, 6],
     "color": "Creamy bells under arching stems",
+    "colors": ["white"],
     "hex": "#E6EBD3",
     "txt": "#2E3A2C",
     "light": "Part shade to shade",

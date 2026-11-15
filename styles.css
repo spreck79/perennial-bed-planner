@@ -994,3 +994,27 @@ body { background: linear-gradient(rgba(246,243,234,.35), rgba(246,243,234,.35))
 #sunask .sa-opt.on .sa-box { background: var(--forest); border-color: var(--forest); }
 #sunask .sa-opt.on .sa-box::after { content: "✓"; color: #fff; font-size: 12px; font-weight: 700; position: absolute; left: 2px; top: -2px; }
 #sunask .hfoot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 16px; font-size: 13px; color: var(--muted); }
+
+/* plant list: flower color dots and bloom season groups */
+.libcolor { margin: 2px 0 2px; }
+.lc-lab { font-size: 12px; color: var(--muted); font-weight: 600; margin: 4px 0 5px; }
+.lc-dots { display: flex; gap: 8px; align-items: center; }
+.lc-dot { width: 24px; height: 24px; border-radius: 50%; border: 1px solid #c9c4b3; padding: 0; cursor: pointer; flex: none; }
+.lc-dot:hover { transform: scale(1.1); }
+.lc-dot.on { border: 3px solid var(--forest-d); box-shadow: 0 0 0 2px #fff inset; }
+.libsort2 { border-top: 1px solid var(--rule); padding-top: 8px; margin-top: 6px; }
+.lgroup { display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 10px; margin: 8px 0 4px; background: #EEF2E6; border: 0; border-radius: 10px; cursor: pointer; font: inherit; color: var(--forest-d); text-align: left; }
+.lgroup:hover { background: #E4EBD8; }
+.lg-arr { display: inline-block; width: 12px; transition: transform .15s; }
+.lgroup.open .lg-arr { transform: rotate(90deg); }
+.lg-t { font-weight: 700; }
+.lg-sub { font-size: 12px; color: var(--muted); }
+.lg-n { margin-left: auto; background: var(--forest); color: #fff; border-radius: 10px; padding: 1px 8px; font-size: 12px; font-weight: 700; }
+.libsort2 { white-space: nowrap; gap: 5px; }
+.libsort2 .selbtn { white-space: nowrap; padding-left: 8px; padding-right: 22px; }
+.libsort2 .libn { margin-left: auto; white-space: nowrap; }
+.lc-lab { display: flex; align-items: baseline; }
+.lc-lab .libn { margin-left: auto; font-weight: 600; }
+.lg-t { white-space: nowrap; }
+.lg-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1 1 auto; }
+.lg-n { flex: none; }

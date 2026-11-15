@@ -12,6 +12,7 @@
     "spacing": 15,
     "bloom": [7, 8.5],
     "color": "Purple bottlebrush spikes",
+    "colors": ["purple"],
     "hex": "#9B59B6",
     "txt": "#FFFFFF",
     "light": "Full sun to light shade",

@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [7, 9],
     "color": "Small white flower heads",
+    "colors": ["white"],
     "hex": "#EFEDE4",
     "txt": "#2E3A2C",
     "light": "Full sun to part shade",

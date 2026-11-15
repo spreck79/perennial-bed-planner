@@ -12,6 +12,7 @@
     "spacing": 18,
     "bloom": [4.3, 5.3],
     "color": "Pink, lavender or white carpet",
+    "colors": ["white", "pink", "purple"],
     "hex": "#E7A1C8",
     "txt": "#2E3A2C",
     "light": "Full sun",

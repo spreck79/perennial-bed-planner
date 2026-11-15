@@ -12,6 +12,7 @@
     "spacing": 30,
     "bloom": [7.5, 9.5],
     "color": "Dusty mauve-pink domes",
+    "colors": ["pink"],
     "hex": "#C38BA8",
     "txt": "#2E3A2C",
     "light": "Full sun to part shade",

@@ -12,6 +12,7 @@
     "spacing": 24,
     "bloom": [6, 10.5],
     "color": "Many colors (red shown)",
+    "colors": ["white", "yellow", "orange", "red", "pink", "purple"],
     "hex": "#CC3D3F",
     "txt": "#FFFFFF",
     "light": "Sun to part shade; rich, moist, well-drained soil",

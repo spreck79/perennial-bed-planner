@@ -13,6 +13,7 @@
     "spacing": 10,
     "bloom": [4, 4.9],
     "color": "Yellow, white or bicolor trumpets",
+    "colors": ["white", "yellow"],
     "hex": "#F2C230",
     "txt": "#2E3A2C",
     "light": "Full sun to part shade",

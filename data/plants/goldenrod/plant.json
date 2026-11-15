@@ -12,6 +12,7 @@
     "spacing": 18,
     "bloom": [8, 11],
     "color": "Bright yellow",
+    "colors": ["yellow"],
     "hex": "#EFCF4A",
     "txt": "#2E3A2C",
     "light": "Part shade to shade; average soil",

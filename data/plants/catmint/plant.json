@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": [5.5, 9],
     "color": "Lavender-blue haze",
+    "colors": ["purple", "blue"],
     "hex": "#9AA0D8",
     "txt": "#2E3A2C",
     "light": "Full sun to part shade",

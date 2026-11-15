@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [5.7, 7.7],
     "color": "Chartreuse sprays",
+    "colors": ["yellow", "green"],
     "hex": "#C5D86A",
     "txt": "#2E3A2C",
     "light": "Part shade to sun; moist, well-drained soil",

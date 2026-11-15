@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": [7, 8.3],
     "color": "Tall white flower candles",
+    "colors": ["white"],
     "hex": "#F3F1E6",
     "txt": "#2E3A2C",
     "light": "Part shade to shade; rich soil",

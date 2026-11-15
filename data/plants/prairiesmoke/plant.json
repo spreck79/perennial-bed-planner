@@ -11,6 +11,7 @@
     "spacing": 12,
     "bloom": [4.7, 6],
     "color": "Nodding pink flowers, feathery seed heads",
+    "colors": ["pink"],
     "hex": "#C9708F",
     "txt": "#FFFFFF",
     "light": "Full sun",

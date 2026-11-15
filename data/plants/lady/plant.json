@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": null,
     "color": "Lacy, light green fronds",
+    "colors": ["green"],
     "hex": "#6BA55A",
     "txt": "#FFFFFF",
     "light": "Part shade to shade; moist soil",

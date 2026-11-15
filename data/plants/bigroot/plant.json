@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": [5.2, 7],
     "color": "Magenta-pink",
+    "colors": ["pink"],
     "hex": "#D86AA8",
     "txt": "#FFFFFF",
     "light": "Part shade to sun; handles dry shade",

@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [5.5, 7],
     "color": "White tubular flowers",
+    "colors": ["white"],
     "hex": "#F1EDF2",
     "txt": "#2E3A2C",
     "light": "Full sun to part shade",

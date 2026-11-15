@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [5.5, 7.5],
     "color": "Deep violet-blue spikes",
+    "colors": ["purple", "blue"],
     "hex": "#4B3E9E",
     "txt": "#FFFFFF",
     "light": "Full sun",

@@ -19,7 +19,7 @@
 <link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <title>Perennial Bed Planner</title>
-<link rel="stylesheet" href="styles.css?v=9">
+<link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body class="planner">
 <header class="top">
@@ -133,12 +133,13 @@
       <div class="libkey" id="libKey" hidden></div>
       <div class="libtabs" id="libTabs"></div>
       <div class="filters">
-        <div class="row tight qrow"><input type="search" id="q" placeholder="Search by name"><button type="button" class="btn small" id="fReset" title="Clear the search, height, bloom month and light filters">Reset filters</button></div>
+        <div class="row tight qrow"><input type="search" id="q" placeholder="Search name or color"><button type="button" class="btn small" id="fReset" title="Clear the search, light, height and color filters">Reset filters</button></div>
         <div class="row tight">
+          <button type="button" class="btn small selbtn" id="fSun" style="flex:1">Any light</button>
           <button type="button" class="btn small selbtn" id="fHeight" style="flex:1">Any height</button>
-          <button type="button" class="btn small selbtn" id="fMonth" style="flex:1">Any bloom month</button>
         </div>
-        <div class="libsort"><button type="button" class="btn small selbtn" id="fSun">Any light</button> Sort <button type="button" class="btn small selbtn" id="libSort">A to Z</button><span class="libn" id="libN"></span></div>
+        <div class="libcolor"><div class="lc-lab">Flower color<span class="libn" id="libN"></span></div><div class="lc-dots" id="fColor"></div></div>
+        <div class="libsort libsort2">Group by <button type="button" class="btn small selbtn" id="libGroup">Bloom season</button> Sort <button type="button" class="btn small selbtn" id="libSort">A to Z</button></div>
       </div>
       <div class="lib" id="lib"></div>
     </section>

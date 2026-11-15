@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": null,
     "color": "Silver, burgundy and green fronds",
+    "colors": ["green"],
     "hex": "#9DB7A5",
     "txt": "#2E3A2C",
     "light": "Part shade to shade; moist soil",

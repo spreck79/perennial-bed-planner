@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [6, 8],
     "color": "Lavender-purple, fragrant",
+    "colors": ["purple"],
     "hex": "#9C8BD1",
     "txt": "#FFFFFF",
     "light": "Full sun",

@@ -11,6 +11,7 @@
     "spacing": 27,
     "bloom": [6, 11],
     "color": "Violet-blue, white eye",
+    "colors": ["purple", "blue"],
     "hex": "#8F86DA",
     "txt": "#FFFFFF",
     "light": "Part shade to sun; blooms best with 4+ hours",

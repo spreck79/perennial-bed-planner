@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": [7, 9.3],
     "color": "Fragrant pink, white or lavender heads",
+    "colors": ["white", "pink", "purple"],
     "hex": "#E58FBF",
     "txt": "#2E3A2C",
     "light": "Full sun to part shade",

@@ -12,6 +12,7 @@
     "spacing": 15,
     "bloom": [5.5, 7.5],
     "color": "Bright yellow daisies",
+    "colors": ["yellow"],
     "hex": "#F2C230",
     "txt": "#2E3A2C",
     "light": "Full sun",

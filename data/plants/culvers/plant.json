@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": [7, 9],
     "color": "White candle spires",
+    "colors": ["white"],
     "hex": "#EDEFF5",
     "txt": "#2E3A2C",
     "light": "Sun to light shade; needs about 4 hours of sun",

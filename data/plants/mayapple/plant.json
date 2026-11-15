@@ -12,6 +12,7 @@
     "spacing": 18,
     "bloom": [5, 5.7],
     "color": "White flower hidden under the leaves",
+    "colors": ["white"],
     "hex": "#F4F1EA",
     "txt": "#2E3A2C",
     "light": "Part shade to shade",

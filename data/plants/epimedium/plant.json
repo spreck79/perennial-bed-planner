@@ -11,6 +11,7 @@
     "spacing": 15,
     "bloom": [4.3, 5.7],
     "color": "Dainty yellow, pink or white",
+    "colors": ["white", "yellow", "pink"],
     "hex": "#F0C75E",
     "txt": "#2E3A2C",
     "light": "Part shade to shade; handles dry shade once established",

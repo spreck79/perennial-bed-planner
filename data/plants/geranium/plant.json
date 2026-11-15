@@ -11,6 +11,7 @@
     "spacing": 15,
     "bloom": [5, 7],
     "color": "Pink-lavender",
+    "colors": ["pink", "purple"],
     "hex": "#D3A2D3",
     "txt": "#2E3A2C",
     "light": "Sun to part shade; adaptable",

@@ -12,6 +12,7 @@
     "spacing": 10,
     "bloom": null,
     "color": "Soft green, grass-like",
+    "colors": ["green"],
     "hex": "#B9D39A",
     "txt": "#2E3A2C",
     "light": "Part shade to shade; handles dry shade under trees",

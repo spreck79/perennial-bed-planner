@@ -12,6 +12,7 @@
     "spacing": 24,
     "bloom": [8, 10.3],
     "color": "Yellow daisies with a button center",
+    "colors": ["yellow"],
     "hex": "#E8A21F",
     "txt": "#2E3A2C",
     "light": "Full sun",

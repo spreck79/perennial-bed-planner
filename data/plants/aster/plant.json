@@ -12,6 +12,7 @@
     "spacing": 18,
     "bloom": [9, 11],
     "color": "Pale blue-lavender",
+    "colors": ["purple", "blue"],
     "hex": "#C2C5EE",
     "txt": "#2E3A2C",
     "light": "Part shade; average soil",

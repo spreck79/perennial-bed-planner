@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [5.3, 6.2],
     "color": "Purple, blue, yellow or white",
+    "colors": ["white", "yellow", "purple", "blue"],
     "hex": "#7E68C2",
     "txt": "#FFFFFF",
     "light": "Full sun",

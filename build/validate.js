@@ -90,6 +90,8 @@ function validate(plants, readErrors) {
     if (!("bloom" in f)) E("missing 'bloom' (use null for a foliage plant)");
     else if (f.bloom !== null && !(isPair(f.bloom, 3, 12) && f.bloom[0] < f.bloom[1])) E("bloom must be [start, end] months between 3 and 12, start before end, or null");
     for (const k of ["hex", "txt"]) if (!/^#[0-9A-Fa-f]{6}$/.test(f[k] || "")) E(`'${k}' must be a color like #A1B2C3`);
+    { const CL = ["white", "yellow", "orange", "red", "pink", "purple", "blue", "green"];
+      if (!Array.isArray(f.colors) || !f.colors.length || f.colors.some(c => !CL.includes(c)) || new Set(f.colors).size !== f.colors.length) E("'colors' must list one or more of " + CL.join(", ") + " (each once): the flower colors for the color filter; green also means grown for its leaves"); }
     if (!Array.isArray(f.sun) || !f.sun.length || f.sun.some(s => !SUNS.includes(s)) || new Set(f.sun).size !== f.sun.length) E("'sun' must list one or more of full, part, shade (each once)");
     if ("deer" in f && !["A", "B", "C", "D"].includes(f.deer)) E("'deer' must be the Rutgers rating A, B, C or D (or left out if not rated)");
     if ("squirrels" in f && (f.squirrels !== true || f.kind !== "bulb")) E("'squirrels' is only for bulbs squirrels dig up, and must be true");

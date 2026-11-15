@@ -11,6 +11,7 @@
     "spacing": 36,
     "bloom": [6, 7],
     "color": "Big creamy-white plumes",
+    "colors": ["white"],
     "hex": "#F1ECD8",
     "txt": "#2E3A2C",
     "light": "Part shade to shade; best in light shade, takes some sun if the soil stays moist",

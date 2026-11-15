@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [6, 8.5],
     "color": "Pink or white pincushions",
+    "colors": ["white", "pink"],
     "hex": "#D99AB0",
     "txt": "#2E3A2C",
     "light": "Part shade; moist soil",

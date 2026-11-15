@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [6.5, 8],
     "color": "Gold, orange, red or pink",
+    "colors": ["yellow", "orange", "red", "pink"],
     "hex": "#F2A33A",
     "txt": "#2E3A2C",
     "light": "Full sun to part shade",

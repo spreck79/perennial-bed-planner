@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": null,
     "color": "Copper-orange new fronds, dark green later",
+    "colors": ["green"],
     "hex": "#C07A4A",
     "txt": "#FFFFFF",
     "light": "Part shade to shade; moist soil",

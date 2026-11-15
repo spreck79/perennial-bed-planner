@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": [6, 7.5],
     "color": "Rose-pink bells with purple spots",
+    "colors": ["pink"],
     "hex": "#C9509A",
     "txt": "#FFFFFF",
     "light": "Sun to part shade",

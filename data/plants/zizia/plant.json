@@ -11,6 +11,7 @@
     "spacing": 15,
     "bloom": [5, 6.5],
     "color": "Flat yellow flower clusters",
+    "colors": ["yellow"],
     "hex": "#E7CB3A",
     "txt": "#2E3A2C",
     "light": "Full sun to part shade",

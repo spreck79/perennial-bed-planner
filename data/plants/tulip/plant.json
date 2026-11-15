@@ -13,6 +13,7 @@
     "spacing": 10,
     "bloom": [4.5, 5.5],
     "color": "Red, pink, yellow or orange cups",
+    "colors": ["yellow", "orange", "red", "pink"],
     "hex": "#C8324B",
     "txt": "#FFFFFF",
     "light": "Full sun",

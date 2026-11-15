@@ -11,6 +11,7 @@
     "spacing": 12,
     "bloom": [7.5, 9.5],
     "color": "Scarlet red spikes",
+    "colors": ["red"],
     "hex": "#C8102E",
     "txt": "#FFFFFF",
     "light": "Part shade to sun",

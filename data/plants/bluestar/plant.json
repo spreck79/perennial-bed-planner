@@ -11,6 +11,7 @@
     "spacing": 30,
     "bloom": [5, 6.5],
     "color": "Pale blue star-shaped flowers; golden fall leaves",
+    "colors": ["blue"],
     "hex": "#9DB8DE",
     "txt": "#2E3A2C",
     "light": "Full sun to part shade; blooms best in sun and may flop in deep shade",

@@ -12,6 +12,7 @@
     "spacing": 24,
     "bloom": [8.5, 10.5],
     "color": "Purple with gold centers",
+    "colors": ["purple"],
     "hex": "#8A5FC2",
     "txt": "#FFFFFF",
     "light": "Full sun to part shade",

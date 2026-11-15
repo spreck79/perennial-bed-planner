@@ -82,6 +82,7 @@ Top level (all required except `example` and `sources`, nothing else allowed):
 | `spacing` | number (inches) | yes | Center-to-center spacing. More than 0. |
 | `bloom` | `[start, end]` months, or `null` | yes (may be `null`) | Months between 3 and 12, start before end. `null` = grown for its foliage. |
 | `color` | string | yes | Flower or leaf color in words. |
+| `colors` | array | yes | The plant-list color filter: one or more of `white`, `yellow`, `orange`, `red`, `pink`, `purple`, `blue`, `green`, each once. Every flower color the plant comes in; `green` for green flowers or a plant grown for its leaves. |
 | `hex` | color | yes | The plant's color on the plan and charts. |
 | `txt` | color | yes | Text color that reads on `hex` (usually `#2E3A2C` or `#FFFFFF`). |
 | `light` | string | yes | Light and soil needs in words. |

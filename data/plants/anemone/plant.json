@@ -11,6 +11,7 @@
     "spacing": 24,
     "bloom": [8.5, 10.5],
     "color": "Pink or white flowers on tall stems",
+    "colors": ["white", "pink"],
     "hex": "#EDB8CF",
     "txt": "#2E3A2C",
     "light": "Part shade to sun",

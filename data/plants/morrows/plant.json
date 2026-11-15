@@ -11,6 +11,7 @@
     "spacing": 15,
     "bloom": null,
     "color": "Dark green, often white-edged blades",
+    "colors": ["green"],
     "hex": "#8FBF8A",
     "txt": "#2E3A2C",
     "light": "Part shade to shade; average to moist soil",

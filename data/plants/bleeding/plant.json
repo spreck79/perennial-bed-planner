@@ -12,6 +12,7 @@
     "spacing": 24,
     "bloom": [4.5, 6],
     "color": "Pink and white hearts",
+    "colors": ["white", "pink"],
     "hex": "#E46A8F",
     "txt": "#FFFFFF",
     "light": "Part shade to shade",

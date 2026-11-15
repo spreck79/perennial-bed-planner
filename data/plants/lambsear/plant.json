@@ -11,6 +11,7 @@
     "spacing": 18,
     "bloom": null,
     "color": "Soft, fuzzy silver leaves",
+    "colors": ["green"],
     "hex": "#BFC3B8",
     "txt": "#2E3A2C",
     "light": "Full sun",

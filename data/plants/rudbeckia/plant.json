@@ -12,6 +12,7 @@
     "spacing": 18,
     "bloom": [7, 9.8],
     "color": "Golden petals, dark eye",
+    "colors": ["yellow"],
     "hex": "#F0B323",
     "txt": "#2E3A2C",
     "light": "Full sun to part shade",

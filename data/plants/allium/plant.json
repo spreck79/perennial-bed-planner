@@ -13,6 +13,7 @@
     "spacing": 10,
     "bloom": [5.3, 6.2],
     "color": "Violet-purple balls",
+    "colors": ["purple"],
     "hex": "#8A4FC2",
     "txt": "#FFFFFF",
     "light": "Full sun",

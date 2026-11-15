@@ -12,6 +12,7 @@
     "spacing": 18,
     "bloom": [6.5, 9],
     "color": "Rosy purple with orange cone",
+    "colors": ["pink", "purple"],
     "hex": "#C9549A",
     "txt": "#FFFFFF",
     "light": "Full sun to part shade",
