@@ -170,7 +170,9 @@
     d.style.cssText = "max-width:560px;margin:80px auto;padding:24px 28px;background:#F6F3EA;border:1px solid #D9D3C2;border-radius:14px;font:16px/1.5 system-ui,sans-serif;color:#2E3A2C";
     d.innerHTML = html; document.body.innerHTML = ""; document.body.appendChild(d);
   }
-  const loadScript = src => new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = () => no(new Error("Couldn't load " + src)); document.body.appendChild(s); });
+  // each page's scripts carry the same ?v= as this file's own tag, so a push never mixes old and new files
+  const VER = (() => { const me = document.currentScript && document.currentScript.src.match(/[?&]v=([^&]+)/); return me ? me[1] : ""; })();
+  const loadScript = src => new Promise((ok, no) => { const s = document.createElement("script"); s.src = src + (VER && !/^https?:/.test(src) ? (src.includes("?") ? "&" : "?") + "v=" + VER : ""); s.onload = ok; s.onerror = () => no(new Error("Couldn't load " + src)); document.body.appendChild(s); });
 
   // full-size photo as a data URL (the PDF needs the picture itself), fetched the first time it's needed
   root.PHOTO_FULL = root.PHOTO_FULL || {};
