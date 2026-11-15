@@ -4,8 +4,8 @@ This is the contract for every program that reads or writes the planner's plant 
 its JSON file and its two photos, and **nothing about a plant is kept anywhere outside its folder**: not in the code,
 not in a list, not in a page. The website reads the plant folders every time a page opens (`plant-data.js`), so it is
 plug-and-play: add a folder and the plant is on the site; delete it and it's gone from every page; change a plant.json
-and the change shows. Pages that are already open notice within about a minute (a few seconds at http://localhost:8321 on
-your computer) and reload themselves, keeping the visitor's garden plan. Nothing is ever built or generated.
+and the change shows the next time a page is opened or refreshed (on the live site, within about 10 minutes of a
+push). Nothing is ever built or generated.
 
 The rules are in `build/validate.js` (run `node build/check.js` to list anything to fix; the site doesn't need it) and
 `data/plant.schema.json` (JSON Schema, for editors and other programs). If they disagree, `build/validate.js` decides.

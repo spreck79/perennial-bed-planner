@@ -118,26 +118,34 @@
       if (r.ok) { const j = await r.json(); return { kind: "local", ids: j.ids, version: j.version, file: f => abs(f) }; }
     } catch (e) {}
     const repo = repoName();
-    if (repo) {      // the live site: ask GitHub what's in the site's folders right now
+    if (repo) {      // the live site: which plant folders the repo has. The files themselves come from this site.
       const key = "plants-folders:" + repo, saved = store.get(key) || {};
-      try {
-        const base = "https://api.github.com/repos/" + repo;
-        const r = await fetch(base + "/commits/HEAD", { cache: "no-store", headers: Object.assign({ Accept: "application/vnd.github+json" }, saved.etag ? { "If-None-Match": saved.etag } : {}) });
-        let sha = saved.sha, ids = saved.ids;
+      const live = ids => ({ kind: "github", ids, file: f => abs(f) });
+      // seen in the last 10 minutes: use that list (the site's own files are cached for 10 minutes anyway)
+      if (saved.ids && saved.at && Date.now() - saved.at < 10 * 60 * 1000) return live(saved.ids);
+      try {      // 1. ask GitHub (each visitor's connection may ask 60 times an hour)
+        const base = "https://api.github.com/repos/" + repo, json = { Accept: "application/vnd.github+json" };
+        const r = await fetch(base + "/commits/HEAD", { cache: "no-store", headers: Object.assign({}, json, saved.etag ? { "If-None-Match": saved.etag } : {}) });
+        let ids = saved.ids;
         if (r.status === 200) {
           const c = await r.json();
           if (c.sha !== saved.sha || !ids) {
-            const t = await (await fetch(base + "/git/trees/" + c.commit.tree.sha + "?recursive=1", { headers: { Accept: "application/vnd.github+json" } })).json();
-            ids = (t.tree || []).map(e => (e.path.match(/^data\/plants\/([^/]+)\/plant\.json$/) || [])[1]).filter(Boolean);
+            const tr = await fetch(base + "/git/trees/" + c.commit.tree.sha + "?recursive=1", { headers: json });
+            if (!tr.ok) throw new Error("GitHub answered " + tr.status);
+            ids = ((await tr.json()).tree || []).map(e => (e.path.match(/^data\/plants\/([^/]+)\/plant\.json$/) || [])[1]).filter(Boolean);
           }
-          sha = c.sha;
-          store.set(key, { etag: r.headers.get("ETag"), sha, ids });
-        } else if (r.status !== 304) throw new Error("GitHub answered " + r.status);
-        if (sha && ids) return { kind: "github", ids, version: sha, file: f => "https://raw.githubusercontent.com/" + repo + "/" + sha + "/" + f };
-      } catch (e) {
-        console.warn("Couldn't ask GitHub for the plant folders (" + e.message + ")");
-        if (saved.sha && saved.ids) return { kind: "github", ids: saved.ids, version: saved.sha, file: f => abs(f) };   // the last folders seen
-      }
+          store.set(key, { etag: r.headers.get("ETag"), sha: c.sha, ids, at: Date.now() });
+        } else if (r.status === 304 && ids) store.set(key, Object.assign(saved, { at: Date.now() }));
+        else throw new Error("GitHub answered " + r.status);
+        return live(ids);
+      } catch (e) { console.warn("Couldn't ask GitHub for the plant folders (" + e.message + "); trying jsDelivr"); }
+      try {      // 2. GitHub said no (busy connection): jsDelivr's copy of the repo (no limit; can be a few hours behind)
+        const r = await fetch("https://data.jsdelivr.com/v1/packages/gh/" + repo + "@main?structure=flat", { cache: "no-store" });
+        if (!r.ok) throw new Error("jsDelivr answered " + r.status);
+        const ids = ((await r.json()).files || []).map(f => (f.name.match(/^\/data\/plants\/([^/]+)\/plant\.json$/) || [])[1]).filter(Boolean);
+        if (ids.length) return live(ids);
+      } catch (e) { console.warn("Couldn't ask jsDelivr either (" + e.message + ")"); }
+      if (saved.ids) return live(saved.ids);      // 3. the last folders this browser saw
     }
     return { kind: "none" };
   }
@@ -175,39 +183,15 @@
       .then(d => (d ? (root.PHOTO_FULL[id] = d) : null)).catch(() => null);
   };
 
-  let current = "", source = null;
-  // what the plants say, without the version in the photo addresses (so only a change to a plant counts)
-  const fingerprint = (data, src) => { const t = JSON.stringify(data); return src.kind === "github" && src.version ? t.split(src.version).join("") : t; };
+  let source = null;
   // start(scripts): read the plants, then load the page's own scripts in order
   root.PlantData.start = async function (scripts) {
     source = await findFolders();
     if (source.kind === "file") return !!showMessage("<b>No plants loaded.</b><br>A page opened straight from your disk isn't allowed to look inside the plant folders. Open <b><a href='http://localhost:8321/'>http://localhost:8321</a></b> instead: that's this folder, with its plants.");
-    if (source.kind === "none") return !!showMessage("<b>The plant folders couldn't be found.</b><br>Please try again in a minute.");
+    if (source.kind === "none") return !!showMessage("<b>The plant folders couldn't be found.</b><br>The site is very busy right now. Please try again in a few minutes.");
     const data = await readPlants(source);
     Object.assign(root, data);
-    current = fingerprint(data, source);
     for (const s of scripts) await loadScript(s);
-    watch();
     return true;
   };
-
-  // keep watching the folders: when a plant is added, deleted or changed, reload the page (the garden plan is kept)
-  function watch() {
-    const every = source.kind === "local" ? 3000 : 60000;
-    let busy = false;
-    const check = async () => {
-      if (busy) return; busy = true;
-      try {
-        const s = await findFolders();
-        if (s.kind === source.kind && (s.version !== source.version || String(s.ids) !== String(source.ids))) {
-          const data = await readPlants(s);
-          if (fingerprint(data, s) !== current) { setTimeout(() => location.reload(), 400); return; }
-          source = s;
-        }
-      } catch (e) {}
-      busy = false;
-    };
-    setInterval(check, every);
-    document.addEventListener("visibilitychange", () => { if (!document.hidden) check(); });
-  }
 })(typeof window !== "undefined" ? window : this);
