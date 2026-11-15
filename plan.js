@@ -10,7 +10,7 @@
   const HLC = { tox: "#B8392E", deer: "#7A5230", daisy: "#C99A1E", nat: "#5E8F4A", gar: "#B8629B" };
   const HLT = { tox: "#B8392E", deer: "#7A5230", daisy: "#8A6410", nat: "#3F6B3A", gar: "#8A3F72" };
   const deerEats = p => p.deer === "C" || p.deer === "D";
-  const badgeKinds = pl => { const k = [pl.native ? "nat" : "gar"]; if (pl.fam === "daisy") k.push("daisy"); if (deerEats(pl)) k.push("deer"); if (pl.toxic && pl.toxic.length) k.push("tox"); if (window.isTender && window.isTender(pl)) k.push("cold"); return k; };
+  const badgeKinds = pl => { const k = [pl.native && "nat", pl.gfav && "gar"].filter(Boolean); if (pl.fam === "daisy") k.push("daisy"); if (deerEats(pl)) k.push("deer"); if (pl.toxic && pl.toxic.length) k.push("tox"); if (window.isTender && window.isTender(pl)) k.push("cold"); return k; };
   const hlKind = pl => pl.toxic && pl.toxic.length ? "tox" : deerEats(pl) ? "deer" : pl.fam === "daisy" ? "daisy" : pl.native ? "nat" : "gar";
 
   // sun-zone colors: match the per-plant sun-badge icon colors, so the painted zones and the badges read as the same system
@@ -556,6 +556,15 @@
     }
     const poly = bed.poly.map(q => `${q[0].toFixed(3)},${Y(q[1]).toFixed(3)}`).join(" ");
     const clip = el("clipPath", { id: "bedclip" }, defs); el("polygon", { points: poly }, clip);
+    // a faint 1-ft grid around the bed too (under it), so spots outside the edge can be measured
+    if (c.showGrid !== false) {
+      const og = el("g", { class: "glayer-out", stroke: "rgba(120,100,70,.16)", "stroke-width": 0.03, "pointer-events": "none" }, root);
+      const oh = el("g", { stroke: "rgba(120,100,70,.08)", "stroke-width": 0.02 }, og);   // half-foot lines, fainter
+      for (let x = 0.5; x < bb.w; x++) el("line", { x1: x, y1: 0, x2: x, y2: bb.h }, oh);
+      for (let y = 0.5; y < bb.h; y++) el("line", { x1: 0, y1: Y(y), x2: bb.w, y2: Y(y) }, oh);
+      for (let x = 0; x <= bb.w + 0.001; x++) el("line", { x1: x, y1: 0, x2: x, y2: bb.h }, og);
+      for (let y = 0; y <= bb.h + 0.001; y++) el("line", { x1: 0, y1: Y(y), x2: bb.w, y2: Y(y) }, og);
+    }
     el("polygon", { class: "bedrim", points: poly, fill: "#8E7660", stroke: "#8E7660", "stroke-width": fs * 0.9, "stroke-linejoin": "round" }, root);
     // the sides people see the bed from: that part of the rim turns green (point at it for what it means)
     { const segs = window.Geo.viewEdges(bed);
@@ -579,6 +588,9 @@
     }
     if (c.showGrid !== false) {
       const grid = el("g", { class: "glayer", "clip-path": "url(#bedclip)", stroke: sun && sun.show ? "rgba(70,55,40,.28)" : "#BBA388", "stroke-width": 0.035, "pointer-events": "none" }, root);
+      const gh = el("g", { "stroke-opacity": 0.4, "stroke-width": 0.022 }, grid);   // half-foot lines inside the bed, fainter
+      for (let x = 0.5; x < bb.w; x++) el("line", { x1: x, y1: 0, x2: x, y2: bb.h }, gh);
+      for (let y = 0.5; y < bb.h; y++) el("line", { x1: 0, y1: Y(y), x2: bb.w, y2: Y(y) }, gh);
       for (let x = 1; x < bb.w; x++) el("line", { x1: x, y1: 0, x2: x, y2: bb.h }, grid);
       for (let y = 1; y < bb.h; y++) el("line", { x1: 0, y1: Y(y), x2: bb.w, y2: Y(y) }, grid);
 
@@ -639,7 +651,7 @@
     svg.classList.toggle("hasHover", !!(c.hoverId && !c.paint));
     if (selAll.length === 1 && placements[selAll[0]]) {
       const p = placements[selAll[0]], pl = byId[p.id], r = sp(pl) / 2 * 0.96;
-      const txt = pl.name + (pl.native ? "" : " ◆") + (pl.fam === "daisy" ? " ✿" : ""), fsz = fs * 0.95, w = txt.length * fsz * 0.6 + fsz * 1.4, h = fsz * 1.9;
+      const txt = pl.name + (pl.gfav ? " ◆" : "") + (pl.fam === "daisy" ? " ✿" : ""), fsz = fs * 0.95, w = txt.length * fsz * 0.6 + fsz * 1.4, h = fsz * 1.9;
       let cx = Math.max(w / 2, Math.min(bb.w - w / 2, p.x)), cy = Y(p.y) - r - h * 0.5 - fsz * 0.45;
       if (cy - h / 2 < -mT * 0.9) cy = Y(p.y) + r + h * 0.5 + fsz * 0.45;
       const lg = el("g", { class: "sellab", "pointer-events": "none" }, root);

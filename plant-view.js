@@ -43,7 +43,8 @@
 
     // chips under the name, the same marks the planner uses
     const chips = [
-      p.native ? `<span class="chip c-nat">${LEAF} Michigan native</span>` : `<span class="chip c-gar">◆ Garden favorite</span>`,
+      p.native ? `<span class="chip c-nat">${LEAF} Michigan native</span>` : "",
+      p.gfav ? `<span class="chip c-gar">◆ ${p.native ? "Sold at garden centers" : "Garden favorite"}</span>` : "",
       p.fam === "daisy" ? `<span class="chip c-daisy">✿ Daisy family</span>` : "",
       (p.deer === "C" || p.deer === "D") ? `<span class="chip c-deer">${ANTLER} Deer ${p.deer === "D" ? "often" : "sometimes"} eat it</span>` : "",
       tox ? `<span class="chip c-tox">! ${esc(tox)}</span>` : "",
@@ -94,7 +95,7 @@
     // what the page shows, as plain text, so the one-page PDF says exactly the same (plant-page.js draws it)
     const sheet = {
       name: p.name, latin: p.latin, notes: p.notes + (p.fam === "daisy" ? " Daisy family, like ragweed." : ""), hex: p.hex, txt: p.txt, code: p.code,
-      marks: [p.native ? ["nat", "Michigan native"] : ["gar", "Garden favorite"], p.fam === "daisy" && ["daisy", "Daisy family"],
+      marks: [p.native && ["nat", "Michigan native"], p.gfav && ["gar", p.native ? "Sold at garden centers" : "Garden favorite"], p.fam === "daisy" && ["daisy", "Daisy family"],
         (p.deer === "C" || p.deer === "D") && ["deer", "Deer " + (p.deer === "D" ? "often" : "sometimes") + " eat it"], tox && ["tox", tox],
         wc && ["cold", window.isTender(p) ? "Not winter-hardy here" : "Mulch for winter"]].filter(Boolean),
       facts: [["Height", Charts.heightText(p)], ["Spacing", (p.clump ? `clumps of ${p.clump}, ` : "") + p.spacing + " in apart (center to center)"],

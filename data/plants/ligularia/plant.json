@@ -20,7 +20,8 @@
     "notes": "Bold leaves and tall yellow spires for a damp, shady back row. Wilts in afternoon sun or dry soil, so keep it moist.",
     "deer": "A",
     "toxic": ["people", "dogs", "cats"],
-    "toxSrc": "Contains pyrrolizidine alkaloids (general references; not on the ASPCA list)"
+    "toxSrc": "Contains pyrrolizidine alkaloids (general references; not on the ASPCA list)",
+    "zones": [4, 9]
   },
   "photo": {
     "credit": {
@@ -34,9 +35,9 @@
     "kind": "garden",
     "sources": [
       {
-        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
-        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
-        "note": "Current perennial list from a Michigan garden center."
+        "title": "Ray Wiegand's Nursery (Macomb, Michigan): perennials list",
+        "url": "http://plants.wiegandsnursery.com/12150006/List?type=pere",
+        "note": "Lists Ligularia 'The Rocket' - The Rocket Rayflower."
       }
     ]
   },
@@ -56,6 +57,14 @@
           "about": "astrantia"
         }
       ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Chicago Botanic Garden: Ligularia stenocephala 'The Rocket'",
+      "url": "https://www.chicagobotanic.org/plant-information/plant-finder/ligularia-stenocephala-rocket-rocket-goldenray",
+      "topic": "Hardiness",
+      "note": "Hardiness zones 4 to 9."
     }
   ]
 }

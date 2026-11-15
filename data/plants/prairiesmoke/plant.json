@@ -18,7 +18,8 @@
     "moisture": "Dry to average",
     "notes": "Nodding pink flowers in spring turn into wispy pink seed plumes that look like smoke. A low front-edge plant for a sunny, dry spot.",
     "deer": "C",
-    "toxic": null
+    "toxic": null,
+    "zones": [3, 7]
   },
   "photo": {
     "credit": {
@@ -35,6 +36,13 @@
         "title": "Wild Cherry Farm: Prairie Smoke",
         "url": "https://www.wildcherryfarm.com/shop-native-plants/p/prairie-smoke-geum-triflorum",
         "note": "State threatened in Michigan (only native plants are state-listed)."
+      }
+    ],
+    "garden": [
+      {
+        "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
+        "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+        "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
       }
     ]
   },
@@ -78,6 +86,14 @@
           "about": "prairiesmoke"
         }
       ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Lurie Garden (Chicago): Prairie Smoke",
+      "url": "https://www.luriegarden.org/plants/prairie-smoke/",
+      "topic": "Hardiness",
+      "note": "USDA zones 3 through 7."
     }
   ]
 }

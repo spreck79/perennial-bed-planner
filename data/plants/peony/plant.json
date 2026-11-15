@@ -19,7 +19,8 @@
     "notes": "Huge fragrant flowers in late spring and handsome leaves all season. Plant the eyes only 1-2 inches deep. Lives for decades.",
     "deer": "A",
     "toxic": ["dogs", "cats"],
-    "toxSrc": "ASPCA lists peony as toxic"
+    "toxSrc": "ASPCA lists peony as toxic",
+    "zones": [3, 8.5]
   },
   "photo": {
     "credit": {
@@ -33,9 +34,9 @@
     "kind": "garden",
     "sources": [
       {
-        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
-        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
-        "note": "Current perennial list from a Michigan garden center."
+        "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
+        "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+        "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
       }
     ]
   },
@@ -73,6 +74,12 @@
       "url": "https://extension.umn.edu/gardening-minnesota/upper-midwest-home-garden-care-calendar",
       "topic": "Care timing",
       "note": "Divide bearded iris late July to early August and peonies from late August; plant spring bulbs from September to mid-November."
+    },
+    {
+      "title": "NC State Extension Plant Toolbox: herbaceous peonies (Lactiflora)",
+      "url": "https://plants.ces.ncsu.edu/plants/paeonia-herbaceous-types/common-name/lactiflora-hybrids/",
+      "topic": "Hardiness",
+      "note": "Hardiness zones 3a to 8b."
     }
   ],
   "companions": [

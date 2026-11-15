@@ -20,7 +20,8 @@
     "notes": "Classic white daisies all summer; deadhead for more flowers. Divide every few years to keep it vigorous.",
     "deer": "C",
     "toxic": ["dogs", "cats"],
-    "toxSrc": "ASPCA lists daisy as toxic"
+    "toxSrc": "ASPCA lists daisy as toxic",
+    "zones": [4, 9.5]
   },
   "photo": {
     "credit": {
@@ -34,9 +35,9 @@
     "kind": "garden",
     "sources": [
       {
-        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
-        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
-        "note": "Current perennial list from a Michigan garden center."
+        "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
+        "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+        "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
       }
     ]
   },
@@ -60,6 +61,12 @@
       "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
       "topic": "Care timing",
       "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    },
+    {
+      "title": "NC State Extension Plant Toolbox: Leucanthemum x superbum",
+      "url": "https://plants.ces.ncsu.edu/plants/leucanthemum-x-superbum/",
+      "topic": "Hardiness",
+      "note": "Hardiness zones 4a to 9b."
     }
   ],
   "companions": [

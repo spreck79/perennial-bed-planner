@@ -7,7 +7,7 @@
 <h4>Your work is kept</h4><p>The planner saves as you go, in this browser on this computer. <b>Save plan</b> downloads a copy you can open on another computer with <b>Open plan</b>.</p>
 <div class="hfoot"><span>More help: the Help button at the top.</span><button type="button" class="btn primary hclose">Got it</button></div>`,
     prefCard: `<h3>Choosing your kind of garden</h3>
-<h4>Michigan natives or garden favorites</h4><ul><li><b>Michigan natives</b> grow wild in Michigan and feed local bees, butterflies and birds. Buy them from a Michigan native plant nursery.</li><li><b>Garden favorites</b> are popular plants sold at Michigan garden centers.</li><li>Pick both to see everything.</li></ul>
+<h4>Michigan natives or garden favorites</h4><ul><li><b>Michigan natives</b> grow wild in Michigan and feed local bees, butterflies and birds. Buy them from a Michigan native plant nursery.</li><li><b>Garden favorites</b> ◆ are popular plants sold at Michigan garden centers. A native that garden centers also sell shows both marks.</li><li>Pick both to see everything.</li></ul>
 <h4>Kinds of plants</h4><p>Click a kind to turn it on or off: <b>Flowers</b>, <b>Ferns</b>, <b>Grasses &amp; sedges</b>, <b>Groundcovers</b> (low plants that spread and fill the gaps) and <b>Spring bulbs</b> (planted in fall, bloom in spring). <b>All</b> turns them all on.</p>
 <p>The bar shows how many plants match. The Plants list shows only those, so you can change your mind any time.</p>
 <div class="hfoot"><span>At least one choice has to stay on.</span><button type="button" class="btn primary hclose">Got it</button></div>`,

@@ -18,7 +18,8 @@
     "moisture": "Average to moist",
     "notes": "One of the first flowers of spring, pink and blue on the same plant, over silver-spotted leaves that brighten shade all season.",
     "deer": "A",
-    "toxic": null
+    "toxic": null,
+    "zones": [3, 8.5]
   },
   "photo": {
     "credit": {
@@ -32,9 +33,9 @@
     "kind": "garden",
     "sources": [
       {
-        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
-        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
-        "note": "Current perennial list from a Michigan garden center."
+        "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
+        "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+        "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
       }
     ]
   },
@@ -90,6 +91,14 @@
           "about": "phlox"
         }
       ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "NC State Extension Plant Toolbox: Pulmonaria saccharata",
+      "url": "https://plants.ces.ncsu.edu/plants/pulmonaria-saccharata/",
+      "topic": "Hardiness",
+      "note": "Hardiness zones 3a to 8b."
     }
   ]
 }

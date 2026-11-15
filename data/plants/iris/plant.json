@@ -19,7 +19,8 @@
     "notes": "Ruffled flowers in late spring over sword-like leaves. Plant the rhizomes at the soil surface; divide every 3-4 years.",
     "deer": "A",
     "toxic": ["people", "dogs", "cats"],
-    "toxSrc": "ASPCA lists iris as toxic"
+    "toxSrc": "ASPCA lists iris as toxic",
+    "zones": [3, 9]
   },
   "photo": {
     "credit": {
@@ -33,9 +34,9 @@
     "kind": "garden",
     "sources": [
       {
-        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
-        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
-        "note": "Current perennial list from a Michigan garden center."
+        "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
+        "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+        "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
       }
     ]
   },
@@ -60,6 +61,12 @@
       "url": "https://extension.umn.edu/gardening-minnesota/upper-midwest-home-garden-care-calendar",
       "topic": "Care timing",
       "note": "Divide bearded iris late July to early August and peonies from late August; plant spring bulbs from September to mid-November."
+    },
+    {
+      "title": "Nebraska Extension Backyard Farmer: Bearded Iris",
+      "url": "https://byf.unl.edu/bearded-iris-iris-germanica/",
+      "topic": "Hardiness",
+      "note": "Hardiness zones 3 to 9."
     }
   ],
   "companions": [

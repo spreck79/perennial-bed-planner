@@ -18,7 +18,8 @@
     "moisture": "Dry to average",
     "notes": "A fragrant, spreading groundcover that crowds out weeds, with leaves that turn red in fall. Handles dry shade well.",
     "deer": "B",
-    "toxic": null
+    "toxic": null,
+    "zones": [3, 8]
   },
   "photo": {
     "credit": {
@@ -54,6 +55,12 @@
       "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
       "topic": "Care timing",
       "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    },
+    {
+      "title": "Chicago Botanic Garden: Geranium macrorrhizum ssp. macrorrhizum",
+      "url": "https://chicagobotanic.org/plantcollections/plantfinder/geranium_macrorrhizum_ssp_macrorrhizum--bigroot_geranium",
+      "topic": "Hardiness",
+      "note": "Hardiness zones 3 to 8."
     }
   ],
   "companions": [

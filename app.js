@@ -85,7 +85,8 @@
   }
   function icons(p, off) {
     let h = sunIcon(p);
-    h += p.native ? '<span class="ic ic-nat" data-k="nat" data-tip="Michigan native">' + LEAF + "</span>" : '<span class="ic ic-gar" data-k="gar" data-tip="Garden favorite (not native)">◆</span>';
+    if (p.native) h += '<span class="ic ic-nat" data-k="nat" data-tip="Michigan native">' + LEAF + "</span>";
+    if (p.gfav) h += '<span class="ic ic-gar" data-k="gar" data-tip="' + (p.native ? "Also sold at Michigan garden centers" : "Garden favorite (not native)") + '">◆</span>';
     if (p.fam === "daisy") h += '<span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span>';
     if (deerEats(p)) h += '<span class="ic ic-deer" data-k="deer" data-tip="' + esc(deerTip(p)) + '">' + DEER + "</span>";
     if (p.toxic && p.toxic.length) h += '<span class="ic ic-tox" data-k="tox" data-tip="' + esc(window.toxLabel(p)) + '">!</span>';
@@ -620,13 +621,10 @@
     clearSel(); objSel = -1;
     const c = bedContents(), label = Geo.SHAPES[k].label.toLowerCase(), now = `There ${c.one ? "is" : "are"} ${c.text} on the bed now.`;
     if (k === "free") {
-      // Draw your own always opens the outline editor; the question is only whether to keep what's planted
-      if (!c.any) { startDraw(); return; }   // starts from the bed you have now; "Clear shape" gives a blank canvas
-      askShape("Draw your own outline", [now,
-        "Keep them and I'll open your current outline so you can reshape it. When you save, your plants are re-arranged to fit the new shape.",
-        "Or clear the bed and draw a brand-new outline from scratch. You can undo either one."],
-        "Keep my plants", () => startDraw(), () => startDraw({ fresh: true }));
-      return;
+      // Draw your own opens the outline editor and keeps what's planted (it's re-arranged to fit on Save).
+      // During the tour it starts blank, for drawing a first outline; afterwards it opens the bed you have
+      // now, to reshape it ("Clear shape" still gives a blank canvas).
+      startDraw(Tour.on ? { blank: true } : {}); return;
     }
     if (S.shape === k) {
       if (!c.any) { toast("This is already a " + label + ", and the bed is empty."); return; }
@@ -724,14 +722,15 @@
   }
 
   // Open the outline editor. It starts from the bed you have now (a drawn outline as drawn; a rectangle as
-  // its corners; an island as a smooth 8-point loop) unless opts.fresh, which starts blank and clears the bed
+  // its corners; an island as a smooth 8-point loop) unless opts.fresh, which starts blank and clears the bed,
+  // or opts.blank, which starts blank and keeps what's planted
   // when the new outline is saved. Nothing changes if the editor is cancelled.
   function startDraw(opts) {
     opts = opts || {};
     armed = null; selIdx = -1; extraSel = []; objSel = -1; objArmed = null; pathDraw = null; paint = null; renderPaintBar();
     if (innerWidth > 1050) $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" });
     let seed = null, seedSharp = null, smooth = !!S.freeSmooth;
-    if (!opts.fresh) {
+    if (!opts.fresh && !opts.blank) {
       if (S.shape === "free" && S.freePoly) { seed = S.freeCtrl || S.freePoly; if (S.freeCtrl) seedSharp = S.freeSharp; }
       else if (bed && bed.poly) {
         const P = bed.poly;
@@ -756,11 +755,15 @@
     $("#notice").style.display = "none";
   }
 
+  // natives and/or garden favorites: a native sold at garden centers counts as both
+  function originOk(p, origin) { return (p.native && origin.includes("nat")) || (p.gfav && origin.includes("gar")); }
+  window.originOk = originOk;
+
   // does a plant fit the step-2 choices?
   function matchesPrefs(p) {
     const pr = S.prefs;
     if (!p.sun.some(x => pr.sun.includes(x))) return false;
-    if (!pr.origin.includes(p.native ? "nat" : "gar")) return false;
+    if (!originOk(p, pr.origin)) return false;
     if (!pr.kinds.includes(p.kind)) return false;
     if (p.toxic && !pr.toxic) return false;
     if (p.fam === "daisy" && pr.daisy === false) return false;
@@ -1737,7 +1740,10 @@
     const res = S.sun.res, r = Math.max(paint.size / 2, res * 0.72), cells = S.sun.cells;
     for (let i = Math.floor((x - r) / res); i <= Math.floor((x + r) / res); i++) for (let j = Math.floor((y - r) / res); j <= Math.floor((y + r) / res); j++) {
       const cx = (i + 0.5) * res, cy = (j + 0.5) * res;
-      if (i < 0 || j < 0 || Math.hypot(cx - x, cy - y) > r || !Geo.pip(bed.poly, cx, cy)) continue;
+      // a cell counts when any part of it is in the bed (its middle or a corner), so the paint reaches right
+      // up to a curved edge; the drawing is clipped to the bed's outline anyway
+      const inBed = Geo.pip(bed.poly, cx, cy) || [[0, 0], [1, 0], [0, 1], [1, 1]].some(q => Geo.pip(bed.poly, (i + q[0]) * res, (j + q[1]) * res));
+      if (i < 0 || j < 0 || Math.hypot(cx - x, cy - y) > r || !inBed) continue;
       if (paint.brush === "erase") delete cells[i + "," + j]; else cells[i + "," + j] = paint.brush;
     }
   }
@@ -1885,7 +1891,7 @@
   // groundcovers to offer: low plants that suit the step-2 choices (sun, origin, safety)
   function groundcovers() {
     const pr = S.prefs, low = p => p.filler || (p.kind === "mat" && p.hHi <= 12);
-    return PL.filter(p => low(p) && p.sun.some(x => pr.sun.includes(x)) && pr.origin.includes(p.native ? "nat" : "gar") && !(p.toxic && !pr.toxic) && !(p.fam === "daisy" && pr.daisy === false) && !(deerEats(p) && pr.deer === false))
+    return PL.filter(p => low(p) && p.sun.some(x => pr.sun.includes(x)) && originOk(p, pr.origin) && !(p.toxic && !pr.toxic) && !(p.fam === "daisy" && pr.daisy === false) && !(deerEats(p) && pr.deer === false))
       .sort((a, b) => (b.filler ? 1 : 0) - (a.filler ? 1 : 0) || a.name.localeCompare(b.name));
   }
   // companions of the plants in the bed: { plantId: [companion ids] } (skipping any the user left out) and the full list
@@ -2661,6 +2667,11 @@
       on = false; cancelAnimationFrame(raf); document.body.classList.remove("touring");
       veil.style.display = coach.style.display = "none";
       if (done === "quiet") return;
+      if (!done) {   // skipped: the steps not done yet count as done, as if Done was pressed on each without changing anything
+        const left = Object.keys(STEPS_UI).filter(k => !(S.done && S.done[k]));
+        left.forEach(k => completeStep(k, false));
+        if (left.length) { toast("Tour skipped. The steps are set to the usual choices; click any step to change it.", 4500); return; }
+      }
       toast(done ? "You're all set. Click Guided tour at the top any time to see these steps again." : "Tour closed. Click Guided tour at the top any time to start it again.", 4000);
     }
     // Enter in the name box moves on; Esc closes the tour once nothing else is open

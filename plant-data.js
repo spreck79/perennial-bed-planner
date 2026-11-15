@@ -36,7 +36,8 @@
 
     P.forEach(r => {
       const d = r.plant;
-      out.PLANTS.push(Object.assign({ id: d.id }, d.facts, { credit: d.photo.credit }));
+      const gfav = !d.facts.native || !!(d.status && d.status.garden && d.status.garden.length);   // garden favorite: not native, or a native also sold at Michigan garden centers
+      out.PLANTS.push(Object.assign({ id: d.id }, d.facts, { credit: d.photo.credit, gfav }));
       out.PHOTOS[d.id] = r.preview; out.PHOTO_URL[d.id] = r.full;
       if (d.photo.focus) out.PHOTO_FOCUS[d.id] = d.photo.focus;
       out.CREDITS[d.id] = d.photo.credit;
@@ -51,10 +52,8 @@
 
     // native / garden favorite sources, each once, with the plants each one showed
     const ss = new Map();
-    P.forEach(r => ((r.plant.status && r.plant.status.sources) || []).forEach(s => {
-      if (!ss.has(s.url)) ss.set(s.url, { title: s.title, url: s.url, kind: r.plant.status.kind, note: s.note, plants: [] });
-      ss.get(s.url).plants.push(r.id);
-    }));
+    const addSrc = (r, s, kind) => { if (!ss.has(s.url)) ss.set(s.url, { title: s.title, url: s.url, kind, note: s.note, plants: [] }); ss.get(s.url).plants.push(r.id); };
+    P.forEach(r => { const st = r.plant.status || {}; (st.sources || []).forEach(s => addSrc(r, s, st.kind)); (st.garden || []).forEach(s => addSrc(r, s, "garden")); });
     out.STATUS_SOURCES = [...ss.values()];
 
     // good neighbors: only with plants that are here; a pairing listed on one plant is shown on both

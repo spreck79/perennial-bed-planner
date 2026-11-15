@@ -5,7 +5,7 @@
   const DAISY = "#B7791F";
   const deerEats = p => p.deer === "C" || p.deer === "D";
   const deerText = p => (p.deer === "D" ? "Deer often eat it" : "Deer sometimes eat it") + (p.squirrels ? " and squirrels dig the bulbs" : "") + ".";
-  const marks = p => (p.native ? "" : " ◆") + (p.fam === "daisy" ? " ✿" : "");
+  const marks = p => (p.gfav ? " ◆" : "") + (p.fam === "daisy" ? " ✿" : "");
   const C = { forest: "#3F6B3A", ink: "#2E3A2C", muted: "#6B7464", rule: "#D9D3C2", cream: "#F5F2E8", soft: "#EEF0E2", band: "#ECEFE0", leaf: "#5E8F4E", leaf2: "#8DB46F", leafD: "#41693A", berry: "#A8578A", soil: "#B89A74", stripe: "#F7F5EE" };
   const rgb = h => { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
 
@@ -42,12 +42,12 @@
     const counts = {}; placements.forEach(p => (counts[p.id] = (counts[p.id] || 0) + 1));
     const waiting = data.waiting || {}; let nWait = 0; Object.keys(waiting).forEach(k => { if (waiting[k] > 0 && byId[k]) { counts[k] = (counts[k] || 0) + waiting[k]; nWait += waiting[k]; } });
     let page = 1;
-    const newPage = () => { doc.addPage(); page++; };
+    const newPage = () => { doc.addPage("letter", "portrait"); page++; };   // portrait again after the landscape lay-it-out sheet
     const rowOf = p => hMean(p) <= 14 ? "Front" : hMean(p) <= 28 ? "Middle" : "Back";
     const stripe = (x, y, w, h) => { fill(C.stripe); doc.rect(x, y, w, h, "F"); };
     // plant icons, same order and colors as the site: native leaf or garden favorite, daisy, deer, toxic
     const ICON = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: ["#B8392E", "#FFFFFF"], cold: ["#4F7FB4", "#FFFFFF"] };
-    const icKinds = p => { const k = [p.native ? "nat" : "gar"]; if (p.fam === "daisy") k.push("daisy"); if (deerEats(p)) k.push("deer"); if (p.toxic && p.toxic.length) k.push("tox"); if (window.isTender && window.isTender(p)) k.push("cold"); return k; };
+    const icKinds = p => { const k = [p.native && "nat", p.gfav && "gar"].filter(Boolean); if (p.fam === "daisy") k.push("daisy"); if (deerEats(p)) k.push("deer"); if (p.toxic && p.toxic.length) k.push("tox"); if (window.isTender && window.isTender(p)) k.push("cold"); return k; };
     const drawIc = (k, x, y, br) => {
       const c = ICON[k]; fill(c[0]); doc.circle(x, y, br, "F");
       const u = br * 0.55;
@@ -160,31 +160,31 @@
     }
     let y = 284;
     const labW = 187;
-    // ================= Bed plan =================
-    progress && progress(0.7, "Bed plan");
-    // on the cover page under the photos when it fits, else on its own page
-    {
-      const kinds = new Set(placements.map(p => p.id)).size, bh = Math.min((W - 2 * M - 26) / bed.bb.w * bed.bb.h, 218);
-      const need = 12 + 64 + 6 + bh + 54 + 34 + Math.ceil(kinds / 4) * 18;
-      if (y + need > H - 56) { newPage(); y = 62; }
-    }
-    const planPage = page;
-    let by0 = y; heading("Bed plan: " + dimsShort + ", planted the natural way", by0, 15.5); by0 += 12;
+    // ================= Bed plan drawing (used on the lay-it-out sheet) =================
     const OBJS = (data.objects || []).filter(o => Geo.pip(bed.poly, o.x, o.y)), SUNP = data.sun;
-    by0 += para("Each plant is drawn at the size it grows to, so the plan doubles as a spacing guide: plant each one at the center of its drawing. Each grid square is 1 foot. Drifts run at an angle and repeat along the bed." + (SUNP ? " The colors under the plants show how much sun each part of the bed gets." : "") + (OBJS.length ? " Paths, stones and other objects are drawn where they sit; trees show their canopy as a dashed ring." : ""), M, by0 + 8, W - 2 * M, 8.8, 11.6, C.ink) + 18;
-    {
-      const bb = bed.bb, availBW = W - 2 * M - 26, availBH = 218;
+    // the bed plan with its legend and plant key; W and H are the page size (the lay-it-out sheet is landscape),
+    // maxH the most height the drawing may take, big = a label on every foot
+    const drawBedPlan = (by0, W, H, maxH, big, keyCols) => {
+      const bb = bed.bb, availBW = W - 2 * M - 26, availBH = maxH;
       const sc = Math.min(availBW / bb.w, availBH / bb.h), bw = bb.w * sc, bh = bb.h * sc;
       const bx = M + 22 + (availBW - bw) / 2, byy = by0 + 6;
       const X = x => bx + x * sc, Y = y => byy + (bb.h - y) * sc;
       const pathLines = pts => pts.map((q, i) => i === 0 ? null : [q[0] - pts[i - 1][0], q[1] - pts[i - 1][1]]).slice(1);
       const P = bed.poly.map(q => [X(q[0]), Y(q[1])]);
       const drawPoly = (f, s, lw) => { doc.setLineWidth(lw || 0.5); doc.lines(pathLines(P.concat([P[0]])), P[0][0], P[0][1], [1, 1], f, true); };
+      // faint 1-ft grid over the whole drawing, around the bed too, so spots outside the edge can be measured
+      stroke("#EFEBE1"); doc.setLineWidth(0.25);   // half-foot lines, fainter still
+      for (let gx = 0.5; gx < bb.w; gx++) doc.line(X(gx), Y(0), X(gx), Y(bb.h));
+      for (let gy = 0.5; gy < bb.h; gy++) doc.line(X(0), Y(gy), X(bb.w), Y(gy));
+      stroke("#E4DECF"); doc.setLineWidth(0.35);
+      for (let gx = 0; gx <= bb.w + 0.01; gx++) doc.line(X(gx), Y(0), X(gx), Y(bb.h));
+      for (let gy = 0; gy <= bb.h + 0.01; gy++) doc.line(X(0), Y(gy), X(bb.w), Y(gy));
       fill("#8E7660"); stroke("#8E7660"); doc.setLineWidth(6); doc.setLineJoin("round"); drawPoly("FD", 1, 6);
       fill("#A68C72"); stroke("#8E7660"); doc.setLineJoin("miter"); drawPoly("F", 0, 0.5);
       // painted sun zones (fine cells, runs merged per row), then the outline again to tidy the curved edges
       const ZC = (window.Plan && window.Plan.ZONE) || { full: "#C9AE66", part: "#B7AC8C", shade: "#7C7678" }, ZL = {}; ["full", "part", "shade"].forEach(z => (ZL[z] = window.Plan.ZONE_LAB[z] + " (" + window.Plan.ZONE_HRS[z] + ")"));
       if (SUNP) {
+        doc.saveGraphicsState(); doc.lines(pathLines(P.concat([P[0]])), P[0][0], P[0][1], [1, 1], null, true); doc.clip(); doc.discardPath();   // keep the zones inside the bed's edge
         const res = 0.25, nx = Math.ceil(bb.w / res), ny = Math.ceil(bb.h / res);
         for (let j = 0; j < ny; j++) {
           const cy = (j + 0.5) * res; let i = 0;
@@ -195,6 +195,7 @@
             i = k;
           }
         }
+        doc.restoreGraphicsState();
         stroke("#8E7660"); doc.setLineWidth(5); doc.setLineJoin("round"); doc.lines(pathLines(P.concat([P[0]])), P[0][0], P[0][1], [1, 1], "S", true); doc.setLineJoin("miter");
       }
       // the sides the bed is seen from: green along the rim, as on the screen
@@ -209,6 +210,10 @@
         }
         ints.sort((p1, p2) => p1 - p2); const out = []; for (let i = 0; i + 1 < ints.length; i += 2) out.push([ints[i], ints[i + 1]]); return out;
       };
+      stroke("#B09A7F"); doc.setLineWidth(0.22);   // half-foot lines inside the bed, fainter
+      for (let gx = 0.5; gx < bb.w; gx++) segsAt(gx, true).forEach(s => doc.line(X(gx), Y(s[0]), X(gx), Y(s[1])));
+      for (let gy = 0.5; gy < bb.h; gy++) segsAt(gy, false).forEach(s => doc.line(X(s[0]), Y(gy), X(s[1]), Y(gy)));
+      stroke("#BBA388"); doc.setLineWidth(0.35);
       for (let gx = 1; gx < bb.w; gx++) segsAt(gx, true).forEach(s => doc.line(X(gx), Y(s[0]), X(gx), Y(s[1])));
       for (let gy = 1; gy < bb.h; gy++) segsAt(gy, false).forEach(s => doc.line(X(s[0]), Y(gy), X(s[1]), Y(gy)));
       // objects sit under the plants
@@ -293,7 +298,7 @@
         for (let k = 0; k < n; k++) { const a0 = k / n * Math.PI * 2, a1 = (k + 0.6) / n * Math.PI * 2, x0 = o.x + Math.cos(a0) * R, y0 = o.y + Math.sin(a0) * R, x1 = o.x + Math.cos(a1) * R, y1 = o.y + Math.sin(a1) * R;
           if (Geo.pip(bed.poly, x0, y0) && Geo.pip(bed.poly, x1, y1)) doc.line(X(x0), Y(y0), X(x1), Y(y1)); } });
       const BADC = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: [TOX, "#FFFFFF"], cold: ["#4F7FB4", "#FFFFFF"] };
-      const kindsOf = pl => { const k = [pl.native ? "nat" : "gar"]; if (pl.fam === "daisy") k.push("daisy"); if (deerEats(pl)) k.push("deer"); if (pl.toxic && pl.toxic.length) k.push("tox"); if (window.isTender && window.isTender(pl)) k.push("cold"); return k; };
+      const kindsOf = pl => { const k = [pl.native && "nat", pl.gfav && "gar"].filter(Boolean); if (pl.fam === "daisy") k.push("daisy"); if (deerEats(pl)) k.push("deer"); if (pl.toxic && pl.toxic.length) k.push("tox"); if (window.isTender && window.isTender(pl)) k.push("cold"); return k; };
       const pbadge = (k, x, y, br) => {
         const c = BADC[k]; fill(c[0]); stroke("#FFFFFF"); doc.setLineWidth(0.6); doc.circle(x, y, br, "FD");
         const u = br * 0.55;
@@ -309,8 +314,8 @@
         ks.forEach((k, bi) => pbadge(k, X(p.x) + (bi - (ks.length - 1) / 2) * st, Y(p.y) - r * 0.86, br)); });
       { let lx = bx + 4; [["nat", "Michigan native"], ["gar", "Garden favorite"], ["daisy", "Daisy family"], ["deer", "Deer eat it"], ["tox", "Toxic plant"], ["cold", "Needs winter care"]].filter(q => usedK.has(q[0])).forEach(([k, t]) => { pbadge(k, lx, byy - 12, 4); sf("sb", 6.8); color(k === "tox" ? TOX : C.muted); text(t, lx + 7, byy - 9.6); lx += 7 + doc.getTextWidth(t) + 12; }); }
       font("helvetica", "normal", 6.4); color(C.muted);
-      const xs = bb.w > 30 ? 5 : bb.w > 16 ? 2 : 1; for (let gx = 0; gx <= bb.w + 0.01; gx += xs) text(gx + " ft", X(gx), byy + bh + 12, { align: "center" });
-      const ys = bb.h > 24 ? 5 : bb.h > 12 ? 2 : 1; for (let gy = 0; gy <= bb.h + 0.01; gy += ys) text(String(gy), bx - 8, Y(gy) + 2, { align: "right" });
+      const xs = big ? (bb.w > 40 ? 2 : 1) : bb.w > 30 ? 5 : bb.w > 16 ? 2 : 1; for (let gx = 0; gx <= bb.w + 0.01; gx += xs) text(gx + " ft", X(gx), byy + bh + 12, { align: "center" });
+      const ys = big ? (bb.h > 40 ? 2 : 1) : bb.h > 24 ? 5 : bb.h > 12 ? 2 : 1; for (let gy = 0; gy <= bb.h + 0.01; gy += ys) text(String(gy), bx - 8, Y(gy) + 2, { align: "right" });
       font("helvetica", "bold", 7.2); color("#4b5244");
       // second legend row: sun zones and the kinds of objects in the bed
       const extra = [];
@@ -331,7 +336,7 @@
       {
         const onPlan = {}; placements.forEach(p => { onPlan[p.id] = (onPlan[p.id] || 0) + 1; });
         const kinds = Object.keys(onPlan).map(id => byId[id]).sort((a, b) => a.name.localeCompare(b.name));
-        const cols = 4, colW = (W - 2 * M) / cols, rowH = 18, rows = Math.ceil(kinds.length / cols);
+        const cols = keyCols, colW = (W - 2 * M) / cols, rowH = 18, rows = Math.ceil(kinds.length / cols);
         by0 += 6; if (by0 + 16 + rows * rowH > H - 60) { newPage(); by0 = 66; }
         sf("rb", 11.5); color(C.forest); text("Plant key", M, by0); const kw = doc.getTextWidth("Plant key"); sf("s", 7.4); color(C.muted); text("The letters on the plan, and how many of each", M + kw + 10, by0); by0 += 12;
         kinds.forEach((pl, i) => {
@@ -343,9 +348,10 @@
         });
         by0 += rows * rowH + 12;
       }
-    }
+      return by0;
+    };
     progress && progress(0.3, "Shopping list");
-    newPage(); let sy = 56;
+    let sy = y - 6;   // on the cover page, under the photos
     // ================= Shopping list  =================
     {
       const list = byHeight, rh = 37, uw = W - 2 * M;
@@ -357,14 +363,27 @@
         stroke(C.rule); doc.setLineWidth(0.5); doc.line(M, sy + 4, W - M, sy + 4); sy += 6;
       };
       sy += 6; hdr(false);
-      list.forEach(p => {
+      // two lists, one per stop: the native plant nursery, then the garden center
+      const groups = [["From a Michigan native plant nursery", "Michigan natives: ask for the straight species (the Latin name)", list.filter(p => !p.gfav)],
+        ["From a garden center", "Garden favorites: sold at most Michigan garden centers and nurseries", list.filter(p => p.gfav)]].filter(g => g[2].length);
+      const rows = []; groups.forEach(g => { rows.push({ g }); g[2].forEach(p => rows.push({ p })); });
+      rows.forEach(({ g, p }) => {
+        if (g) {
+          if (sy + 30 + rh > H - 56) { newPage(); sy = 62; hdr(true); }
+          const n = g[2].reduce((s, q) => s + (counts[q.id] || 0), 0);
+          fill(C.soft); doc.roundedRect(M, sy + 4, W - 2 * M, 20, 4, 4, "F");
+          sf("sb", 8.4); color(C.forest); text(g[0], M + 8, sy + 17); const gw = doc.getTextWidth(g[0]);
+          sf("s", 6.8); color(C.muted); text(g[1], M + 8 + gw + 8, sy + 17);
+          sf("sb", 7.4); color(C.forest); text(n + " plant" + (n === 1 ? "" : "s"), W - M - 8, sy + 17, { align: "right" });
+          sy += 26; return;
+        }
         if (sy + rh > H - 56) { newPage(); sy = 62; hdr(true); }
         stroke("#8b8f80"); doc.setLineWidth(0.7); fill("#FFFFFF"); doc.roundedRect(M + 4, sy + 14, 9, 9, 1.5, 1.5, "FD");
         photo(p.id, M + 18, sy + 7, 30, 22, 3);
         codeDot(p, M + 19, sy + 9, 8);   // its code on the bed plan
         sf("sb", 7.8); color(C.ink); text(p.name, M + 54, sy + 11); drawIcons(p, M + 54 + doc.getTextWidth(p.name) + 4, sy + 8.3, 3.2);
         sf("ri", 6.8); color(C.muted); text(p.latin, M + 54, sy + 18.5);   // the botanical name under the common name
-        { let lx = M + 54; const lab0 = p.native ? "Michigan native" : "Garden favorite"; sf("s", 6); color(C.muted); text(lab0, lx, sy + 26); lx += doc.getTextWidth(lab0 + "  ");
+        { let lx = M + 54; const lab0 = p.native && p.gfav ? "Michigan native, sold at garden centers" : p.native ? "Michigan native" : "Garden favorite"; sf("s", 6); color(C.muted); text(lab0, lx, sy + 26); lx += doc.getTextWidth(lab0 + "  ");
           if (deerEats(p)) { const dt = p.deer === "D" ? "Deer often eat" : "Deer sometimes eat"; sf("sb", 6); color("#7A5230"); text(dt, lx, sy + 26); lx += doc.getTextWidth(dt + "  "); }
           if (waiting[p.id] > 0) { sf("sb", 6); color(TOX); text(waiting[p.id] + " won't fit in the bed drawing", lx, sy + 26); } }
         if (p.toxic) { sf("sb", 6); color(TOX); text(toxLabel(p), M + 54, sy + 33); }
@@ -375,6 +394,16 @@
       sf("sb", 8.8); color(C.ink); text("Total: " + (placements.length + nWait) + " plants", W - M - 6, sy + 15, { align: "right" }); sy += 26;
     }
     hy = sy; noteBox([["Where to buy: ", true], ["get the natives as straight species (the Latin name) from a Michigan native nursery, such as Wildtype Native Plant Nursery in Mason and Michigan Wildflower Farm in Portland, plus local native plant sales (often run by Wild Ones chapters and conservation districts) every May. The garden favorites are stocked at most garden centers and nurseries from April on.", false]], C.soft, C.rule, C.ink);
+    let planPage = 0;
+    // ================= Lay-it-out sheet (landscape, the bed plan as big as it fits) =================
+    progress && progress(0.43, "Lay-it-out sheet");
+    {
+      doc.addPage("letter", "landscape"); page++; planPage = page;
+      const LW = H, LH = W, kinds = new Set(placements.map(p => p.id)).size, keyH = 34 + Math.ceil(kinds / 6) * 18;
+      let ly = 52; sf("rb", 18); color(C.forest); text("Lay-it-out sheet", M, ly);
+      ly += para("Take this page outside. Each plant is drawn at the size it grows to, so the sheet doubles as a spacing guide: set each pot on the center of its circle. Each grid square is 1 foot and every foot is numbered along the edges, so each spot reads as \u201cso many feet along, so many feet back.\u201d Drifts run at an angle and repeat along the bed." + (SUNP ? " The colors under the plants show how much sun each part of the bed gets." : "") + (OBJS.length ? " Paths, stones and other objects are drawn where they sit; trees show their canopy as a dashed ring." : ""), M, ly + 14, LW - 2 * M, 8.6, 11.2, C.ink) + 18;
+      ly += 16; drawBedPlan(ly, LW, LH, Math.max(120, LH - 50 - ly - 60 - keyH), true, 6);   // room above for the icon legend
+    }
     // ================= Side view: small to big =================
     progress && progress(0.5, "Small-to-big side view");
     newPage();
@@ -504,7 +533,7 @@
       ["Prep the bed this fall (now is perfect)", "Mark the bed outline, mow the grass short, then lay cardboard over it and cover with 4 to 6 inches of shredded leaves or compost. By spring the grass underneath is dead and the soil is soft, with no digging out sod. Skip deep tilling, which pulls buried weed seeds to the surface."],
       ["Plant in spring (or early fall)", "Best windows in zone 6B are late April through early June, after the soil dries enough to work, or late August through September so roots settle in before winter."],
       ["Buy the right plants", "For the natives, buy straight species from a native nursery; small plugs are cheap and root in fast. Garden favorites come in quart or gallon pots at most garden centers." + [...new Set(plants.filter(p => p.buyNote).map(p => p.buyNote))].map(t => " " + t).join("")],
-      ["Lay it out before digging", "Use the bed plan on page " + planPage + ": mark a few 1-ft grid lines with string or flour, set every pot on its drawn spot, then stand back and adjust until it looks right before digging."],
+      ["Lay it out before digging", "Use the lay-it-out sheet on page " + planPage + ": mark a few 1-ft grid lines with string or flour, set every pot on its drawn spot, then stand back and adjust until it looks right before digging."],
       ["Plant at the right depth", "Dig a hole about twice as wide as the pot and just as deep. Loosen circling roots, set the crown level with the soil, firm it in and water well."],
       ["Mulch lightly and water the first season", "Use 1 to 2 inches of shredded leaves, kept off the crowns. Water about an inch a week if it doesn't rain during the first summer; after that the plants mostly take care of themselves."],
       ["Be patient", "Perennials follow the old rule: the first year they sleep, the second year they creep, the third year they leap. The bed will look sparse at first and fill in by year three."],
@@ -643,7 +672,7 @@
         const parts = [["Light & soil: ", true], [soil + (need ? (/[.]$/.test(soil) ? " " : ". ") + need + "." : ""), false]];
         let note = p.notes; if (p.fam === "daisy") note += " Daisy family, like ragweed.";
         { const wc = window.winterCare && window.winterCare(p); if (wc && !/winter/i.test(p.notes)) note += " Winter: " + wc.text; } if (deerEats(p) && !/deer/i.test(p.notes)) note += " " + deerText(p);
-        const pf = data.prefs || {}, okPref = q => (!(q.toxic && q.toxic.length) || pf.toxic) && !(deerEats(q) && pf.deer === false) && !(q.fam === "daisy" && pf.daisy === false) && (!pf.sun || q.sun.some(s => pf.sun.includes(s))) && (!pf.origin || pf.origin.includes(q.native ? "nat" : "gar"));
+        const pf = data.prefs || {}, okPref = q => (!(q.toxic && q.toxic.length) || pf.toxic) && !(deerEats(q) && pf.deer === false) && !(q.fam === "daisy" && pf.daisy === false) && (!pf.sun || q.sun.some(s => pf.sun.includes(s))) && (!pf.origin || (q.native && pf.origin.includes("nat")) || (q.gfav && pf.origin.includes("gar")));
         const comps = (window.COMPANIONS && window.COMPANIONS[p.id] || []).filter(c => byId[c.id] && (counts[c.id] || okPref(byId[c.id])));
         sf("s", 7.8); const nl = wrap(note, tw).slice(0, comps.length ? 3 : 4);
         // the light line can wrap now that it gives the hours of sun, so each card is as tall as its text needs
@@ -740,7 +769,7 @@
     const n = doc.getNumberOfPages(), LG = window.PDF_LOGOS || {};
     const linkText = (t, x, yy, url) => { text(t, x, yy); doc.link(x, yy - 6, doc.getTextWidth(t), 8, { url }); return doc.getTextWidth(t); };
     for (let i = 1; i <= n; i++) {
-      doc.setPage(i); stroke(C.rule); doc.setLineWidth(0.6); doc.line(M, H - 44, W - M, H - 44);
+      doc.setPage(i); const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight(); stroke(C.rule); doc.setLineWidth(0.6); doc.line(M, H - 44, W - M, H - 44);
       sf("s", 7.2); color(C.muted); text(gName + "  ·  Zone 6B  ·  Southern Michigan  ·  Page " + i + " of " + n, M, H - 30);
       let x = M; sf("s", 6.2);
       const seg = (t, url) => { color(url ? C.forest : C.muted); x += url ? linkText(t, x, H - 19, url) : (text(t, x, H - 19), doc.getTextWidth(t)); };

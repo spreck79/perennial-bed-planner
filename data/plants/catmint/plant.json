@@ -34,9 +34,9 @@
     "kind": "garden",
     "sources": [
       {
-        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
-        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
-        "note": "Current perennial list from a Michigan garden center."
+        "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
+        "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+        "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
       }
     ]
   },
@@ -99,23 +99,6 @@
       "why": "Combines well with beebalm and Shasta daisies; harmonizes with yellow foxglove, Coreopsis and lemon daylilies.",
       "aboutThisPlant": true,
       "sources": [
-        {
-          "title": "Wisconsin Horticulture (UW–Madison Extension): Catmint 'Walker's Low' article",
-          "url": "https://hort.extension.wisc.edu/articles/nepeta-x-faassenii-walkers-low/",
-          "about": "catmint"
-        }
-      ]
-    },
-    {
-      "id": "foxglove",
-      "why": "Combines well with beebalm and Shasta daisies; harmonizes with yellow foxglove, Coreopsis and lemon daylilies.",
-      "aboutThisPlant": true,
-      "sources": [
-        {
-          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
-          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
-          "about": "foxglove"
-        },
         {
           "title": "Wisconsin Horticulture (UW–Madison Extension): Catmint 'Walker's Low' article",
           "url": "https://hort.extension.wisc.edu/articles/nepeta-x-faassenii-walkers-low/",

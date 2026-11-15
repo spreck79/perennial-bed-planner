@@ -117,9 +117,10 @@ The photos themselves are `full.jpg` (a JPEG of exactly 640 x 480; the site uses
 |---|---|---|---|
 | `kind` | `"native"` \| `"garden"` | yes | Must agree with `facts.native`. |
 | `sources` | array | yes, at least one | Each `{ "title": string, "url": "http(s)://…", "note": string }`, all three required. A Michigan native list for a native plant, or a Michigan garden center for a garden favorite. |
+| `garden` | array | no, natives only | A Michigan native that Michigan garden centers also sell: one or more garden-center sources, same shape as `sources`. The plant then shows both marks (leaf and ◆), matches both choices in step 2, and goes in the PDF's garden-center shopping list. |
 
 A source used by several plants is one source on the site: write its `title` and `note` exactly the same in every
-plant that uses it (matched by `url`), and use it only for plants of one kind (all native or all garden).
+plant that uses it (matched by `url`), and use it only for one kind of proof (a native list, or a garden center that sells the plant).
 
 ### care
 

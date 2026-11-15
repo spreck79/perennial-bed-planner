@@ -1,43 +1,43 @@
 {
   "id": "foxglove",
   "facts": {
-    "code": "YeFo",
-    "name": "Yellow Foxglove",
-    "latin": "Digitalis grandiflora",
+    "code": "FCR",
+    "name": "Foxglove 'Camelot Rose'",
+    "latin": "Digitalis purpurea 'Camelot Rose'",
     "native": false,
     "kind": "clump",
-    "hLo": 24,
-    "hHi": 36,
+    "hLo": 36,
+    "hHi": 42,
     "spacing": 18,
     "bloom": [6, 7.5],
-    "color": "Pale yellow bells",
-    "hex": "#EADB8C",
-    "txt": "#2E3A2C",
-    "light": "Part shade to sun",
+    "color": "Rose-pink bells with purple spots",
+    "hex": "#C9509A",
+    "txt": "#FFFFFF",
+    "light": "Sun to part shade",
     "sun": ["full", "part"],
-    "moisture": "Average to moist",
-    "notes": "A true perennial foxglove with soft yellow bells on tall spikes. Every part is very poisonous if eaten.",
-    "deer": "B",
+    "moisture": "Average, well-drained",
+    "notes": "Tall spikes of rose-pink, spotted bells that bloom the first year. A biennial or short-lived perennial that reseeds, so it keeps coming back. Every part is very poisonous if eaten.",
+    "deer": "A",
     "toxic": ["people", "dogs", "cats"],
     "toxSrc": "ASPCA lists foxglove as toxic",
     "gloves": true,
-    "zones": [3, 8.5]
+    "zones": [4, 9]
   },
   "photo": {
     "credit": {
-      "file": "Digitalis grandioflora 2.jpg",
-      "by": "Audrius Meskauskas (Audriusa)",
-      "lic": "CC BY-SA 3.0",
-      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+      "file": "Digitalis purpurea Camelot Rose 1zz.jpg",
+      "by": "David J. Stang",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
     }
   },
   "status": {
     "kind": "garden",
     "sources": [
       {
-        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
-        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
-        "note": "Current perennial list from a Michigan garden center."
+        "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
+        "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+        "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
       }
     ]
   },
@@ -47,69 +47,48 @@
   },
   "companions": [
     {
-      "id": "astilbe",
-      "why": "Combines with catmint and lady's mantle; in shade with astilbe, hosta or coral bells.",
+      "id": "peony",
+      "why": "Recommended companion plants for 'Camelot Rose': peony ('Dr. Alexander Fleming') and Salvia 'Caradonna'.",
       "aboutThisPlant": true,
       "sources": [
         {
-          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
-          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
+          "title": "Gardenia.net: Digitalis purpurea 'Camelot Rose'",
+          "url": "https://www.gardenia.net/plant/digitalis-purpurea-camelot-rose",
           "about": "foxglove"
         }
       ]
     },
     {
-      "id": "catmint",
-      "why": "Combines with catmint and lady's mantle; in shade with astilbe, hosta or coral bells.",
+      "id": "caradonna",
+      "why": "Recommended companion plants for 'Camelot Rose': peony ('Dr. Alexander Fleming') and Salvia 'Caradonna'.",
       "aboutThisPlant": true,
       "sources": [
         {
-          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
-          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
+          "title": "Gardenia.net: Digitalis purpurea 'Camelot Rose'",
+          "url": "https://www.gardenia.net/plant/digitalis-purpurea-camelot-rose",
           "about": "foxglove"
-        },
-        {
-          "title": "Wisconsin Horticulture (UW–Madison Extension): Catmint 'Walker's Low' article",
-          "url": "https://hort.extension.wisc.edu/articles/nepeta-x-faassenii-walkers-low/",
-          "about": "catmint"
         }
       ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bordine's 2026 Plant Guide: Foxglove 'Camelot Rose' entry",
+      "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+      "topic": "Plant facts",
+      "note": "Listed with sun perennials: 36-42 in. tall, 18-24 in. wide, rose with purple spots, blooms 2-4 weeks from late June, flowers reliably every year."
     },
     {
-      "id": "coral",
-      "why": "Combines with catmint and lady's mantle; in shade with astilbe, hosta or coral bells.",
-      "aboutThisPlant": true,
-      "sources": [
-        {
-          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
-          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
-          "about": "foxglove"
-        }
-      ]
+      "title": "Perennials.com (Walters Gardens): Digitalis purpurea 'Camelot Rose'",
+      "url": "https://www.perennials.com/plants/digitalis-purpurea-camelot-rose.html",
+      "topic": "Hardiness",
+      "note": "USDA zones 4 to 9; full sun or partial shade."
     },
     {
-      "id": "hosta",
-      "why": "Combines with catmint and lady's mantle; in shade with astilbe, hosta or coral bells.",
-      "aboutThisPlant": true,
-      "sources": [
-        {
-          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
-          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
-          "about": "foxglove"
-        }
-      ]
-    },
-    {
-      "id": "ladysmantle",
-      "why": "Combines with catmint and lady's mantle; in shade with astilbe, hosta or coral bells.",
-      "aboutThisPlant": true,
-      "sources": [
-        {
-          "title": "Wisconsin Horticulture (UW–Madison Extension): Yellow Foxglove article",
-          "url": "https://hort.extension.wisc.edu/articles/yellow-foxglove-digitalis-grandiflora/",
-          "about": "foxglove"
-        }
-      ]
+      "title": "Rutgers NJAES: Landscape Plants Rated by Deer Resistance",
+      "url": "https://njaes.rutgers.edu/deer-resistant-plants/",
+      "topic": "Deer",
+      "note": "Common foxglove (Digitalis purpurea) is rated A, rarely damaged."
     }
   ]
 }

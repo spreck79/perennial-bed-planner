@@ -157,6 +157,17 @@ function validate(plants, readErrors) {
       for (const k of Object.keys(s)) if (!["title", "url", "note"].includes(k)) E(`status.sources[${i}]: unknown field '${k}'`);
       if (isUrl(s.url)) (statusSrc[s.url] = statusSrc[s.url] || []).push({ id, s, kind: st.kind });
     });
+    // a Michigan native may also be a garden favorite: status.garden lists Michigan garden centers that sell it
+    for (const k of Object.keys(st)) if (!["kind", "sources", "garden"].includes(k)) E(`status: unknown field '${k}'`);
+    if (st.garden !== undefined) {
+      if (st.kind !== "native") E("status.garden is only for Michigan natives that are also sold at garden centers (a garden favorite's garden centers go in status.sources)");
+      else if (!Array.isArray(st.garden) || !st.garden.length) E("status.garden: leave it out, or list at least one Michigan garden center that sells it");
+      else st.garden.forEach((s, i) => {
+        if (!isText(s.title) || !isUrl(s.url) || !isText(s.note)) E(`status.garden[${i}] needs a title, a web address (url) and a note`);
+        for (const k of Object.keys(s)) if (!["title", "url", "note"].includes(k)) E(`status.garden[${i}]: unknown field '${k}'`);
+        if (isUrl(s.url)) (statusSrc[s.url] = statusSrc[s.url] || []).push({ id, s, kind: "garden" });
+      });
+    }
 
     // ---- care ----
     const groups = C.CARE_GROUPS.concat("spring");

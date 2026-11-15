@@ -18,7 +18,8 @@
     "moisture": "Moist",
     "notes": "Orchid-like spotted flowers in September and October, after most of the bed is done. A good late-season shade plant.",
     "deer": "B",
-    "toxic": null
+    "toxic": null,
+    "zones": [4, 8]
   },
   "photo": {
     "credit": {
@@ -32,9 +33,9 @@
     "kind": "garden",
     "sources": [
       {
-        "title": "Bordine's (Michigan garden center): perennials by bloom time, 2026",
-        "url": "https://bordines.com/wp-content/uploads/2026/08/bloom-time.pdf",
-        "note": "Current perennial list from a Michigan garden center."
+        "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
+        "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+        "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
       }
     ]
   },
@@ -167,6 +168,14 @@
           "about": "toad"
         }
       ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Oklahoma State Extension, Oklahoma Proven: Toad Lily",
+      "url": "https://extension.okstate.edu/programs/oklahoma-proven/plant-profiles/toad-lily",
+      "topic": "Hardiness",
+      "note": "Hardiness zones 4 to 8."
     }
   ]
 }
