@@ -310,6 +310,8 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 .sitefoot .footr { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
 .sitefoot a.s79 { display: flex; align-items: center; gap: 10px; color: #5E5245; font: 400 12.5px "Trebuchet MS", "Segoe UI", sans-serif; text-decoration: none; }   /* the spreck79 sign-off, in its own brand font and colors */
 .sitefoot a.s79 img { height: 38px; width: auto; display: block; }
+.sitefoot a.gh { display: flex; align-items: center; gap: 6px; }   /* the GitHub mark, linking to the code */
+.sitefoot a.gh img { width: 18px; height: 18px; display: block; }
 @media print { .sitefoot { display: none; } }
 .fillpick .fp-desc { flex-basis: 100%; font-size: 13px; color: #2E3A2C; }
 .fillpick .fp-desc p { margin: 0 0 9px; }
