@@ -1944,9 +1944,12 @@
       try {
         const j = JSON.parse(r.result), plan = j.plan || j;
         if (!plan || !Array.isArray(plan.placements) || !plan.shape) throw new Error("not a planner file");
+        const before = plan.placements.length, goneKinds = new Set(plan.placements.filter(p => !byId[p.id]).map(p => p.id)).size;
         plan.placements = plan.placements.filter(p => byId[p.id]);
+        const gone = before - plan.placements.length;
         S = Object.assign(freshState(), plan); S.prefs = Object.assign(freshState().prefs, plan.prefs || {}); S.waiting = cleanWaiting(S.waiting); migratePrefs(plan.prefs);
-        init(false); save(); toast("Opened " + gardenName() + ".");
+        init(false); save();
+        toast("Opened " + gardenName() + "." + (gone ? " " + goneKinds + (goneKinds === 1 ? " kind of plant in it is" : " kinds of plants in it are") + " no longer on the site, so " + gone + (gone === 1 ? " plant was" : " plants were") + " left out." : ""), gone ? 8000 : undefined);
       } catch (err) { toast("That file isn't a saved garden plan.", 5000); }
       e.target.value = "";
     };
@@ -2473,7 +2476,9 @@
   }
   // ---------- PDF preview: look it over, then Download or Print (nothing is saved until asked) ----------
   let pvUrl = null, pvBlob = null, pvName = "", pvFrame = null, pvPrev = null;
-  function loadScript(src) { return new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = () => no(new Error("Couldn't load " + src)); document.head.appendChild(s); }); }
+  const loadScript = window.PlantData.load;
+  // the PDF maker (jsPDF, its fonts and pdf.js) is only fetched the first time a guide is made
+  const needPdf = () => (window.jspdf ? Promise.resolve() : loadScript("lib/jspdf.umd.min.js")).then(() => window.PDF_FONTS ? null : loadScript("fonts.js")).then(() => window.PDFExport ? null : loadScript("pdf.js"));
   function closePreview() {
     const box = $("#pvw"); box.hidden = true; $("#pvBody").innerHTML = ""; pvFrame = null;
     if (pvUrl) { URL.revokeObjectURL(pvUrl); pvUrl = null; } pvBlob = null;
@@ -2521,7 +2526,7 @@
     const busy = $("#busy"), bar = $("#busyBar"), txt = $("#busyText"); busy.classList.add("on"); bar.style.width = "3%";
     txt.textContent = "Getting the photos…";
     const ids = [...new Set(S.placements.map(p => p.id))];
-    Promise.all(ids.map(loadFull).concat(window.PDFExport.prepare ? [window.PDFExport.prepare()] : [])).then(() => setTimeout(() => {
+    needPdf().then(() => Promise.all(ids.map(loadFull).concat(window.PDFExport.prepare ? [window.PDFExport.prepare()] : []))).then(() => setTimeout(() => {
       try {
         const doc = buildPdf();
         bar.style.width = "100%"; txt.textContent = "Opening the preview…";
@@ -2529,7 +2534,7 @@
         openPreview(doc, fname);
         setTimeout(() => busy.classList.remove("on"), 300);
       } catch (err) { console.error(err); busy.classList.remove("on"); toast("Sorry, the PDF could not be made: " + err.message, 6000); }
-    }, 60));
+    }, 60)).catch(err => { console.error(err); busy.classList.remove("on"); toast("Sorry, the PDF could not be made: " + err.message, 6000); });
   });
   window.addEventListener("keydown", e => {
     if (e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;

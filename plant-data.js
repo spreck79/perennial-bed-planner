@@ -1,11 +1,13 @@
-// The plants come straight from their folders, every time a page opens: data/plants/<id>/plant.json, full.jpg and
-// preview.jpg. Nothing about any plant is stored anywhere else. Add a folder and the plant is on the site; delete it
-// and it's gone; change a plant.json and the change shows (pages that are open notice within about a minute and
-// reload themselves, keeping your garden plan).
+// The plants come straight from their folders: data/plants/<id>/plant.json, full.jpg and preview.jpg. Nothing about
+// any plant is stored anywhere else. Add a folder and the plant is on the site; delete it and it's gone; change a
+// plant.json and the change shows on the next refresh.
 //
 // Finding the folders: a web page can't list a folder by itself, so this asks whoever serves the site.
-//   - On the live site (GitHub Pages) it asks GitHub which plant folders the site has right now.
 //   - On your computer (http://localhost:8321, see build/serve.js), it asks the local server.
+//   - On the live site it reads data/plants.all.json: every plant folder in one file, made from the folders each
+//     time the site is published (build/site.js, run by .github/workflows/publish.yml). Nobody edits that file.
+//   - If that file isn't there (the site was published without the workflow), it asks GitHub which plant folders
+//     the site has and reads them one by one.
 // A page opened straight from the disk (index.html double-clicked) can't see any folders: browsers don't allow it.
 (function (root) {
   "use strict";
@@ -116,8 +118,12 @@
       const r = await fetch("__plants", { cache: "no-store" });
       if (r.ok) { const j = await r.json(); return { kind: "local", ids: j.ids, version: j.version, file: f => abs(f) }; }
     } catch (e) {}
+    try {      // the published site: every plant in one file (made by build/site.js when the site is published)
+      const r = await fetch(abs("data/plants.all.json") + (VER ? "?v=" + VER : ""));
+      if (r.ok) { const j = await r.json(); if (j && Array.isArray(j.plants) && j.plants.length) return { kind: "bundle", plants: j.plants, extra: j.extra || [], file: f => abs(f) }; }
+    } catch (e) {}
     const repo = repoName();
-    if (repo) {      // the live site: which plant folders the repo has. The files themselves come from this site.
+    if (repo) {      // published without that file: which plant folders the repo has. The files themselves come from this site.
       const key = "plants-folders:" + repo, saved = store.get(key) || {};
       const live = ids => ({ kind: "github", ids, file: f => abs(f) });
       // seen in the last 10 minutes: use that list (the site's own files are cached for 10 minutes anyway)
@@ -150,6 +156,12 @@
   }
 
   async function readPlants(src) {
+    const dirOf = id => "data/plants/" + encodeURIComponent(id) + "/";
+    if (src.kind === "bundle") return assemble(src.plants.map(plant => {
+      const id = plant && plant.id, why = usable(plant, id);
+      if (why) { console.warn("Plant folder " + id + " left out: " + why); return null; }
+      return { id, plant, full: src.file(dirOf(id) + "full.jpg"), preview: src.file(dirOf(id) + "preview.jpg") };
+    }).filter(Boolean), src.extra);
     const got = await Promise.all(src.ids.map(async id => {
       const dir = "data/plants/" + encodeURIComponent(id) + "/";
       try {
@@ -184,6 +196,7 @@
       .then(d => (d ? (root.PHOTO_FULL[id] = d) : null)).catch(() => null);
   };
 
+  root.PlantData.load = loadScript;   // for parts a page only needs later (the PDF maker)
   let source = null;
   // start(scripts): read the plants, then load the page's own scripts in order
   root.PlantData.start = async function (scripts) {

@@ -1,2 +1,4 @@
 __pycache__/
 build/serve-log.txt
+_site/
+data/plants.all.json

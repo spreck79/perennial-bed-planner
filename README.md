@@ -37,5 +37,10 @@ Plants are believed non-toxic to people, dogs and cats unless marked Toxic. Plea
 ## Sources
 Photo credits, companion-plant sources and native/garden status sources are on the [Sources and photo credits](https://pbp.spreck79.com/credits.html) page. Each plant lives in its own folder in `data/plants` (facts, photos, sources, care and good neighbors; see `data/SCHEMA.md`), and nothing about a plant is kept anywhere else. The site reads the folders every time a page opens: add a folder and the plant is on the site, delete it and it's gone, edit it and the change shows. On your own computer it runs at http://localhost:8321 (see `build/serve.js`).
 
+## Publishing
+Every push to `main` publishes the site (`.github/workflows/publish.yml`; the repository's Settings > Pages > Source must say "GitHub Actions"). The workflow runs `build/site.js`, which copies the site and adds two things made fresh each time: `data/plants.all.json` (every plant folder in one file, so a visitor's browser asks once instead of once per plant) and a version stamp on every script and stylesheet (so a browser never mixes files from two versions). Nobody edits either by hand, and neither is kept in the repository. If the site is published straight from the branch instead, it still works: it asks GitHub for the plant folders and reads them one by one.
+
+Before pushing: `node build/check.js` checks every plant folder, and `node build/smoke.js` opens the site in a hidden browser (from the folders and as published) and checks the planner, the PDF guide and each page.
+
 ## License
 The planner's own text, plant notes, research and code are © 2026 spreck79, licensed under [Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/). Photos keep their own licenses (see the Sources and photo credits page); jsPDF is MIT licensed; PDF.js (used for the preview on phones and tablets) is Apache 2.0; the DejaVu fonts have their own free license. Details in `LICENSE.txt`.

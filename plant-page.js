@@ -165,7 +165,7 @@
 
   // ---- the preview, the same as the planner's (computers use the browser's PDF viewer; phones get drawn pages)
   let pvUrl = null, pvBlob = null, pvName = "", pvFrame = null, pvPrev = null;
-  const loadScript = src => new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = () => no(new Error("Couldn't load " + src)); document.head.appendChild(s); });
+  const loadScript = window.PlantData.load;
   const toast = (msg, ms) => { const t = $("#toast"); if (!t) return; t.textContent = msg; t.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("on"), ms || 2600); };
   function closePreview() {
     $("#pvw").hidden = true; $("#pvBody").innerHTML = ""; pvFrame = null;
