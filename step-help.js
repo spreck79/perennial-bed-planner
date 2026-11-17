@@ -28,8 +28,9 @@
     sunCard: `<h3>Mapping the sun</h3>
 <p>Count only <b>direct</b> sun that lands on the bed, over a summer day.</p>
 <ul class="hsun"><li><i style="background:#E9C35C"></i><b>Full sun</b>: 6 or more hours</li><li><i style="background:#B7AC8C"></i><b>Part shade</b>: 3 to 6 hours</li><li><i style="background:#7C7678"></i><b>Shade</b>: under 3 hours</li></ul>
-<h4>Two quick questions</h4><p>The first time you reach this step, a pop-up asks what light most of the bed gets, and whether any areas get different light. Skip it and the bed is set to full sun.</p>
-<h4>Mapping spots on the plan</h4><ol><li>If you ticked other areas, the palette opens above the bed plan. Otherwise press <b>Map sunny and shady spots on the bed plan</b>.</li><li>Pick a light and drag across the spots that get it. Choose a brush size: S, M or L.</li><li>The <b>Eraser</b> sets a spot back to the bed's main light. <b>Clear</b> starts over.</li><li>To change the whole bed, pick the L brush and paint over all of it.</li></ol>
+<h4>The bed's main light</h4><p>Pick the light <b>most of the bed</b> gets. The whole bed turns that color. Change it any time here or under <b>Sun</b> above the bed plan.</p>
+<h4>Painting the spots that are different</h4><ol><li>Press <b>Paint them on the bed plan</b>. The palette opens above the bed.</li><li>Pick a light and drag across the spots that get it. Choose a brush: small for edges, large to fill.</li><li>The <b>Eraser</b> sets a spot back to the bed's main light. <b>Clear</b> wipes everything you painted.</li><li>Press <b>Done</b> on the palette when it looks right.</li></ol>
+<p>The first time you go on to paint, a short lesson points at each tool and shows a stroke being painted. <b>Show me how painting works</b> plays it again.</p>
 <p><b>Not sure?</b> Check the bed a few times on a sunny day (morning, noon, mid-afternoon) and note where shadows from the house, trees and fences fall.</p>
 <div class="hfoot"><span>Plants are only placed where the light suits them.</span><button type="button" class="btn primary hclose">Got it</button></div>`
   };

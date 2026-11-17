@@ -128,6 +128,8 @@
   }
   function load() { try { const t = localStorage.getItem(LS); return t ? JSON.parse(t) : null; } catch (e) { return null; } }
   let saveT = 0;
+  // the first-time lessons (painting the sun, drawing a bed) play once per browser, not once per garden
+  const Seen = { key: "pbp.lessonsSeen", all() { try { return JSON.parse(localStorage.getItem(this.key)) || {}; } catch (e) { return {}; } }, has(k) { return !!this.all()[k]; }, set(k) { const a = this.all(); a[k] = 1; try { localStorage.setItem(this.key, JSON.stringify(a)); } catch (e) {} } };
   function save() { track(); clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) {} }, 200); }
 
   // ---------- undo / redo: every saved change to the bed is a step you can go back to ----------
@@ -143,6 +145,7 @@
   function applySnap(snapStr) {
     const v = JSON.parse(snapStr); HKEYS.forEach((k, i) => { S[k] = v[i]; }); normalizeExtras(); hcur = snapStr;
     bed = Geo.buildBed(S); attachExtras(); clearSel(); objSel = -1; objArmed = null; pathDraw = null; armed = null; optMode = "idle"; notice = ""; noFit = [];
+    if (sunActive()) { const have = sunInBed(); S.prefs.sun = ["full", "part", "shade"].filter(k => have.has(k)); }   // which plants fit follows the lights on the bed
     fullRender();
   }
   function undo() { track(); if (!hist.length) { toast("Nothing to undo."); return; } fut.push(hcur); applySnap(hist.pop()); undoUI(); toast("Undone. Press Redo (Ctrl+Y) to put it back."); }
@@ -155,6 +158,8 @@
     if (!S.sun || typeof S.sun !== "object" || !S.sun.cells) S.sun = { res: 0.5, cells: {} };
     S.sun.res = 0.5;
     if (S.sunBase && !["full", "part", "shade"].includes(S.sunBase)) S.sunBase = null;
+    // plans saved when the sun step was a checklist: a narrowed list becomes the bed's main light
+    if (!S.sunBase && !Object.keys(S.sun.cells).length && S.prefs && Array.isArray(S.prefs.sun) && S.prefs.sun.length && S.prefs.sun.length < 3) S.sunBase = sunBase();
     if (!Array.isArray(S.compSkip)) S.compSkip = [];
   }
   function sunBase() { if (S.sunBase) return S.sunBase; const s = (S.prefs && S.prefs.sun) || []; return s.length === 1 ? s[0] : s.includes("part") ? "part" : s[0] || "part"; }
@@ -749,6 +754,7 @@
       onCancel: () => { if (S.shape === "free" && !S.freePoly) { S.shape = "rect"; S.dims = { w: 16, d: 6 }; rebuildBed(); } fullRender(); }
     }, { pts: seed, smooth, sharp: seedSharp });
     renderShapesPanel();
+    if (!Seen.has("draw")) setTimeout(() => window.Plan.drawLesson(), 450);   // the first time: a short lesson on the drawing tools
     // the line under the plan describes the outline being drawn, not the old bed
     $("#stats").innerHTML = "<span><b>Drawing your own outline</b> · Save shape when you're done (or press Done in step 2)</span>";
     showPlanTools();
@@ -812,7 +818,7 @@
     if (k === "name") return (S.name || "").trim() ? "<b>" + esc(S.name.trim()) + "</b>" : "No name yet";
     if (k === "bed") { const t = $("#bedSummary"); return "<b>" + esc(Geo.SHAPES[S.shape].label) + "</b>" + (t && t.textContent ? " · " + t.innerHTML.replace(/<\/?b>/g, "").replace("</span>", "").replace("<span>", " · ") : "") + (bed ? " · seen from " + (bed.front === "c" ? "all sides" : viewWords(bed.views || [bed.front])) : ""); }
     if (k === "objects") { const c = {}; S.objects.forEach(o => (c[o.t] = (c[o.t] || 0) + 1)); const l = Object.keys(c).map(t => objPlural(t, c[t])); return l.length ? "<b>" + l.join(", ") + "</b>" : "None"; }
-    if (k === "sun") return "<b>" + pr.sun.map(z => lab[z]).join(", ") + "</b>" + (Object.keys(S.sun.cells).length ? " · sun zones mapped" : "");
+    if (k === "sun") { if (!sunActive()) return "Not set yet"; const o = [...sunInBed()].filter(z => z !== sunBase()).map(z => lab[z].toLowerCase()); return "<b>Mostly " + lab[sunBase()].toLowerCase() + "</b>" + (o.length ? " · some " + o.join(" and ") : ""); }
     const org = pr.origin.length === 2 ? "Natives and garden favorites" : pr.origin[0] === "nat" ? "Michigan natives" : "Garden favorites";
     const nk = pr.kinds.length, kinds = nk === KINDS.length - 1 ? "all kinds" : nk + " kind" + (nk === 1 ? "" : "s");
     if (k === "kind") return "<b>" + org + "</b>, " + kinds;
@@ -883,57 +889,63 @@
     }
     return true;
   }
-  // Step 4 works on the plan: opening it opens the sun palette ("Map sun zones"), and its Done (or the
-  // palette's Done) saves the zones, ticks any light you mapped in step 4's list, and closes the palette.
+  // The sun step works on the plan. The first time it opens, the painting lesson plays and leaves the palette open;
+  // the palette's Done saves what was painted and finishes the step.
   function startSunStep() {
     if (paint || window.Plan.isDrawing()) return;
-    if (needSunAsk()) { askSun(r => { if (r.others.length) paintFor(r.others, true); }); return; }
-    togglePaint(true); if (paint) paint.fromStep = true;
-    toast("Map where the sun falls: pick a light on the palette above the plan and drag across the bed. Press Done when you're finished.", 5000);
+    // nothing starts by itself: the step asks for the bed's main light, and its button goes on to painting
   }
-  // The first time someone reaches the sun step: two quick questions in a pop-up. "Mostly" becomes the light of
-  // the whole bed (nothing picked = full sun); any other lights they tick open the palette to paint those spots.
-  function needSunAsk() { return !S.sunAsked && !Object.keys(S.sun.cells).length && !(S.done && S.done.sun); }
-  function paintFor(others, fromStep) {
+  // The sun step asks what light most of the bed gets. The first time someone goes on to paint, a short lesson
+  // plays on the plan (sunLesson): it points at each tool on the palette, shows a stroke being painted, then hands over.
+  function needSunAsk() { return !Seen.has("sun") && !Object.keys(S.sun.cells).length; }   // the lesson hasn't been seen yet
+  const needBase = () => { if (S.sunBase) return false; toast("First pick the light most of the bed gets.", 3500); return true; };
+  function sunLesson(opts) {
+    if (window.Lesson.on) return; opts = opts || {};
+    if (!S.sunBase) S.sunBase = "full";
     if (!paint) togglePaint(true);
     if (!paint) return;
-    paint.brush = others[0]; if (fromStep) paint.fromStep = true; renderPaintBar();
-    const L = window.Plan.ZONE_LAB, names = others.map(k => L[k].toLowerCase());
-    toast("Now drag across the spots that get " + (names.length > 1 ? names.slice(0, -1).join(", ") + " or " + names[names.length - 1] : names[0]) + ". Pick the light on the palette above the plan. Press Done when you're finished.", 6000);
-  }
-  let sunAskOpen = false;
-  function askSun(then) {
-    if (sunAskOpen) return; sunAskOpen = true;
     const Z = window.Plan.ZONE, L = window.Plan.ZONE_LAB, H = window.Plan.ZONE_HRS, K = ["full", "part", "shade"];
-    let mostly = null; const others = new Set();
-    const d = document.createElement("div"); d.id = "sunask"; d.setAttribute("role", "dialog"); d.setAttribute("aria-modal", "true");
-    d.innerHTML = `<div class="hb"><h3>How much sun does your bed get?</h3>
-      <p class="sa-note">Count only direct sun that lands on the bed, over a summer day.</p>
-      <div class="sa-q">Your bed is mostly…</div><div class="sa-row" id="saMost"></div>
-      <div class="sa-q">Are there any areas of your bed that are…? <small>Check all that apply</small></div><div class="sa-row" id="saOther"></div>
-      <div class="hfoot"><span>Skip it and the bed is set to full sun. You can paint the light on the bed plan any time.</span><button type="button" class="btn primary" id="saOk">Done</button></div></div>`;
-    const sw = k => `<i style="background:${Z[k]}"></i><b>${L[k]}</b><span>${H[k]}</span>`;
-    const draw = () => {
-      const m = d.querySelector("#saMost"), o = d.querySelector("#saOther"); m.innerHTML = ""; o.innerHTML = "";
-      K.forEach(k => {
-        const b = document.createElement("button"); b.type = "button"; b.className = "sa-opt" + (mostly === k ? " on" : ""); b.setAttribute("role", "radio"); b.setAttribute("aria-checked", mostly === k); b.innerHTML = sw(k);
-        b.onclick = () => { mostly = k; others.delete(k); draw(); }; m.appendChild(b);
-        const c = document.createElement("button"); c.type = "button"; c.className = "sa-opt ck" + (others.has(k) ? " on" : ""); c.setAttribute("role", "checkbox"); c.setAttribute("aria-checked", others.has(k)); c.innerHTML = '<em class="sa-box"></em>' + sw(k);
-        c.disabled = mostly === k; c.title = mostly === k ? "That's what most of the bed gets" : "";
-        c.onclick = () => { if (others.has(k)) others.delete(k); else others.add(k); draw(); }; o.appendChild(c);
-      });
-    };
-    const finish = () => {
-      d.remove(); sunAskOpen = false;
-      const base = mostly || "full", rest = K.filter(k => others.has(k) && k !== base);
-      S.sunAsked = true; S.sunBase = base; S.prefs.sun = K.filter(k => k === base || rest.includes(k)); prefChanged(); save(); renderPlan();
-      then && then({ base, others: rest });
-    };
-    d.querySelector("#saOk").onclick = finish;
-    d.addEventListener("click", e => { if (e.target === d) finish(); });
-    d.addEventListener("keydown", e => { if (e.key === "Escape") { e.stopPropagation(); finish(); } });
-    draw(); document.body.appendChild(d); d.querySelector("#saOk").focus();
+    const bar = () => $("#paintBar"), lights = () => [...bar().querySelectorAll(".pb-btn:not(.pb-size)")];
+    const defaultBrush = () => (sunBase() === "shade" ? "part" : "shade");
+    let keptCells = null;      // what was painted before a demonstration started
+    const restore = () => { if (keptCells !== null) { S.sun.cells = JSON.parse(keptCells); keptCells = null; } if (paint) { paint.size = 2; paint.brush = defaultBrush(); renderPaintBar(); renderPlanOnly(); } };
+    // the demonstration: a pointer picks the large brush, picks a light, and paints a patch at one end of the bed
+    async function demo(api) {
+      const brush = defaultBrush();
+      keptCells = JSON.stringify(S.sun.cells);
+      const soil = document.querySelector("#plan .soil") || document.querySelector("#plan .bedrim") || $("#plan"), sr = soil.getBoundingClientRect();
+      const xs = bed.poly.map(q => q[0]), ys = bed.poly.map(q => q[1]), x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+      const toFt = (sx, sy) => [x0 + (sx - sr.left) / sr.width * (x1 - x0), y1 - (sy - sr.top) / sr.height * (y1 - y0)];
+      api.start(sr.left + sr.width * 0.55, sr.top + sr.height * 0.55); await api.wait(500);
+      await api.press([...bar().querySelectorAll(".pb-size")].pop(), 700); paint.size = 4; renderPaintBar();
+      await api.press(lights()[K.indexOf(brush)], 600); paint.brush = brush; renderPaintBar();
+      api.brush(4 * sr.width / (x1 - x0));
+      // three passes down one end of the bed
+      const pts = []; [0.08, 0.2, 0.3].forEach((fx, n) => { for (let i = 0; i <= 14; i++) { const f = n % 2 ? 1 - i / 14 : i / 14; pts.push([sr.left + sr.width * (fx + 0.03 * Math.sin(f * 5)), sr.top + sr.height * (0.1 + 0.8 * f)]); } });
+      await api.to(pts[0][0], pts[0][1], 700); api.hold(true);
+      for (const [sx, sy] of pts) { await api.to(sx, sy, 70); const [fx, fy] = toFt(sx, sy); paintAt(fx, fy); renderPlanOnly(); }
+      api.hold(false); await api.wait(300);
+      await api.to(sr.left + sr.width * 0.6, sr.top + sr.height * 0.5, 600);
+    }
+    window.Lesson.run({
+      kick: "Painting the sun", last: "Start painting", reset: restore,
+      steps: [
+        { t: "The three lights", target: () => lights().slice(0, 3),
+          html: "These are your paints. " + (TOUCH ? "Tap one, then slide a finger" : "Pick one, then drag") + " across the bed to color the spots that get that light.<ul class='sl-lights'>" + K.map(k => "<li><i style='background:" + Z[k] + "'></i><b>" + L[k] + "</b> " + H[k] + " of direct sun a day</li>").join("") + "</ul>" },
+        { t: "The eraser", target: () => lights().slice(3, 4), html: "Painted the wrong spot? The <b>Eraser</b> puts it back to the light most of the bed gets (" + L[sunBase()].toLowerCase() + ")." },
+        { t: "Brush sizes", target: () => [...bar().querySelectorAll(".pb-size")], html: "Three brush sizes. Use the <b>small</b> one for edges and corners, and the <b>large</b> one to fill a big area fast." },
+        { t: "Watch how it's done", target: () => [$("#planWrap")], below: true, demo, html: (TOUCH ? "Tap a brush size, tap a light, then slide a finger across the bed." : "Pick a brush size, pick a light, then drag across the bed.") + " <span class='sl-note'>This is only a demonstration. It's wiped away when you start.</span>" }
+      ],
+      onClose() {
+        Seen.set("sun");
+        if (paint) { paint.size = 2; paint.brush = defaultBrush(); if (opts.fromStep) paint.fromStep = true; }
+        save(); renderPaintBar(); renderPlan(); syncSunPrefs(); renderChips();
+        toast("Your turn. The bed is " + L[sunBase()].toLowerCase() + ": paint any spots that are different, then press " + (Tour.on ? "Next" : "Done") + ".", 6000);
+      }
+    });
   }
+  // the light most of the bed gets: the whole bed is that color except where another light is painted
+  function setSunBase(k) { S.sunBase = k; save(); renderPaintBar(); renderPlan(); syncSunPrefs(); renderChips(); }
   function endSunStep() {
     if (!paint) return;
     paint = null; save(); renderPaintBar(); renderPlan(); syncSunPrefs();
@@ -992,7 +1004,9 @@
   }
   $("#btnExample").addEventListener("click", loadExample);
   $("#gName").addEventListener("keydown", e => { if (e.key === "Enter" && !document.body.classList.contains("touring")) { e.preventDefault(); e.target.blur(); completeStep("name", true); } });
-  $("#btnPaintSun").addEventListener("click", () => { if (!paint) togglePaint(); if (innerWidth > 1050) $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  const tourNext = () => { const n = Tour.on && !paint && document.querySelector("#tourCoach .tc-next"); if (n) n.click(); return !!n; };   // in the tour's first part these buttons are its Next
+  $("#btnPaintSun").addEventListener("click", () => { if (tourNext() || needBase()) return; if (needSunAsk()) { sunLesson({ fromStep: !(S.done && S.done.sun) }); return; } if (!paint) togglePaint(); if (paint && !(S.done && S.done.sun)) paint.fromStep = true; if (innerWidth > 1050) $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  $("#btnSunHow").addEventListener("click", () => { if (!tourNext() && !needBase()) sunLesson({ fromStep: !(S.done && S.done.sun) }); });
   // ---------- steps 4 to 6: how much sun, what kind of garden, and plants to watch out for ----------
   // Sun as three rows in the planner's sun colors, what to include as tiles and chips, and what to leave out as
   // plain switches (with the full explanation one click away). A counter shows how many plants match.
@@ -1019,12 +1033,11 @@
     const n = PL.filter(matchesPrefs).length;
     $("#prefCount").innerHTML = $("#avoidCount").innerHTML = `<b>${n}</b> of ${PL.length} plants match<i style="width:${Math.round(n / PL.length * 100)}%"></i>`;
     // sun: three rows in the sun colors, with hours
-    const sunBox = $("#pSun"); sunBox.innerHTML = "";
+    const sunBox = $("#pSunBase"); sunBox.innerHTML = "";
     ["full", "part", "shade"].forEach(k => {
-      const on = pr.sun.includes(k), b = document.createElement("button"); b.type = "button"; b.className = "optrow" + (on ? " on" : "");
-      const cnt = PL.filter(p => p.sun.includes(k)).length;
-      b.innerHTML = `<span class="ic ic-sun optsw" style="background:${SUNCOL[k]}">${SUNGLYPH}</span><span class="optt"><b>${window.Plan.ZONE_LAB[k]}</b><span>${window.Plan.ZONE_HRS[k]} of direct sun a day</span></span><small>${cnt} plants</small><span class="optck">${on ? "✓" : ""}</span>`;
-      b.onclick = () => toggleIn("sun", k); sunBox.appendChild(b);
+      const on = sunActive() && sunBase() === k, b = document.createElement("button"); b.type = "button"; b.className = "sunopt" + (on ? " on" : ""); b.setAttribute("aria-pressed", on);
+      b.innerHTML = `<i style="background:${window.Plan.ZONE[k]}"></i><b>${window.Plan.ZONE_LAB[k]}</b><span>${window.Plan.ZONE_HRS[k]}</span>`;
+      b.onclick = () => setSunBase(k); sunBox.appendChild(b);
     });
     // include: natives / garden favorites
     const oBox = $("#pOrigin"); oBox.innerHTML = "";
@@ -1723,10 +1736,11 @@
   $("#mSun").addEventListener("click", toggleMenu("mSun", () => {
     const L = window.Plan.ZONE_LAB, H = window.Plan.ZONE_HRS;
     showMenu(() => [
-      { label: paint ? "Stop mapping sun" : "Map sun zones…", hint: paint ? "" : "drag across the bed", fn: () => togglePaint() },
-      { head: "The rest of the bed gets" }
-    ].concat(["full", "part", "shade"].map(k => ({ label: L[k], hint: H[k], check: sunBase() === k, keep: true, fn: () => { S.sunBase = k; save(); renderPaintBar(); renderPlan(); } })))
-      .concat([{ sep: true }, { label: "Clear all mapped sun zones", disabled: !sunActive(), fn: () => { S.sun.cells = {}; S.sunBase = null; save(); renderPaintBar(); renderPlan(); toast("Sun zones cleared. Undo brings them back."); } }]), $("#mSun"), "", "mSun");
+      { label: paint ? "Stop painting" : "Paint sun and shade…", hint: paint ? "" : "drag across the bed", fn: () => { if (!paint && needSunAsk()) sunLesson(); else togglePaint(); } },
+      { label: "Show me how", hint: "a short lesson", fn: () => sunLesson() },
+      { head: "Most of the bed gets" }
+    ].concat(["full", "part", "shade"].map(k => ({ label: L[k], hint: H[k], check: sunActive() && sunBase() === k, keep: true, fn: () => setSunBase(k) })))
+      .concat([{ sep: true }, { label: "Clear painted spots", disabled: !Object.keys(S.sun.cells).length, fn: () => { S.sun.cells = {}; save(); renderPaintBar(); renderPlan(); syncSunPrefs(); toast("Painted spots cleared. Undo brings them back."); } }]), $("#mSun"), "", "mSun");
   }));
   $("#mPlan").addEventListener("click", toggleMenu("mPlan", () => showMenu([
     { label: "Suggest a planting…", hint: "picks plants for you", fn: suggestClicked },
@@ -1826,16 +1840,12 @@
     if (open || !z.size) z.add(sunBase());
     return z;
   }
-  // Painting a light that step 4 leaves out ticks it there too, so there are plants for that spot.
-  // exact (used when the guided tour leaves its sun step) makes step 4 match the bed exactly.
-  function syncSunPrefs(exact) {
+  // Which plants fit follows the lights on the bed: its main light plus anything painted.
+  function syncSunPrefs() {
     if (!sunActive()) return;
-    const have = sunInBed(), cur = S.prefs.sun;
-    const next = ["full", "part", "shade"].filter(k => have.has(k) || (!exact && cur.includes(k)));
-    if (next.join() === cur.join()) return;
-    const added = next.filter(k => !cur.includes(k));
+    const have = sunInBed(), next = ["full", "part", "shade"].filter(k => have.has(k));
+    if (next.join() === S.prefs.sun.join()) return;
     S.prefs.sun = next; prefChanged();
-    if (added.length) toast("Step 4 now includes " + added.map(k => window.Plan.ZONE_LAB[k].toLowerCase()).join(" and ") + " plants, to match the sun you mapped.", 3500);
   }
   // the sun-painting palette floats at the top of the bed plan while painting
   function renderPaintBar() {
@@ -1853,7 +1863,7 @@
     sep();
     [[1, "S"], [2, "M"], [4, "L"]].forEach(([n, t]) => btn(`<i class="pb-dot" style="width:${4 + n * 2}px;height:${4 + n * 2}px"></i>`, "pb-btn pb-size" + (paint.size === n ? " on" : ""), n + " ft brush", () => { paint.size = n; renderPaintBar(); renderPlanOnly(); }));
     const sp = document.createElement("span"); sp.className = "pb-grow"; bar.appendChild(sp);
-    const clr = btn("Clear", "btn small", "Clear all mapped sun zones", () => { S.sun.cells = {}; S.sunBase = null; save(); renderPaintBar(); renderPlan(); toast("Sun zones cleared. Undo brings them back."); }); clr.disabled = !sunActive();
+    const clr = btn("Clear", "btn small", "Wipe everything you painted (the bed goes back to its main light)", () => { S.sun.cells = {}; save(); renderPaintBar(); renderPlan(); syncSunPrefs(); toast("Painted spots cleared. Undo brings them back."); }); clr.disabled = !Object.keys(S.sun.cells).length;
     btn("Done", "btn small primary", "Save the sun zones and stop mapping (Esc)", () => {
       if (paint.fromStep && !Tour.on && !(S.done && S.done.sun)) { completeStep("sun", true); return; }   // step 4's palette: Done finishes the step too
       endSunStep(); if (S.done && S.done.sun) { openSteps.delete("sun"); renderSteps(); }
@@ -1905,7 +1915,8 @@
     onSpotMenu(x, y, cx, cy) { openSpotMenu(x, y, cx, cy); },
     onPaintStart() {},
     onPaint(x, y) { paintAt(x, y); renderPlanOnly(); },
-    onPaintEnd() { save(); renderPlan(); renderPaintBar(); syncSunPrefs(); }
+    onPaintEnd() { save(); renderPlan(); renderPaintBar(); syncSunPrefs(); },
+    onDrawLesson() { Seen.set("draw"); }
   });
   function finishPath() {
     if (!pathDraw) return;
@@ -2300,7 +2311,7 @@
     bottom.appendChild(acts);
   }
   document.addEventListener("keydown", e => {
-    if (e.key !== "Escape" || document.getElementById("modalOverlay") || window.Plan.isDrawing()) return;
+    if (e.key !== "Escape" || document.getElementById("modalOverlay") || window.Plan.isDrawing() || window.Lesson.on) return;
     if (document.getElementById("plantMenu")) { closePlantMenu(); return; }
     if (!$("#addCard").hidden) { closeAddCard(); return; }
     if (paint) { endSunStep(); return; }
@@ -2638,10 +2649,25 @@
         text: "Pick a shape: a rectangle, a round island, or draw your own. Then set the size with <b>−</b> and <b>+</b>. The bed plan beside it changes as you go." },
       { key: "objects", title: "Add objects", holes: [["#objCard"], ["#planWrap"]],
         text: "Add anything that's in the bed or going into it: a path, stepping stones, rocks, a birdbath, shrubs, a hedge or trees. Plants are then laid out around them. Click one, then click the bed. Drag it to move it, and drag the white dots to resize. Nothing to add? Just click Next." },
-      { key: "sun", title: "Add the sun", holes: [["#planWrap"], ["#sunCard"]], primary: 0,
-        text: "Two quick questions set the light for the whole bed. If parts of it get different light, drag across those spots with that light on the palette above the plan: <b>full sun</b> is 6+ hours of direct sun a day, <b>part shade</b> 3 to 6, <b>shade</b> under 3. The list of lights in this step follows what you map.",
-        enter() { if (needSunAsk()) askSun(r => { if (r.others.length) paintFor(r.others); }); else if (!paint) togglePaint(true); },
-        leave(fwd) { if (paint) { paint = null; renderPaintBar(); renderPlan(); } if (fwd) syncSunPrefs(true); } },
+      // the sun step has two parts: pick the bed's main light (only the step is lit), then paint on the plan
+      { key: "sun", title: "Add the sun", holes: [["#sunCard"]], primary: 0, text: "",
+        part(n) {
+          this.at = n;
+          this.holes = n ? [["#planWrap"], ["#sunCard"]] : [["#sunCard"]];
+          this.text = n ? "Paint the spots that get different light from the rest of the bed: pick a light on the palette above the plan and drag across the bed. Press <b>Next</b> when it looks right."
+            : "Pick the light <b>most</b> of your bed gets: count direct sun on the bed over a summer day. Then press <b>Next</b>.";
+        },
+        before() { this.part(S.sunBase && !needSunAsk() ? 1 : 0); },
+        enter() { if (this.at && !paint) togglePaint(true); },
+        next() {
+          if (this.at) return true;
+          if (needBase()) return false;
+          this.part(1); const p = coach.querySelector("p"); if (p) p.innerHTML = this.text;
+          $("#planWrap").scrollIntoView({ behavior: "smooth", block: "center" });
+          if (needSunAsk()) sunLesson(); else if (!paint) togglePaint(true);
+          return false;
+        },
+        leave(fwd) { if (paint) { paint = null; renderPaintBar(); renderPlan(); } if (fwd) syncSunPrefs(); } },
       { key: "plants", title: "Pick your plants", holes: [["#libCard"]], last: true,
         text: "Click <b>+ Add</b> on any plant and it's placed in the bed for you. Or let the planner choose: <b>Suggest a planting</b> picks plants that suit each part of the bed and go well together." }
     ];
@@ -2699,6 +2725,7 @@
     }
     function show() {
       const st = STEPS[idx];
+      if (st.before) st.before();
       coach.innerHTML = `<div class="tc-kick">${st.last ? "Your plants" : "Step " + (idx + 1) + " of " + (STEPS.length - 1)}<span class="tc-dots">${STEPS.map((_, i) => `<i class="${i === idx ? "on" : i < idx ? "done" : ""}"></i>`).join("")}</span></div><h3>${st.title}</h3><p>${st.text}</p><div class="tc-acts"></div><button type="button" class="tc-skip">Skip the tour</button>`;
       const acts = coach.querySelector(".tc-acts");
       const b = (t, cls, fn) => { const x = document.createElement("button"); x.type = "button"; x.className = "btn " + cls; x.textContent = t; x.onclick = fn; acts.appendChild(x); return x; };
@@ -2707,7 +2734,7 @@
       if (st.last) {
         b("Suggest a planting", "small", () => { end(true); suggestClicked(); });
         b("I'll pick my own", "primary small", () => end(true));   // the highlighted choice
-      } else b("Next", "primary small tc-next", () => go(idx + 1));
+      } else b("Next", "primary small tc-next", () => { if (!st.next || st.next()) go(idx + 1); });
       coach.querySelector(".tc-skip").onclick = () => end(false);
       // bring the step into view
       const first = document.querySelector(st.holes[st.primary || 0][0]);
@@ -2749,7 +2776,7 @@
     }
     // Enter in the name box moves on; Esc closes the tour once nothing else is open
     document.addEventListener("keydown", e => {
-      if (!on) return;
+      if (!on || window.Lesson.on) return;
       if (e.key === "Enter" && e.target && e.target.id === "gName") { e.preventDefault(); e.target.blur(); go(idx + 1); return; }
       if (e.key !== "Escape") return;
       if (document.getElementById("modalOverlay") || document.getElementById("prefAsk") || document.getElementById("plantMenu") || !$("#addCard").hidden || paint || window.Plan.isDrawing() || document.querySelector(".lightbox.on")) return;

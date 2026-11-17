@@ -115,9 +115,12 @@
           <div class="stephead"><h2><span class="stepck">✓</span>How much sun?</h2><button type="button" class="steptog"></button></div>
           <div class="stepsum"></div>
           <div class="stepbody">
-            <p class="lede">Pick every light your bed gets. Count only direct sun on the bed itself. Pick one or more.</p>
-            <div class="optlist" id="pSun"></div>
-            <button type="button" class="btn small sunpaintbtn" id="btnPaintSun">Map sunny and shady spots on the bed plan</button>
+            <p class="lede">Count only direct sun that lands on the bed, over a summer day.</p>
+            <div class="sunq">Most of the bed gets</div>
+            <div class="sunopts" id="pSunBase"></div>
+            <div class="sunq">Spots that get different light</div>
+            <button type="button" class="btn small sunpaintbtn" id="btnPaintSun">Paint them on the bed plan</button>
+            <p class="sunhow"><button type="button" class="whybtn" id="btnSunHow">Show me how painting works</button></p>
             <div class="stepfoot"><button type="button" class="btn primary stepdone">Done</button></div>
           </div>
         </section>
@@ -213,6 +216,6 @@
 <script src="fit-note.js?v=12"></script>
 <script src="step-help.js?v=12"></script>
 <script src="plant-data.js?v=12"></script>
-<script>PlantData.start(["plant-rules.js", "geometry.js", "care.js", "charts.js", "plan.js", "app.js"]);</script>
+<script>PlantData.start(["plant-rules.js", "geometry.js", "care.js", "charts.js", "lesson.js", "plan.js", "app.js"]);</script>
 </body>
 </html>

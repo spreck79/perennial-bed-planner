@@ -147,7 +147,7 @@
       else if (e.target && e.target.closest && e.target.closest(".ctxmenu")) e.preventDefault();
     }, true);
     window.addEventListener("keydown", e => {
-      if (!draw) return;
+      if (!draw || (window.Lesson && window.Lesson.on)) return;   // (a lesson is playing: its keys are its own)
       if (e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
       if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); finishDraw(); }
       else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); cancelDraw(); }
@@ -877,11 +877,96 @@
     const size = document.createElement("select"); size.title = "Drawing area";
     SIZES.forEach(s => { const o = document.createElement("option"); o.value = s[0] + "x" + s[1]; o.textContent = `Area ${s[0]} × ${s[1]} ft`; size.appendChild(o); });
     size.onchange = () => { const [w, h] = size.value.split("x").map(Number); draw.W = w; draw.H = h; draw.pts = draw.pts.map(q => [Math.min(w, q[0]), Math.min(h, q[1])]); renderDraw(); };
-    bar.append(save, mk("Undo", undoDraw), (() => { const c = mk("Clear shape", clearDraw); c.title = "Erase the outline and draw a new one from scratch"; return c; })(), mk("Cancel", cancelDraw), curves, corners, size, msg);
-    wrap.appendChild(bar); ui = { bar, msg, save, curves, corners, size };
+    const undo = mk("Undo", undoDraw), clear = mk("Clear shape", clearDraw), cancel = mk("Cancel", cancelDraw), how = mk("Show me how", () => drawLesson(), "dhow");
+    clear.title = "Erase the outline and draw a new one from scratch"; how.title = "A short lesson on drawing a bed";
+    bar.append(save, undo, clear, cancel, curves, corners, size, how, msg);
+    wrap.appendChild(bar); ui = { bar, msg, save, undo, clear, cancel, curves, corners, size };
     if (!SIZES.some(s => s[0] === draw.W && s[1] === draw.H)) { const o = document.createElement("option"); o.value = draw.W + "x" + draw.H; o.textContent = `Area ${draw.W} × ${draw.H} ft`; size.appendChild(o); }
   }
   function removeDrawUI() { if (ui) { ui.bar.remove(); ui = null; } }
+
+  // ---------- the bed-drawing lesson: each tool shown on a sample shape, then the grid is handed back ----------
+  function drawLesson() {
+    if (!draw || !window.Lesson || window.Lesson.on) return;
+    const keep = { pts: draw.pts.map(q => q.slice()), sharp: draw.sharp.slice(), closed: draw.closed, W: draw.W, H: draw.H, hist: draw.hist, view: Object.assign({}, view) };
+    const SHAPE = [[9, 5], [27, 5], [27, 13], [18, 16], [9, 13]], EXTRA = [[9, 5], [18, 2.5], [27, 5], [27, 13], [18, 16], [9, 13]];
+    const set = (pts, closed) => { draw.W = 36; draw.H = 20; draw.pts = pts.map(q => q.slice()); draw.sharp = pts.map(() => true); draw.closed = closed; draw.cur = null; draw.drag = -1; draw.move = null; draw.hist = []; view = { z: 1, fx: 0.5, fy: 0.5 }; renderDraw(); };
+    // feet on the drawing grid -> a spot on the screen, and back (snapped to the half foot)
+    const C = (x, y) => { const k = draw.W / 36, pt = svg.createSVGPoint(); pt.x = x + 2 * k; pt.y = draw.H - y + 1.2 * k; const q = pt.matrixTransform(svg.getScreenCTM()); return [q.x, q.y]; };
+    const F = (cx, cy) => drawCoords({ clientX: cx, clientY: cy });
+    const click = TOUCH ? "Tap" : "Click", clickl = click.toLowerCase();
+    const whole = () => [wrap];
+    const steps = [
+      { t: "Drop the corners", setup: () => set([], false), html: click + " on the grid to drop a corner. Each " + clickl + " adds another. To finish, " + clickl + " the <b>orange dot</b> where you started and the shape closes.",
+        async demo(api) {
+          api.start(...C(18, 10)); await api.wait(400);
+          for (const q of SHAPE) { await api.glide(...C(q[0], q[1]), 520, (x, y) => { if (draw.pts.length) { draw.cur = F(x, y); renderDraw(); } }); await api.click(); draw.cur = null; draw.pts.push(q.slice()); draw.sharp.push(true); renderDraw(); }
+          await api.glide(...C(SHAPE[0][0], SHAPE[0][1]), 600, (x, y) => { draw.cur = F(x, y); renderDraw(); }); await api.click(); draw.cur = null; draw.closed = true; renderDraw();
+          await api.to(...C(18, 10), 500);
+        } },
+      { t: "Drag a dot to move it", setup: () => set(SHAPE, true), html: "Every corner has a dot. " + (TOUCH ? "Put a finger on a dot and slide it," : "Drag a dot") + " and that corner moves. The side lengths update as you go.",
+        async demo(api) {
+          const drag = (x, y) => { const q = F(x, y); draw.pts[3] = [q.x, q.y]; renderDraw(); };
+          api.start(...C(18, 10)); await api.wait(400); await api.to(...C(18, 16), 600);
+          api.hold(true); await api.glide(...C(22, 18.5), 800, drag); api.hold(false); await api.wait(450);
+          api.hold(true); await api.glide(...C(15, 17), 800, drag); api.hold(false);
+        } },
+      { t: click + " a dot to round the corner", setup: () => set(SHAPE, true), html: click + " a dot (without dragging) and that corner becomes a smooth <b>curve</b>. " + click + " it again and it's a <b>sharp</b> corner. Round dot = curve, square dot = sharp.",
+        async demo(api) {
+          const tog = async (i, x, y) => { await api.to(...C(x, y), 650); await api.click(); draw.sharp[i] = !draw.sharp[i]; renderDraw(); await api.wait(800); };
+          api.start(...C(18, 10)); await api.wait(400);
+          await tog(3, 18, 16); await tog(1, 27, 5); await tog(3, 18, 16);
+        } },
+      { t: "+ splits a side in two", setup: () => set(SHAPE, true), html: "Each side has a <b>+</b> in the middle. " + click + " it and that one side becomes two, with a new corner between them. Then drag the new corner where you want it.",
+        async demo(api) {
+          api.start(...C(18, 10)); await api.wait(400); await api.to(...C(18, 5), 650); await api.click();
+          draw.pts.splice(1, 0, [18, 5]); draw.sharp.splice(1, 0, true); renderDraw(); await api.wait(600);
+          api.hold(true); await api.glide(...C(18, 2.5), 700, (x, y) => { const q = F(x, y); draw.pts[1] = [q.x, q.y]; renderDraw(); }); api.hold(false);
+        } },
+      { t: "Remove a corner", setup: () => set(EXTRA, true), html: (TOUCH ? "Press and hold" : "Right-click") + " a dot to take that corner out. The two sides beside it join back into one.",
+        async demo(api) {
+          api.start(...C(18, 10)); await api.wait(400); await api.to(...C(18, 2.5), 650);
+          if (api.touch) { api.note("press and hold"); await api.longPress(900); } else { api.note("right-click"); await api.wait(500); await api.click(); }
+          draw.pts.splice(1, 1); draw.sharp.splice(1, 1); renderDraw(); await api.wait(700); api.note("");
+        } },
+      { t: "Move the whole bed", setup: () => set(SHAPE, true), html: "Drag anywhere <b>inside</b> the shape and the whole bed moves, without changing its shape.",
+        async demo(api) {
+          const shift = (x, y) => { const q = F(x, y); draw.pts = SHAPE.map(s => [s[0] + q.x - 18, s[1] + q.y - 10]); renderDraw(); };
+          api.start(...C(12, 8)); await api.wait(400); await api.to(...C(18, 10), 500);
+          api.hold(true); await api.glide(...C(24, 12.5), 800, shift); await api.glide(...C(14, 9), 900, shift); api.hold(false);
+        } },
+      { t: "All curves, all sharp", setup: () => set(SHAPE, true), html: "<b>All curves</b> rounds every corner at once, for a flowing bed. <b>All sharp</b> makes them all crisp again.",
+        async demo(api) {
+          api.start(...C(18, 10)); await api.wait(400);
+          await api.press(ui.curves, 700); draw.sharp = draw.pts.map(() => false); renderDraw(); await api.wait(1100);
+          await api.press(ui.corners, 500); draw.sharp = draw.pts.map(() => true); renderDraw(); await api.wait(400);
+        } },
+      { t: "More room, and zooming in", setup: () => set(SHAPE, true), html: "Big bed? Pick a larger <b>Area</b> and the grid grows. For fine work, " + (TOUCH ? "pinch with two fingers, or use <b>−</b> and <b>+</b>" : "zoom with <b>−</b> and <b>+</b> or Ctrl + scroll") + ". <b>Fit</b> shows everything again.",
+        async demo(api) {
+          api.start(...C(18, 10)); await api.wait(400);
+          await api.press(ui.size, 700); draw.W = 60; draw.H = 34; renderDraw(); await api.wait(1300);
+          await api.press(ui.size, 300); draw.W = 36; draw.H = 20; renderDraw(); await api.wait(500);
+          const zin = zbar.querySelector(".zin"), zfit = zbar.querySelector(".zfit");
+          if (api.touch) {      // two fingers spreading apart on the shape
+            const [cx, cy] = C(18, 10); let z = 1;
+            api.note("pinch"); await api.pinch(cx, cy, 60, 230, 1100, f => { const want = 1 + 0.96 * f; zoomBy(want / z, cx, cy); z = want; }); api.note(""); await api.wait(900);
+          } else { await api.press(zin, 800); zoomBy(1.4); await api.wait(350); await api.press(zin, 100); zoomBy(1.4); await api.wait(1000); }
+          await api.press(zfit, 500); view = { z: 1, fx: 0.5, fy: 0.5 }; applyView();
+        } },
+      { t: "The buttons", setup: () => set(SHAPE, true), target: () => [ui.save, ui.undo, ui.clear, ui.cancel],
+        html: "<ul class='sl-list'><li><b>Save shape</b> keeps your outline and goes back to the bed plan.</li><li><b>Undo</b> takes back your last change.</li><li><b>Clear shape</b> erases the outline so you can draw a new one.</li><li><b>Cancel</b> leaves without saving.</li><li><b>Show me how</b> plays this lesson again.</li></ul><span class='sl-note'>The sample shape is wiped away when you start.</span>" }
+    ];
+    steps.forEach(s => { if (!s.target) { s.target = whole; s.below = true; } });
+    window.Lesson.run({
+      kick: "Drawing your bed", last: "Start drawing", steps,
+      reset(s) {
+        if (!draw) return;
+        if (s) { s.setup(); return; }
+        draw.W = keep.W; draw.H = keep.H; draw.pts = keep.pts; draw.sharp = keep.sharp; draw.closed = keep.closed; draw.hist = keep.hist; draw.cur = null; draw.drag = -1; draw.move = null; view = keep.view; renderDraw();
+      },
+      onClose() { cb.onDrawLesson && cb.onDrawLesson(); }
+    });
+  }
 
   function renderLegend(items) {
     const box = document.getElementById("planLegend"); if (!box) return;
@@ -899,5 +984,5 @@
     svg.classList.toggle("hasHover", !!id);   // the bed and objects fade back while a plant is pointed at
     svg.querySelectorAll(".pl").forEach(g => { g.classList.toggle("hl", !!id && g.dataset.id === id); g.classList.toggle("dim", !!id && g.dataset.id !== id && !g.classList.contains("sel")); });
   }
-  window.Plan = { init, render, clientToBed, pxPerFt, zonesForSun, zonesOff, movePl, startDraw, setHover, isDrawing: () => !!draw, touch: TOUCH, sidesList, resetView, zoomBy, cancelDraw, finishDraw, chaikin, frontLabels, ZONE, ZONE_LAB, ZONE_HRS, ZONE_TIP, sunNeed, sunTip };
+  window.Plan = { init, render, clientToBed, pxPerFt, zonesForSun, zonesOff, movePl, startDraw, drawLesson, setHover, isDrawing: () => !!draw, touch: TOUCH, sidesList, resetView, zoomBy, cancelDraw, finishDraw, chaikin, frontLabels, ZONE, ZONE_LAB, ZONE_HRS, ZONE_TIP, sunNeed, sunTip };
 })();

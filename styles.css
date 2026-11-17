@@ -917,7 +917,7 @@ body { background: linear-gradient(rgba(246,243,234,.35), rgba(246,243,234,.35))
 .step .stepfoot { align-items: center; gap: 10px; }
 .step .qhelp { flex: none; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--forest); background: #fff; color: var(--forest); font: 700 13px var(--sans); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
 .step .qhelp:hover { background: var(--forest); color: #fff; }
-#stephelp, #sunask { position: fixed; inset: 0; z-index: 9500; background: rgba(46,58,44,.45); display: flex; align-items: center; justify-content: center; padding: 20px; }
+#stephelp { position: fixed; inset: 0; z-index: 9500; background: rgba(46,58,44,.45); display: flex; align-items: center; justify-content: center; padding: 20px; }
 #stephelp .hb { background: #fff; border-radius: 16px; max-width: 560px; width: 100%; max-height: 90vh; overflow: auto; padding: 22px 26px 18px; box-shadow: 0 10px 40px rgba(0,0,0,.25); font: 14.5px/1.5 var(--sans); color: var(--ink); }
 #stephelp h3 { font: 400 22px var(--serif); color: var(--forest); margin: 0 0 10px; }
 #stephelp h4 { margin: 14px 0 4px; font-size: 14px; }
@@ -928,20 +928,6 @@ body { background: linear-gradient(rgba(246,243,234,.35), rgba(246,243,234,.35))
 #stephelp .hfoot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px; font-size: 13px; color: var(--muted); }
 
 /* the two sun questions (app.js askSun) */
-#sunask .hb { background: #fff; border-radius: 16px; max-width: 560px; width: 100%; padding: 22px 26px 18px; box-shadow: 0 10px 40px rgba(0,0,0,.25); font: 14.5px/1.5 var(--sans); color: var(--ink); }
-#sunask h3 { font: 400 22px var(--serif); color: var(--forest); margin: 0 0 4px; }
-#sunask .sa-note { margin: 0 0 10px; color: var(--muted); font-size: 13.5px; }
-#sunask .sa-q { font-weight: 700; margin: 14px 0 6px; } #sunask .sa-q small { font-weight: 400; color: var(--muted); margin-left: 4px; }
-#sunask .sa-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-#sunask .sa-opt { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; padding: 10px 12px; border: 1.5px solid var(--rule); border-radius: 10px; background: #fff; cursor: pointer; font: inherit; color: var(--ink); position: relative; }
-#sunask .sa-opt i { width: 26px; height: 14px; border-radius: 4px; display: block; margin-bottom: 4px; }
-#sunask .sa-opt span { font-size: 12.5px; color: var(--muted); }
-#sunask .sa-opt.on { border-color: var(--forest); background: var(--soft); box-shadow: inset 0 0 0 1px var(--forest); }
-#sunask .sa-opt:disabled { opacity: .4; cursor: default; }
-#sunask .sa-box { position: absolute; right: 10px; top: 10px; width: 16px; height: 16px; border: 1.5px solid #9aa08f; border-radius: 4px; background: #fff; }
-#sunask .sa-opt.on .sa-box { background: var(--forest); border-color: var(--forest); }
-#sunask .sa-opt.on .sa-box::after { content: "✓"; color: #fff; font-size: 12px; font-weight: 700; position: absolute; left: 2px; top: -2px; }
-#sunask .hfoot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 16px; font-size: 13px; color: var(--muted); }
 
 /* plant list: flower color dots and bloom season groups */
 .libcolor { margin: 2px 0 2px; }
@@ -966,3 +952,49 @@ body { background: linear-gradient(rgba(246,243,234,.35), rgba(246,243,234,.35))
 .lg-t { white-space: nowrap; }
 .lg-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1 1 auto; }
 .lg-n { flex: none; }
+
+/* sun step: the bed's main light, and the first-time painting lesson */
+#sunCard .sunq { font-weight: 700; font-size: 13px; margin: 12px 0 6px; }
+#sunCard .sunopts, #lesson .sl-opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+#sunCard .sunpaintbtn { margin-top: 0; }
+#sunCard .sunhow { margin: 8px 0 0; font-size: 12.5px; }
+.sunopt { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; padding: 8px 10px; border: 1.5px solid var(--rule); border-radius: 10px; background: #fff; font: inherit; color: var(--ink); cursor: pointer; }
+.sunopt i { width: 24px; height: 12px; border-radius: 4px; display: block; margin-bottom: 3px; }
+.sunopt b { font-size: 13px; } .sunopt span { font-size: 11.5px; color: var(--muted); }
+.sunopt:hover { border-color: #c9c2a8; }
+.sunopt.on { border-color: var(--forest); background: var(--soft); box-shadow: inset 0 0 0 1px var(--forest); }
+#lesson { position: fixed; inset: 0; z-index: 9400; font: 14px/1.45 var(--sans, system-ui, sans-serif); color: var(--ink); }
+#lesson .sl-ring { position: fixed; border-radius: 12px; box-shadow: 0 0 0 3px #F2C40F, 0 0 0 9999px rgba(46,58,44,.5); transition: left .25s ease, top .25s ease, width .25s ease, height .25s ease; pointer-events: none; }
+#lesson .sl-card { position: fixed; box-sizing: border-box; background: #fff; border-radius: 14px; padding: 14px 16px 12px; box-shadow: 0 14px 40px rgba(0,0,0,.32); border-top: 4px solid var(--forest); transition: left .25s ease, top .25s ease; }
+#lesson .sl-kick { display: flex; align-items: center; justify-content: space-between; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--forest); }
+#lesson .sl-dots { display: flex; gap: 4px; } #lesson .sl-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--rule); }
+#lesson .sl-dots i.done { background: var(--leaf); } #lesson .sl-dots i.on { background: var(--forest); width: 18px; border-radius: 4px; }
+#lesson h3 { margin: 6px 0 4px; font: 400 19px var(--serif); color: var(--forest); }
+#lesson .sl-body { font-size: 13.5px; }
+#lesson .sl-lights { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; font-size: 13px; }
+#lesson .sl-lights i { display: inline-block; width: 18px; height: 11px; border-radius: 3px; margin-right: 7px; vertical-align: -1px; }
+#lesson .sl-opts { margin-top: 10px; }
+#lesson .sl-note { display: block; margin-top: 4px; color: var(--muted); font-size: 12.5px; }
+#lesson .sl-again { display: block; margin-top: 8px; font-size: 12.5px; }
+#lesson .sl-foot { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+#lesson .sl-grow { flex: 1; } #lesson .sl-skip { font-size: 12.5px; font-weight: 600; color: var(--muted); }
+#lesson .sl-cur { position: fixed; width: 0; height: 0; transition: left 0ms linear, top 0ms linear; pointer-events: none; z-index: 2; }
+#lesson .sl-cur::after { content: ""; position: absolute; left: -2px; top: -2px; width: 0; height: 0; border-left: 13px solid #fff; border-top: 0 solid transparent; border-bottom: 19px solid transparent; filter: drop-shadow(0 0 1px #000) drop-shadow(0 1px 2px rgba(0,0,0,.6)); transform: rotate(-12deg); transform-origin: top left; }
+#lesson .sl-cur i { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); border-radius: 50%; border: 2px dashed #2E3A2C; box-sizing: border-box; opacity: 0; }
+#lesson .sl-cur.down i { opacity: 1; }
+body.lessonon .paintbar .pb-btn.sl-press { transform: scale(.9); box-shadow: 0 0 0 3px #F2C40F; }
+body.lessonon #tourCoach { visibility: hidden; }
+#lesson .sl-cur b { position: absolute; left: 16px; top: 18px; white-space: nowrap; background: #2E3A2C; color: #fff; font: 700 11.5px var(--sans); padding: 3px 7px; border-radius: 6px; }
+#lesson .sl-cur b:empty { display: none; }
+#lesson .sl-cur.clk::before { content: ""; position: absolute; left: -14px; top: -14px; width: 28px; height: 28px; border-radius: 50%; border: 3px solid #F2C40F; animation: slclk .24s ease-out; opacity: 0; }
+@keyframes slclk { from { transform: scale(.3); opacity: 1; } to { transform: scale(1.3); opacity: 0; } }
+body.lessonon .sl-press { box-shadow: 0 0 0 3px #F2C40F !important; }
+#lesson .sl-list { margin: 0; padding-left: 18px; display: grid; gap: 5px; font-size: 13px; }
+.drawbar .dhow { border-style: dashed; }
+/* lessons on a touch screen: a fingertip, a ring that fills for press-and-hold, a second finger for pinching */
+#lesson .sl-lp { position: absolute; left: -22px; top: -22px; width: 44px; height: 44px; display: none; }
+#lesson .sl-cur.lp .sl-lp { display: block; } #lesson .sl-cur.lp .sl-lp circle { animation: sllp var(--lp, 800ms) linear forwards; }
+@keyframes sllp { to { stroke-dashoffset: 0; } }
+#lesson.touch .sl-cur::after { left: -15px; top: -15px; width: 30px; height: 30px; box-sizing: border-box; border: 2.5px solid #2E3A2C; border-radius: 50%; background: rgba(255,255,255,.6); transform: none; filter: drop-shadow(0 1px 3px rgba(0,0,0,.45)); transition: transform .12s, background .12s; }
+#lesson.touch .sl-cur.down::after { background: rgba(242,196,15,.75); transform: scale(.82); }
+#lesson.touch .sl-cur b { left: 20px; top: 20px; }
