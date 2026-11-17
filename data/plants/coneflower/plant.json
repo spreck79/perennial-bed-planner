@@ -1,9 +1,9 @@
 {
   "id": "coneflower",
   "facts": {
-    "code": "PuCo",
-    "name": "Purple Coneflower",
-    "latin": "Echinacea purpurea",
+    "code": "Cone",
+    "name": "Coneflower",
+    "latin": "Echinacea purpurea and hybrids",
     "native": false,
     "kind": "clump",
     "fam": "daisy",
@@ -11,14 +11,14 @@
     "hHi": 36,
     "spacing": 18,
     "bloom": [6.5, 9],
-    "color": "Rosy purple with orange cone",
-    "colors": ["pink", "purple"],
+    "color": "Rosy purple, pink, red, orange, yellow, white or lime green, with a raised cone",
+    "colors": ["white", "yellow", "orange", "red", "pink", "purple", "green"],
     "hex": "#C9549A",
     "txt": "#FFFFFF",
     "light": "Full sun to part shade",
     "sun": ["full", "part"],
     "moisture": "Dry to average",
-    "notes": "A long-blooming prairie classic, native to the central U.S. Leave the seed heads standing for goldfinches.",
+    "notes": "A long-blooming prairie classic. The plain purple coneflower is native to the central U.S.; garden hybrids add red, orange, yellow and white. Leave the seed heads standing for goldfinches.",
     "deer": "B",
     "toxic": null,
     "zones": [3, 8.5]
@@ -36,7 +36,7 @@
     "sources": [
       {
         "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
-        "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+        "url": "https://bordines.com/wp-content/uploads/2026/05/BORDINES-2026-PLANT-GUIDE.pdf",
         "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
       }
     ]

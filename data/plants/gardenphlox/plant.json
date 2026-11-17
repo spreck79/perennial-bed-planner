@@ -10,8 +10,8 @@
     "hHi": 36,
     "spacing": 24,
     "bloom": [7, 9.3],
-    "color": "Fragrant pink, white or lavender heads",
-    "colors": ["white", "pink", "purple"],
+    "color": "Fragrant pink, white, lavender or red heads",
+    "colors": ["white", "red", "pink", "purple"],
     "hex": "#E58FBF",
     "txt": "#2E3A2C",
     "light": "Full sun to part shade",
@@ -35,7 +35,7 @@
     "sources": [
       {
         "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
-        "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+        "url": "https://bordines.com/wp-content/uploads/2026/05/BORDINES-2026-PLANT-GUIDE.pdf",
         "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
       }
     ]

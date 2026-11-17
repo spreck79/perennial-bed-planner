@@ -10,9 +10,9 @@
     "hLo": 4,
     "hHi": 8,
     "spacing": 12,
-    "bloom": null,
-    "color": "Velvety heart-shaped leaves",
-    "colors": ["green"],
+    "bloom": [4, 5],
+    "color": "Purplish-brown flowers hidden under velvety heart-shaped leaves",
+    "colors": ["purple"],
     "hex": "#6F9A5A",
     "txt": "#FFFFFF",
     "light": "Part shade to shade",
@@ -49,7 +49,7 @@
     "garden": [
       {
         "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
-        "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+        "url": "https://bordines.com/wp-content/uploads/2026/05/BORDINES-2026-PLANT-GUIDE.pdf",
         "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
       }
     ]

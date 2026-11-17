@@ -4,7 +4,9 @@
 //   Lesson.run({ kick, steps, last, reset, onClose })
 //     kick     the small heading, e.g. "Painting the sun"
 //     steps    [{ t: title, html, target: () => [elements to light up], below: true (card beside the target, not
-//                over it), demo: async api => {...} }]
+//                over it), card: () => [elements the card must not cover, when that is more than the target],
+//                lit: () => [other elements that stay bright], under: () => element the card sits right under,
+//                demo: async api => {...} }]
 //     last     the label of the last step's button ("Start painting")
 //     reset    called before every step and replay, to put things back the way they were
 //     onClose  called once when the lesson ends (finished, skipped or Esc)
@@ -20,17 +22,28 @@
     const steps = cfg.steps;
     let at = 0, runId = 0;
     const ov = document.createElement("div"); ov.id = "lesson"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-label", cfg.kick);
-    ov.innerHTML = '<div class="sl-ring"></div><div class="sl-cur" hidden>' + FINGER + '</div><div class="sl-cur sl-cur2" hidden></div><div class="sl-card"><div class="sl-kick"><span></span><span class="sl-dots"></span></div><h3></h3><div class="sl-body"></div><div class="sl-foot"><button type="button" class="whybtn sl-skip">Skip</button><span class="sl-grow"></span><button type="button" class="btn small sl-back">Back</button><button type="button" class="btn small primary sl-next">Next</button></div></div>';
+    ov.innerHTML = '<svg class="sl-veil" aria-hidden="true"><path fill-rule="evenodd"></path></svg><div class="sl-ring"></div><div class="sl-cur" hidden>' + FINGER + '</div><div class="sl-cur sl-cur2" hidden></div><div class="sl-card"><div class="sl-kick"><span></span><span class="sl-dots"></span></div><h3></h3><div class="sl-body"></div><div class="sl-foot"><button type="button" class="whybtn sl-skip">Skip</button><span class="sl-grow"></span><button type="button" class="btn small sl-back">Back</button><button type="button" class="btn small primary sl-next">Next</button></div></div>';
     ov.classList.toggle("touch", TOUCH); document.body.appendChild(ov);
-    const ring = ov.querySelector(".sl-ring"), card = ov.querySelector(".sl-card"), cur = ov.querySelector(".sl-cur"), body = ov.querySelector(".sl-body"), dot = cur.querySelector("i"), tag = cur.querySelector("b"), cur2 = ov.querySelector(".sl-cur2");
+    const veil = ov.querySelector(".sl-veil"), ring = ov.querySelector(".sl-ring"), card = ov.querySelector(".sl-card"), cur = ov.querySelector(".sl-cur"), body = ov.querySelector(".sl-body"), dot = cur.querySelector("i"), tag = cur.querySelector("b"), cur2 = ov.querySelector(".sl-cur2");
     const union = els => { const r = els.filter(Boolean).map(e => e.getBoundingClientRect()); return { left: Math.min(...r.map(x => x.left)), top: Math.min(...r.map(x => x.top)), right: Math.max(...r.map(x => x.right)), bottom: Math.max(...r.map(x => x.bottom)) }; };
     function place() {
-      const s = steps[at], r = union(s.target()), pad = 5;
-      Object.assign(ring.style, { left: r.left - pad + "px", top: r.top - pad + "px", width: r.right - r.left + pad * 2 + "px", height: r.bottom - r.top + pad * 2 + "px" });
+      const s = steps[at], ring0 = union(s.target()), pad = 5;
+      Object.assign(ring.style, { left: ring0.left - pad + "px", top: ring0.top - pad + "px", width: ring0.right - ring0.left + pad * 2 + "px", height: ring0.bottom - ring0.top + pad * 2 + "px" });
+      const r = s.card ? union(s.card()) : ring0;   // the card can be told to keep clear of more than the ringed thing
+      // lit: other things that stay bright next to the ringed one. The page is then dimmed by a sheet with a hole for each.
+      const lit = s.lit ? s.lit().filter(Boolean).map(e => e.getBoundingClientRect()) : [];
+      ov.classList.toggle("holes", lit.length > 0);
+      if (lit.length) {
+        const hole = (q, p) => { const x = q.left - p, y = q.top - p, w = q.right - q.left + 2 * p, h = q.bottom - q.top + 2 * p, c = 12; return `M${x + c} ${y}h${w - 2 * c}a${c} ${c} 0 0 1 ${c} ${c}v${h - 2 * c}a${c} ${c} 0 0 1 ${-c} ${c}h${-(w - 2 * c)}a${c} ${c} 0 0 1 ${-c} ${-c}v${-(h - 2 * c)}a${c} ${c} 0 0 1 ${c} ${-c}Z`; };
+        veil.setAttribute("viewBox", `0 0 ${innerWidth} ${innerHeight}`);
+        veil.firstChild.setAttribute("d", `M0 0H${innerWidth}V${innerHeight}H0Z` + hole(ring0, pad) + lit.map(q => hole(q, 2)).join(""));
+      }
       const cw = Math.min(360, innerWidth - 20); card.style.width = cw + "px";
       const ch = card.offsetHeight;
       let top = r.bottom + 14, left = r.left;
-      if (s.below) {      // beside the target when there's room (so it stays in view), else under it
+      const u = s.under && s.under();
+      if (u) { const q = u.getBoundingClientRect(); left = q.left; top = Math.min(q.bottom + 12, innerHeight - ch - 10); card.style.width = Math.min(cw, Math.max(260, q.right - q.left)) + "px"; }   // parked right under something, every step
+      else if (s.below) {      // beside the target when there's room (so it stays in view), else under it
         if (r.left >= cw + 24) { left = r.left - cw - 14; top = Math.min(r.top, innerHeight - ch - 10); }
         else { left = r.left + (r.right - r.left - cw) / 2; top = Math.min(r.bottom + 12, innerHeight - ch - 10); }
       } else if (top + ch > innerHeight - 10) top = Math.max(10, r.top - ch - 14);

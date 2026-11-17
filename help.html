@@ -49,6 +49,12 @@
   details { background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 10px 14px; margin: 8px 0; }
   summary { cursor: pointer; font-weight: 600; } details p { margin: 8px 0 2px; }
   .keybox { background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 12px 14px; line-height: 2.2; }
+  .plain { margin: 6px 0 10px; padding-left: 20px; } .plain li { margin: 5px 0; }
+  .tipbox { background: #EEF3E4; border: 1px solid #C9D7B4; border-radius: 12px; padding: 10px 14px; margin: 12px 0; }
+  .how { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; margin: 8px 0 12px; }
+  .how th, .how td { text-align: left; padding: 8px 12px; border-top: 1px solid var(--rule); vertical-align: top; } .how tr:first-child th, .how tr:first-child td { border-top: 0; }
+  .how th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  .how.icons td:first-child { white-space: nowrap; width: 1%; }
   .jump { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 0; } .jump a { background: #fff; border: 1px solid var(--rule); border-radius: 999px; padding: 4px 12px; text-decoration: none; font-size: 14px; }
   @media (max-width: 640px) { .steps { grid-template-columns: 1fr; } }
 </style>
@@ -64,33 +70,117 @@
 <main>
   <h1>Help</h1>
   <p class="muted">How to use the Perennial Bed Planner (beta).</p>
-  <div class="jump"><a href="#start">Quick start</a><a href="#icons">What the icons mean</a><a href="#faq">Questions</a><a href="#facts">Where the facts come from</a><a href="#feedback">Feedback</a></div>
+  <div class="jump"><a href="#start">Quick start</a><a href="#plants">Find plants</a><a href="#bed">Work on the bed</a><a href="#read">Read the plan</a><a href="#charts">Charts and shopping list</a><a href="#pages">Plant pages</a><a href="#pdf">PDF guide</a><a href="#icons">Icons</a><a href="#faq">Questions</a><a href="#facts">Where the facts come from</a><a href="#feedback">Feedback</a></div>
 
   <h2 id="start">Quick start</h2>
-  <p>Work down the steps on the left of the planner. Want to see it walked through? Press <b>Guided tour</b> at the top of the planner. Just looking around? <b>Load an example garden</b> in step 1.</p>
+  <p>Work through the six steps at the top of the planner. Want it walked through? Press <b>Guided tour</b>. Just looking around? <b>Load an example garden</b> in step 1.</p>
   <ol class="steps">
     <li><b>Name your garden</b>Optional. It goes at the top of the planner and on your PDF guide.</li>
     <li><b>What kind of garden?</b>Michigan natives, garden favorites or both, and the kinds of plants you like.</li>
-    <li><b>Plants to watch out for</b>Leave out plants that are toxic to pets or people, that deer eat, that need winter care, or that bother ragweed allergies.</li>
-    <li><b>Build your bed</b>A rectangle, a round island, or draw your own. Set the size with − and +.</li>
-    <li><b>Add objects</b>Paths, stepping stones, rocks, a birdbath, shrubs or trees. Plants are laid out around them.</li>
-    <li><b>Add the sun</b>Paint full sun (6+ hours), part shade (3 to 6) and shade (under 3) onto the bed.</li>
+    <li><b>Plants to watch out for</b>Leave out plants that are toxic to pets or people, that deer eat, that need winter care, that bother ragweed allergies, or that can escape the garden.</li>
+    <li><b>Your bed</b>A rectangle, a round island, or draw your own outline. Set the size with − and +, and say which sides it's seen from.</li>
+    <li><b>Add objects</b>Paths, stepping stones, rocks, a birdbath, shrubs or trees. Click one, then click the bed. Plants are laid out around them.</li>
+    <li><b>How much sun?</b>Pick the light most of the bed gets. If some spots are different, paint them: full sun (6+ hours), part shade (3 to 6) or shade (under 3).</li>
   </ol>
-  <p>Then <b>pick your plants</b>: press <b>+ Add</b> on any plant and it's placed for you, or use <b>Plan it ▾ → Suggest a planting</b> to let the planner choose. When you're happy, press <b>Create PDF guide</b> for a printable plan, plant list and care calendar.</p>
+  <p>Then <b>pick your plants</b>: press <b>+ Add</b> on any plant and it's placed for you, or use <b>Plan it ▾ → Suggest a planting</b> to let the planner choose. When you're happy, press <b>Create PDF guide</b>.</p>
+  <div class="tipbox"><b>Short lessons play the first time</b> you draw a bed, add an object or paint the sun. A pointer shows each tool, then hands over to you. <b>Skip</b> closes one. To watch one again, press <b>Show me how</b> in that step. <b>Start over</b> plays them all again.</div>
+
+  <h2 id="plants">Find plants</h2>
+  <p>The plant list only shows plants that fit your choices and the light in your bed. To narrow it down:</p>
+  <ul class="plain">
+    <li><b>Search</b> by name, Latin name or color.</li>
+    <li><b>Any light</b> and <b>Any height</b> filter by where it grows and how tall it gets.</li>
+    <li><b>Flower color</b>: click a dot to see only plants that bloom in that color. Click it again to show them all. Green means no flowers (ferns, sedges) or green flowers.</li>
+    <li><b>Group by</b> sorts the list into folding groups: bloom season, plant type, native status, light, deer, or fall cleanup. Click a group's title to fold it.</li>
+    <li><b>All that fit</b> shows every plant you could add. <b>In your bed</b> shows only the ones you've chosen.</li>
+    <li><b>Reset filters</b> clears the search and filters.</li>
+  </ul>
+  <p>Click a plant's photo to enlarge it. <b>More info</b> under the big photo opens that plant's own page.</p>
+
+  <h2 id="bed">Work on the bed</h2>
+  <p>Everything on the bed can be moved. The same things work with a mouse or a finger:</p>
+  <table class="how">
+    <tr><th>To do this</th><th>Mouse</th><th>Tablet</th></tr>
+    <tr><td>Move a plant or object</td><td>Drag it</td><td>Press and hold, then drag</td></tr>
+    <tr><td>More choices (duplicate, lock, remove…)</td><td>Right-click it</td><td>Press and hold it</td></tr>
+    <tr><td>Add something at one spot</td><td>Right-click an empty spot</td><td>Press and hold an empty spot</td></tr>
+    <tr><td>Select every plant of one kind</td><td>Shift-click one</td><td>Press and hold, then <b>Select all</b></td></tr>
+    <tr><td>Select several plants</td><td>Ctrl-click each</td><td>Press and hold, then <b>Select more plants</b></td></tr>
+    <tr><td>Resize an object</td><td colspan="2">Select it, then drag a white dot</td></tr>
+    <tr><td>Zoom in and out</td><td>Hold Ctrl and scroll, or use − and +</td><td>Pinch with two fingers</td></tr>
+    <tr><td>Undo, redo</td><td>The arrows above the bed, or Ctrl+Z and Ctrl+Y</td><td>The arrows above the bed</td></tr>
+  </table>
+  <p>The buttons above the bed:</p>
+  <ul class="plain">
+    <li><b>+ Add</b>: a plant from a list, or an object to place.</li>
+    <li><b>Sun</b>: paint sun and shade, change the light most of the bed gets, or clear what you painted.</li>
+    <li><b>Plan it</b>: <b>Suggest a planting</b> picks plants for you. <b>Re-arrange</b> lays out the same plants again. <b>Fill gaps</b> tucks groundcover or companion plants into empty spots. <b>Clear bed</b> removes all plants.</li>
+    <li><b>View</b>: show the plants as letters or photos, and turn the grid and sun colors on or off.</li>
+  </ul>
+  <p><b>Lock in place</b> (in a plant's menu) keeps a plant where you put it when the bed is re-arranged.</p>
+
+  <h2 id="read">Read the plan</h2>
+  <ul class="plain">
+    <li><b>Each circle is the plant at its full grown size</b>, so the plan doubles as your spacing guide. Grid squares are 1 foot.</li>
+    <li><b>The letters</b> are a short code for the plant (BlSt for Blue Star). The key under the plan and the shopping list show which is which.</li>
+    <li><b>The small marks</b> on a circle are the same icons as in the plant list: sun needs on top, the rest along the bottom.</li>
+    <li><b>The bed's colors</b> show the light: yellow for full sun, tan for part shade, gray for shade.</li>
+    <li><b>A red dashed ring</b> means the plant is too close to a neighbor or sits on an object. <b>A yellow dotted ring</b> means it's in light that doesn't suit it. Drag it somewhere better.</li>
+    <li><b>Full when grown</b> (under the plan): 100% means every plant is at its recommended spacing, so the bed fills in once grown.</li>
+    <li><b>Seen from</b>: the green edge is the side you look at the bed from. Short plants go there, taller ones behind.</li>
+  </ul>
+
+  <h2 id="charts">Charts and shopping list</h2>
+  <ul class="plain">
+    <li><b>Garden Timeline</b>: a bar for each plant showing the months it blooms, so you can spot gaps in the season. Striped bars are leaf plants that carry the bed between flowers. Switch between <b>All plants</b> and <b>Chosen only</b>.</li>
+    <li><b>Height and spacing</b>: your chosen plants side by side from shortest to tallest, drawn to one scale. The bar under each is how far apart to set that kind.</li>
+    <li><b>Shopping list</b>: what to buy for the bed as it's arranged, with how many of each.</li>
+  </ul>
+  <p>Click a plant in any of them and it lights up on the bed plan and in the other charts, in the color of its last icon.</p>
+
+  <h2 id="pages">Plant pages</h2>
+  <p>Every plant has its own page: photo, height and spacing, bloom months, every color it comes in, light, soil, hardiness, deer and toxicity, a year of care, the plants it goes well with, and where each fact came from. Open it with <b>More info</b> under a plant's enlarged photo. <b>Print this plant</b> makes a one-page PDF.</p>
+
+  <h2 id="pdf">PDF guide</h2>
+  <p><b>Create PDF guide</b> builds a printable booklet for your bed:</p>
+  <ul class="plain">
+    <li>A cover with your garden's name and a bloom calendar.</li>
+    <li>The shopping list.</li>
+    <li>The bed plan with a plant key, and a <b>lay-it-out sheet</b> to carry outside: set each pot on the center of its circle.</li>
+    <li>A card for each plant with its photo and facts.</li>
+    <li>A care calendar: what to do, month by month.</li>
+    <li>Photo credits.</li>
+  </ul>
+  <p>It takes a few seconds to make. Then save it or print it from the viewer.</p>
 
   <h2 id="icons">What the icons mean</h2>
-  <div class="keybox"><span class="ickey"><span class="ic ic-sun" data-k="sun" style="background:#F2C40C" data-tip="Full sun: 6 or more hours of direct sun a day"><svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="2.5" fill="currentColor"></circle><path d="M6 .8V2.4M6 9.6v1.6M.8 6h1.6M9.6 6h1.6M2.3 2.3 3.4 3.4M8.6 8.6l1.1 1.1M2.3 9.7 3.4 8.6M8.6 3.4l1.1-1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path></svg></span> full sun <span class="ic ic-sun" data-k="sun" style="background:#B5A153" data-tip="Part shade: 3 to 6 hours of direct sun a day"><svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="2.5" fill="currentColor"></circle><path d="M6 .8V2.4M6 9.6v1.6M.8 6h1.6M9.6 6h1.6M2.3 2.3 3.4 3.4M8.6 8.6l1.1 1.1M2.3 9.7 3.4 8.6M8.6 3.4l1.1-1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path></svg></span> part shade <span class="ic ic-sun" data-k="sun" style="background:#6E6E6E" data-tip="Shade: little or no direct sun, under 3 hours a day"><svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="2.5" fill="currentColor"></circle><path d="M6 .8V2.4M6 9.6v1.6M.8 6h1.6M9.6 6h1.6M2.3 2.3 3.4 3.4M8.6 8.6l1.1 1.1M2.3 9.7 3.4 8.6M8.6 3.4l1.1-1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path></svg></span> shade (blended if it takes more than one) <span class="ic ic-nat" data-k="nat" data-tip="Michigan native"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M10.6 1.4C5.2 1.2 1.6 3.9 1.7 8c0 .9.3 1.7.7 2.3.5-2.6 2.3-4.6 4.9-5.8-2.1 1.5-3.6 3.4-4.2 6 .5.2 1.1.3 1.7.3 4 0 6-3.4 5.8-9.4z" fill="currentColor"></path></svg></span></span> native <span class="ic ic-gar" data-k="gar" data-tip="Garden favorite (not native)">◆</span> garden favorite <span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span> daisy family <span class="ic ic-deer" data-k="deer" data-tip="Deer often or sometimes eat this"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 11V6.2M6 6.2 3.2 2M4.3 3.7 2 4.2M6 6.2 8.8 2M7.7 3.7 10 4.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"></path></svg></span> deer often eat <span class="ic ic-tox" data-k="tox" data-tip="Toxic plant">!</span> toxic <span class="ic ic-cold" data-k="cold" data-tip="Not winter-hardy here: needs winter care">❄</span> needs winter care</div>
-  <p class="muted">Hover over (or tap) any icon in the planner to see what it means.</p>
+  <table class="how icons">
+    <tr><td><span class="ic ic-sun" data-k="sun" style="background:#F2C40C" data-tip="Full sun: 6 or more hours of direct sun a day"><svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="2.5" fill="currentColor"></circle><path d="M6 .8V2.4M6 9.6v1.6M.8 6h1.6M9.6 6h1.6M2.3 2.3 3.4 3.4M8.6 8.6l1.1 1.1M2.3 9.7 3.4 8.6M8.6 3.4l1.1-1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path></svg></span> <span class="ic ic-sun" data-k="sun" style="background:#B5A153" data-tip="Part shade: 3 to 6 hours of direct sun a day"><svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="2.5" fill="currentColor"></circle><path d="M6 .8V2.4M6 9.6v1.6M.8 6h1.6M9.6 6h1.6M2.3 2.3 3.4 3.4M8.6 8.6l1.1 1.1M2.3 9.7 3.4 8.6M8.6 3.4l1.1-1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path></svg></span> <span class="ic ic-sun" data-k="sun" style="background:#6E6E6E" data-tip="Shade: little or no direct sun, under 3 hours a day"><svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="2.5" fill="currentColor"></circle><path d="M6 .8V2.4M6 9.6v1.6M.8 6h1.6M9.6 6h1.6M2.3 2.3 3.4 3.4M8.6 8.6l1.1 1.1M2.3 9.7 3.4 8.6M8.6 3.4l1.1-1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path></svg></span></td><td><b>Light it needs</b>: full sun (6 or more hours of direct sun), part shade (3 to 6 hours) or shade (under 3). A blended icon means it takes more than one.</td></tr>
+    <tr><td><span class="ic ic-nat" data-k="nat" data-tip="Michigan native"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M10.6 1.4C5.2 1.2 1.6 3.9 1.7 8c0 .9.3 1.7.7 2.3.5-2.6 2.3-4.6 4.9-5.8-2.1 1.5-3.6 3.4-4.2 6 .5.2 1.1.3 1.7.3 4 0 6-3.4 5.8-9.4z" fill="currentColor"></path></svg></span></span></td><td><b>Michigan native</b>: grows wild in Michigan. Good for local bees, butterflies and birds.</td></tr>
+    <tr><td><span class="ic ic-gar">◆</span></td><td><b>Garden favorite</b>: not native, but sold at Michigan nurseries and garden centers. On a native, it means garden centers sell it too.</td></tr>
+    <tr><td><span class="ic ic-df">✿</span></td><td><b>Daisy family</b>: related to ragweed. Can bother people with ragweed allergies.</td></tr>
+    <tr><td><span class="ic ic-deer" data-k="deer" data-tip="Deer often or sometimes eat this"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 11V6.2M6 6.2 3.2 2M4.3 3.7 2 4.2M6 6.2 8.8 2M7.7 3.7 10 4.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"></path></svg></span></td><td><b>Deer eat it</b>: rated "often" or "sometimes damaged" by Rutgers University.</td></tr>
+    <tr><td><span class="ic ic-cold">❄</span></td><td><b>Needs winter care</b>: not hardy in zone 6B. It's dug up in fall and replanted in spring.</td></tr>
+    <tr><td><span class="ic ic-tox">!</span></td><td><b>Toxic plant</b>: can make pets or people sick if eaten.</td></tr>
+    <tr><td><span class="ic ic-inv">↔</span></td><td><b>Can escape the garden</b>: not native, and on a Michigan list of plants that spread into natural areas. The plant's page says how to keep it in bounds.</td></tr>
+  </table>
+  <p class="muted">In the planner, point at (or tap) any icon to see what it means for that plant.</p>
 
   <h2 id="faq">Questions</h2>
   <details open><summary>Is my plan saved?</summary><p>Yes, in this browser on this computer, automatically. To keep a copy, move it to another computer, or share it, press <b>Save plan</b>: it downloads a small file. Press <b>Open plan</b> to load it again.</p></details>
+  <details><summary>A plant I want isn't in the list. Where is it?</summary><p>The list hides plants that don't fit your choices. Check three things: <b>Reset filters</b> in the plant list; the <b>What kind of garden?</b> and <b>Plants to watch out for</b> steps (a plant left out there is hidden); and the <b>How much sun?</b> step (a shade plant won't show for a bed that's all full sun). If it's still missing, the site may not have it yet: there are only so many plants so far.</p></details>
   <details><summary>Why can't I put a plant in some spots?</summary><p>Each plant only goes where the light suits it. While you drag a plant, the spots that don't suit it turn gray. A plant may also need more room than is free.</p></details>
-  <details><summary>How do I move, copy or remove plants?</summary><p>Drag a plant to move it. Right-click any plant, object or empty spot for more choices. Shift-click a plant to select every plant of that kind. Undo and redo are just above the bed (Ctrl+Z and Ctrl+Y).</p></details>
-  <details><summary>Does it work on a phone?</summary><p>It's made for a computer, or an iPad or other tablet turned sideways. A phone can look around, but the bed is hard to work with on a small screen.</p></details>
-  <details><summary>How do I start over?</summary><p>Press <b>Start over</b> at the top of the planner. Save your plan first if you want to keep it.</p></details>
+  <details><summary>I added a plant but it isn't on the bed.</summary><p>There was no room for it in light that suits it, so it waits on the shopping list instead of going in the wrong spot. Make room (remove or move something, or make the bed bigger) and add it again.</p></details>
+  <details><summary>How do I move, copy or remove plants?</summary><p>Drag a plant to move it. Right-click it (on a tablet, press and hold) for Duplicate, Lock in place, Move to an open spot and Remove. See <a href="#bed">Work on the bed</a> for the full list.</p></details>
+  <details><summary>My garden is gone. What happened?</summary><p>The plan is kept by your browser. It's lost if the browser's saved site data is cleared, if you used a private window, or if you're on a different browser or computer. Use <b>Save plan</b> now and then to keep a file you can open again anywhere.</p></details>
+  <details><summary>The plants didn't load.</summary><p>Refresh the page. If the list is still empty, hold Ctrl and press F5 (on a Mac, Cmd+Shift+R) to load a fresh copy.</p></details>
+  <details><summary>Does it work on a phone or tablet?</summary><p>It's made for a computer, or an iPad or other tablet turned sideways. On a tablet, press and hold takes the place of right-click, and two fingers zoom. A phone can look around, but the bed is hard to work with on a small screen.</p></details>
+  <details><summary>Can I change my choices after I've planted?</summary><p>Yes. Open any step again and change it. If a plant in the bed no longer fits, the planner asks before taking it out.</p></details>
+  <details><summary>Does it work for my yard?</summary><p>The plants and care dates are for Southern Michigan, zone 6B. Nearby zone 5 and 6 gardens will be close, but check a plant's hardiness zones on its page.</p></details>
+  <details><summary>How do I start over?</summary><p>Press <b>Start over</b> at the top of the planner. Save your plan first if you want to keep it. The lessons play again too.</p></details>
 
   <h2 id="facts">Where the facts come from</h2>
-  <p>Plant facts come from Michigan sources first, such as Michigan native plant nurseries and garden centers, then university extension services in nearby states. Every source and photo credit is listed on the <a href="credits.html">Sources and photo credits</a> page.</p>
+  <p>Plant facts come from Michigan sources first, such as Michigan State University Extension, Michigan native plant nurseries and Michigan garden centers, then university extension services in nearby states. Deer ratings come from Rutgers University and toxicity from the ASPCA. Every plant's page lists its own sources, and every source and photo credit is on the <a href="credits.html">Sources and photo credits</a> page.</p>
 
   <h2 id="feedback">Feedback</h2>
   <p>This is a beta, so things may still change. Found a mistake or have an idea? Email <a href="mailto:feedback@spreck79.com?subject=Perennial%20Bed%20Planner%20feedback">feedback@spreck79.com</a>. The link fills in the subject "Perennial Bed Planner feedback" for you.</p>

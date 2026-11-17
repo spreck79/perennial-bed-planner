@@ -82,7 +82,7 @@ Top level (all required except `example` and `sources`, nothing else allowed):
 | `spacing` | number (inches) | yes | Center-to-center spacing. More than 0. |
 | `bloom` | `[start, end]` months, or `null` | yes (may be `null`) | Months between 3 and 12, start before end. `null` = grown for its foliage. |
 | `color` | string | yes | Flower or leaf color in words. |
-| `colors` | array | yes | The plant-list color filter: one or more of `white`, `yellow`, `orange`, `red`, `pink`, `purple`, `blue`, `green`, each once. Every flower color the plant comes in; `green` for green flowers or a plant grown for its leaves. |
+| `colors` | array | yes | The plant-list color filter: one or more of `white`, `yellow`, `orange`, `red`, `pink`, `purple`, `blue`, `green`, each once. What the plant shows at bloom time: every flower color it is sold in (a named cultivar lists only its own). `green` only for green flowers, or alone for a plant with no flowers (ferns, sedges, leaf grasses, non-flowering forms). Never green for the leaves of a plant that flowers. |
 | `hex` | color | yes | The plant's color on the plan and charts. |
 | `txt` | color | yes | Text color that reads on `hex` (usually `#2E3A2C` or `#FFFFFF`). |
 | `light` | string | yes | Light and soil needs in words. |
@@ -96,6 +96,7 @@ Top level (all required except `example` and `sources`, nothing else allowed):
 | `gloves` | `true` | no | Toxic plants to handle with gloves. Named in the PDF's toxic-plant note when they're in the bed. |
 | `zones` | `[coldest, warmest]` zones | no, but see the rules | Hardiness range, from 1 to 13.5 in steps of .5, coldest first. Missing zones are allowed but listed as "worth finishing". If the coldest zone is above 6.5 the plant needs `winter`. If the warmest is below 6 it fails. |
 | `winter` | object | when the plant isn't hardy in zone 6B | `{ "how": "dig" \| "pot" \| "annual" \| "mulch", "text"?: string, "lift"?: [start, end], "replant"?: [start, end], "mulch"?: [start, end] }`. Windows are months (1 to 12.99, start before end); any left out get the usual timing for that `how`, and `text` replaces the standard instructions. `mulch` = hardy only to 6B, mulch the crown; `dig` = dig up and store; `pot` = bring indoors; `annual` = replant each year. |
+| `invasive` | object | no | Only for a non-native plant that a Michigan list (a township, conservation district, CISMA or invasive species network) tells gardeners to avoid: `{ "list": who lists it, "url": "http(s)://…", "note": one or two sentences on what it does and what to do }`. The plant shows the ↔ mark ("Can escape the garden") and can be left out in "Plants to watch out for". A plant on the State of Michigan's prohibited, restricted or watch lists (michigan.gov/invasives) is never added to the site at all. |
 | `buyNote` | string | no | A buying tip added to the PDF's "Buy the right plants" step when the plant is in the bed ("Often sold as dormant roots."). |
 
 ### photo

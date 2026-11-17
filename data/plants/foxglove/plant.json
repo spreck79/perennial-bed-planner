@@ -22,7 +22,12 @@
     "toxic": ["people", "dogs", "cats"],
     "toxSrc": "ASPCA lists foxglove as toxic",
     "gloves": true,
-    "zones": [4, 9]
+    "zones": [4, 9],
+    "invasive": {
+      "list": "Springfield Township, Michigan: Going Native, sheet 5, \"Plants to Avoid: Invasive Exotic Plant Species\"",
+      "url": "https://archive.epa.gov/ecopage/web/pdf/sheet5.pdf",
+      "note": "Common foxglove seeds itself freely, and a Southeast Michigan township lists it among non-native plants to avoid. Cut off the flower spikes before the seed drops, and keep it away from woods and other natural areas."
+    }
   },
   "photo": {
     "credit": {
@@ -37,7 +42,7 @@
     "sources": [
       {
         "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
-        "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+        "url": "https://bordines.com/wp-content/uploads/2026/05/BORDINES-2026-PLANT-GUIDE.pdf",
         "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
       }
     ]
@@ -75,7 +80,7 @@
   "sources": [
     {
       "title": "Bordine's 2026 Plant Guide: Foxglove 'Camelot Rose' entry",
-      "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+      "url": "https://bordines.com/wp-content/uploads/2026/05/BORDINES-2026-PLANT-GUIDE.pdf",
       "topic": "Plant facts",
       "note": "Listed with sun perennials: 36-42 in. tall, 18-24 in. wide, rose with purple spots, blooms 2-4 weeks from late June, flowers reliably every year."
     },

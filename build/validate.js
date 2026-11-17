@@ -91,7 +91,8 @@ function validate(plants, readErrors) {
     else if (f.bloom !== null && !(isPair(f.bloom, 3, 12) && f.bloom[0] < f.bloom[1])) E("bloom must be [start, end] months between 3 and 12, start before end, or null");
     for (const k of ["hex", "txt"]) if (!/^#[0-9A-Fa-f]{6}$/.test(f[k] || "")) E(`'${k}' must be a color like #A1B2C3`);
     { const CL = ["white", "yellow", "orange", "red", "pink", "purple", "blue", "green"];
-      if (!Array.isArray(f.colors) || !f.colors.length || f.colors.some(c => !CL.includes(c)) || new Set(f.colors).size !== f.colors.length) E("'colors' must list one or more of " + CL.join(", ") + " (each once): the flower colors for the color filter; green also means grown for its leaves"); }
+      if (!Array.isArray(f.colors) || !f.colors.length || f.colors.some(c => !CL.includes(c)) || new Set(f.colors).size !== f.colors.length) E("'colors' must list one or more of " + CL.join(", ") + " (each once): the colors it shows at bloom time, for the color filter; green is for a plant with no flowers, or for green flowers");
+      else if (f.colors.includes("green") && f.bloom && !/green|chartreuse/i.test(f.color || "")) E("'colors' has green, but this plant flowers: list its flower colors only (green stays only when 'color' says the flowers are green)"); }
     if (!Array.isArray(f.sun) || !f.sun.length || f.sun.some(s => !SUNS.includes(s)) || new Set(f.sun).size !== f.sun.length) E("'sun' must list one or more of full, part, shade (each once)");
     if ("deer" in f && !["A", "B", "C", "D"].includes(f.deer)) E("'deer' must be the Rutgers rating A, B, C or D (or left out if not rated)");
     if ("squirrels" in f && (f.squirrels !== true || f.kind !== "bulb")) E("'squirrels' is only for bulbs squirrels dig up, and must be true");
@@ -106,6 +107,12 @@ function validate(plants, readErrors) {
     for (const k of ["filler", "dormant"]) if (k in f && f[k] !== true) E(`'${k}' is either true or left out`);
     if ("clump" in f && !(Number.isInteger(f.clump) && f.clump >= 1)) E("'clump' is a whole number of bulbs (1 or more)");
     if ("clump" in f && f.kind !== "bulb") E("'clump' is only for bulbs");
+    if (f.invasive !== undefined) {      // on a Michigan plants-to-avoid list (never a state-regulated plant: those aren't added at all)
+      const iv = f.invasive;
+      if (!iv || typeof iv !== "object" || !isText(iv.note) || !isText(iv.list) || !isUrl(iv.url)) E("'invasive' needs { list (who lists it), url, note (what a gardener should do) }");
+      else for (const k of Object.keys(iv)) if (!["list", "url", "note"].includes(k)) E(`unknown invasive field '${k}'`);
+      if (f.native) E("'invasive' is only for plants that aren't native to Michigan");
+    }
     const z = f.zones, wn = f.winter;
     if (z !== undefined) {
       if (!(isPair(z, 1, 13.5) && z[0] <= z[1] && z.every(x => (x * 2) % 1 === 0))) E("zones must be [coldest, warmest] like [3, 8] (use .5 for the b half: 6.5 = 6b)");

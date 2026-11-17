@@ -1,0 +1,20 @@
+# Checks every source link on the site once a week (build/links.js).
+# When a link is dead the run fails, and GitHub emails the owner. The list of dead links is on the run's page
+# (Actions > Check links > the latest run > Summary). It can also be started by hand with "Run workflow".
+name: Check links
+
+on:
+  schedule:
+    - cron: "17 11 * * 1"   # Mondays, about 7 in the morning in Michigan
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Open every source link
+        run: node build/links.js

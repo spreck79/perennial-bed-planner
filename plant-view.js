@@ -47,22 +47,29 @@
       p.gfav ? `<span class="chip c-gar">◆ ${p.native ? "Sold at garden centers" : "Garden favorite"}</span>` : "",
       p.fam === "daisy" ? `<span class="chip c-daisy">✿ Daisy family</span>` : "",
       (p.deer === "C" || p.deer === "D") ? `<span class="chip c-deer">${ANTLER} Deer ${p.deer === "D" ? "often" : "sometimes"} eat it</span>` : "",
-      tox ? `<span class="chip c-tox">! ${esc(tox)}</span>` : "",
       wc ? `<span class="chip c-cold">❄ ${window.isTender(p) ? "Not winter-hardy here" : "Mulch for winter"}</span>` : "",
+      tox ? `<span class="chip c-tox">! ${esc(tox)}</span>` : "",
+      p.invasive ? `<span class="chip c-inv">↔ Can escape the garden</span>` : "",
     ].join("");
 
+    const inv = p.invasive, noInv = p.native ? "No: it's a Michigan native" : "Not on Michigan's invasive plant lists";
+    // every color it shows at bloom time, as dots (the same colors as the plant list's color filter)
+    const DOT = { white: "#F6F3EA", yellow: "#F2C94C", orange: "#E8833A", red: "#C8343A", pink: "#E58BB5", purple: "#8E5BB5", blue: "#5B7FD1", green: "#6E9B5A" };
+    const cols = (p.colors || []).filter(c => DOT[c]), dotHex = p.bloom && cols.length ? cols.map(c => DOT[c]) : [p.hex];
+    const colsHtml = dotHex.map(h => `<span class="cdot" style="background:${esc(h)}"></span>`).join("") + " ";
     const facts = [
       ["Height", Charts.heightText(p)],
       ["Spacing", (p.clump ? `clumps of ${p.clump}, ` : "") + p.spacing + " in apart (center to center)"],
       ["Place in the bed", rowOf(p) + " row"],
       ["Blooms", p.bloom ? Charts.bloomText(p) : "Grown for its leaves"],
-      ["Color", `<span class="sw" style="background:${esc(p.hex)}"></span>${esc(p.color)}`, true],
+      ["Color", colsHtml + esc(p.color), true],
       ["Light", esc(p.light) + (sunTxt ? `<br><span class="muted">${esc(sunTxt)}</span>` : ""), true],
       ["Soil moisture", p.moisture],
       ["Plant type", KIND[p.kind] + (p.dormant ? " (goes dormant in summer)" : "") + (p.filler ? "; good for filling gaps" : "")],
       ["Hardiness zones", zones ? `${zones}` + (wc ? (window.isTender(p) ? " (not hardy in Michigan zone 6B)" : " (hardy only to 6B: mulch for winter)") : " (hardy in Michigan zone 6B)") : "Not recorded yet"],
       ["Deer", p.deer ? `${DEER[p.deer]} (Rutgers rating ${p.deer})` : "Not rated by Rutgers"],
       ["Toxic", tox ? esc(tox) + (p.toxSrc ? `<br><span class="muted">${esc(p.toxSrc)}</span>` : "") : "Believed non-toxic to people, dogs and cats", true],
+      ["Can escape the garden", inv ? esc(inv.note) + `<br><span class="muted">Listed in: <a href="${esc(inv.url)}" target="_blank" rel="noopener">${esc(inv.list)}</a></span>` : esc(noInv), true],
       ["Code on the plan", `<span class="code" style="background:${esc(p.hex)};color:${esc(p.txt)}">${esc(p.code)}</span>`, true],
     ].map(([k, v, raw]) => `<tr><th>${k}</th><td>${raw ? v : esc(v)}</td></tr>`).join("");
 
@@ -89,6 +96,7 @@
       ...status.map(s => `<li><b>${s.kind === "native" ? "Michigan native" : "Sold in Michigan"}:</b> <a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a></li>`),
       p.deer ? `<li><b>Deer:</b> <a href="https://njaes.rutgers.edu/deer-resistant-plants/" target="_blank" rel="noopener">Rutgers NJAES deer-resistant plant list</a> <span class="muted">rating ${esc(p.deer)}: ${esc(DEER[p.deer].toLowerCase())}</span></li>` : "",
       tox ? `<li><b>Toxic:</b> ${esc(p.toxSrc || "")}</li>` : "",
+      inv ? `<li><b>Can escape the garden:</b> <a href="${esc(inv.url)}" target="_blank" rel="noopener">${esc(inv.list)}</a></li>` : "",
       cr.file ? `<li><b>Photo:</b> <a href="${esc(commons(cr.file))}" target="_blank" rel="noopener">${esc(cr.file)}</a> by ${esc(cr.by)}, <a href="${esc(cr.licUrl)}" target="_blank" rel="noopener">${esc(cr.lic)}</a>, Wikimedia Commons</li>` : "",
     ].filter(Boolean).join("");
 
@@ -96,15 +104,16 @@
     const sheet = {
       name: p.name, latin: p.latin, notes: p.notes + (p.fam === "daisy" ? " Daisy family, like ragweed." : ""), hex: p.hex, txt: p.txt, code: p.code,
       marks: [p.native && ["nat", "Michigan native"], p.gfav && ["gar", p.native ? "Sold at garden centers" : "Garden favorite"], p.fam === "daisy" && ["daisy", "Daisy family"],
-        (p.deer === "C" || p.deer === "D") && ["deer", "Deer " + (p.deer === "D" ? "often" : "sometimes") + " eat it"], tox && ["tox", tox],
-        wc && ["cold", window.isTender(p) ? "Not winter-hardy here" : "Mulch for winter"]].filter(Boolean),
+        (p.deer === "C" || p.deer === "D") && ["deer", "Deer " + (p.deer === "D" ? "often" : "sometimes") + " eat it"], wc && ["cold", window.isTender(p) ? "Not winter-hardy here" : "Mulch for winter"],
+        tox && ["tox", tox], p.invasive && ["inv", "Can escape the garden"]].filter(Boolean),
       facts: [["Height", Charts.heightText(p)], ["Spacing", (p.clump ? `clumps of ${p.clump}, ` : "") + p.spacing + " in apart (center to center)"],
-        ["Place in the bed", rowOf(p) + " row"], ["Blooms", p.bloom ? Charts.bloomText(p) : "Grown for its leaves"], ["Color", p.color, "", p.hex],
+        ["Place in the bed", rowOf(p) + " row"], ["Blooms", p.bloom ? Charts.bloomText(p) : "Grown for its leaves"], ["Color", p.color, "", dotHex],
         ["Light", p.light, sunTxt], ["Soil moisture", p.moisture],
         ["Plant type", KIND[p.kind] + (p.dormant ? " (goes dormant in summer)" : "") + (p.filler ? "; good for filling gaps" : "")],
         ["Hardiness zones", zones ? zones + (wc ? (window.isTender(p) ? " (not hardy in Michigan zone 6B)" : " (hardy only to 6B: mulch for winter)") : " (hardy in Michigan zone 6B)") : "Not recorded yet"],
         ["Deer", p.deer ? `${DEER[p.deer]} (Rutgers rating ${p.deer})` : "Not rated by Rutgers"],
-        ["Toxic", tox || "Believed non-toxic to people, dogs and cats", tox ? p.toxSrc || "" : ""]],
+        ["Toxic", tox || "Believed non-toxic to people, dogs and cats", tox ? p.toxSrc || "" : ""],
+        ["Can escape the garden", inv ? inv.note : noInv, inv ? "Listed in: " + inv.list : ""]],
       year: [p.bloom && ["Bloom", p.bloom[0], p.bloom[1], p.hex], care.prep && ["Spring prep", care.prep.a, care.prep.b, "#7FA66A"],
         care.cut && ["Cut back", care.cut.a, care.cut.b, "#A68C72"], care.trim && ["Trim", care.trim.a, care.trim.b, "#C4A884"],
         care.lift && ["Dig up", care.lift.a, care.lift.b, "#4F7FB4"], care.replant && ["Replant", care.replant.a, care.replant.b, "#6F9AC9"],
@@ -113,7 +122,7 @@
         care.divide && ["Divide", care.divide], wc && ["Winter", wc.text]].filter(Boolean),
       neighbors: groups.map(g => ({ plants: g.ids.map(id => [byId[id].name, byId[id].hex]), why: g.why, src: g.src.map(i => COMPANION_SOURCES[i]).filter(Boolean).map(s => s.title) })),
       sources: [...status.map(s => [s.kind === "native" ? "Michigan native" : "Sold in Michigan", s.title]), p.deer && ["Deer", "Rutgers NJAES deer-resistant plant list (rating " + p.deer + ")"],
-        tox && ["Toxic", p.toxSrc || ""], cr.file && ["Photo", `${cr.by}, ${cr.lic}, Wikimedia Commons`]].filter(Boolean),
+        tox && ["Toxic", p.toxSrc || ""], inv && ["Can escape the garden", inv.list], cr.file && ["Photo", `${cr.by}, ${cr.lic}, Wikimedia Commons`]].filter(Boolean),
     };
 
     // the plant's facts as data, for other programs

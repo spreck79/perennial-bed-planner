@@ -9,8 +9,8 @@
   const W = 612, H = 792, M = 40;
   const C = { forest: "#3F6B3A", ink: "#2E3A2C", muted: "#6B7464", rule: "#D9D3C2", band: "#ECEFE0", soft: "#EEF0E2", stripe: "#F7F5EE" };
   // the guide's icon colors (background, mark), and the tag colors used on the site
-  const ICON = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: ["#B8392E", "#FFFFFF"], cold: ["#4F7FB4", "#FFFFFF"] };
-  const TAG = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#6A4526"], tox: ["#F6D9D5", "#9A2E24"], cold: ["#DCE7F3", "#2F5D8C"] };
+  const ICON = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: ["#B8392E", "#FFFFFF"], cold: ["#4F7FB4", "#FFFFFF"], inv: ["#E0812C", "#FFFFFF"] };
+  const TAG = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#6A4526"], tox: ["#F6D9D5", "#9A2E24"], cold: ["#DCE7F3", "#2F5D8C"], inv: ["#FBE3CC", "#9A4E12"] };
   const MONTHS = ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"], T0 = 4, T1 = 12;
   const rgb = h => { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
 
@@ -50,6 +50,7 @@
       if (kd === "nat") { fill(c[1]); doc.lines([[u * 0.75, -u * 1.45], [u * 1.1, -u * 0.4], [-u * 0.4, u * 1.1]], x - u * 0.9, y + u * 0.9, [1, 1], "F", true); }
       else if (kd === "gar") { fill(c[1]); doc.lines([[u * 0.8, u * 0.9], [-u * 0.8, u * 0.9], [-u * 0.8, -u * 0.9]], x, y - u * 0.9, [1, 1], "F", true); }
       else if (kd === "deer") { stroke(c[1]); doc.setLineCap("round"); doc.setLineWidth(br * 0.22); doc.line(x, y + u, x, y - u * 0.1); doc.line(x, y - u * 0.1, x - u * 0.8, y - u); doc.line(x, y - u * 0.1, x + u * 0.8, y - u); doc.line(x - u * 0.4, y - u * 0.55, x - u * 1.05, y - u * 0.45); doc.line(x + u * 0.4, y - u * 0.55, x + u * 1.05, y - u * 0.45); }
+      else if (kd === "inv") { stroke(c[1]); doc.setLineCap("round"); doc.setLineWidth(br * 0.19); const a = br * 0.6, h = br * 0.32; doc.line(x - a, y, x + a, y); doc.line(x - a, y, x - a + h, y - h); doc.line(x - a, y, x - a + h, y + h); doc.line(x + a, y, x + a - h, y - h); doc.line(x + a, y, x + a - h, y + h); }
       else if (kd === "cold") { stroke(c[1]); doc.setLineCap("round"); doc.setLineWidth(br * 0.17); [0, 60, 120].forEach(a => { const t = a * Math.PI / 180, dx = Math.sin(t) * br * 0.62, dy = Math.cos(t) * br * 0.62; doc.line(x - dx, y - dy, x + dx, y + dy); }); }
       else if (kd === "daisy") { doc.setFontSize(br * 1.6); if (FN) doc.setFont("Sans", "normal"); color(c[1]); text("✿", x, y + br * 0.55, { align: "center" }); }
       else { doc.setFontSize(br * 1.5); if (FN) doc.setFont("Sans", "bold"); color(c[1]); text("!", x, y + br * 0.53, { align: "center" }); }
@@ -105,12 +106,13 @@
       let fy = y;
       list.forEach(([lab, val, sub, hex], i) => {
         if (i) { stroke(C.rule); doc.setLineWidth(0.4); doc.line(x, fy - 9 * k, x + colW, fy - 9 * k); }
-        sf("sb", 7.6); color(C.muted); text(lab, x, fy);
+        sf("sb", 7.6); color(C.muted); const ll = wrap(lab, labW - 6 * k); text(ll, x, fy, { lineHeightFactor: 1.3 });   // a long label wraps onto a second line
         let vx = x + labW; const vw = colW - labW;
-        if (hex) { fill(hex); stroke("#B9B39E"); doc.setLineWidth(0.4); doc.circle(vx + 4 * k, fy - 2.8 * k, 3.6 * k, "FD"); vx += 12 * k; }
-        sf("s", 8.6); color(C.ink); const vl = wrap(val, vw - (hex ? 12 * k : 0)); text(vl, vx, fy, { lineHeightFactor: 1.3 }); let hgt = vl.length * 8.6 * k * 1.3;
+        const dots = hex ? [].concat(hex) : [];   // one dot for each color it comes in
+        dots.forEach(h => { fill(h); stroke("#B9B39E"); doc.setLineWidth(0.4); doc.circle(vx + 4 * k, fy - 2.8 * k, 3.6 * k, "FD"); vx += 9.5 * k; }); if (dots.length) vx += 2.5 * k;
+        sf("s", 8.6); color(C.ink); const vl = wrap(val, vw - (vx - x - labW)); text(vl, vx, fy, { lineHeightFactor: 1.3 }); let hgt = vl.length * 8.6 * k * 1.3;
         if (sub) { sf("s", 7.2); color(C.muted); const sl = wrap(sub, vw); text(sl, x + labW, fy + hgt, { lineHeightFactor: 1.3 }); hgt += sl.length * 7.2 * k * 1.3; }
-        fy += Math.max(hgt, 10 * k) + 9 * k;
+        fy += Math.max(hgt, 10 * k, ll.length * 7.6 * k * 1.3) + 9 * k;
       });
       return fy;
     };

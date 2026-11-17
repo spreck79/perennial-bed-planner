@@ -37,6 +37,9 @@ Plants are believed non-toxic to people, dogs and cats unless marked Toxic. Plea
 ## Sources
 Photo credits, companion-plant sources and native/garden status sources are on the [Sources and photo credits](https://pbp.spreck79.com/credits.html) page. Each plant lives in its own folder in `data/plants` (facts, photos, sources, care and good neighbors; see `data/SCHEMA.md`), and nothing about a plant is kept anywhere else. The site reads the folders every time a page opens: add a folder and the plant is on the site, delete it and it's gone, edit it and the change shows. On your own computer it runs at http://localhost:8321 (see `build/serve.js`).
 
+## Checking the source links
+`node build/links.js` opens every source link in the plant folders and pages and lists the dead ones. GitHub runs it every Monday (`.github/workflows/links.yml`) and emails the owner when a link has died; the list is on that run's Summary page.
+
 ## Publishing
 Every push to `main` publishes the site (`.github/workflows/publish.yml`; the repository's Settings > Pages > Source must say "GitHub Actions"). The workflow runs `build/site.js`, which copies the site and adds two things made fresh each time: `data/plants.all.json` (every plant folder in one file, so a visitor's browser asks once instead of once per plant) and a version stamp on every script and stylesheet (so a browser never mixes files from two versions). Nobody edits either by hand, and neither is kept in the repository. If the site is published straight from the branch instead, it still works: it asks GitHub for the plant folders and reads them one by one.
 

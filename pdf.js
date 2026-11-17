@@ -46,21 +46,22 @@
     const rowOf = p => hMean(p) <= 14 ? "Front" : hMean(p) <= 28 ? "Middle" : "Back";
     const stripe = (x, y, w, h) => { fill(C.stripe); doc.rect(x, y, w, h, "F"); };
     // plant icons, same order and colors as the site: native leaf or garden favorite, daisy, deer, toxic
-    const ICON = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: ["#B8392E", "#FFFFFF"], cold: ["#4F7FB4", "#FFFFFF"] };
-    const icKinds = p => { const k = [p.native && "nat", p.gfav && "gar"].filter(Boolean); if (p.fam === "daisy") k.push("daisy"); if (deerEats(p)) k.push("deer"); if (p.toxic && p.toxic.length) k.push("tox"); if (window.isTender && window.isTender(p)) k.push("cold"); return k; };
+    const ICON = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: ["#B8392E", "#FFFFFF"], cold: ["#4F7FB4", "#FFFFFF"], inv: ["#E0812C", "#FFFFFF"] };
+    const icKinds = p => { const k = [p.native && "nat", p.gfav && "gar"].filter(Boolean); if (p.fam === "daisy") k.push("daisy"); if (deerEats(p)) k.push("deer"); if (window.isTender && window.isTender(p)) k.push("cold"); if (p.toxic && p.toxic.length) k.push("tox"); if (p.invasive) k.push("inv"); return k; };
     const drawIc = (k, x, y, br) => {
       const c = ICON[k]; fill(c[0]); doc.circle(x, y, br, "F");
       const u = br * 0.55;
       if (k === "nat") { fill(c[1]); doc.lines([[u * 0.75, -u * 1.45], [u * 1.1, -u * 0.4], [-u * 0.4, u * 1.1]], x - u * 0.9, y + u * 0.9, [1, 1], "F", true); }
       else if (k === "gar") { fill(c[1]); doc.lines([[u * 0.8, u * 0.9], [-u * 0.8, u * 0.9], [-u * 0.8, -u * 0.9]], x, y - u * 0.9, [1, 1], "F", true); }
       else if (k === "deer") { stroke(c[1]); doc.setLineCap("round"); doc.setLineWidth(br * 0.22); doc.line(x, y + u, x, y - u * 0.1); doc.line(x, y - u * 0.1, x - u * 0.8, y - u); doc.line(x, y - u * 0.1, x + u * 0.8, y - u); doc.line(x - u * 0.4, y - u * 0.55, x - u * 1.05, y - u * 0.45); doc.line(x + u * 0.4, y - u * 0.55, x + u * 1.05, y - u * 0.45); doc.setLineCap("butt"); }
+      else if (k === "inv") { stroke(c[1]); doc.setLineCap("round"); doc.setLineWidth(br * 0.19); const a = br * 0.6, h = br * 0.32; doc.line(x - a, y, x + a, y); doc.line(x - a, y, x - a + h, y - h); doc.line(x - a, y, x - a + h, y + h); doc.line(x + a, y, x + a - h, y - h); doc.line(x + a, y, x + a - h, y + h); }
       else if (k === "cold") { stroke(c[1]); doc.setLineCap("round"); doc.setLineWidth(br * 0.17); [0, 60, 120].forEach(a => { const t = a * Math.PI / 180, dx = Math.sin(t) * br * 0.62, dy = Math.cos(t) * br * 0.62; doc.line(x - dx, y - dy, x + dx, y + dy); }); }
       else if (k === "daisy") { sf("s", br * 1.6); color(c[1]); text("\u273F", x, y + br * 0.55, { align: "center" }); }
       else { sf("sb", br * 1.5); color(c[1]); text("!", x, y + br * 0.53, { align: "center" }); }
     };
     // draws a plant's icon row; y is the icons' center line. Returns the row width.
     const drawIcons = (p, x, y, br, center) => { const ks = icKinds(p), st = br * 2.35, wd = (ks.length - 1) * st + 2 * br; const x0 = center ? x - wd / 2 : x; ks.forEach((k, i) => drawIc(k, x0 + br + i * st, y, br)); return wd; };
-    const KEYITEMS = [["nat", "native"], ["gar", "garden favorite"], ["daisy", "daisy family"], ["deer", "deer often eat"], ["tox", "toxic"], ["cold", "needs winter care"]];
+    const KEYITEMS = [["nat", "Michigan native"], ["gar", "Garden favorite"], ["daisy", "Daisy family"], ["deer", "Deer eat it"], ["cold", "Needs winter care"], ["tox", "Toxic plant"], ["inv", "Can escape the garden"]];
     // icon key on one line; y is the text baseline. Returns its width.
     const drawKey = (x, y, size, kinds) => { let lx = x; KEYITEMS.filter(q => !kinds || kinds.includes(q[0])).forEach(([k, t]) => { drawIc(k, lx + size * 0.55, y - size * 0.33, size * 0.55); sf("s", size); color(C.muted); text(t, lx + size * 1.35, y); lx += size * 1.35 + doc.getTextWidth(t) + size * 1.3; }); return lx - x; };
     const usedKinds = (() => { const s = new Set(); plants.forEach(p => icKinds(p).forEach(k => s.add(k))); return KEYITEMS.map(q => q[0]).filter(k => s.has(k)); })();
@@ -297,22 +298,23 @@
       OBJS.filter(o => o.t === "tree").forEach(o => { stroke("#2F5A2A"); doc.setLineWidth(0.8); const R = o.w / 2, n = Math.max(24, Math.round(R * 2 * Math.PI / 0.5));
         for (let k = 0; k < n; k++) { const a0 = k / n * Math.PI * 2, a1 = (k + 0.6) / n * Math.PI * 2, x0 = o.x + Math.cos(a0) * R, y0 = o.y + Math.sin(a0) * R, x1 = o.x + Math.cos(a1) * R, y1 = o.y + Math.sin(a1) * R;
           if (Geo.pip(bed.poly, x0, y0) && Geo.pip(bed.poly, x1, y1)) doc.line(X(x0), Y(y0), X(x1), Y(y1)); } });
-      const BADC = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: [TOX, "#FFFFFF"], cold: ["#4F7FB4", "#FFFFFF"] };
-      const kindsOf = pl => { const k = [pl.native && "nat", pl.gfav && "gar"].filter(Boolean); if (pl.fam === "daisy") k.push("daisy"); if (deerEats(pl)) k.push("deer"); if (pl.toxic && pl.toxic.length) k.push("tox"); if (window.isTender && window.isTender(pl)) k.push("cold"); return k; };
+      const BADC = { nat: ["#E1EBCB", "#3F6B3A"], gar: ["#F3DDEA", "#8A3F72"], daisy: ["#FBEBC4", "#8A6410"], deer: ["#EFE2D3", "#7A5230"], tox: [TOX, "#FFFFFF"], cold: ["#4F7FB4", "#FFFFFF"], inv: ["#E0812C", "#FFFFFF"] };
+      const kindsOf = pl => { const k = [pl.native && "nat", pl.gfav && "gar"].filter(Boolean); if (pl.fam === "daisy") k.push("daisy"); if (deerEats(pl)) k.push("deer"); if (window.isTender && window.isTender(pl)) k.push("cold"); if (pl.toxic && pl.toxic.length) k.push("tox"); if (pl.invasive) k.push("inv"); return k; };
       const pbadge = (k, x, y, br) => {
         const c = BADC[k]; fill(c[0]); stroke("#FFFFFF"); doc.setLineWidth(0.6); doc.circle(x, y, br, "FD");
         const u = br * 0.55;
         if (k === "nat") { fill(c[1]); doc.lines([[u * 0.75, -u * 1.45], [u * 1.1, -u * 0.4], [-u * 0.4, u * 1.1]], x - u * 0.9, y + u * 0.9, [1, 1], "F", true); }
         else if (k === "gar") { fill(c[1]); doc.lines([[u * 0.8, u * 0.9], [-u * 0.8, u * 0.9], [-u * 0.8, -u * 0.9]], x, y - u * 0.9, [1, 1], "F", true); }
         else if (k === "deer") { stroke(c[1]); doc.setLineWidth(br * 0.22); doc.line(x, y + u, x, y - u * 0.1); doc.line(x, y - u * 0.1, x - u * 0.8, y - u); doc.line(x, y - u * 0.1, x + u * 0.8, y - u); doc.line(x - u * 0.4, y - u * 0.55, x - u * 1.05, y - u * 0.45); doc.line(x + u * 0.4, y - u * 0.55, x + u * 1.05, y - u * 0.45); }
-        else if (k === "cold") { stroke(c[1]); doc.setLineCap("round"); doc.setLineWidth(br * 0.17); [0, 60, 120].forEach(a => { const t = a * Math.PI / 180, dx = Math.sin(t) * br * 0.62, dy = Math.cos(t) * br * 0.62; doc.line(x - dx, y - dy, x + dx, y + dy); }); }
+        else if (k === "inv") { stroke(c[1]); doc.setLineCap("round"); doc.setLineWidth(br * 0.19); const a = br * 0.6, h = br * 0.32; doc.line(x - a, y, x + a, y); doc.line(x - a, y, x - a + h, y - h); doc.line(x - a, y, x - a + h, y + h); doc.line(x + a, y, x + a - h, y - h); doc.line(x + a, y, x + a - h, y + h); }
+      else if (k === "cold") { stroke(c[1]); doc.setLineCap("round"); doc.setLineWidth(br * 0.17); [0, 60, 120].forEach(a => { const t = a * Math.PI / 180, dx = Math.sin(t) * br * 0.62, dy = Math.cos(t) * br * 0.62; doc.line(x - dx, y - dy, x + dx, y + dy); }); }
         else if (k === "daisy") { sf("s", br * 1.5); color(c[1]); text("✿", x, y + br * 0.5, { align: "center" }); }
         else { font("helvetica", "bold", br * 1.5); color(c[1]); text("!", x, y + br * 0.52, { align: "center" }); }
       };
       const usedK = new Set();
       placements.forEach(p => { const pl = byId[p.id], ks = kindsOf(pl); ks.forEach(k => usedK.add(k)); const r = (pl.spacing / 24) * sc * 0.96, br = Math.max(2.6, Math.min(4.4, r * 0.3)), st = br * 1.85;
         ks.forEach((k, bi) => pbadge(k, X(p.x) + (bi - (ks.length - 1) / 2) * st, Y(p.y) - r * 0.86, br)); });
-      { let lx = bx + 4; [["nat", "Michigan native"], ["gar", "Garden favorite"], ["daisy", "Daisy family"], ["deer", "Deer eat it"], ["tox", "Toxic plant"], ["cold", "Needs winter care"]].filter(q => usedK.has(q[0])).forEach(([k, t]) => { pbadge(k, lx, byy - 12, 4); sf("sb", 6.8); color(k === "tox" ? TOX : C.muted); text(t, lx + 7, byy - 9.6); lx += 7 + doc.getTextWidth(t) + 12; }); }
+      { let lx = bx + 4; [["nat", "Michigan native"], ["gar", "Garden favorite"], ["daisy", "Daisy family"], ["deer", "Deer eat it"], ["cold", "Needs winter care"], ["tox", "Toxic plant"], ["inv", "Can escape the garden"]].filter(q => usedK.has(q[0])).forEach(([k, t]) => { pbadge(k, lx, byy - 12, 4); sf("sb", 6.8); color(k === "tox" ? TOX : C.muted); text(t, lx + 7, byy - 9.6); lx += 7 + doc.getTextWidth(t) + 12; }); }
       font("helvetica", "normal", 6.4); color(C.muted);
       const xs = big ? (bb.w > 40 ? 2 : 1) : bb.w > 30 ? 5 : bb.w > 16 ? 2 : 1; for (let gx = 0; gx <= bb.w + 0.01; gx += xs) text(gx + " ft", X(gx), byy + bh + 12, { align: "center" });
       const ys = big ? (bb.h > 40 ? 2 : 1) : bb.h > 24 ? 5 : bb.h > 12 ? 2 : 1; for (let gy = 0; gy <= bb.h + 0.01; gy += ys) text(String(gy), bx - 8, Y(gy) + 2, { align: "right" });
@@ -358,7 +360,7 @@
       const cx = { qty: uw * 0.50, sp: uw * 0.60, ht: uw * 0.72, bl: uw * 0.86 };
       const hdr = (cont) => {
         sf("rb", 14); color(C.forest); text(cont ? "Shopping list (continued)" : "Shopping list", M, sy); sy += 12;
-        if (!cont) { sf("s", 7.4); color(C.muted); text("Tick each plant off as you buy it.  Spacing is center to center.", M, sy); sy += 12; drawKey(M, sy, 7.2, usedKinds); sy += 12; }
+        if (!cont) { sf("s", 7.4); color(C.muted); text("Tick each plant off as you buy it.  Spacing is center to center.", M, sy); sy += 12; }
         sf("sb", 5.8); color(C.muted); text("PLANT", M + 54, sy); text("HOW MANY", M + cx.qty, sy); text("SPACING", M + cx.sp, sy); text("HEIGHT", M + cx.ht, sy); text("BLOOMS", M + cx.bl, sy);
         stroke(C.rule); doc.setLineWidth(0.5); doc.line(M, sy + 4, W - M, sy + 4); sy += 6;
       };
@@ -407,9 +409,8 @@
     // ================= Side view: small to big =================
     progress && progress(0.5, "Small-to-big side view");
     newPage();
-    sy = 62; heading("Planting small to big: front to back", sy, 20); sy += 12;
+    sy = 62; heading("Height and spacing", sy, 20); sy += 12;
     sy += para("Put the shortest plants along the edge people see first (the lawn, path or patio side) and step up in height toward the back (the fence, house or trees). Each row is tall enough to be seen over the one in front of it. If the bed is an island that people walk all the way around, put the tallest plants in the middle instead. The bar under each plant shows how far apart to set that kind.", M, sy + 8, W - 2 * M, 8.8, 11.6, C.ink) + 14;
-    drawKey(M, sy + 4, 7.2, usedKinds); sy += 14;
     const k = 1.2, availW = W - 2 * M - 24;
     const colW = p => Math.max(p.spacing * k, 52) + 6;
     const rowsL = []; let cur = [], cw0 = 0;
@@ -556,7 +557,6 @@
       sf("rb", 20); color(C.forest); text(first ? "Garden Timeline" : "Garden Timeline (continued)", M, y0); y0 += 16;
       if (first) {
         y0 += para("The chart shows when each chosen plant is in flower. Foliage plants stay green all season and carry the bed between blooms. The icons after each name are the same as on the site (key below). The small marks on each bar show when to prep each plant (green) and when to cut it back (brown; dashed = optional trim for more flowers). The Care through the year page explains each one.", M, y0 + 4, W - 2 * M, 8.4, 11, C.muted) + 6;
-        drawKey(M, y0 + 6, 7.2, usedKinds); y0 += 14;
       }
       sf("sb", 7.2); color(C.muted);
       Ch.MONTHS.forEach((m, i) => text(m, x0 + mw * i + mw / 2, y0 + 8, { align: "center" }));
@@ -662,7 +662,7 @@
     groups.forEach(([title, list]) => {
       if (!list.length) return;
       list = list.slice().sort((a, b) => hMean(a) - hMean(b) || a.name.localeCompare(b.name));
-      const startPage = (cont) => { newPage(); let t = cont ? title.replace(/ ◆$/, "") + " (continued)" : title; heading(t, 62, cont ? 18 : 20); if (!cont) { sf("s", 8.4); color(C.muted); const t0 = "Listed in planting order, from the front edge of the bed to the back."; text(t0, M, 78); drawKey(M, 91, 7.2, usedKinds); } return cont ? 80 : 102; };
+      const startPage = (cont) => { newPage(); let t = cont ? title.replace(/ ◆$/, "") + " (continued)" : title; heading(t, 62, cont ? 18 : 20); if (!cont) { sf("s", 8.4); color(C.muted); const t0 = "Listed in planting order, from the front edge of the bed to the back."; text(t0, M, 78); } return cont ? 80 : 90; };
       let py = startPage(false);
       list.forEach(p => {
         const tx = M + 148, tw = W - M - tx;
@@ -671,7 +671,7 @@
         const need = window.Plan && window.Plan.sunNeed ? window.Plan.sunNeed(p) : "";
         const parts = [["Light & soil: ", true], [soil + (need ? (/[.]$/.test(soil) ? " " : ". ") + need + "." : ""), false]];
         let note = p.notes; if (p.fam === "daisy") note += " Daisy family, like ragweed.";
-        { const wc = window.winterCare && window.winterCare(p); if (wc && !/winter/i.test(p.notes)) note += " Winter: " + wc.text; } if (deerEats(p) && !/deer/i.test(p.notes)) note += " " + deerText(p);
+        { const wc = window.winterCare && window.winterCare(p); if (wc && !/winter/i.test(p.notes)) note += " Winter: " + wc.text; } if (deerEats(p) && !/deer/i.test(p.notes)) note += " " + deerText(p); if (p.invasive) note += " " + p.invasive.note;
         const pf = data.prefs || {}, okPref = q => (!(q.toxic && q.toxic.length) || pf.toxic) && !(deerEats(q) && pf.deer === false) && !(q.fam === "daisy" && pf.daisy === false) && (!pf.sun || q.sun.some(s => pf.sun.includes(s))) && (!pf.origin || (q.native && pf.origin.includes("nat")) || (q.gfav && pf.origin.includes("gar")));
         const comps = (window.COMPANIONS && window.COMPANIONS[p.id] || []).filter(c => byId[c.id] && (counts[c.id] || okPref(byId[c.id])));
         sf("s", 7.8); const nl = wrap(note, tw).slice(0, comps.length ? 3 : 4);
@@ -690,9 +690,10 @@
         fill(rowOf(p) === "Front" ? C.leaf2 : C.leaf); doc.roundedRect(W - M - pw, py + 3, pw, 13, 6.5, 6.5, "F"); color("#FFFFFF"); text(row, W - M - pw / 2, py + 12, { align: "center" });
         { // tags line up from the right; when the full wording would run into the Latin name, they switch to short wording
           const tags = [];
+          if (p.invasive) tags.push(["CAN ESCAPE THE GARDEN", "CAN SPREAD", "#FBE3CC", "#9A4E12"]);
           if (p.toxic && p.toxic.length) tags.push([toxLabel(p).toUpperCase(), "TOXIC", "#F6D9D5", "#9A2E24"]);
-          if (deerEats(p)) tags.push([p.deer === "D" ? "DEER OFTEN EAT IT" : "DEER SOMETIMES EAT IT", "DEER EAT IT", "#EFE2D3", "#6A4526"]);
           if (window.winterCare && window.winterCare(p)) tags.push(window.isTender(p) ? ["NOT WINTER-HARDY HERE", "NOT HARDY HERE", "#DCE7F3", "#2F5D8C"] : ["MULCH FOR WINTER", "WINTER MULCH", "#DCE7F3", "#2F5D8C"]);
+          if (deerEats(p)) tags.push([p.deer === "D" ? "DEER OFTEN EAT IT" : "DEER SOMETIMES EAT IT", "DEER EAT IT", "#EFE2D3", "#6A4526"]);
           sf("ri", 8.4); const room = W - M - (tx + doc.getTextWidth(p.latin) + 8); sf("sb", 6);
           const wide = i => tags.reduce((s, t) => s + doc.getTextWidth(t[i]) + 19, -5), useI = wide(0) <= room ? 0 : 1;
           let px = W - M; tags.forEach(t => { const tw3 = doc.getTextWidth(t[useI]) + 14; fill(t[2]); doc.roundedRect(px - tw3, py + 19.5, tw3, 12, 6, 6, "F"); color(t[3]); text(t[useI], px - tw3 / 2, py + 27.6, { align: "center" }); px -= tw3 + 5; }); }
@@ -704,7 +705,8 @@
         lab("SPACING", c2, py + 41); val(p.clump ? "clumps of " + p.clump + ", " + p.spacing + " in apart" : p.spacing + " in apart", c2, py + 51, tw * 0.3);
         lab("PLACE IN BED", c3, py + 41); val(rowOf(p) + " row", c3, py + 51, tw * 0.28);
         lab("BLOOMS", c1, py + 62); val(p.bloom ? Ch.bloomText(p) : "Foliage plant", c1, py + 72, tw * 0.38);
-        lab("COLOR", c2, py + 62); fill(p.hex); stroke(Ch.shade(p.hex, 0.75)); doc.setLineWidth(0.4); doc.circle(c2 + 4, py + 69.6, 3.7, "FD"); val(p.color, c2 + 12, py + 72, tw * 0.58 - 12);
+        lab("COLOR", c2, py + 62); { const DOT = { white: "#F6F3EA", yellow: "#F2C94C", orange: "#E8833A", red: "#C8343A", pink: "#E58BB5", purple: "#8E5BB5", blue: "#5B7FD1", green: "#6E9B5A" }, cs = p.bloom && (p.colors || []).length ? p.colors.map(c => DOT[c]).filter(Boolean) : [p.hex];
+          let dx = c2 + 4; cs.forEach(h => { fill(h); stroke("#B9B39E"); doc.setLineWidth(0.4); doc.circle(dx, py + 69.6, 3.4, "FD"); dx += 8.4; }); val(p.color, dx + 0.5, py + 72, tw * 0.58 - (dx + 0.5 - c2)); }
         const ln = flow(parts, tx, py + 87, tw, 7.8, 10, C.muted, C.muted, true);
         const inPlan = comps.filter(c => counts[c.id]).map(c => byId[c.id].name).slice(0, 4);
         const others = comps.filter(c => !counts[c.id]).map(c => byId[c.id].name).slice(0, Math.max(0, 4 - inPlan.length));
@@ -744,6 +746,8 @@
         const list = daisy.length === 1 ? daisy[0] : daisy.slice(0, -1).join(", ") + " and " + daisy[daisy.length - 1];
         noteBox([["Allergy note: ", true], [list + (daisy.length === 1 ? " is" : " are") + " (marked ✿) in the daisy family along with ragweed. Most are pollinated by insects rather than wind, so they are a less common cause of hay fever than ragweed, but anyone with a daisy-family allergy should check with an allergist before planting them.", false]], "#FBF3DC", "#EBD9A0", "#6B520F");
       }
+      const inv = plants.filter(p => p.invasive);
+      if (inv.length) inv.forEach(p => noteBox([["Can escape the garden: ", true], [p.name + ". " + p.invasive.note + " (Listed in: " + p.invasive.list + ".)"]], "#FBE3CC", "#E0812C", "#7A3E0E"));
     }
     // ================= Credits =================
     progress && progress(0.95, "Photo credits");

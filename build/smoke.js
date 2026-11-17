@@ -46,6 +46,22 @@ const ok = (cond, what) => { console.log((cond ? "  ok    " : "  FAIL  ") + what
       }
       await page.click("#btnExample"); await page.waitForTimeout(1500);
       ok(await page.evaluate(() => document.querySelectorAll("#lib .pcard.on, #lib .pcard").length > 0 && JSON.parse(localStorage.getItem("shadeGardenPlanner.v1") || "{}").placements.length > 10), "the example garden loads");
+      // the three lessons: each opens, plays through every step and closes, leaving the garden as it was
+      const lesson = async (name, open, steps) => {
+        const before = await page.evaluate(() => { const s = JSON.parse(localStorage.getItem("shadeGardenPlanner.v1")); return JSON.stringify([s.objects, s.sun, s.freePoly || null, s.placements.length]); });
+        await open(); await page.waitForTimeout(700);
+        let seen = 0, good = await page.evaluate(() => !!(window.Lesson.on && document.querySelector("#lesson h3").textContent));
+        while (good && seen < 12 && await page.evaluate(() => window.Lesson.on)) { seen++; await page.waitForTimeout(350); await page.click("#lesson .sl-next"); }
+        await page.waitForTimeout(400);
+        const after = await page.evaluate(() => { const s = JSON.parse(localStorage.getItem("shadeGardenPlanner.v1")); return JSON.stringify([s.objects, s.sun, s.freePoly || null, s.placements.length]); });
+        ok(good && seen === steps && before === after, "the " + name + " lesson plays (" + seen + " of " + steps + " steps) and leaves the garden alone");
+      };
+      await lesson("add objects", async () => { await page.evaluate(() => document.querySelector("#objCard .steptog").click()); await page.waitForTimeout(500); await page.click("#btnObjHow"); }, 5);
+      await lesson("sun painting", async () => { await page.evaluate(() => document.querySelector("#sunCard .steptog").click()); await page.waitForTimeout(500); await page.click("#btnSunHow"); }, 4);
+      await page.evaluate(() => document.querySelector("#sunCard .steptog").click()); await page.waitForTimeout(400);
+      await lesson("draw a bed", async () => { await page.evaluate(() => window.Plan.startDraw && document.querySelector("#bedPanel .steptog").click()); await page.waitForTimeout(500); await page.evaluate(() => { const b = [...document.querySelectorAll("#bedPanel button")].find(x => /draw/i.test(x.textContent)); b && b.click(); }); await page.waitForTimeout(900); if (!await page.evaluate(() => window.Lesson.on)) await page.evaluate(() => { const h = document.querySelector(".dhow"); h && h.click(); }); }, 9);
+      await page.keyboard.press("Escape"); await page.waitForTimeout(300);
+      await page.evaluate(() => { const c = [...document.querySelectorAll(".drawbar button")].find(x => x.textContent === "Cancel"); c && c.click(); }); await page.waitForTimeout(400);
       await page.click("#btnPdf");
       const made = await page.waitForSelector("#pvw:not([hidden])", { timeout: 60000 }).then(() => true, () => false);
       ok(made, "the PDF guide is made");

@@ -10,8 +10,8 @@
     "hHi": 30,
     "spacing": 18,
     "bloom": [6.5, 8],
-    "color": "Gold, orange, red or pink",
-    "colors": ["yellow", "orange", "red", "pink"],
+    "color": "Gold, orange, red, pink, purple or near-white",
+    "colors": ["white", "yellow", "orange", "red", "pink", "purple"],
     "hex": "#F2A33A",
     "txt": "#2E3A2C",
     "light": "Full sun to part shade",
@@ -36,7 +36,7 @@
     "sources": [
       {
         "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
-        "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+        "url": "https://bordines.com/wp-content/uploads/2026/05/BORDINES-2026-PLANT-GUIDE.pdf",
         "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
       }
     ]
@@ -55,6 +55,12 @@
       "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
       "topic": "Care timing",
       "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    },
+    {
+      "title": "Grand Traverse Regional Invasive Species Network: planting guidelines for Garfield Township",
+      "url": "https://www.garfieldmi.gov/download/12717/native-plant-requirements-for-landscape-plans.pdf",
+      "topic": "Invasive check",
+      "note": "Lists the orange roadside daylily (Hemerocallis fulva) as invasive. That is a different plant from the clump-forming garden hybrids here, so buy named hybrids, not the orange ditch lily."
     }
   ],
   "companions": [

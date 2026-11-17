@@ -11,7 +11,7 @@
     "spacing": 24,
     "bloom": [7, 8],
     "color": "Lavender or white spikes; grown for leaves",
-    "colors": ["white", "purple", "green"],
+    "colors": ["white", "purple"],
     "hex": "#B3A6D9",
     "txt": "#2E3A2C",
     "light": "Part shade to shade",
@@ -36,7 +36,7 @@
     "sources": [
       {
         "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
-        "url": "https://bordines.com/wp-content/uploads/2026/04/BORDINES-2026-PLANT-GUIDE.pdf",
+        "url": "https://bordines.com/wp-content/uploads/2026/05/BORDINES-2026-PLANT-GUIDE.pdf",
         "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
       }
     ]

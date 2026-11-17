@@ -89,15 +89,15 @@
     if (p.gfav) h += '<span class="ic ic-gar" data-k="gar" data-tip="' + (p.native ? "Also sold at Michigan garden centers" : "Garden favorite (not native)") + '">◆</span>';
     if (p.fam === "daisy") h += '<span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span>';
     if (deerEats(p)) h += '<span class="ic ic-deer" data-k="deer" data-tip="' + esc(deerTip(p)) + '">' + DEER + "</span>";
-    if (p.toxic && p.toxic.length) h += '<span class="ic ic-tox" data-k="tox" data-tip="' + esc(window.toxLabel(p)) + '">!</span>';
     if (p.id && window.isTender(p)) h += '<span class="ic ic-cold" data-k="cold" data-tip="Not winter-hardy here: ' + esc(window.winterCare(p).short) + '">❄</span>';
+    if (p.toxic && p.toxic.length) h += '<span class="ic ic-tox" data-k="tox" data-tip="' + esc(window.toxLabel(p)) + '">!</span>';
+    if (p.invasive) h += '<span class="ic ic-inv" data-k="inv" data-tip="Can escape the garden: ' + esc(p.invasive.note) + '">↔</span>';
     if (off) h += '<span class="ic ic-off" data-k="off" data-tip="Outside your garden choices">–</span>';
     return '<span class="ics">' + h + "</span>";
   }
   const SUNKEY = ["full", "part", "shade"].map(k => '<span class="ic ic-sun" data-k="sun" style="background:' + SUNCOL[k] + '" data-tip="' + window.Plan.ZONE_TIP[k] + '">' + SUNGLYPH + "</span> " + { full: "full sun", part: "part shade", shade: "shade" }[k]).join(" ");
-  const KEY = () => '<span class="ickey">' + SUNKEY + " (blended if it takes more than one) " + icons({ native: true }).replace(/<\/?span class="ics">/g, "").replace(/<span class="ic ic-sun".*?<\/span>/, "") + ' native ' + icons({}).replace(/<\/?span class="ics">/g, "").replace(/<span class="ic ic-sun".*?<\/span>/, "") + ' garden favorite <span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span> daisy family <span class="ic ic-deer" data-k="deer" data-tip="Deer often or sometimes eat this">' + DEER + '</span> deer often eat <span class="ic ic-tox" data-k="tox" data-tip="Toxic plant">!</span> toxic <span class="ic ic-cold" data-k="cold" data-tip="Not winter-hardy here: needs winter care">❄</span> needs winter care</span>';
+  const KEY = () => '<span class="ickey">' + SUNKEY + " (blended if it takes more than one) " + icons({ native: true }).replace(/<\/?span class="ics">/g, "").replace(/<span class="ic ic-sun".*?<\/span>/, "") + ' Michigan native ' + icons({}).replace(/<\/?span class="ics">/g, "").replace(/<span class="ic ic-sun".*?<\/span>/, "") + ' Garden favorite <span class="ic ic-df" data-k="daisy" data-tip="Daisy family (related to ragweed)">✿</span> Daisy family <span class="ic ic-deer" data-k="deer" data-tip="Deer often or sometimes eat this">' + DEER + '</span> Deer eat it <span class="ic ic-cold" data-k="cold" data-tip="Not winter-hardy here: needs winter care">❄</span> Needs winter care <span class="ic ic-tox" data-k="tox" data-tip="Toxic plant">!</span> Toxic plant <span class="ic ic-inv" data-k="inv" data-tip="Can escape the garden: on a Michigan list of plants that spread into natural areas">↔</span> Can escape the garden</span>';
   window.plannerKey = KEY;
-  document.querySelectorAll(".keyslot").forEach(e => (e.innerHTML = KEY()));
   { const tip = document.createElement("div"); tip.id = "ictip"; document.body.appendChild(tip);
     const SEL = ".ic, .cpill, .sunb, .ztip, .dtip";
     const place = (x, y) => { const tw = tip.offsetWidth; tip.style.left = Math.max(6, Math.min(window.innerWidth - tw - 6, x - tw / 2)) + "px"; tip.style.top = Math.max(6, y - tip.offsetHeight - 6) + "px"; };
@@ -118,7 +118,7 @@
   function freshState() {
     return { shape: "rect", dims: {}, freePoly: null, freeView: "border", placements: [], seed: 7, fill: true, view: "codes",
       filter: { q: "", height: "", sun: "", color: "", group: "season" }, bloomFilter: "sel", bloomSort: "start",
-      name: "", prefs: { sun: ["full", "part", "shade"], origin: ["nat", "gar"], kinds: ["clump", "fern", "grass", "mat", "bulb"], toxic: true, daisy: true, deer: true, tender: true, v2: true }, waiting: {}, showGrid: true,
+      name: "", prefs: { sun: ["full", "part", "shade"], origin: ["nat", "gar"], kinds: ["clump", "fern", "grass", "mat", "bulb"], toxic: true, daisy: true, deer: true, tender: true, invasive: true, v2: true }, waiting: {}, showGrid: true,
       objects: [], sun: { res: 0.5, cells: {} }, sunBase: null, showSun: true, fillMode: "ground", compSkip: [], freeCtrl: null, freeSmooth: true, done: {} };
   }
   // The example garden ("Load an example garden" in step 1): the drawn border described above, finished.
@@ -129,7 +129,7 @@
   function load() { try { const t = localStorage.getItem(LS); return t ? JSON.parse(t) : null; } catch (e) { return null; } }
   let saveT = 0;
   // the first-time lessons (painting the sun, drawing a bed) play once per browser, not once per garden
-  const Seen = { key: "pbp.lessonsSeen", all() { try { return JSON.parse(localStorage.getItem(this.key)) || {}; } catch (e) { return {}; } }, has(k) { return !!this.all()[k]; }, set(k) { const a = this.all(); a[k] = 1; try { localStorage.setItem(this.key, JSON.stringify(a)); } catch (e) {} } };
+  const Seen = { key: "pbp.lessonsSeen", all() { try { return JSON.parse(localStorage.getItem(this.key)) || {}; } catch (e) { return {}; } }, has(k) { return !!this.all()[k]; }, clear() { try { localStorage.removeItem(this.key); } catch (e) {} }, set(k) { const a = this.all(); a[k] = 1; try { localStorage.setItem(this.key, JSON.stringify(a)); } catch (e) {} } };
   function save() { track(); clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) {} }, 200); }
 
   // ---------- undo / redo: every saved change to the bed is a step you can go back to ----------
@@ -309,7 +309,7 @@
   // counts include plants that are chosen but didn't fit in the bed ("waiting"), so they stay on the shopping list
   function counts(real) { const c = {}; S.placements.forEach(p => { if (real && p.c) return; c[p.id] = (c[p.id] || 0) + 1; }); const w = S.waiting || {}; Object.keys(w).forEach(id => { if (byId[id] && w[id] > 0) c[id] = (c[id] || 0) + w[id]; }); return c; }
   // plans saved before spring bulbs and the deer option existed: turn the new choices on
-  function migratePrefs(raw) { const pr = S.prefs; if (!(raw && raw.v2)) { if (Array.isArray(pr.kinds) && !pr.kinds.includes("bulb")) pr.kinds.push("bulb"); if (pr.deer == null) pr.deer = true; pr.v2 = true; } if (pr.tender == null) pr.tender = false; }
+  function migratePrefs(raw) { const pr = S.prefs; if (!(raw && raw.v2)) { if (Array.isArray(pr.kinds) && !pr.kinds.includes("bulb")) pr.kinds.push("bulb"); if (pr.deer == null) pr.deer = true; pr.v2 = true; } if (pr.tender == null) pr.tender = false; if (pr.invasive == null) pr.invasive = true; }
   function cleanWaiting(w) { const o = {}; if (w && typeof w === "object") Object.keys(w).forEach(k => { const n = Math.floor(+w[k]); if (byId[k] && n > 0 && n < 500) o[k] = n; }); return o; }
   function placedCounts() { const c = {}; S.placements.forEach(p => { c[p.id] = (c[p.id] || 0) + 1; }); return c; }
   const waitTotal = () => Object.keys(S.waiting || {}).reduce((s, k) => s + (S.waiting[k] > 0 ? S.waiting[k] : 0), 0);
@@ -355,8 +355,8 @@
     if (ids.length && !S.placements.some(p => ids.includes(p.id))) toast("That plant doesn't fit in the bed yet, so there is nothing to highlight on the plan.");
     selectIds(ids); renderPlan();
   }
-  const HLK = ["tox", "deer", "daisy", "nat", "gar"];
-  function hlKind(p) { return p.toxic && p.toxic.length ? "tox" : deerEats(p) ? "deer" : p.fam === "daisy" ? "daisy" : p.native ? "nat" : "gar"; }
+  const HLK = ["inv", "tox", "cold", "deer", "daisy", "nat", "gar"];   // a selected row takes the color of the last mark in its pack
+  function hlKind(p) { return p.invasive ? "inv" : p.toxic && p.toxic.length ? "tox" : p.id && window.isTender(p) ? "cold" : deerEats(p) ? "deer" : p.fam === "daisy" ? "daisy" : p.native ? "nat" : "gar"; }
   window.plannerHlKind = hlKind;
   function markSel() { const ids = selIds(); document.querySelectorAll(".brow,.ocol,#shop tr[data-id]").forEach(e => { const on = ids.includes(e.dataset.id); e.classList.toggle("sel", on); HLK.forEach(k => e.classList.remove("hl-" + k)); if (on) { const p = PL.find(x => x.id === e.dataset.id); if (p) e.classList.add("hl-" + hlKind(p)); } }); }
   function stripFiller() { S.placements = S.placements.filter(p => !isGroundcover(p)); selIdx = -1; }
@@ -775,6 +775,7 @@
     if (p.fam === "daisy" && pr.daisy === false) return false;
     if (deerEats(p) && pr.deer === false) return false;
     if (window.isTender(p) && pr.tender === false) return false;
+    if (p.invasive && pr.invasive === false) return false;
     return true;
   }
   function passes(p) {
@@ -822,7 +823,7 @@
     const org = pr.origin.length === 2 ? "Natives and garden favorites" : pr.origin[0] === "nat" ? "Michigan natives" : "Garden favorites";
     const nk = pr.kinds.length, kinds = nk === KINDS.length - 1 ? "all kinds" : nk + " kind" + (nk === 1 ? "" : "s");
     if (k === "kind") return "<b>" + org + "</b>, " + kinds;
-    const out = AVOID.filter(a => pr[a.key] === false).map(a => ({ toxic: "toxic plants", deer: "deer favorites", tender: "plants needing winter care", daisy: "daisy family" }[a.key]));
+    const out = AVOID.filter(a => pr[a.key] === false).map(a => ({ toxic: "toxic plants", deer: "deer favorites", tender: "plants needing winter care", daisy: "daisy family", invasive: "plants that can escape" }[a.key]));
     return (out.length ? "Leaving out <b>" + out.join(", ") + "</b>" : "<b>Nothing left out</b>") + " · " + PL.filter(matchesPrefs).length + " plants match";
   }
   // Only one step is open at a time: the one you opened with Edit, or else the first one not done yet. On a
@@ -959,13 +960,88 @@
     Object.keys(Geo.OBJ).forEach(t => {
       const b = document.createElement("button"); b.type = "button"; b.className = "objbtn" + (objArmed === t || (t === "path" && pathDraw) ? " on" : "");
       b.innerHTML = `${objIcon(t)}<b>${esc(Geo.OBJ[t].label.replace(" / shrub row", ""))}</b><span>${objSize(t)}</span>`;
-      b.title = Geo.OBJ[t].note || ""; b.onclick = () => { armObject(t); $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" });
+      b.title = Geo.OBJ[t].note || ""; b.onclick = () => { if (!Seen.has("objects")) { objLesson(t); if (window.Lesson.on) return; } armObject(t); $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" });
         toast(t === "path" ? "Click points along the bed for the path, then Finish (or double-click)." : "Now click the bed where the " + Geo.OBJ[t].label.toLowerCase().replace(" / shrub row", "") + " goes.", 3500); };
       grid.appendChild(b);
     });
     const c = {}; S.objects.forEach(o => (c[o.t] = (c[o.t] || 0) + 1));
     const have = Object.keys(c).map(t => objPlural(t, c[t]));
     $("#objList").innerHTML = have.length ? `<b>On the bed:</b> ${have.join(", ")}. Click one on the plan to move, resize or remove it.` : "Nothing yet. Skip this step if there's nothing in the bed.";
+  }
+  // A short lesson for this step, played on the plan the first time an object is picked (and from "Show me how"):
+  // a pointer puts a birdbath down, moves it, resizes it and lays a path. Nothing it does is kept.
+  function objLesson(picked) {
+    if (window.Lesson.on || !bed || paint || window.Plan.isDrawing()) return;
+    const keep = JSON.stringify(S.objects), tap = TOUCH ? "Tap" : "Click", tapl = tap.toLowerCase();
+    const xs = bed.poly.map(q => q[0]), ys = bed.poly.map(q => q[1]), x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+    // feet on the bed -> a spot on the screen
+    const C = (x, y) => { const r = (document.querySelector("#plan .soil") || $("#plan")).getBoundingClientRect(); return [r.left + (x - x0) / (x1 - x0) * r.width, r.top + (y1 - y) / (y1 - y0) * r.height]; };
+    // open spots inside the bed, nearest the middle first
+    const spots = []; for (let fy = 0.2; fy <= 0.81; fy += 0.1) for (let fx = 0.15; fx <= 0.86; fx += 0.05) { const x = x0 + fx * (x1 - x0), y = y0 + fy * (y1 - y0); if (Geo.pip(bed.poly, x, y) && !Geo.objHit(S.objects, x, y, 1.2, 1)) spots.push([x, y, Math.hypot(fx - 0.5, fy - 0.5)]); }
+    spots.sort((a, b) => a[2] - b[2]);
+    const A = spots[0] || [(x0 + x1) / 2, (y0 + y1) / 2], B = spots.find(q => Math.abs(q[0] - A[0]) > Math.min(3, (x1 - x0) * 0.25)) || A;
+    // the plants step out of view while the lesson plays, so the objects are easy to see; they come back when it ends
+    const keepPl = S.placements;
+    const restore = step => { const m = document.getElementById("plantMenu"); if (m) m.remove(); S.placements = step ? [] : keepPl; S.objects = JSON.parse(keep); objSel = -1; objArmed = null; pathDraw = null; attachExtras(); renderObjStep(); renderPlanOnly(); renderSelCard(); };
+    const btn = t => { const i = Object.keys(Geo.OBJ).indexOf(t), b = $("#objGrid").children[i]; return b && b.offsetParent ? b : $("#mAdd"); };
+    const put = (x, y) => { S.objects.push({ t: "birdbath", x, y, w: 2, h: 2, rot: 0 }); objSel = S.objects.length - 1; attachExtras(); renderPlanOnly(); return S.objects[objSel]; };
+    const sideBySide = () => { const g = $("#objGrid"); return g.offsetParent && g.getBoundingClientRect().right <= $("#planWrap").getBoundingClientRect().left; };
+    // beside the plan: the Add objects box stays lit the whole time and the card sits right under it
+    const whole = () => [$("#planWrap")], box = () => (sideBySide() ? [$("#objCard")] : []), under = () => (sideBySide() ? $("#objCard") : null);
+    async function place(api) {
+      api.start(...C(B[0], B[1])); await api.wait(400);
+      await api.press(btn("birdbath"), 800);
+      await api.to(...C(A[0], A[1]), 900); await api.click(); put(A[0], A[1]); await api.wait(500);
+    }
+    // drag it somewhere else, then pull a white dot to make it bigger
+    async function moveSize(api) {
+      const o = put(A[0], A[1]); api.start(...C(A[0], A[1])); await api.wait(500);
+      api.note("drag"); api.hold(true);
+      await api.glide(...C(B[0], B[1]), 1100, () => { const r = (document.querySelector("#plan .soil") || $("#plan")).getBoundingClientRect(); o.x = x0 + (api.pos.x - r.left) / r.width * (x1 - x0); o.y = y1 - (api.pos.y - r.top) / r.height * (y1 - y0); renderPlanOnly(); });
+      api.hold(false); api.note(""); await api.wait(600);
+      const h = document.querySelector("#plan .obh"), hr = h ? h.getBoundingClientRect() : null, c = C(o.x, o.y);
+      const hx = hr ? hr.left + hr.width / 2 : c[0] + 20, hy = hr ? hr.top + hr.height / 2 : c[1], ux = hx - c[0], uy = hy - c[1];
+      await api.to(hx, hy, 600); api.note("drag the dot"); api.hold(true);
+      for (const w of [2.4, 2.8, 3.2, 3.6]) { o.w = o.h = w; renderPlanOnly(); await api.to(c[0] + ux * w / 2, c[1] + uy * w / 2, 220); }
+      api.hold(false); api.note(""); await api.wait(400);
+    }
+    async function path(api) {
+      const yM = A[1], P = [[x0 + (x1 - x0) * 0.2, yM], [x0 + (x1 - x0) * 0.5, yM + (y1 - y0) * 0.12], [x0 + (x1 - x0) * 0.8, yM]].filter(q => Geo.pip(bed.poly, q[0], q[1]));
+      if (P.length < 2) return;
+      api.start(...C(A[0], A[1])); await api.wait(300);
+      await api.press(btn("path"), 800);
+      for (let i = 0; i < P.length; i++) { await api.to(...C(P[i][0], P[i][1]), 700); await api.click(); pathDraw = { pts: P.slice(0, i + 1), w: Geo.OBJ.path.w }; renderPlanOnly(); }
+      await api.wait(300); api.note(TOUCH ? "tap Finish" : "double-click"); await api.click(); await api.click(); api.note("");
+      pathDraw = null; S.objects.push({ t: "path", x: P[1][0], y: P[1][1], w: Geo.OBJ.path.w, h: Geo.OBJ.path.w, rot: 0, pts: P }); objSel = S.objects.length - 1; attachExtras(); renderPlanOnly(); await api.wait(400);
+    }
+    // the object's own menu opens, and Duplicate is picked from it
+    async function menu(api) {
+      put(A[0], A[1]); api.start(...C(B[0], B[1])); const at = C(A[0], A[1]); await api.to(at[0], at[1], 700);
+      if (TOUCH) await api.longPress(700); else { api.note("right-click"); await api.click(); api.note(""); }
+      openObjMenu(objSel, at[0] + 6, at[1] + 6); await api.wait(900);
+      const item = [...document.querySelectorAll("#plantMenu .ctxitem")].find(x => /another|duplicate/i.test(x.textContent));
+      if (!item) return;
+      await api.press(item, 700); { const m = document.getElementById("plantMenu"); if (m) m.remove(); }   // just the menu goes; no card pops up in its place
+      const spot = spots.find(q => Math.hypot(q[0] - A[0], q[1] - A[1]) > 2.4 && Math.hypot(q[0] - A[0], q[1] - A[1]) < 4) || B;
+      put(spot[0], spot[1]); await api.wait(500);
+    }
+    window.Lesson.run({
+      kick: "Adding objects", last: "Got it", reset: restore,
+      steps: [
+        { t: "What's in the bed?", under, target: () => [sideBySide() ? $("#objCard") : $("#objGrid").offsetParent ? $("#objGrid") : $("#mAdd")],
+          html: "Paths, rocks, a birdbath, shrubs, a tree: add anything that's in the bed or going into it <b>before the plants</b>. The plants are then laid out around them." },
+        { t: "Put one on the bed", target: whole, lit: box, under, below: true, demo: place, html: tap + " an object, then " + tapl + " the bed where it goes." },
+        { t: "Move it, resize it", target: whole, lit: box, under, below: true, demo: moveSize, html: "<b>Drag</b> an object to move it. " + tap + " it and drag a <b>white dot</b> to make it bigger or smaller." },
+        { t: "Lay a path", target: whole, lit: box, under, below: true, demo: path, html: "Pick <b>Path</b>, then " + tapl + " points along the bed. " + (TOUCH ? "Tap <b>Finish</b>" : "Double-click (or press <b>Finish</b>)") + " to end it. Drag its white dots to bend it, and the orange dot for width." },
+        { t: "Copy, turn or remove", target: whole, lit: box, under, below: true, demo: menu, html: (TOUCH ? "<b>Press and hold</b>" : "<b>Right-click</b>") + " an object for its menu: <b>Duplicate</b>, <b>Turn 90°</b> or <b>Remove</b>. <span class='sl-note'>This was only a demonstration. Nothing was added to your bed.</span>" }
+      ],
+      onClose() {
+        Seen.set("objects");
+        // carry on with the object that was clicked before the lesson started
+        if (picked && Geo.OBJ[picked]) { armObject(picked); toast(picked === "path" ? "Your turn. " + tap + " points along the bed for the path, then Finish." : "Your turn. " + tap + " the bed where the " + Geo.OBJ[picked].label.toLowerCase().replace(" / shrub row", "") + " goes.", 5000); }
+        else toast("Your turn. " + tap + " an object, then " + tapl + " the bed. Nothing in the bed? Press " + (Tour.on ? "Next" : "Done") + ".", 6000);
+      }
+    });
   }
   function openStep(k) { openSteps.add(k); renderSteps(); }
   Object.keys(STEPS_UI).forEach(k => {
@@ -1006,6 +1082,7 @@
   $("#gName").addEventListener("keydown", e => { if (e.key === "Enter" && !document.body.classList.contains("touring")) { e.preventDefault(); e.target.blur(); completeStep("name", true); } });
   const tourNext = () => { const n = Tour.on && !paint && document.querySelector("#tourCoach .tc-next"); if (n) n.click(); return !!n; };   // in the tour's first part these buttons are its Next
   $("#btnPaintSun").addEventListener("click", () => { if (tourNext() || needBase()) return; if (needSunAsk()) { sunLesson({ fromStep: !(S.done && S.done.sun) }); return; } if (!paint) togglePaint(); if (paint && !(S.done && S.done.sun)) paint.fromStep = true; if (innerWidth > 1050) $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  $("#btnObjHow").addEventListener("click", () => objLesson());
   $("#btnSunHow").addEventListener("click", () => { if (!tourNext() && !needBase()) sunLesson({ fromStep: !(S.done && S.done.sun) }); });
   // ---------- steps 4 to 6: how much sun, what kind of garden, and plants to watch out for ----------
   // Sun as three rows in the planner's sun colors, what to include as tiles and chips, and what to leave out as
@@ -1020,6 +1097,9 @@
     { key: "deer", label: "Plants deer like to eat", why: "If deer visit your yard", icon: () => '<span class="ic ic-deer">' + DEER + "</span>", more: th => th.append("Plants marked with the antler icon are ones deer often or sometimes eat, based on the Rutgers University deer-resistance ratings. No plant is deer-proof: hungry deer eat almost anything, and rabbits nibble many young plants too. If deer visit your yard, leave these out or plan on fencing or repellent.") },
     { key: "tender", label: "Plants that need winter care here", why: "Not hardy in zone 6B: they're dug up in fall, brought indoors, or replanted each year", icon: '<span class="ic ic-cold">❄</span>',
       more: th => th.append("These plants (marked ❄) can't survive a Michigan zone 6B winter in the ground on their own. Each one's card and the Garden Timeline say what it needs: dig up and store it after the first frost and replant in May, bring it indoors in a pot, or plant a new one each year. Plants hardy only to 6B itself get a winter-mulch reminder instead, and aren't left out here.") },
+    { key: "invasive", label: "Plants that can escape the garden", why: "Not native, and on a Michigan list of plants that spread into natural areas", icon: '<span class="ic ic-inv">↔</span>',
+      more: th => { th.append("These plants (marked ↔) aren't native to Michigan and can seed themselves beyond the garden. None is banned by the State of Michigan: plants on the state's prohibited, restricted or watch lists are never on this site. But a Michigan township, conservation district or invasive species network lists each one as a plant to avoid, usually near woods, wetlands and other natural areas. If you grow one, cut off the spent flowers before they drop seed. Each plant's page says which list it's on. See ");
+        const ln = document.createElement("a"); ln.href = "https://www.michigan.gov/invasives"; ln.target = "_blank"; ln.rel = "noopener"; ln.textContent = "Michigan.gov/Invasives"; th.append(ln, " for the state's lists."); } },
     { key: "daisy", label: "Daisy-family plants", why: "If someone has ragweed allergies", icon: '<span class="ic ic-df">✿</span>', more: th => th.append("Daisy-family plants (marked ✿) are related to ragweed. Most are pollinated by insects, so they shed far less pollen than ragweed, but people with ragweed allergies can still react, often to handling them. If allergies are a concern, leave them out or check with a doctor.") }
   ];
   const whyOpen = new Set();
@@ -1261,7 +1341,7 @@
       ["fades", "Fades away by summer", "bulbs and spring ephemerals", p => inCut(p, "bulb") || inCut(p, "ephemeral")]] },
   };
   const inCut = (p, g) => !!(window.CARE_DATA && window.CARE_DATA.CUT[g] && window.CARE_DATA.CUT[g].includes(p.id));
-  const COLORS = [["white", "White", "#F6F3EA"], ["yellow", "Yellow", "#F2C94C"], ["orange", "Orange", "#E8833A"], ["red", "Red", "#C8343A"], ["pink", "Pink", "#E58BB5"], ["purple", "Purple", "#8E5BB5"], ["blue", "Blue", "#5B7FD1"], ["green", "Green flowers or leaves", "#6E9B5A"]];
+  const COLORS = [["white", "White", "#F6F3EA"], ["yellow", "Yellow", "#F2C94C"], ["orange", "Orange", "#E8833A"], ["red", "Red", "#C8343A"], ["pink", "Pink", "#E58BB5"], ["purple", "Purple", "#8E5BB5"], ["blue", "Blue", "#5B7FD1"], ["green", "Green: no flowers, or green flowers", "#6E9B5A"]];
   function renderColorDots() {
     const box = $("#fColor"); if (!box) return; box.innerHTML = "";
     COLORS.forEach(([v, t, hex]) => {
@@ -1393,7 +1473,7 @@
   // ---------- small to big chart ----------
   function renderOrder() {
     const sel = selected().sort((a, b) => Geo.hMean(a) - Geo.hMean(b) || a.name.localeCompare(b.name));
-    const host = $("#ochart"); host.innerHTML = '<div class="okey">' + KEY() + "</div>";
+    const host = $("#ochart"); host.innerHTML = "";   // the icon key lives under the bed plan (and behind "What do the icons mean?" in the plant list)
     if (!sel.length) { host.innerHTML = '<div class="empty" style="padding:18px">Choose some plants and they will line up here from smallest to biggest.</div>'; return; }
     // one scale for every row (like the PDF), so 1 ft is the same height everywhere
     const maxH = Math.max(...sel.map(p => p.hHi)), k = Math.max(1.6, Math.min(3.2, 230 / maxH));
@@ -1973,7 +2053,7 @@
   // groundcovers to offer: low plants that suit the step-2 choices (sun, origin, safety)
   function groundcovers() {
     const pr = S.prefs, low = p => p.filler || (p.kind === "mat" && p.hHi <= 12);
-    return PL.filter(p => low(p) && p.sun.some(x => pr.sun.includes(x)) && originOk(p, pr.origin) && !(p.toxic && !pr.toxic) && !(p.fam === "daisy" && pr.daisy === false) && !(deerEats(p) && pr.deer === false))
+    return PL.filter(p => low(p) && p.sun.some(x => pr.sun.includes(x)) && originOk(p, pr.origin) && !(p.toxic && !pr.toxic) && !(p.fam === "daisy" && pr.daisy === false) && !(deerEats(p) && pr.deer === false) && !(p.invasive && pr.invasive === false))
       .sort((a, b) => (b.filler ? 1 : 0) - (a.filler ? 1 : 0) || a.name.localeCompare(b.name));
   }
   // companions of the plants in the bed: { plantId: [companion ids] } (skipping any the user left out) and the full list
@@ -2074,7 +2154,7 @@
       f.innerHTML = `<span>${esc(Ch.heightText(pl))} tall</span><span>${pl.spacing} in apart</span><span>${cnt[pl.id] || 0} in the bed</span>` +
         `<div class="sc-sun"><i class="zsw" style="background:${window.Plan.sunTip ? (pl.sun.length > 1 ? "linear-gradient(90deg," + ["full", "part", "shade"].filter(z => pl.sun.includes(z)).map(z => window.Plan.ZONE[z]).join(",") + ")" : window.Plan.ZONE[pl.sun[0]]) : ""}"></i>${esc(window.Plan.sunNeed(pl))}</div>` +
         (tox ? `<div class="sc-tox">${esc(tox)}</div>` : "") +
-        (window.winterCare(pl) ? `<div class="sc-cold">${window.isTender(pl) ? "❄ Not winter-hardy here: " : "Winter: "}${esc(window.winterCare(pl).short)}</div>` : "") + (p0.lock ? '<div class="sc-lock">Locked in place</div>' : "");
+        (pl.invasive ? `<div class="sc-inv">↔ Can escape the garden: ${esc(pl.invasive.note)}</div>` : "") + (window.winterCare(pl) ? `<div class="sc-cold">${window.isTender(pl) ? "❄ Not winter-hardy here: " : "Winter: "}${esc(window.winterCare(pl).short)}</div>` : "") + (p0.lock ? '<div class="sc-lock">Locked in place</div>' : "");
       card.appendChild(f);
       cardActs(card, plantActions(group));
       cardCompanions(card, idxs[0]);
@@ -2241,7 +2321,8 @@
       const d = document.createElement("div"); d.className = "fp-desc"; d.innerHTML = lines.map(l => "<p>" + esc(l) + "</p>").join(""); top.appendChild(d);
       const acts = document.createElement("div"); acts.className = "po-acts";
       const ok = document.createElement("button"); ok.type = "button"; ok.className = "btn primary"; ok.textContent = "Confirm";
-      ok.onclick = () => { closeModal(); if (mode === "reset") { S = freshState(); init(true); Tour.start(); } else if (mode === "clear") doClear(); else doArrange(); };
+      // starting over also forgets which lessons were seen, so they play again like the first time
+      ok.onclick = () => { closeModal(); if (mode === "reset") { Seen.clear(); S = freshState(); init(true); Tour.start(); } else if (mode === "clear") doClear(); else doArrange(); };
       const no = document.createElement("button"); no.type = "button"; no.className = "btn small"; no.textContent = "Cancel";
       no.onclick = closeModal;
       acts.appendChild(ok); acts.appendChild(no); bottom.appendChild(acts);
@@ -2562,6 +2643,8 @@
   function init(fresh, example) {
     normalizeExtras(); objSel = -1; objArmed = null; pathDraw = null; paint = null; renderPaintBar(); openSteps.clear();
     bed = Geo.buildBed(S); attachExtras();
+    // a saved garden: which plants fit follows the lights on its bed (older saves kept their own list)
+    if (!fresh && sunActive()) { const have = sunInBed(); S.prefs.sun = ["full", "part", "shade"].filter(k => have.has(k)); }
     if (fresh && example) {
       // sunny plants first, then part shade, then shade (as the bed's sun zones run), each group in name order
       const sunRank = p => ({ full: 0, part: 1, shade: 2 })[p.sun[0]];
@@ -2644,13 +2727,13 @@
       { key: "kind", title: "What kind of garden?", holes: [["#prefCard"]],
         text: "Choose Michigan natives, garden favorites or both, and which kinds of plants you like. The counter shows how many plants match." },
       { key: "avoid", title: "Plants to watch out for", holes: [["#avoidCard"]],
-        text: "Leave out plants that are toxic to pets or people, that deer eat, that need winter care here, or that bother ragweed allergies. Or include them: they're marked with an icon so you know." },
-      { key: "bed", title: "Build your bed", holes: [["#bedPanel"], ["#planWrap"]],
+        text: "Leave out plants that are toxic to pets or people, that deer eat, that need winter care here, that can escape the garden, or that bother ragweed allergies. Or include them: they're marked with an icon so you know." },
+      { key: "bed", title: "Your bed", holes: [["#bedPanel"], ["#planWrap"]],
         text: "Pick a shape: a rectangle, a round island, or draw your own. Then set the size with <b>−</b> and <b>+</b>. The bed plan beside it changes as you go." },
       { key: "objects", title: "Add objects", holes: [["#objCard"], ["#planWrap"]],
         text: "Add anything that's in the bed or going into it: a path, stepping stones, rocks, a birdbath, shrubs, a hedge or trees. Plants are then laid out around them. Click one, then click the bed. Drag it to move it, and drag the white dots to resize. Nothing to add? Just click Next." },
       // the sun step has two parts: pick the bed's main light (only the step is lit), then paint on the plan
-      { key: "sun", title: "Add the sun", holes: [["#sunCard"]], primary: 0, text: "",
+      { key: "sun", title: "How much sun?", holes: [["#sunCard"]], primary: 0, text: "",
         part(n) {
           this.at = n;
           this.holes = n ? [["#planWrap"], ["#sunCard"]] : [["#sunCard"]];

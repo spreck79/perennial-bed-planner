@@ -330,6 +330,8 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 .ic-df { background: #FBEBC4; color: #8A6410; font-size: 10px; }
 .ic-tox { background: #B8392E; color: #fff; }
 .ic-cold { background: #4F7FB4; color: #fff; }
+.ic-inv { background: #E0812C; color: #fff; font-weight: 800; }
+.sc-inv { color: #9A4E12; font-weight: 600; margin-top: 2px; }
 .sc-cold { color: #2F5D8C; font-weight: 600; margin-top: 2px; }
 .ic-off { background: #EEE; color: #777; }
 .ickey { white-space: normal; }
@@ -343,16 +345,21 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 #ictip.k-tox { background: #F6D9D5; color: #9A2E24; }
 #ictip.k-off { background: #EEE; color: #555; }
 #ictip.k-cold { background: #DCE7F3; color: #2F5D8C; }
+#ictip.k-inv { background: #FBE3CC; color: #9A4E12; white-space: normal; max-width: 320px; border-radius: 10px; line-height: 1.4; padding: 6px 10px; }
 .okey { font-size: 12px; color: var(--muted); margin: 0 0 8px; }
 .wfit { display: block; color: #9A2E24; font-size: 11px; font-weight: 600; margin-left: 0; }
 .brow.sel { background: #E5E2F3 !important; box-shadow: inset 3px 0 0 #6E64B0; }
 .ocol.sel { outline: 2px solid #6E64B0; outline-offset: -1px; border-radius: 10px; background: rgba(229,226,243,.55); }
 .brow.sel.hl-tox { background: #F6D9D5 !important; box-shadow: inset 3px 0 0 #B8392E; }
+.brow.sel.hl-inv { background: #FBE3CC !important; box-shadow: inset 3px 0 0 #E0812C; }
+.brow.sel.hl-cold { background: #DCE7F3 !important; box-shadow: inset 3px 0 0 #4F7FB4; }
 .brow.sel.hl-deer { background: #EFE2D3 !important; box-shadow: inset 3px 0 0 #7A5230; }
 .brow.sel.hl-daisy { background: #FBEBC4 !important; box-shadow: inset 3px 0 0 #C99A1E; }
 .brow.sel.hl-nat { background: #E1EBCB !important; box-shadow: inset 3px 0 0 #5E8F4A; }
 .brow.sel.hl-gar { background: #F3DDEA !important; box-shadow: inset 3px 0 0 #B8629B; }
 .ocol.sel.hl-tox { outline-color: #B8392E; background: rgba(246,217,213,.7); }
+.ocol.sel.hl-inv { outline-color: #E0812C; background: rgba(251,227,204,.8); }
+.ocol.sel.hl-cold { outline-color: #4F7FB4; background: rgba(220,231,243,.8); }
 .ocol.sel.hl-deer { outline-color: #7A5230; background: rgba(239,226,211,.8); }
 .ocol.sel.hl-daisy { outline-color: #C99A1E; background: rgba(251,235,196,.8); }
 .ocol.sel.hl-nat { outline-color: #5E8F4A; background: rgba(225,235,203,.8); }
@@ -373,6 +380,8 @@ svg.hasSel .pl:not(.sel) circle.pc, svg.hasSel .pl:not(.sel) text, svg.hasSel .p
 
 #shop tr.sel td { background: #E5E2F3; }
 #shop tr.sel.hl-tox td { background: #F6D9D5; }
+#shop tr.sel.hl-inv td { background: #FBE3CC; }
+#shop tr.sel.hl-cold td { background: #DCE7F3; }
 #shop tr.sel.hl-deer td { background: #EFE2D3; }
 #shop tr.sel.hl-daisy td { background: #FBEBC4; }
 #shop tr.sel.hl-nat td { background: #E1EBCB; }
@@ -965,6 +974,8 @@ body { background: linear-gradient(rgba(246,243,234,.35), rgba(246,243,234,.35))
 .sunopt.on { border-color: var(--forest); background: var(--soft); box-shadow: inset 0 0 0 1px var(--forest); }
 #lesson { position: fixed; inset: 0; z-index: 9400; font: 14px/1.45 var(--sans, system-ui, sans-serif); color: var(--ink); }
 #lesson .sl-ring { position: fixed; border-radius: 12px; box-shadow: 0 0 0 3px #F2C40F, 0 0 0 9999px rgba(46,58,44,.5); transition: left .25s ease, top .25s ease, width .25s ease, height .25s ease; pointer-events: none; }
+#lesson .sl-veil { position: fixed; inset: 0; width: 100%; height: 100%; display: none; pointer-events: none; } #lesson .sl-veil path { fill: rgba(46,58,44,.5); }
+#lesson.holes .sl-veil { display: block; } #lesson.holes .sl-ring { box-shadow: 0 0 0 3px #F2C40F; }
 #lesson .sl-card { position: fixed; box-sizing: border-box; background: #fff; border-radius: 14px; padding: 14px 16px 12px; box-shadow: 0 14px 40px rgba(0,0,0,.32); border-top: 4px solid var(--forest); transition: left .25s ease, top .25s ease; }
 #lesson .sl-kick { display: flex; align-items: center; justify-content: space-between; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--forest); }
 #lesson .sl-dots { display: flex; gap: 4px; } #lesson .sl-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--rule); }
