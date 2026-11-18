@@ -44,7 +44,9 @@ const ok = (cond, what) => { console.log((cond ? "  ok    " : "  FAIL  ") + what
         const vs = new Set(urls.filter(u => /\.(js|css)\?v=/.test(u)).map(u => u.split("?v=")[1]));
         ok(vs.size === 1, "every script and stylesheet carries the same version stamp");
       }
-      await page.click("#btnExample"); await page.waitForTimeout(1500);
+      ok(await page.evaluate(() => !!document.querySelector("#welcome #wcTour")), "a first visit opens the welcome card");
+      await page.click("#wcEx"); await page.waitForTimeout(1500);
+      ok(await page.evaluate(() => !document.querySelector("#welcome") && window.__app.S.name === "Example Garden"), "the welcome card's example button loads the example garden");
       ok(await page.evaluate(() => document.querySelectorAll("#lib .pcard.on, #lib .pcard").length > 0 && JSON.parse(localStorage.getItem("shadeGardenPlanner.v1") || "{}").placements.length > 10), "the example garden loads");
       // the three lessons: each opens, plays through every step and closes, leaving the garden as it was
       const lesson = async (name, open, steps) => {

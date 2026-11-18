@@ -1009,3 +1009,24 @@ body.lessonon .sl-press { box-shadow: 0 0 0 3px #F2C40F !important; }
 #lesson.touch .sl-cur::after { left: -15px; top: -15px; width: 30px; height: 30px; box-sizing: border-box; border: 2.5px solid #2E3A2C; border-radius: 50%; background: rgba(255,255,255,.6); transform: none; filter: drop-shadow(0 1px 3px rgba(0,0,0,.45)); transition: transform .12s, background .12s; }
 #lesson.touch .sl-cur.down::after { background: rgba(242,196,15,.75); transform: scale(.82); }
 #lesson.touch .sl-cur b { left: 20px; top: 20px; }
+
+/* the welcome card on a first visit */
+#welcome { position: fixed; inset: 0; z-index: 2000; background: rgba(46,58,44,.55); display: flex; align-items: center; justify-content: center; padding: 20px; animation: wcIn .25s ease; }
+@keyframes wcIn { from { opacity: 0; } to { opacity: 1; } }
+.wc-card { background: var(--cream); border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,.3); width: min(640px, 100%); max-height: calc(100vh - 40px); overflow: auto; }
+.wc-pics { display: flex; height: 110px; overflow: hidden; border-radius: 18px 18px 0 0; }
+.wc-pics img { flex: 1; min-width: 0; object-fit: cover; height: 100%; }
+.wc-body { padding: 22px 30px 20px; text-align: center; }
+.wc-body h1 { font-size: 28px; line-height: 1.2; }
+.wc-lede { font-size: 15px; color: var(--ink); margin: 8px 0 18px; }
+.wc-steps { list-style: none; padding: 0; margin: 0 0 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; text-align: center; }
+.wc-steps li { background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 12px 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.wc-steps svg { width: 40px; height: 40px; }
+.wc-steps b { font-size: 14px; color: var(--forest); }
+.wc-steps span { font-size: 12.5px; color: var(--muted); line-height: 1.35; }
+.wc-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.wc-btns .btn { padding: 10px 18px; font-size: 14px; }
+.wc-skip { border: 0; background: none; color: var(--forest); text-decoration: underline; font: inherit; font-size: 13px; margin-top: 12px; cursor: pointer; }
+.wc-foot { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+.wc-foot a { color: var(--forest); font-weight: 600; }
+@media (max-width: 560px) { .wc-steps { grid-template-columns: 1fr; } .wc-pics { height: 80px; } .wc-body { padding: 18px 18px 16px; } .wc-body h1 { font-size: 23px; } }

@@ -555,12 +555,12 @@
   function togglePlant(id) {
     notice = ""; noFit = [];
     if (S.removed) delete S.removed[id];
-    if (counts()[id] > 0) removePlant(id); else addOne(id);   // + Add puts in one plant; use + for more
+    if (counts()[id] > 0) removePlant(id); else { addOne(id); window.Stats && Stats.add(id); }   // + Add puts in one plant; use + for more
     refresh();
   }
   function setQty(id, d) {
     notice = ""; noFit = [];
-    if (d > 0) addOne(id); else if (counts()[id] > 0) removeOne(id);
+    if (d > 0) { addOne(id); window.Stats && Stats.add(id); } else if (counts()[id] > 0) removeOne(id);
     refresh();
   }
 
@@ -730,10 +730,19 @@
   // its corners; an island as a smooth 8-point loop) unless opts.fresh, which starts blank and clears the bed,
   // or opts.blank, which starts blank and keeps what's planted
   // when the new outline is saved. Nothing changes if the editor is cancelled.
+  // Drawing, painting the sun, placing an object or starting over: the page moves to where the steps end, so the
+  // bed plan sits right under the top bar. Every one of them stops at the same place.
+  function toStepsEnd() {
+    requestAnimationFrame(() => {
+      const g = document.querySelector(".stepgrid"), bar = document.querySelector(".top"); if (!g) return;
+      const y = Math.max(0, g.getBoundingClientRect().bottom + scrollY - (bar ? bar.offsetHeight : 0) + 4);
+      if (Math.abs(y - scrollY) > 4) scrollTo({ top: y, behavior: "smooth" });
+    });
+  }
   function startDraw(opts) {
     opts = opts || {};
     armed = null; selIdx = -1; extraSel = []; objSel = -1; objArmed = null; pathDraw = null; paint = null; renderPaintBar();
-    if (innerWidth > 1050) $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" });
+    toStepsEnd();
     let seed = null, seedSharp = null, smooth = !!S.freeSmooth;
     if (!opts.fresh && !opts.blank) {
       if (S.shape === "free" && S.freePoly) { seed = S.freeCtrl || S.freePoly; if (S.freeCtrl) seedSharp = S.freeSharp; }
@@ -960,7 +969,7 @@
     Object.keys(Geo.OBJ).forEach(t => {
       const b = document.createElement("button"); b.type = "button"; b.className = "objbtn" + (objArmed === t || (t === "path" && pathDraw) ? " on" : "");
       b.innerHTML = `${objIcon(t)}<b>${esc(Geo.OBJ[t].label.replace(" / shrub row", ""))}</b><span>${objSize(t)}</span>`;
-      b.title = Geo.OBJ[t].note || ""; b.onclick = () => { if (!Seen.has("objects")) { objLesson(t); if (window.Lesson.on) return; } armObject(t); $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" });
+      b.title = Geo.OBJ[t].note || ""; b.onclick = () => { if (!Seen.has("objects")) { objLesson(t); if (window.Lesson.on) return; } armObject(t); toStepsEnd();
         toast(t === "path" ? "Click points along the bed for the path, then Finish (or double-click)." : "Now click the bed where the " + Geo.OBJ[t].label.toLowerCase().replace(" / shrub row", "") + " goes.", 3500); };
       grid.appendChild(b);
     });
@@ -1071,6 +1080,7 @@
   // the example garden: a finished plan to look around, with every step already done
   function loadExample() {
     const go = () => {
+      exampleUsed = true; window.Stats && Stats.use("example");
       if (Tour.on) Tour.end("quiet");
       S = exampleState(); init(true, true); heightPolish(); refresh();
       toast("Here's an example garden. Click Edit on any step to change it, or Start over for an empty bed.", 4500);
@@ -1081,7 +1091,7 @@
   $("#btnExample").addEventListener("click", loadExample);
   $("#gName").addEventListener("keydown", e => { if (e.key === "Enter" && !document.body.classList.contains("touring")) { e.preventDefault(); e.target.blur(); completeStep("name", true); } });
   const tourNext = () => { const n = Tour.on && !paint && document.querySelector("#tourCoach .tc-next"); if (n) n.click(); return !!n; };   // in the tour's first part these buttons are its Next
-  $("#btnPaintSun").addEventListener("click", () => { if (tourNext() || needBase()) return; if (needSunAsk()) { sunLesson({ fromStep: !(S.done && S.done.sun) }); return; } if (!paint) togglePaint(); if (paint && !(S.done && S.done.sun)) paint.fromStep = true; if (innerWidth > 1050) $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  $("#btnPaintSun").addEventListener("click", () => { if (tourNext() || needBase()) return; if (needSunAsk()) { sunLesson({ fromStep: !(S.done && S.done.sun) }); return; } if (!paint) togglePaint(); if (paint && !(S.done && S.done.sun)) paint.fromStep = true; toStepsEnd(); });
   $("#btnObjHow").addEventListener("click", () => objLesson());
   $("#btnSunHow").addEventListener("click", () => { if (!tourNext() && !needBase()) sunLesson({ fromStep: !(S.done && S.done.sun) }); });
   // ---------- steps 4 to 6: how much sun, what kind of garden, and plants to watch out for ----------
@@ -1251,7 +1261,7 @@
   function dropPlantAuto(id) {
     const pl = byId[id]; notice = ""; noFit = [];
     if (S.removed) delete S.removed[id];
-    const ok = addOne(id, true); if (!ok) addWaiting(id, 1);
+    const ok = addOne(id, true); if (!ok) addWaiting(id, 1); window.Stats && Stats.add(id);
     refresh();
     toast(ok ? `Added ${pl.name}, placed by height in light it likes.` : `No room left for ${pl.name} in light it likes. It's on the shopping list.`, 3000);
   }
@@ -1788,7 +1798,7 @@
   // phones and tablets: the editor's buttons or the sun palette sit just above the plan; bring them into view
   function showPlanTools() {
     if (innerWidth > 1050) return;
-    requestAnimationFrame(() => { const w = $("#planWrap"); if (!w) return; const y = w.getBoundingClientRect().top + scrollY - 8; scrollTo({ top: y, behavior: "smooth" }); });
+    toStepsEnd();
   }
   function togglePaint(quiet) {
     paint = paint ? null : { brush: sunBase() === "shade" ? "full" : "shade", size: 2 };
@@ -2026,10 +2036,10 @@
     const blob = new Blob([JSON.stringify({ app: "perennial-garden-planner", version: 2, plan: S }, null, 1)], { type: "application/json" });
     const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = fileDate() + " " + safeFile(gardenName()) + " plan.json";
     document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
-    toast("Plan saved to your Downloads folder.");
+    toast("Plan saved to your Downloads folder."); window.Stats && Stats.use("save");
   });
   $("#fileOpen").addEventListener("change", e => {
-    const f = e.target.files && e.target.files[0]; if (!f) return;
+    const f = e.target.files && e.target.files[0]; if (!f) return; window.Stats && Stats.use("open");
     const r = new FileReader();
     r.onload = () => {
       try {
@@ -2284,7 +2294,7 @@
     if (!pool.length) list.innerHTML = `<div class="sc-empty">${qq ? "No match. Try another name." : "No plants match your choices for this light. Try widening them in What kind of garden?, Plants to watch out for or How much sun?"}</div>`;
   }
   function addPlantHere(id) {
-    const pl = byId[id], spot = addSpot; notice = ""; noFit = [];
+    const pl = byId[id], spot = addSpot; notice = ""; noFit = []; window.Stats && Stats.add(id);
     S.placements = S.placements.filter(q => !q.c);
     const sel = selected(); if (!sel.some(p => p.id === id)) sel.push(pl);
     const p = spot ? Geo.placeAt(bed, byId, S.placements, id, spot.x, spot.y) : Geo.placeOne(bed, byId, S.placements, id, Geo.depthTargets(sel), 0);
@@ -2322,7 +2332,7 @@
       const acts = document.createElement("div"); acts.className = "po-acts";
       const ok = document.createElement("button"); ok.type = "button"; ok.className = "btn primary"; ok.textContent = "Confirm";
       // starting over also forgets which lessons were seen, so they play again like the first time
-      ok.onclick = () => { closeModal(); if (mode === "reset") { Seen.clear(); S = freshState(); init(true); Tour.start(); } else if (mode === "clear") doClear(); else doArrange(); };
+      ok.onclick = () => { closeModal(); if (mode === "reset") { Seen.clear(); S = freshState(); init(true); welcome(); } else if (mode === "clear") doClear(); else doArrange(); };
       const no = document.createElement("button"); no.type = "button"; no.className = "btn small"; no.textContent = "Cancel";
       no.onclick = closeModal;
       acts.appendChild(ok); acts.appendChild(no); bottom.appendChild(acts);
@@ -2559,7 +2569,7 @@
     toast(`Suggested ${kinds} kinds, ${n} plants, for ${light.length > 1 ? light.slice(0, -1).join(", ") + " and " + light[light.length - 1] : light[0]}. Click again for a different planting.`);
   }
   function doClear() { S.placements = []; S.waiting = {}; selIdx = -1; notice = ""; noFit = []; refresh(); toast("Bed cleared."); }
-  $("#btnReset").addEventListener("click", () => { clearSel(); objSel = -1; renderPlan(); $("#planCard").scrollIntoView({ behavior: "smooth", block: "start" }); openConfirmModal("reset"); });
+  $("#btnReset").addEventListener("click", () => { clearSel(); objSel = -1; renderPlan(); toStepsEnd(); openConfirmModal("reset"); });
   // Build the guide PDF; returns the jsPDF document
   function buildPdf() {
     const sel = selected();
@@ -2613,6 +2623,20 @@
   }
   $("#pvBack").addEventListener("click", closePreview); $("#pvSave").addEventListener("click", pvDownload); $("#pvPrint").addEventListener("click", pvPrintIt);
   window.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#pvw").hidden) { e.preventDefault(); e.stopImmediatePropagation(); closePreview(); } }, true);
+  // the choices behind a finished garden, for the owner's usage counts (stats.js): plain categories, nothing personal
+  let exampleUsed = false;
+  function countGuide() {
+    if (!window.Stats || window.Stats.off) return;
+    const pr = S.prefs, o = pr.origin || [], a = bed ? bed.area : 0;
+    window.Stats.guide({
+      n: S.placements.length, ids: [...new Set(S.placements.map(p => p.id))],
+      kind: o.includes("nat") && o.includes("gar") ? "both" : o.includes("nat") ? "natives" : "garden",
+      types: (pr.kinds || []).slice(), avoid: ["toxic", "deer", "tender", "daisy", "invasive"].filter(k => pr[k] === false),
+      shape: S.shape, size: a < 50 ? "under 50" : a < 100 ? "50-99" : a < 200 ? "100-199" : a < 400 ? "200-399" : "400+",
+      light: S.sunBase || "", paint: Object.keys(S.sun.cells || {}).length ? 1 : 0,
+      obj: [...new Set((S.objects || []).map(x => x.t))], ex: exampleUsed ? 1 : 0
+    });
+  }
   $("#btnPdf").addEventListener("click", () => {
     if (!S.placements.length) { toast("Add some plants to the bed first."); return; }
     const busy = $("#busy"), bar = $("#busyBar"), txt = $("#busyText"); busy.classList.add("on"); bar.style.width = "3%";
@@ -2624,6 +2648,7 @@
         bar.style.width = "100%"; txt.textContent = "Opening the preview…";
         const fname = fileDate() + " " + safeFile(gardenName()) + ".pdf";
         openPreview(doc, fname);
+        countGuide();
         setTimeout(() => busy.classList.remove("on"), 300);
       } catch (err) { console.error(err); busy.classList.remove("on"); toast("Sorry, the PDF could not be made: " + err.message, 6000); }
     }, 60)).catch(err => { console.error(err); busy.classList.remove("on"); toast("Sorry, the PDF could not be made: " + err.message, 6000); });
@@ -2850,6 +2875,7 @@
       on = false; cancelAnimationFrame(raf); document.body.classList.remove("touring");
       veil.style.display = coach.style.display = "none";
       if (done === "quiet") return;
+      window.Stats && Stats.use(done ? "tour-done" : "tour-skip");
       if (!done) {   // skipped: the steps not done yet count as done, as if Done was pressed on each without changing anything
         const left = Object.keys(STEPS_UI).filter(k => !(S.done && S.done[k]));
         left.forEach(k => completeStep(k, false));
@@ -2873,6 +2899,42 @@
   const gone = saved && Array.isArray(saved.placements) ? [...new Set(saved.placements.filter(p => !byId[p.id]).map(p => p.id))] : [];
   if (saved && gone.length) saved.placements = saved.placements.filter(p => byId[p.id]);
   if (saved && saved.placements && saved.shape) { S = Object.assign(freshState(), saved); S.prefs = Object.assign(freshState().prefs, saved.prefs || {}); S.waiting = cleanWaiting(S.waiting); migratePrefs(saved.prefs); init(false); if (gone.length) { save(); toast(gone.length === 1 ? "One plant in your garden is no longer on the site, so it was taken out." : gone.length + " plants in your garden are no longer on the site, so they were taken out.", 5000); } }
-  else { S = freshState(); init(true); Tour.start(); }
+  else { S = freshState(); init(true); welcome(); }
+  if (saved && welcomeOpen()) welcome();   // the card was still open when the page was left (a Help link, then Back): show it again
+  // remembers that the welcome card is open until one of its choices is picked
+  function welcomeOpen(v) { try { if (v === undefined) return localStorage.getItem("pbp.welcomeOpen") === "1"; if (v) localStorage.setItem("pbp.welcomeOpen", "1"); else localStorage.removeItem("pbp.welcomeOpen"); } catch (e) { return false; } }
+  // First visit, and after Start over: a welcome card that says what the site is for, then the tour, the example garden, or a look around
+  function welcome() {
+    const pics = ["coneflower", "bluebells", "astilbe", "rudbeckia", "columbine"].filter(id => byId[id]);
+    const ov = document.createElement("div"); ov.id = "welcome"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-labelledby", "wcTitle");
+    const icon = {
+      bed: '<svg viewBox="0 0 40 40"><path d="M5 30 C5 14 14 8 22 9 C31 10 35 18 35 26 L35 30 Z" fill="#E6D9BE" stroke="#8C6B4A" stroke-width="2"/><path d="M5 30 H35" stroke="#5E8F4E" stroke-width="3"/><circle cx="28" cy="13" r="4" fill="#F2C40C"/></svg>',
+      plants: '<svg viewBox="0 0 40 40"><circle cx="13" cy="25" r="8" fill="#E58BB5" stroke="#fff" stroke-width="2"/><circle cx="27" cy="23" r="9" fill="#8E5BB5" stroke="#fff" stroke-width="2"/><circle cx="20" cy="12" r="7" fill="#F2C94C" stroke="#fff" stroke-width="2"/></svg>',
+      guide: '<svg viewBox="0 0 40 40"><rect x="9" y="5" width="22" height="30" rx="2" fill="#fff" stroke="#3F6B3A" stroke-width="2"/><path d="M13 12h14M13 17h14M13 22h9" stroke="#6F7667" stroke-width="2"/><circle cx="25" cy="28" r="3" fill="#5E8F4E"/></svg>'
+    };
+    ov.innerHTML = `<div class="wc-card">
+      <div class="wc-pics">${pics.map(id => `<img src="data/plants/${id}/preview.jpg" alt="">`).join("")}</div>
+      <div class="wc-body">
+        <h1 id="wcTitle">Plan a perennial bed for Southern Michigan</h1>
+        <p class="wc-lede">Draw your bed, pick plants that grow here, and print a guide to take outside.</p>
+        <ol class="wc-steps">
+          <li>${icon.bed}<b>Draw your bed</b><span>Its shape, its size, and how much sun it gets.</span></li>
+          <li>${icon.plants}<b>Pick your plants</b><span>${PLANTS.length} Michigan natives and garden favorites, set out for you at their full grown size.</span></li>
+          <li>${icon.guide}<b>Print your guide</b><span>A shopping list, a planting plan, and care through the year.</span></li>
+        </ol>
+        <div class="wc-btns"><button type="button" class="btn primary" id="wcTour">Start the guided tour</button><button type="button" class="btn" id="wcEx">See an example garden</button></div>
+        <button type="button" class="wc-skip" id="wcOwn">I'll look around on my own</button>
+        <p class="wc-foot">Free, no account, and nothing about you is collected. <a href="help.html#feedback">Send feedback</a> · <a href="help.html#privacy">Privacy</a></p>
+      </div></div>`;
+    document.body.appendChild(ov); document.body.classList.add("welcoming"); welcomeOpen(true);
+    const close = then => { welcomeOpen(false); ov.remove(); document.body.classList.remove("welcoming"); removeEventListener("keydown", onKey, true); then && then(); };
+    const onKey = e => { if (e.key === "Escape") { e.stopPropagation(); close(); } };
+    addEventListener("keydown", onKey, true);
+    ov.querySelector("#wcTour").onclick = () => close(() => Tour.start());
+    ov.querySelector("#wcEx").onclick = () => close(loadExample);
+    ov.querySelector("#wcOwn").onclick = () => close();
+    ov.addEventListener("click", e => { if (e.target === ov) close(); });
+    setTimeout(() => ov.querySelector("#wcTour").focus(), 50);
+  }
   window.__app = { get S() { return S; }, get bed() { return bed; } };
 })();

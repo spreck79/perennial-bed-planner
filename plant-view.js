@@ -163,6 +163,7 @@
   }
 
   const id = new URLSearchParams(location.search).get("id"), p = byId[id];
+  if (p && window.Stats) window.Stats.page(id);   // usage counts (stats.js)
   if (!p) {
     document.title = "Plant not found · Perennial Bed Planner";
     document.getElementById("pp").innerHTML = '<section class="card"><h2>This plant isn\'t on the site</h2><p>There\'s no plant folder for it (any more). <a href="index.html">Back to the planner</a></p></section>';

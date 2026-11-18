@@ -49,6 +49,14 @@
   details { background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 10px 14px; margin: 8px 0; }
   summary { cursor: pointer; font-weight: 600; } details p { margin: 8px 0 2px; }
   .keybox { background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 12px 14px; line-height: 2.2; }
+  .statsw { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; margin: 4px 0 2px; user-select: none; }
+  .statsw input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .sw-track { width: 42px; height: 24px; border-radius: 12px; background: #C9C4B3; position: relative; transition: background .15s; flex: none; }
+  .sw-knob { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.3); transition: left .15s; }
+  .statsw input:checked + .sw-track { background: #3F6B3A; }
+  .statsw input:checked + .sw-track .sw-knob { left: 21px; }
+  .statsw input:focus-visible + .sw-track { outline: 2px solid #3F6B3A; outline-offset: 2px; }
+  .sw-text { font-weight: 600; }
   .plain { margin: 6px 0 10px; padding-left: 20px; } .plain li { margin: 5px 0; }
   .tipbox { background: #EEF3E4; border: 1px solid #C9D7B4; border-radius: 12px; padding: 10px 14px; margin: 12px 0; }
   .how { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; margin: 8px 0 12px; }
@@ -70,7 +78,7 @@
 <main>
   <h1>Help</h1>
   <p class="muted">How to use the Perennial Bed Planner (beta).</p>
-  <div class="jump"><a href="#start">Quick start</a><a href="#plants">Find plants</a><a href="#bed">Work on the bed</a><a href="#read">Read the plan</a><a href="#charts">Charts and shopping list</a><a href="#pages">Plant pages</a><a href="#pdf">PDF guide</a><a href="#icons">Icons</a><a href="#faq">Questions</a><a href="#facts">Where the facts come from</a><a href="#feedback">Feedback</a></div>
+  <div class="jump"><a href="#start">Quick start</a><a href="#plants">Find plants</a><a href="#bed">Work on the bed</a><a href="#read">Read the plan</a><a href="#charts">Charts and shopping list</a><a href="#pages">Plant pages</a><a href="#pdf">PDF guide</a><a href="#icons">Icons</a><a href="#faq">Questions</a><a href="#facts">Where the facts come from</a><a href="#feedback">Feedback</a><a href="#privacy">Privacy</a></div>
 
   <h2 id="start">Quick start</h2>
   <p>Work through the six steps at the top of the planner. Want it walked through? Press <b>Guided tour</b>. Just looking around? <b>Load an example garden</b> in step 1.</p>
@@ -185,10 +193,28 @@
   <h2 id="feedback">Feedback</h2>
   <p>This is a beta, so things may still change. Found a mistake or have an idea? Email <a href="mailto:feedback@spreck79.com?subject=Perennial%20Bed%20Planner%20feedback">feedback@spreck79.com</a>. The link fills in the subject "Perennial Bed Planner feedback" for you.</p>
   <p class="muted">Your email address is only used to reply to you. It's never added to a mailing list, shared, or used for anything else.</p>
+
+  <h2 id="privacy">Privacy</h2>
+  <p>No account, no ads and no cookies. Your garden is saved only in your own browser, and nothing about you is collected.</p>
+  <p>To see what people find useful, the site keeps simple counts: how many browsers visit each month, whether it's a computer, tablet or phone, the name of the site a visitor came from (such as Google), which plants get added and opened, the choices behind each PDF guide (like bed shape and main light), and whether the tour and lessons were watched or skipped. Your browser remembers which month it was last counted, so a visit is counted once a month. No name, email, internet address or location is sent, and the counts can't be traced back to anyone.</p>
+  <label class="statsw"><input type="checkbox" id="statsOn" checked><span class="sw-track"><span class="sw-knob"></span></span><span class="sw-text">Count my visits</span></label>
+  <p class="muted" id="statsNote">Switch it off and this browser is never counted. It stays off until you switch it back on.</p>
 </main>
 <footer class="sitefoot">
   <span>Perennial Bed Planner (beta) · Zone 6B · Southern Michigan · © 2026 <a href="https://spreck79.com" target="_blank" rel="noopener">spreck79</a> · <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a> (photos have their own licenses)</span>
   <span class="footr"><a class="gh" href="https://github.com/spreck79/perennial-bed-planner" target="_blank" rel="noopener" title="See the code on GitHub"><img src="img/github.svg" alt="" width="18" height="18">GitHub</a><a class="s79" href="https://spreck79.com" target="_blank" rel="noopener"><span>A side quest by</span><img src="img/spreck79.svg" alt="spreck79" width="61" height="38"></a></span>
 </footer>
+<script src="stats.js?v=12"></script>
+<script>
+  window.Stats && window.Stats.use("help");
+  // the privacy switch: the same setting stats.js reads (off = this browser is never counted)
+  (function () {
+    const box = document.getElementById("statsOn"), note = document.getElementById("statsNote"), KEY = "pbp.statsOff";
+    let off = false; try { off = localStorage.getItem(KEY) === "1"; } catch (e) {}
+    const show = () => { note.textContent = box.checked ? "Switch it off and this browser is never counted. It stays off until you switch it back on." : "Off. This browser isn't counted, on any page of the site."; };
+    box.checked = !off; show();
+    box.addEventListener("change", () => { try { if (box.checked) localStorage.removeItem(KEY); else localStorage.setItem(KEY, "1"); } catch (e) {} show(); });
+  })();
+</script>
 </body>
 </html>

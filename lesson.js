@@ -100,6 +100,8 @@
       if (!on) return; runId++; on = false; cfg.reset && cfg.reset(null);
       document.body.classList.remove("lessonon"); ov.remove();
       removeEventListener("resize", place); removeEventListener("scroll", place, true); removeEventListener("keydown", onKey, true);
+      const name = { "Drawing your bed": "draw", "Painting the sun": "sun", "Adding objects": "objects" }[cfg.kick];
+      if (name && window.Stats) window.Stats.use("lesson-" + name + "-" + (skipped ? "skip" : "done"));   // usage counts (stats.js)
       cfg.onClose && cfg.onClose(!!skipped);
     }
     ov.querySelector(".sl-next").onclick = () => { if (at === steps.length - 1) close(false); else { at++; show(); } };

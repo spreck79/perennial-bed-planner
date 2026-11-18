@@ -212,7 +212,7 @@
     const btn = $("#btnPdf"); btn.disabled = true; const label = btn.textContent; btn.textContent = "Making the PDF…";
     (window.jspdf ? Promise.resolve() : loadScript("lib/jspdf.umd.min.js"))
       .then(() => window.PDF_FONTS ? null : loadScript("fonts.js"))
-      .then(() => openPreview(makePdf(), S.name + " - Perennial Bed Planner.pdf"))
+      .then(() => { openPreview(makePdf(), S.name + " - Perennial Bed Planner.pdf"); const pid = new URLSearchParams(location.search).get("id"); if (window.Stats) window.Stats.plantPdf(pid); })
       .catch(err => { console.error(err); toast("Sorry, the PDF couldn't be made: " + err.message, 5000); })
       .finally(() => { btn.disabled = false; btn.textContent = label; });
   });
