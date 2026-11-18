@@ -18,6 +18,7 @@
   }
   function heightText(p) {
     const f = v => v >= 36 ? (v / 12) + " ft" : v + " in";
+    if (p.hLo === p.hHi) return "about " + f(p.hHi);   // one height, not a range
     return p.hLo >= 36 ? (p.hLo / 12) + "–" + (p.hHi / 12) + " ft" : p.hHi > 36 ? f(p.hLo) + " – " + f(p.hHi) : p.hLo + "–" + p.hHi + " in";
   }
   function bloomCounts(plants) {
