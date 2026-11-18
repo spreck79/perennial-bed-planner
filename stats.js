@@ -12,7 +12,7 @@
 // window.Stats: add(id)  page(id)  plantPdf(id)  use(name)  guide({...})
 (function () {
   "use strict";
-  const ENDPOINT = "https://script.google.com/macros/s/AKfycbx5hY-cdESRyc6afPImbbv-QOlNCVdRFVP1rEi19dhSTUqvksu4es3el5SiTi0HvhgC/exec";   // the Google Apps Script web app address; empty = counting is off
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbyv8scF21U2xppxikmqK6jusXeffcZipCuLr-U0kKJKc3Gz-UEbDHHBrNX5Xmr4YGy4/exec";   // the Google Apps Script web app address; empty = counting is off
   const OFF = "pbp.statsOff", MONTH = "pbp.countedMonth";
   const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} }, del: k => { try { localStorage.removeItem(k); } catch (e) {} } };
 
