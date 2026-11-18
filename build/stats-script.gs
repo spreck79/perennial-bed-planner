@@ -18,12 +18,12 @@ const LABEL = {
     "lesson-objects-done": "Objects lesson: watched", "lesson-objects-skip": "Objects lesson: skipped"
   },
   kind: { natives: "Michigan natives", garden: "Garden favorites", both: "Both" },
-  types: { clump: "Flowers", fern: "Ferns", grass: "Grasses & sedges", mat: "Groundcovers", bulb: "Spring bulbs" },
+  types: { clump: "Flowers", fern: "Ferns", grass: "Grasses & sedges", mat: "Groundcovers", bulb: "Spring bulbs", annual: "Annuals", shrub: "Shrubs" },
   avoid: { toxic: "Toxic plants", deer: "Plants deer eat", tender: "Plants that need winter care", daisy: "Daisy family", invasive: "Plants that can escape the garden" },
   shape: { rect: "Rectangle", lshape: "L-shape", curved: "Curved border", half: "Half moon", wedge: "Corner wedge", circle: "Round island", oval: "Oval island", free: "Drawn by hand" },
   size: { "under 50": "Under 50 sq ft", "50-99": "50 to 99 sq ft", "100-199": "100 to 199 sq ft", "200-399": "200 to 399 sq ft", "400+": "400 sq ft or more" },
   light: { full: "Full sun", part: "Part shade", shade: "Shade" },
-  obj: { path: "Path", stone: "Stepping stone", stump: "Tree stump", rock: "Rock", birdbath: "Birdbath", shrub: "Shrub", hedge: "Hedge", tree: "Tree" }
+  obj: { path: "Path", stone: "Stepping stone", stump: "Tree stump", rock: "Rock", birdbath: "Birdbath", shrub: "Existing shrub", hedge: "Existing hedge", tree: "Existing tree" }
 };
 
 function doPost(e) {
