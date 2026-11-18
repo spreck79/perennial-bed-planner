@@ -85,9 +85,11 @@
     const heroEnd = heroText(false), bandH = Math.max(py + ph + 30, heroEnd + 16);
     fill(C.band); doc.rect(0, 0, W, bandH, "F");
     sf("rb", 11); color(C.forest); text("Perennial Bed Planner", M, 28);
-    { sf("sb", 6.5); const bw = doc.getTextWidth("BETA") + 12, bx = M + 4 + (sf("rb", 11), doc.getTextWidth("Perennial Bed Planner")); sf("sb", 6.5);
+    const fx = M + doc.getTextWidth("Perennial Bed Planner") + 4;   // the small italic "and friends", like the site header
+    sf("ri", 8); color(C.muted); text("and friends", fx, 28);
+    { const fw = doc.getTextWidth("and friends"); sf("sb", 6.5); const bw = doc.getTextWidth("BETA") + 12, bx = fx + fw; sf("sb", 6.5);
       fill("#E5E2F3"); stroke("#BDB7DD"); doc.setLineWidth(0.5); doc.roundedRect(bx + 4, 19, bw, 12, 6, 6, "FD"); color("#4F4A8A"); text("BETA", bx + 4 + bw / 2, 27.4, { align: "center" }); }
-    sf("s", 7.5); color(C.muted); text("All perennials · Zone 6B · Southern Michigan", W - M, 28, { align: "right" });
+    sf("s", 7.5); color(C.muted); text("Perennials, annuals and shrubs · Zone 6B · Southern Michigan", W - M, 28, { align: "right" });
     const photoD = window.PHOTO_FULL && window.PHOTO_FULL[DATA.id];
     if (photoD) {
       try { doc.saveGraphicsState(); doc.roundedRect(px, py, pw, ph, 8, 8, null); doc.clip(); doc.discardPath(); doc.addImage(photoD, "JPEG", px, py, pw, ph); doc.restoreGraphicsState(); }

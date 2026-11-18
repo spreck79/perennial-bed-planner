@@ -1,0 +1,113 @@
+{
+  "id": "crocus",
+  "facts": {
+    "code": "Croc",
+    "name": "Crocus",
+    "latin": "Crocus vernus and other spring crocus",
+    "native": false,
+    "kind": "bulb",
+    "dormant": true,
+    "clump": 10,
+    "hLo": 3,
+    "hHi": 6,
+    "spacing": 8,
+    "bloom": [
+      3.5,
+      4.5
+    ],
+    "color": "Purple, white, yellow or striped cups",
+    "colors": [
+      "white",
+      "yellow",
+      "purple"
+    ],
+    "hex": "#9A63C8",
+    "txt": "#FFFFFF",
+    "light": "Full sun to part shade; fine under trees that leaf out after it blooms",
+    "sun": [
+      "full",
+      "part"
+    ],
+    "moisture": "Average, well drained",
+    "notes": "One of the first flowers of spring, often up through the last snow. Plant the corms 3 to 4 inches deep in fall, in groups of 10 or more. The grassy leaves fade by early summer. Squirrels and chipmunks dig up newly planted corms; chicken wire over the planting stops them.",
+    "deer": "B",
+    "squirrels": true,
+    "toxic": [
+      "dogs",
+      "cats"
+    ],
+    "toxSrc": "ASPCA: spring crocus can cause vomiting, diarrhea and drooling in dogs and cats (autumn crocus, a different plant, is far more toxic)",
+    "zones": [
+      3,
+      8
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "20200207Crocus vernus01.jpg",
+      "by": "Flocci Nivis",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "English Gardens (Metro Detroit garden centers): Flower Record Crocus",
+        "url": "https://plants.englishgardens.com/12150001/Plant/3475/Flower_Record_Crocus",
+        "note": "Sold at English Gardens, with 'Jeanne D'Arc' (white), 'Golden Yellow' and 'Blue Pearl' crocus; 3 to 4 in tall, hardy to zone 3."
+      }
+    ]
+  },
+  "care": {
+    "group": "bulb",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "MSU Extension: Where are my bulbs? Why aren't they flowering?",
+      "url": "https://www.canr.msu.edu/news/where-are-my-bulbs-why-aren-t-they-flowering",
+      "topic": "Spring bulbs",
+      "note": "Plant crocus, snowdrops, squill and other small bulbs 3 to 4 inches deep."
+    },
+    {
+      "title": "Extension (Wildlife Damage Management): Squirrels digging up crocus, hyacinth and tulip bulbs",
+      "url": "https://wildlife-damage-management.extension.org/squirrels-are-digging-up-newly-planted-crocus-hyacinth-and-tulip-bulbs-how-can-i-prevent-this",
+      "topic": "Spring bulbs",
+      "note": "Wire baskets, chicken wire or hardware cloth over newly planted crocus corms keep squirrels from digging them up."
+    },
+    {
+      "title": "ASPCA: Keep Your Pet Safe While You Enjoy Springtime Gardening",
+      "url": "https://www.aspca.org/news/keep-your-pet-safe-while-you-enjoy-springtime-gardening",
+      "topic": "Toxicity",
+      "note": "Spring crocus can cause vomiting, diarrhea and drooling; autumn crocus (Colchicum) is a different, more dangerous plant."
+    }
+  ],
+  "companions": [
+    {
+      "id": "hellebore",
+      "why": "Hellebores bloom in late winter and early spring, and their flowers and leaves pair well with crocus.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia.net: Crocus vernus (Dutch Crocus)",
+          "url": "https://www.gardenia.net/genus/crocus-vernus-dutch-crocus",
+          "about": "crocus"
+        }
+      ]
+    },
+    {
+      "id": "daffodil",
+      "why": "Early daffodils add height and more color to a bed of spring crocus.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia.net: Crocus vernus (Dutch Crocus)",
+          "url": "https://www.gardenia.net/genus/crocus-vernus-dutch-crocus",
+          "about": "crocus"
+        }
+      ]
+    }
+  ]
+}

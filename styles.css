@@ -17,6 +17,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -.01em
 .top > div:first-child { margin-left: 0; }
 @media (max-width: 1050px) { .top > div:first-child { margin-left: 0; } }
 .top h1 { font-size: 22px; line-height: 1.1; }
+.top .friends { font-size: 15px; font-weight: 500; color: #6F7667; font-style: italic; margin-left: 2px; }
 .top .ttl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .top .beta { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; background: #E5E2F3; color: #4F4A8A; border: 1px solid #BDB7DD; }
 .top .sub { color: var(--muted); font-size: 12px; }
@@ -108,7 +109,7 @@ input[type=number], input[type=search], select { font: inherit; padding: 6px 8px
 .selbtn { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; text-align: left; font-weight: 600; }
 .selbtn::after { content: "▾"; color: var(--muted); font-size: 11px; margin-left: 4px; }
 .selbtn.open { background: var(--soft); border-color: #c9c2a8; }
-.selmenu { max-height: 260px; overflow-y: auto; }
+.selmenu { max-height: min(440px, 70vh); overflow-y: auto; }   /* tall enough that short menus (Group by, Sort) never need scrolling */
 
 /* bloom chart */
 .bloom { --label: 250px; }

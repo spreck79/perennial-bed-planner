@@ -98,6 +98,7 @@ Top level (all required except `example` and `sources`, nothing else allowed):
 | `winter` | object | when the plant isn't hardy in zone 6B | `{ "how": "dig" \| "pot" \| "annual" \| "mulch", "text"?: string, "lift"?: [start, end], "replant"?: [start, end], "mulch"?: [start, end] }`. Windows are months (1 to 12.99, start before end); any left out get the usual timing for that `how`, and `text` replaces the standard instructions. `mulch` = hardy only to 6B, mulch the crown; `dig` = dig up and store; `pot` = bring indoors; `annual` = replant each year. |
 | `invasive` | object | no | Only for a non-native plant that a Michigan list (a township, conservation district, CISMA or invasive species network) tells gardeners to avoid: `{ "list": who lists it, "url": "http(s)://…", "note": one or two sentences on what it does and what to do }`. The plant shows the ↔ mark ("Can escape the garden") and can be left out in "Plants to watch out for". A plant on the State of Michigan's prohibited, restricted or watch lists (michigan.gov/invasives) is never added to the site at all. |
 | `buyNote` | string | no | A buying tip added to the PDF's "Buy the right plants" step when the plant is in the bed ("Often sold as dormant roots."). |
+| `annual` | `true` | no | The plant is an annual: it grows one season, goes in after the last frost (mid to late May) and is pulled out after frost in fall. Needs `care.group` `"annual"`; no `zones` or `winter`. `kind` still picks its shape on the plan. Shown and hidden by the "Annuals" switch in "What kind of garden?". |
 
 ### photo
 
@@ -152,6 +153,7 @@ plant that uses it (matched by `url`), and use it only for one kind of proof (a 
 | `marginal` | Leave the tops over winter for protection; cut back in May. |
 | `late` | Slow to come up (mark the spot); cut old stems mid-April to early May. |
 | `ephemeral` | Goes dormant in summer: let the leaves yellow, then clear them. |
+| `annual` | Only for plants with `facts.annual`: plant after the last frost, pull out after frost in fall. No dividing. |
 | `bulb` | Plant in October; cut the leaves off 6+ weeks after they fade. |
 
 Dividing advice follows from the group and bloom time, unless `divide` says otherwise. A new plant gets the standard wording for its group.

@@ -229,9 +229,9 @@
     stump: { label: "Tree stump", w: 1.5, h: 1.5, min: 0.5, max: 5, shape: "circ", note: "Plants are kept clear of the stump." },
     rock: { label: "Rock", w: 2, h: 1.4, min: 0.5, max: 8, shape: "ell", rot: true, note: "Plants are kept clear of the rock but can tuck in around it." },
     birdbath: { label: "Birdbath", w: 2, h: 2, min: 1, max: 4, shape: "circ", note: "Size is the width of the bowl." },
-    shrub: { label: "Shrub", w: 4, h: 4, min: 1.5, max: 12, shape: "circ", note: "Size is how wide the shrub grows. Nothing is planted under it." },
-    hedge: { label: "Hedge / shrub row", w: 4, h: 1.5, min: 1, max: 24, shape: "rect", rot: true, note: "A straight run of shrubs, like a boxwood hedge. Nothing is planted under it." },
-    tree: { label: "Tree", w: 10, h: 10, min: 4, max: 40, shape: "circ", note: "Size is the canopy width. Only the trunk takes up room, so plants can grow underneath. Use Paint sun to mark the shade it casts." }
+    shrub: { label: "Existing shrub", w: 4, h: 4, min: 1.5, max: 12, shape: "circ", note: "Size is how wide the shrub grows. Nothing is planted under it." },
+    hedge: { label: "Existing hedge", w: 4, h: 1.5, min: 1, max: 24, shape: "rect", rot: true, note: "A straight run of shrubs, like a boxwood hedge. Nothing is planted under it." },
+    tree: { label: "Existing tree", w: 10, h: 10, min: 4, max: 40, shape: "circ", note: "Size is the canopy width. Only the trunk takes up room, so plants can grow underneath. Use Paint sun to mark the shade it casts." }
   };
   const trunkR = o => Math.max(0.6, o.w * 0.06);
   // How a hedge is drawn, in its own unrotated frame (feet, centered on 0,0), so the screen and the PDF match:

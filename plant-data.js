@@ -13,7 +13,7 @@
   "use strict";
 
   // ---------- putting the plant files together into what the planner uses ----------
-  const CARE_GROUPS = ["fall", "grass", "sedge", "fern", "evfern", "tidy", "leavesAtBud", "leavesEarly", "pruneInMay", "marginal", "late", "ephemeral", "bulb"];
+  const CARE_GROUPS = ["fall", "grass", "sedge", "fern", "evfern", "tidy", "leavesAtBud", "leavesEarly", "pruneInMay", "marginal", "late", "ephemeral", "bulb", "annual", "shrub"];
   const cmp = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 
   // a plant file the planner can use (anything less is left out and named in the browser console)
@@ -78,7 +78,7 @@
 
     // care (read by care.js)
     const care = r => r.plant.care || {};
-    const C = { CUT: {}, TRIM: [], FALL_SHORT: {}, FALL_WHY: {}, DIVIDE: {}, DIVIDE_NOTE: {}, JUNE: {}, EVERGREEN: [], DORMANCY: {} };
+    const C = { CUT: {}, PRUNE: {}, TRIM: [], FALL_SHORT: {}, FALL_WHY: {}, DIVIDE: {}, DIVIDE_NOTE: {}, JUNE: {}, EVERGREEN: [], DORMANCY: {} };
     CARE_GROUPS.forEach(g => (C.CUT[g] = P.filter(r => care(r).group === g).map(r => r.id)));
     P.forEach(r => {
       const c = care(r), id = r.id;
@@ -89,6 +89,7 @@
       if (c.june) C.JUNE[id] = c.june;
       if (c.evergreen) C.EVERGREEN.push(id);
       if (c.dormancy) C.DORMANCY[id] = c.dormancy;
+      if (c.prune) C.PRUNE[id] = c.prune;
     });
     out.CARE_DATA = C;
     return out;

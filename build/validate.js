@@ -113,8 +113,22 @@ function validate(plants, readErrors) {
       else for (const k of Object.keys(iv)) if (!["list", "url", "note"].includes(k)) E(`unknown invasive field '${k}'`);
       if (f.native) E("'invasive' is only for plants that aren't native to Michigan");
     }
+    if ("shrub" in f) {   // woody: pruned, not cut down
+      if (f.shrub !== true) E("'shrub' must be true (leave it out for other plants)");
+      if (f.annual) E("a plant can't be both an annual and a shrub");
+      if (!(d.care && d.care.group === "shrub")) E("a shrub uses care.group \"shrub\"");
+      if (isNum(f.hHi) && f.hHi > 96) E("shrubs on this site stay under about 8 ft (96 in) on their own");
+      if (!(d.care && d.care.prune)) E("a shrub needs care.prune: when and how to prune it, from a source");
+    } else if (d.care && d.care.group === "shrub") E("care.group \"shrub\" is only for plants with facts.shrub true");
+    if ("soilWarn" in f && !isText(f.soilWarn)) E("'soilWarn' is a sentence about soil the plant needs (or left out)");
+    if ("annual" in f) {   // grows one season: planted each spring after frost, pulled in fall
+      if (f.annual !== true) E("'annual' must be true (leave it out for perennials)");
+      if (f.winter) E("an annual needs no 'winter' care: it is pulled in fall");
+      if (!(d.care && d.care.group === "annual")) E("an annual uses care.group \"annual\"");
+    } else if (d.care && d.care.group === "annual") E("care.group \"annual\" is only for plants with facts.annual true");
     const z = f.zones, wn = f.winter;
-    if (z !== undefined) {
+    if (f.annual) { /* zones don't matter for a one-season plant */ }
+    else if (z !== undefined) {
       if (!(isPair(z, 1, 13.5) && z[0] <= z[1] && z.every(x => (x * 2) % 1 === 0))) E("zones must be [coldest, warmest] like [3, 8] (use .5 for the b half: 6.5 = 6b)");
       else if (z[0] > 6.5 && !wn) E(`not hardy in zone 6B (zones ${z[0]} to ${z[1]}): add 'winter' care (how: dig, pot, annual)`);
       else if (z[1] < 6) E(`zones ${z[0]} to ${z[1]} don't reach 6B: it won't grow well here`);
@@ -183,7 +197,7 @@ function validate(plants, readErrors) {
     if (!groups.includes(ca.group)) E(`care.group must be one of ${groups.join(", ")}`);
     if (typeof ca.trim !== "boolean") E("care.trim must be true (optional shear after the first flowers) or false");
     else if (ca.trim && f.bloom === null) Wn("care.trim is true but it has no bloom time, so no trim is shown");
-    for (const k of Object.keys(ca)) if (!["group", "trim", "fall", "divide", "divideNote", "evergreen", "dormancy", "june"].includes(k)) E(`unknown care field '${k}'`);
+    for (const k of Object.keys(ca)) if (!["group", "trim", "fall", "divide", "divideNote", "evergreen", "dormancy", "june", "prune"].includes(k)) E(`unknown care field '${k}'`);
     if ("divideNote" in ca && !isText(ca.divideNote)) E("care.divideNote is a sentence added to the dividing advice (or left out)");
     if ("june" in ca && !["pinch", "halve"].includes(ca.june)) E("care.june must be pinch or halve (or left out)");
     if ("divide" in ca && !["never", "fleshy", "summer", "early-spring"].includes(ca.divide)) E("care.divide must be never, fleshy, summer or early-spring (leave it out for the usual advice)");
@@ -193,6 +207,12 @@ function validate(plants, readErrors) {
       if (ca.group !== "ephemeral") E("care.dormancy is only for care.group \"ephemeral\"");
       if (!dz || typeof dz.from !== "number" || dz.from < 5 || dz.from > 9 || !isText(dz.short) || Object.keys(dz).some(k => !["from", "short"].includes(k)))
         E("care.dormancy needs 'from' (month number when the leaves are cleared, 5 to 9) and 'short' (e.g. \"Jul\")");
+    }
+    if ("prune" in ca) {
+      const pr = ca.prune;
+      if (ca.group !== "shrub") E("care.prune is only for care.group \"shrub\"");
+      if (!pr || typeof pr.from !== "number" || typeof pr.to !== "number" || pr.from < 1 || pr.to > 12.99 || pr.from >= pr.to || !isText(pr.short) || !isText(pr.text) || Object.keys(pr).some(k => !["from", "to", "short", "text"].includes(k)))
+        E("care.prune needs from and to (months, like 3 and 4.3), short (like \"Mar: cut back\") and text (how to prune, and the size to keep it)");
     }
     if (ca.group === "fall") { if (!ca.fall || !isText(ca.fall.short) || !isText(ca.fall.why)) E("care.fall needs 'short' and 'why' (why it's cut back in fall)"); }
     else if ("fall" in ca) E("care.fall is only for care.group \"fall\"");

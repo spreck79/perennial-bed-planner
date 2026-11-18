@@ -1,0 +1,151 @@
+{
+  "id": "beebalm",
+  "facts": {
+    "code": "BeBa",
+    "name": "Bee Balm",
+    "latin": "Monarda didyma and hybrids",
+    "native": false,
+    "kind": "clump",
+    "hLo": 12,
+    "hHi": 36,
+    "spacing": 24,
+    "bloom": [
+      7,
+      7.9
+    ],
+    "color": "Red, pink or purple pom-poms",
+    "colors": [
+      "red",
+      "pink",
+      "purple"
+    ],
+    "hex": "#D23A3A",
+    "txt": "#FFFFFF",
+    "light": "Full sun, at least 6 hours; in shade it flowers less and gets more powdery mildew",
+    "sun": [
+      "full"
+    ],
+    "moisture": "Moist, well drained",
+    "notes": "Shaggy red, pink or purple flower heads that hummingbirds, bees and butterflies love. It spreads, so divide it every 2 to 3 years; plants given room and sun get less powdery mildew. Its lavender wild cousin is Wild Bergamot.",
+    "deer": "B",
+    "toxic": null,
+    "zones": [
+      4,
+      9
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "Monarda didyma (39371530400).jpg",
+      "by": "Great Smoky Mountains National Park",
+      "lic": "Public domain",
+      "licUrl": "https://creativecommons.org/publicdomain/mark/1.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
+        "url": "https://bordines.com/wp-content/uploads/2026/05/BORDINES-2026-PLANT-GUIDE.pdf",
+        "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
+      },
+      {
+        "title": "English Gardens (Metro Detroit garden centers): Jacob Cline Beebalm",
+        "url": "https://plants.englishgardens.com/12150001/Plant/2850/Jacob_Cline_Beebalm",
+        "note": "Sold at English Gardens, one of many bee balm varieties there; red, about 4 ft tall, hardy to zone 3."
+      }
+    ]
+  },
+  "care": {
+    "group": "fall",
+    "trim": true,
+    "fall": {
+      "short": "bag mildewed leaves",
+      "why": "if the leaves had powdery mildew (a white coating), bag them instead of composting. If they stayed clean, you can leave the stems for bees until spring"
+    },
+    "divideNote": "Divide every 2 to 3 years so it doesn't get crowded; crowded plants get more mildew."
+  },
+  "sources": [
+    {
+      "title": "Iowa State Extension: Growing Bee Balm in the Home Garden",
+      "url": "https://yardandgarden.extension.iastate.edu/how-to/growing-bee-balm-home-garden",
+      "topic": "Plant facts",
+      "note": "Bee balm does best in moist, well-drained soil in full sun (at least 6 hours); in part shade it flowers less and gets more powdery mildew. Flowers come in white, pink, red, lavender and purple."
+    },
+    {
+      "title": "Iowa State Extension: Powdery mildew on bee balm",
+      "url": "https://yardandgarden.extension.iastate.edu/faq/leaves-my-bee-balms-are-covered-grayish-white-powder-what-problem",
+      "topic": "Care timing",
+      "note": "Space bee balm 2 to 2½ ft apart in full sun, divide every 2 to 3 years, and remove infected plant debris in fall to cut down powdery mildew."
+    },
+    {
+      "title": "Fine Gardening: Pink on pink (MSU Horticulture Gardens)",
+      "url": "https://finegardening.com/article/pink-on-pink",
+      "topic": "Hardiness",
+      "note": "Bee balm (Monarda didyma) grown at the Michigan State University horticulture gardens; hardy in zones 4 to 9."
+    },
+    {
+      "title": "Penn State Extension: Cutting Down Perennials in the Fall",
+      "url": "https://extension.psu.edu/cutting-down-perennials-in-the-fall",
+      "topic": "Care timing",
+      "note": "Cut peonies, daylilies, brunnera and speedwell in fall; cut bee balm and garden phlox with powdery mildew and destroy the leaves; rake up hosta leaves (slug eggs); cut yarrow and Shasta daisy flower stalks but keep the base leaves. Leave grasses, Siberian iris, baptisia, sedum, Joe-Pye weed, coneflower, black-eyed Susan and most natives standing; leave marginally hardy anise hyssop tops over winter; tidy hardy geraniums, heucheras, hellebores and moss phlox in spring."
+    },
+    {
+      "title": "Purdue Extension: Cut Back Perennials Now or Later?",
+      "url": "https://www.purdue.edu/hla/sites/yardandgarden/cut-back-perennials-now-or-later/",
+      "topic": "Care timing",
+      "note": "Cut iris in fall to reduce iris borer sites; cut peonies, bee balm and phlox; otherwise wait until several hard frosts have killed the tops."
+    }
+  ],
+  "companions": [
+    {
+      "id": "hyssop",
+      "why": "Combines well with purple coneflower, bee balm and native grasses; in gardens with Japanese anemones.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Anise Hyssop article",
+          "url": "https://hort.extension.wisc.edu/articles/anise-hyssop-agastache-foeniculum/",
+          "about": "hyssop"
+        }
+      ]
+    },
+    {
+      "id": "catmint",
+      "why": "Combines well with beebalm and Shasta daisies; harmonizes with yellow foxglove, Coreopsis and lemon daylilies.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Catmint 'Walker's Low' article",
+          "url": "https://hort.extension.wisc.edu/articles/nepeta-x-faassenii-walkers-low/",
+          "about": "catmint"
+        }
+      ]
+    },
+    {
+      "id": "sneezeweed",
+      "why": "Combines well with ornamental grasses, anise hyssop, beebalm, daylilies, fall asters, liatris, purple coneflower and rudbeckias.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Sneezeweed article",
+          "url": "https://hort.extension.wisc.edu/articles/helenium-helenium-autumnale/",
+          "about": "sneezeweed"
+        }
+      ]
+    },
+    {
+      "id": "vervain",
+      "why": "Surround blue vervain with wet-meadow plants such as ironweed, monarda, purple coneflower, golden Alexanders and mountain mint for a colorful, pollinator-friendly planting.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Minnesota Board of Water and Soil Resources: featured plant, Blue Vervain",
+          "url": "https://bwsr.state.mn.us/sites/default/files/2022-06/featured_plant_july_2022_blue_vervain.pdf",
+          "about": "vervain"
+        }
+      ]
+    }
+  ]
+}

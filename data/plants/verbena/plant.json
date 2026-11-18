@@ -1,0 +1,134 @@
+{
+  "id": "verbena",
+  "facts": {
+    "code": "GaVe",
+    "name": "Garden Verbena",
+    "latin": "Verbena hybrids (Superbena and others)",
+    "native": false,
+    "annual": true,
+    "kind": "mat",
+    "hLo": 6,
+    "hHi": 12,
+    "spacing": 24,
+    "bloom": [
+      6,
+      10.5
+    ],
+    "color": "Purple, lilac-blue, pink, red or white clusters (purple shown)",
+    "colors": [
+      "purple",
+      "blue",
+      "pink",
+      "red",
+      "white"
+    ],
+    "hex": "#7E4FB8",
+    "txt": "#FFFFFF",
+    "light": "Full sun, at least 6 hours",
+    "sun": [
+      "full"
+    ],
+    "moisture": "Dry to average, well drained",
+    "notes": "Low, spreading mats covered in round clusters of small flowers from planting until frost; butterflies and hummingbirds visit. An annual here: plant after the last frost in late May. Superbena types bloom without deadheading; trim the stem tips by about a fifth in midsummer for a fuller plant. Not the same plant as our native Blue Vervain.",
+    "deer": "B",
+    "toxic": null
+  },
+  "photo": {
+    "credit": {
+      "file": "美女櫻 Verbena hybrida -香港動植物公園 Hong Kong Botanical Garden- (9200951252).jpg",
+      "by": "阿橋 HQ",
+      "lic": "CC BY-SA 2.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/2.0"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "English Gardens (Metro Detroit garden centers): Superbena Large Lilac Blue Verbena",
+        "url": "https://plants.englishgardens.com/12150001/Plant/Print?id=13182",
+        "note": "Sold at English Gardens as an annual: about 12 inches tall, spreading 3 ft, planted about 28 inches apart."
+      }
+    ]
+  },
+  "care": {
+    "group": "annual",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Illinois Extension: Garden Verbena",
+      "url": "https://extension.illinois.edu/flowers/garden-verbena",
+      "topic": "Plant facts",
+      "note": "Annual for sunny, dry sites, 6 to 14 inches tall; blooms May to October in full sun and fertile, well-drained soil. Attracts butterflies. Can be cut back to shape."
+    },
+    {
+      "title": "Proven Winners: Superbena Peachy Keen verbena",
+      "url": "https://www.provenwinners.com/plants/verbena/superbena-peachy-keen-verbena-hybrid",
+      "topic": "Care timing",
+      "note": "Superbena flowers nonstop from planting to frost. For a fuller plant, trim up to 20% off the stem ends midseason. In heavy, soggy soil, grow it in a pot."
+    },
+    {
+      "title": "Rutgers NJAES: Landscape Plants Rated by Deer Resistance (printable list)",
+      "url": "https://rutgersgardens.rutgers.edu/wp-content/uploads/2024/05/e271-1.pdf",
+      "topic": "Deer",
+      "note": "Annuals: calendula and strawflower are rated A (rarely damaged); California poppy, verbena and zinnia B (seldom severely damaged); cosmos C (occasionally severely damaged)."
+    },
+    {
+      "title": "ASPCA: Lemon Verbena",
+      "url": "https://www.aspca.org/pet-care/aspca-poison-control/toxic-and-non-toxic-plants/lemon-verbena",
+      "topic": "Toxicity",
+      "note": "ASPCA lists lemon verbena (Aloysia, a different plant) as toxic; garden verbena isn't on its lists."
+    }
+  ],
+  "companions": [
+    {
+      "id": "zinnia",
+      "why": "Verbena adds a delicate touch that complements zinnias.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Gardenia: Zinnia Flowers, a must-have for every garden",
+          "url": "https://www.gardenia.net/guide/zinnia-flowers-a-must-have-for-every-garden",
+          "about": "zinnia"
+        }
+      ]
+    },
+    {
+      "id": "lavender",
+      "why": "Verbena pairs well with lavender, catmint, yarrow, Russian sage and ornamental grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Verbena (Vervain)",
+          "url": "https://www.gardenia.net/plant-variety/verbena-vervain",
+          "about": "verbena"
+        }
+      ]
+    },
+    {
+      "id": "catmint",
+      "why": "Verbena pairs well with lavender, catmint, yarrow, Russian sage and ornamental grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Verbena (Vervain)",
+          "url": "https://www.gardenia.net/plant-variety/verbena-vervain",
+          "about": "verbena"
+        }
+      ]
+    },
+    {
+      "id": "yarrow",
+      "why": "Verbena pairs well with lavender, catmint, yarrow, Russian sage and ornamental grasses.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Verbena (Vervain)",
+          "url": "https://www.gardenia.net/plant-variety/verbena-vervain",
+          "about": "verbena"
+        }
+      ]
+    }
+  ]
+}

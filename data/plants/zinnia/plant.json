@@ -1,0 +1,119 @@
+{
+  "id": "zinnia",
+  "facts": {
+    "code": "Zinn",
+    "name": "Zinnia",
+    "latin": "Zinnia elegans",
+    "native": false,
+    "annual": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 12,
+    "hHi": 48,
+    "spacing": 12,
+    "bloom": [
+      7,
+      10.5
+    ],
+    "color": "Many colors, even lime-green flowers (orange-red shown)",
+    "colors": [
+      "red",
+      "orange",
+      "yellow",
+      "pink",
+      "purple",
+      "white",
+      "green"
+    ],
+    "hex": "#E2502E",
+    "txt": "#FFFFFF",
+    "light": "Full sun; well-drained soil",
+    "sun": [
+      "full"
+    ],
+    "moisture": "Average, well drained; takes heat and dry spells",
+    "notes": "Bright, daisy-like flowers in almost every color from midsummer until frost, and a favorite cut flower that butterflies visit. An annual: plant it after the last frost in late May. Snip off faded flowers to keep it blooming, and give it room for air to keep powdery mildew down.",
+    "deer": "B",
+    "toxic": null
+  },
+  "photo": {
+    "credit": {
+      "file": "Blumenbeet bunt Heidelberg.JPG",
+      "by": "4028mdk09",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "MIgardener (Michigan seed company): Cherry Queen Zinnia",
+        "url": "https://migardener.com/collections/all/products/salmon-zinnia",
+        "note": "Zinnia elegans seed sold by a Michigan company (grown in Michigan, store in St. Clair, MI); full sun, up to about 30 inches, blooms summer to frost."
+      }
+    ]
+  },
+  "care": {
+    "group": "annual",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "MSU Extension: Growing zinnias in your flower garden",
+      "url": "https://www.canr.msu.edu/news/growing_zinnias_in_your_flower_garden",
+      "topic": "Plant facts",
+      "note": "Zinnias are easy annuals for Michigan gardens: full sun and well-drained soil; deadhead them to keep them blooming from early summer to frost."
+    },
+    {
+      "title": "Wisconsin Horticulture (UW–Madison Extension): Zinnias",
+      "url": "https://hort.extension.wisc.edu/articles/zinnia/",
+      "topic": "Plant facts",
+      "note": "Sow or set out plants after the last spring frost once the soil warms. Heights run from about 6 inches to 3 to 4 feet by variety; colors include pink, red, orange, yellow, white, lilac, purple and lime green. Resistant to deer; space for air to cut powdery mildew."
+    },
+    {
+      "title": "Rutgers NJAES: Landscape Plants Rated by Deer Resistance",
+      "url": "https://extension.rutgers.edu/deer-resistant-plants?page=19",
+      "topic": "Deer",
+      "note": "Zinnia is rated B, seldom severely damaged."
+    },
+    {
+      "title": "ASPCA: Zinnia",
+      "url": "https://www.aspca.org/node/5561",
+      "topic": "Toxicity",
+      "note": "Non-toxic to dogs, cats and horses."
+    },
+    {
+      "title": "Gardenia: Zinnia Flowers, a must-have for every garden",
+      "url": "https://www.gardenia.net/guide/zinnia-flowers-a-must-have-for-every-garden",
+      "topic": "Spacing",
+      "note": "Can't take frost: sow after the last frost. Thin compact types to 6 to 8 inches apart and tall types to 12 to 18 inches; plants grow 1 to 4 feet tall."
+    }
+  ],
+  "companions": [
+    {
+      "id": "dahlia",
+      "why": "Dahlias make a striking backdrop or companion to zinnias.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Zinnia Flowers, a must-have for every garden",
+          "url": "https://www.gardenia.net/guide/zinnia-flowers-a-must-have-for-every-garden",
+          "about": "zinnia"
+        }
+      ]
+    },
+    {
+      "id": "salvia",
+      "why": "Salvia goes well with zinnias and draws pollinators.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Zinnia Flowers, a must-have for every garden",
+          "url": "https://www.gardenia.net/guide/zinnia-flowers-a-must-have-for-every-garden",
+          "about": "zinnia"
+        }
+      ]
+    }
+  ]
+}

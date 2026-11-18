@@ -1,0 +1,160 @@
+{
+  "id": "pjm",
+  "facts": {
+    "code": "PjRh",
+    "name": "PJM Rhododendron",
+    "latin": "Rhododendron 'P.J.M.'",
+    "native": false,
+    "shrub": true,
+    "kind": "clump",
+    "hLo": 36,
+    "hHi": 60,
+    "spacing": 48,
+    "bloom": [
+      4.4,
+      5.2
+    ],
+    "color": "Lavender-pink clusters",
+    "colors": [
+      "pink",
+      "purple"
+    ],
+    "hex": "#B8569E",
+    "txt": "#FFFFFF",
+    "light": "Full sun to part shade; keep it out of hot afternoon sun and wind",
+    "sun": [
+      "full",
+      "part"
+    ],
+    "moisture": "Evenly moist, well drained; never soggy",
+    "notes": "One of the hardiest rhododendrons: an evergreen that covers itself in lavender-pink flowers in mid spring, and its small leaves turn deep purple for fall and winter. It has shallow roots, so keep it mulched and watered in dry spells, and water again in late fall before the ground freezes.",
+    "soilWarn": "Needs acidic soil (about pH 4.5 to 5.5). In soil that isn't acidic enough the leaves turn yellow. Get an MSU home soil test before planting; to lower pH, use sulfur or iron sulfate and mix in organic matter like pine needles or pine bark.",
+    "deer": "D",
+    "toxic": [
+      "people",
+      "dogs",
+      "cats"
+    ],
+    "toxSrc": "ASPCA lists rhododendron as toxic to dogs, cats and horses; a few leaves can cause serious problems",
+    "zones": [
+      3.5,
+      8
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "2020-03-26 11 54 45 A P.J.M. Rhododendron blooming along Tranquility Court in the Franklin Farm section of Oak Hill, Fairfax County, Virginia.jpg",
+      "by": "Famartin",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "English Gardens (Metro Detroit garden centers): P.J.M. Rhododendron",
+        "url": "https://plants.englishgardens.com/12150001/Plant/402/PJM_Rhododendron",
+        "note": "Sold at English Gardens: about 5 ft tall and wide, hardy to zone 3b; must have well-drained, acidic, organic soil; prune only after flowering."
+      }
+    ]
+  },
+  "care": {
+    "group": "shrub",
+    "trim": false,
+    "prune": {
+      "from": 5.2,
+      "to": 6.5,
+      "short": "Right after it blooms: prune only if needed",
+      "text": "Prune only right after the flowers fade (late May into June), and never after July: next year's flower buds form over the summer, so later cuts remove them. It rarely needs pruning; to keep it about 4 to 5 ft, shorten a few long branches then and snap off the faded flower clusters if you like."
+    }
+  },
+  "sources": [
+    {
+      "title": "English Gardens (Metro Detroit garden centers): P.J.M. Rhododendron",
+      "url": "https://plants.englishgardens.com/12150001/Plant/402/PJM_Rhododendron",
+      "topic": "Plant facts",
+      "note": "About 5 ft tall and wide; full sun to part shade, away from hot afternoon sun; evenly moist, well-drained, rich acidic soil, yellow leaves (chlorosis) in alkaline soil; prune only after flowering; mulch the roots in winter in exposed spots."
+    },
+    {
+      "title": "MSU Turfgrass archive: Rhododendrons flourish with companion plantings in acid soil (Dow Gardens, Midland, MI)",
+      "url": "https://archive.lib.msu.edu/tic/wetrt/article/1981mar30.pdf",
+      "topic": "Soil",
+      "note": "PJM is the best-known, most adaptable hybrid of Carolina rhododendron, outstanding across the Midwest. Keep soil pH 4.5 to 5.5; lower it with sulfur or iron sulfate and add organic matter such as pine needles or pine bark for the shallow roots."
+    },
+    {
+      "title": "Ask Extension (Wayne County, Michigan): rhododendron pruning and yellow leaves",
+      "url": "https://ask.extension.org/kb/faq.php?id=926759",
+      "topic": "Care timing",
+      "note": "Prune just after it flowers. Yellow leaves can mean soil pH is too high; rhododendrons like pH 4.5 to 6.0. Get an MSU home soil test (homesoiltest.msu.edu) before adjusting."
+    },
+    {
+      "title": "The Morton Arboretum: P.J.M. rhododendron",
+      "url": "https://www.mortonarb.org/trees-plants/tree-plant-descriptions/rhododendron-pjm",
+      "topic": "Care timing",
+      "note": "3 to 6 ft; one of the hardier rhododendrons and tolerates near-neutral soil. Shallow roots like mulch and water in dry spells. Avoid pruning after July, when next year's buds form."
+    },
+    {
+      "title": "Rutgers NJAES: Landscape Plants Rated by Deer Resistance (page 26)",
+      "url": "https://extension.rutgers.edu/deer-resistant-plants?page=26",
+      "topic": "Deer",
+      "note": "Rhododendrons (Rhododendron sp.) are rated D, frequently severely damaged."
+    },
+    {
+      "title": "ASPCA: Rhododendron",
+      "url": "https://www.aspca.org/node/5329",
+      "topic": "Toxicity",
+      "note": "Toxic to dogs, cats and horses (grayanotoxin); a few leaves can cause serious problems."
+    }
+  ],
+  "companions": [
+    {
+      "id": "astilbe",
+      "why": "Favorite perennials and bulbs to grow with rhododendrons include astilbe, columbine, hellebore, daffodils and Siberian iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Great Bulbs and Perennials as Companion Plants for Azaleas and Rhododendrons",
+          "url": "https://www.gardenia.net/guide/great-bulbs-perennials-as-companion-plants-for-azaleas-and-rhododendrons",
+          "about": "pjm"
+        }
+      ]
+    },
+    {
+      "id": "hellebore",
+      "why": "Favorite perennials and bulbs to grow with rhododendrons include astilbe, columbine, hellebore, daffodils and Siberian iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Great Bulbs and Perennials as Companion Plants for Azaleas and Rhododendrons",
+          "url": "https://www.gardenia.net/guide/great-bulbs-perennials-as-companion-plants-for-azaleas-and-rhododendrons",
+          "about": "pjm"
+        }
+      ]
+    },
+    {
+      "id": "columbine",
+      "why": "Favorite perennials and bulbs to grow with rhododendrons include astilbe, columbine, hellebore, daffodils and Siberian iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Great Bulbs and Perennials as Companion Plants for Azaleas and Rhododendrons",
+          "url": "https://www.gardenia.net/guide/great-bulbs-perennials-as-companion-plants-for-azaleas-and-rhododendrons",
+          "about": "pjm"
+        }
+      ]
+    },
+    {
+      "id": "daffodil",
+      "why": "Favorite perennials and bulbs to grow with rhododendrons include astilbe, columbine, hellebore, daffodils and Siberian iris.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Great Bulbs and Perennials as Companion Plants for Azaleas and Rhododendrons",
+          "url": "https://www.gardenia.net/guide/great-bulbs-perennials-as-companion-plants-for-azaleas-and-rhododendrons",
+          "about": "pjm"
+        }
+      ]
+    }
+  ]
+}

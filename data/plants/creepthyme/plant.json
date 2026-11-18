@@ -1,0 +1,97 @@
+{
+  "id": "creepthyme",
+  "facts": {
+    "code": "CrTh",
+    "name": "Creeping Thyme",
+    "latin": "Thymus serpyllum and T. praecox",
+    "native": false,
+    "kind": "mat",
+    "filler": true,
+    "hLo": 2,
+    "hHi": 4,
+    "spacing": 10,
+    "bloom": [
+      6,
+      7
+    ],
+    "color": "Pink, lilac or magenta flowers over fragrant leaves",
+    "colors": [
+      "pink",
+      "purple"
+    ],
+    "hex": "#C77DB8",
+    "txt": "#2E3A2C",
+    "light": "Full sun; needs a dry, sunny spot",
+    "sun": [
+      "full"
+    ],
+    "moisture": "Dry to average, well drained",
+    "notes": "A fragrant evergreen mat smothered in tiny flowers in early summer. Takes light foot traffic, so it's good between stepping stones and along edges, and deer usually leave it alone. Needs sun and good drainage; it rots in wet soil.",
+    "toxic": null,
+    "zones": [
+      4,
+      9
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "20200611Thymus serpyllum3.jpg",
+      "by": "AnRo0002",
+      "lic": "CC0",
+      "licUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Bordine's (Michigan garden center): 2026 Plant Guide",
+        "url": "https://bordines.com/wp-content/uploads/2026/05/BORDINES-2026-PLANT-GUIDE.pdf",
+        "note": "Perennial and ground-cover lists in a Michigan garden center's 2026 plant guide."
+      },
+      {
+        "title": "English Gardens (Metro Detroit garden centers): Creeping Thyme",
+        "url": "https://plants.englishgardens.com/12150001/Plant/27201/Creeping_Thyme",
+        "note": "Sold at English Gardens (Thymus serpyllum), with Red Creeping Thyme and Woolly Thyme; 2 to 3 in tall, space 10 in apart."
+      }
+    ]
+  },
+  "care": {
+    "group": "tidy",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "NC State Extension Plant Toolbox: Thymus serpyllum",
+      "url": "https://plants.ces.ncsu.edu/plants/thymus-serpyllum/common-name/wild-thyme",
+      "topic": "Plant facts",
+      "note": "Creeping thyme is a low, woody evergreen grown as a groundcover, 2 to 3 in tall; trim it now and then to keep the stems from getting woody."
+    }
+  ],
+  "companions": [
+    {
+      "id": "lavender",
+      "why": "Gardenia.net lists English lavender among the recommended companions for creeping thyme.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia.net: Thymus serpyllum (Creeping Thyme)",
+          "url": "https://www.gardenia.net/plant/thymus-serpyllum-creeping-thyme",
+          "about": "creepthyme"
+        }
+      ]
+    },
+    {
+      "id": "sedum",
+      "why": "Gardenia.net lists sedum (stonecrop) among the recommended companions for creeping thyme.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia.net: Thymus serpyllum (Creeping Thyme)",
+          "url": "https://www.gardenia.net/plant/thymus-serpyllum-creeping-thyme",
+          "about": "creepthyme"
+        }
+      ]
+    }
+  ]
+}

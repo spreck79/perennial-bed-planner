@@ -1,0 +1,120 @@
+{
+  "id": "calpoppy",
+  "facts": {
+    "code": "CaPo",
+    "name": "California Poppy",
+    "latin": "Eschscholzia californica",
+    "native": false,
+    "annual": true,
+    "kind": "clump",
+    "hLo": 12,
+    "hHi": 18,
+    "spacing": 8,
+    "bloom": [
+      6,
+      9
+    ],
+    "color": "Orange or yellow, also red, cream or white (orange shown)",
+    "colors": [
+      "orange",
+      "yellow",
+      "red",
+      "white"
+    ],
+    "hex": "#F59A1C",
+    "txt": "#2E3A2C",
+    "light": "Full sun; lean, sandy or well-drained soil",
+    "sun": [
+      "full"
+    ],
+    "moisture": "Dry to average",
+    "notes": "Silky orange cups over feathery blue-green leaves; the flowers close at night and on cloudy days. Bees love it. Sow the seed right where it will grow (it doesn't like being moved), and snip off seed pods if you don't want it coming up all over next year.",
+    "deer": "B",
+    "toxic": [
+      "people",
+      "dogs",
+      "cats"
+    ],
+    "toxSrc": "UC ANR lists the whole plant as toxic if eaten; ASPCA doesn't list it"
+  },
+  "photo": {
+    "credit": {
+      "file": "California poppy Copped Hall Kitchen Garden, Epping, Essex, England 1.jpg",
+      "by": "Acabashi",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "MIgardener (Michigan seed company): California Poppy",
+        "url": "https://migardener.com/collections/flowers/products/california-poppy",
+        "note": "Eschscholzia californica seed sold by a Michigan company with a store in St. Clair, MI; full sun, easily self-seeds."
+      }
+    ]
+  },
+  "care": {
+    "group": "annual",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Oregon State University Extension: California poppy",
+      "url": "https://extension.oregonstate.edu/gardening/pollinators/eschscholzia-californica-california-poppy",
+      "topic": "Plant facts",
+      "note": "Low-spreading to upright, 6 inches to 2 feet tall; visited by bumble bees, many small native bees and butterflies."
+    },
+    {
+      "title": "UC ANR: Plant Safely, Eschscholzia californica",
+      "url": "https://ucanr.edu/node/139580",
+      "topic": "Toxicity",
+      "note": "The entire plant is toxic if eaten; supervise pets and children near it."
+    },
+    {
+      "title": "Rutgers NJAES: Landscape Plants Rated by Deer Resistance (printable list)",
+      "url": "https://rutgersgardens.rutgers.edu/wp-content/uploads/2024/05/e271-1.pdf",
+      "topic": "Deer",
+      "note": "Annuals: calendula and strawflower are rated A (rarely damaged); California poppy, verbena and zinnia B (seldom severely damaged); cosmos C (occasionally severely damaged)."
+    }
+  ],
+  "companions": [
+    {
+      "id": "lavender",
+      "why": "Poppies go well with drought-tolerant plants such as lavender and sedum; California poppy needs lean, dry partners.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: What to Plant with Poppies for a Beautiful Border",
+          "url": "https://www.gardenia.net/guide/best-companion-plants-for-poppies",
+          "about": "calpoppy"
+        }
+      ]
+    },
+    {
+      "id": "sedum",
+      "why": "Poppies go well with drought-tolerant plants such as lavender and sedum; California poppy needs lean, dry partners.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: What to Plant with Poppies for a Beautiful Border",
+          "url": "https://www.gardenia.net/guide/best-companion-plants-for-poppies",
+          "about": "calpoppy"
+        }
+      ]
+    },
+    {
+      "id": "calendula",
+      "why": "Calendula is among the best companions for poppies.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: What to Plant with Poppies for a Beautiful Border",
+          "url": "https://www.gardenia.net/guide/best-companion-plants-for-poppies",
+          "about": "calpoppy"
+        }
+      ]
+    }
+  ]
+}

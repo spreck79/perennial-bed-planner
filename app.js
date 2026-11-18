@@ -117,8 +117,8 @@
   // A new garden (first visit, Start over) is an empty rectangle with nothing on it; the steps build it up.
   function freshState() {
     return { shape: "rect", dims: {}, freePoly: null, freeView: "border", placements: [], seed: 7, fill: true, view: "codes",
-      filter: { q: "", height: "", sun: "", color: "", group: "season" }, bloomFilter: "sel", bloomSort: "start",
-      name: "", prefs: { sun: ["full", "part", "shade"], origin: ["nat", "gar"], kinds: ["clump", "fern", "grass", "mat", "bulb"], toxic: true, daisy: true, deer: true, tender: true, invasive: true, v2: true }, waiting: {}, showGrid: true,
+      filter: { q: "", height: "", sun: "", color: "", group: "none" }, bloomFilter: "sel", bloomSort: "start",
+      name: "", prefs: { sun: ["full", "part", "shade"], origin: ["nat", "gar"], kinds: ["clump", "fern", "grass", "mat", "bulb", "annual", "shrub"], toxic: true, daisy: true, deer: true, tender: true, invasive: true, v2: true }, waiting: {}, showGrid: true,
       objects: [], sun: { res: 0.5, cells: {} }, sunBase: null, showSun: true, fillMode: "ground", compSkip: [], freeCtrl: null, freeSmooth: true, done: {} };
   }
   // The example garden ("Load an example garden" in step 1): the drawn border described above, finished.
@@ -309,7 +309,9 @@
   // counts include plants that are chosen but didn't fit in the bed ("waiting"), so they stay on the shopping list
   function counts(real) { const c = {}; S.placements.forEach(p => { if (real && p.c) return; c[p.id] = (c[p.id] || 0) + 1; }); const w = S.waiting || {}; Object.keys(w).forEach(id => { if (byId[id] && w[id] > 0) c[id] = (c[id] || 0) + w[id]; }); return c; }
   // plans saved before spring bulbs and the deer option existed: turn the new choices on
-  function migratePrefs(raw) { const pr = S.prefs; if (!(raw && raw.v2)) { if (Array.isArray(pr.kinds) && !pr.kinds.includes("bulb")) pr.kinds.push("bulb"); if (pr.deer == null) pr.deer = true; pr.v2 = true; } if (pr.tender == null) pr.tender = false; if (pr.invasive == null) pr.invasive = true; }
+  function migratePrefs(raw) { const pr = S.prefs; if (Array.isArray(pr.kinds) && !pr.v3) { if (!pr.kinds.includes("annual")) pr.kinds.push("annual"); pr.v3 = true; }
+    if (Array.isArray(pr.kinds) && !pr.v4) { if (!pr.kinds.includes("shrub")) pr.kinds.push("shrub"); pr.v4 = true; }   // shrubs arrived: on for every saved garden   // annuals arrived: on for every saved garden
+    if (!(raw && raw.v2)) { if (Array.isArray(pr.kinds) && !pr.kinds.includes("bulb")) pr.kinds.push("bulb"); if (pr.deer == null) pr.deer = true; pr.v2 = true; } if (pr.tender == null) pr.tender = false; if (pr.invasive == null) pr.invasive = true; }
   function cleanWaiting(w) { const o = {}; if (w && typeof w === "object") Object.keys(w).forEach(k => { const n = Math.floor(+w[k]); if (byId[k] && n > 0 && n < 500) o[k] = n; }); return o; }
   function placedCounts() { const c = {}; S.placements.forEach(p => { c[p.id] = (c[p.id] || 0) + 1; }); return c; }
   const waitTotal = () => Object.keys(S.waiting || {}).reduce((s, k) => s + (S.waiting[k] > 0 ? S.waiting[k] : 0), 0);
@@ -565,7 +567,7 @@
   }
 
   // ---------- library ----------
-  const KINDS = [["all", "All"], ["clump", "Flowers"], ["fern", "Ferns"], ["grass", "Grasses & sedges"], ["mat", "Groundcovers"], ["bulb", "Spring bulbs"]];
+  const KINDS = [["all", "All"], ["clump", "Flowers"], ["fern", "Ferns"], ["grass", "Grasses & sedges"], ["mat", "Groundcovers"], ["bulb", "Spring bulbs"], ["annual", "Annuals"], ["shrub", "Shrubs"]];
   function renderShapesPanel() {
     const box = $("#shapes"); box.innerHTML = ""; $("#bedPanel").classList.toggle("isdrawing", window.Plan.isDrawing());
     ["rect", "circle", "free"].forEach(k => {
@@ -779,7 +781,7 @@
     const pr = S.prefs;
     if (!p.sun.some(x => pr.sun.includes(x))) return false;
     if (!originOk(p, pr.origin)) return false;
-    if (!pr.kinds.includes(p.kind)) return false;
+    if (!pr.kinds.includes(p.annual ? "annual" : p.shrub ? "shrub" : p.kind)) return false;   // annuals and shrubs have their own switches, whatever their shape
     if (p.toxic && !pr.toxic) return false;
     if (p.fam === "daisy" && pr.daisy === false) return false;
     if (deerEats(p) && pr.deer === false) return false;
@@ -962,7 +964,7 @@
     toast("Sun zones saved.", 2000);
   }
   // step 3: objects to place before the plants go in
-  const objPlural = (t, n) => { const l = Geo.OBJ[t].label.toLowerCase().replace("hedge / shrub row", "hedge"); return n + " " + (n === 1 ? l : l + "s"); };
+  const objPlural = (t, n) => { const l = Geo.OBJ[t].label.toLowerCase().replace("existing ", ""); return n + " " + (n === 1 ? l : l + "s"); };
   function renderObjStep() {
     const grid = $("#objGrid"); if (!grid) return;
     grid.innerHTML = "";
@@ -1268,7 +1270,7 @@
   // ---------- the Plants list ----------
   // Two tabs (everything that fits, or just what's in the bed), search, filters and a sort. Each plant shows
   // "+ Add", or a - count + stepper once it's in the bed. Every matching plant is listed; the column scrolls.
-  let showKey = false, libFoundSig = "", libFoundOpen = {};
+  let showKey = false, libSig = null;
   function renderLibrary() {
     const c = counts(), f = S.filter, tab = f.tab === "bed" ? "bed" : "all";
     const nMatch = PL.filter(matchesPrefs).length, inBed = PL.filter(p => c[p.id] > 0), outside = inBed.filter(p => !matchesPrefs(p)).length;
@@ -1287,7 +1289,7 @@
     const sorters = { name: (a, b) => a.name.localeCompare(b.name), height: (a, b) => Geo.hMean(a) - Geo.hMean(b) || a.name.localeCompare(b.name), bloom: (a, b) => (a.bloom ? a.bloom[0] : 99) - (b.bloom ? b.bloom[0] : 99) || a.name.localeCompare(b.name) };
     list.sort(sorters[f.sort] || sorters.name);
     $("#libN").textContent = list.length + (list.length === 1 ? " plant" : " plants");
-    $("#fReset").disabled = !(f.q || f.height || f.sun || f.color);
+    $("#fReset").disabled = !(f.q || f.height || f.sun || f.color || (f.group && f.group !== "none"));
     renderColorDots();
     const box = $("#lib"); box.style.minHeight = box.offsetHeight + "px"; box.innerHTML = "";
     requestAnimationFrame(() => { box.style.minHeight = ""; });
@@ -1296,19 +1298,20 @@
       return;
     }
     // folding groups by bloom season (or one plain list); a search or a color opens every group with a match
-    const gby = GROUPINGS[f.group] ? f.group : f.group === "none" ? "none" : "season";
+    const gby = GROUPINGS[f.group] ? f.group : "none";   // "Show all" (one A-to-Z list) is the default
     const groups = gby === "none" ? [{ key: "", plants: list }] : GROUPINGS[gby].groups.map(([key, t, sub, test]) => ({ key: gby + ":" + key, t, sub, plants: list.filter(test) })).filter(g => g.plants.length);
     if (!S.libOpen || S.libOpen.spring !== undefined) S.libOpen = {};   // (older saves kept the open groups under bare names)
-    const open = S.libOpen, forced = !!(f.q || f.color), sig = (f.q || "") + "|" + (f.color || "");
-    // while searching or picking a color, every group with a match starts open, and can still be folded
-    if (forced && libFoundSig !== sig) { libFoundSig = sig; libFoundOpen = {}; }
+    // any change to the search, filters, grouping or sort folds every group back up (the page's first draw keeps the saved folds)
+    const sig = [f.q, f.height, f.sun, f.color, f.group, f.sort].map(v => v || "").join("|");
+    if (libSig !== null && libSig !== sig) S.libOpen = {};
+    libSig = sig;
+    const open = S.libOpen;
     groups.forEach((g, gi) => {
       if (g.key) {
-        if (open[g.key] === undefined && gi === 0 && !groups.some(x => open[x.key] !== undefined)) open[g.key] = true;   // first look: the first group open
-        const isOpen = forced ? libFoundOpen[g.key] !== false : !!open[g.key], h = document.createElement("button");
+        const isOpen = !!open[g.key], h = document.createElement("button");
         h.type = "button"; h.className = "lgroup" + (isOpen ? " open" : "");
         h.innerHTML = `<span class="lg-arr">▸</span><span class="lg-t">${g.t}</span>${g.sub ? `<span class="lg-sub">${g.sub}</span>` : ""}<span class="lg-n">${g.plants.length}</span>`;
-        h.onclick = () => { if (forced) libFoundOpen[g.key] = !isOpen; else open[g.key] = !open[g.key]; renderLibrary(); save(); };
+        h.onclick = () => { open[g.key] = !open[g.key]; renderLibrary(); save(); };
         box.appendChild(h);
         if (!isOpen) return;
       }
@@ -1327,11 +1330,13 @@
   const GROUPINGS = {
     season: { label: "Bloom season", groups: SEASONS },
     type: { label: "Plant type", groups: [
-      ["clump", "Perennials", "flowers and leafy clumps", p => p.kind === "clump"],
-      ["grass", "Grasses and sedges", "", p => p.kind === "grass"],
-      ["fern", "Ferns", "", p => p.kind === "fern"],
-      ["mat", "Groundcovers", "low and spreading", p => p.kind === "mat"],
-      ["bulb", "Bulbs", "plant in fall", p => p.kind === "bulb"]] },
+      ["clump", "Perennials", "flowers and leafy clumps", p => p.kind === "clump" && !p.annual && !p.shrub],
+      ["grass", "Grasses and sedges", "", p => p.kind === "grass" && !p.annual],
+      ["fern", "Ferns", "", p => p.kind === "fern" && !p.annual],
+      ["mat", "Groundcovers", "low and spreading", p => p.kind === "mat" && !p.annual],
+      ["bulb", "Bulbs", "plant in fall", p => p.kind === "bulb" && !p.annual],
+      ["annual", "Annuals", "plant every spring", p => p.annual],
+      ["shrub", "Shrubs", "woody: prune, don't cut down", p => p.shrub]] },
     origin: { label: "Native status", groups: [
       ["nat", "Michigan natives", "from a native nursery", p => p.native && !p.gfav],
       ["both", "Natives sold at garden centers", "both marks", p => p.native && p.gfav],
@@ -1346,9 +1351,11 @@
       ["often", "Deer often eat", "Rutgers D", p => p.deer === "D"],
       ["nr", "Not rated", "no Rutgers rating", p => !p.deer]] },
     cleanup: { label: "Fall cleanup", groups: [
-      ["stand", "Leave standing for winter", "cut back in spring", p => !inCut(p, "fall") && !inCut(p, "bulb") && !inCut(p, "ephemeral")],
+      ["stand", "Leave standing for winter", "cut back in spring", p => !inCut(p, "fall") && !inCut(p, "bulb") && !inCut(p, "ephemeral") && !p.annual && !p.shrub],
       ["fall", "Cut back in fall", "after a few hard frosts", p => inCut(p, "fall")],
-      ["fades", "Fades away by summer", "bulbs and spring ephemerals", p => inCut(p, "bulb") || inCut(p, "ephemeral")]] },
+      ["fades", "Fades away by summer", "bulbs and spring ephemerals", p => inCut(p, "bulb") || inCut(p, "ephemeral")],
+      ["annual", "Pull out after frost", "annuals", p => p.annual],
+      ["shrub", "Prune, don't cut down", "shrubs", p => p.shrub]] },
   };
   const inCut = (p, g) => !!(window.CARE_DATA && window.CARE_DATA.CUT[g] && window.CARE_DATA.CUT[g].includes(p.id));
   const COLORS = [["white", "White", "#F6F3EA"], ["yellow", "Yellow", "#F2C94C"], ["orange", "Orange", "#E8833A"], ["red", "Red", "#C8343A"], ["pink", "Pink", "#E58BB5"], ["purple", "Purple", "#8E5BB5"], ["blue", "Blue", "#5B7FD1"], ["green", "Green: no flowers, or green flowers", "#6E9B5A"]];
@@ -1365,7 +1372,7 @@
     {
       const n = c[p.id] || 0, on = n > 0, d = document.createElement("div");
       d.className = "pcard" + (on ? " on" : ""); d.dataset.id = p.id;
-      d.innerHTML = `<img src="${imgSrc(p.id)}" alt=""><div class="pc-main"><div class="nm">${esc(p.name)}${icons(p, !matchesPrefs(p))}</div><div class="meta">${Ch.heightText(p)} · ${esc(Ch.bloomText(p))}</div></div>` +
+      d.innerHTML = `<img src="${imgSrc(p.id)}" alt=""><div class="pc-main"><div class="nm">${esc(p.name)}${icons(p, !matchesPrefs(p))}</div><div class="meta">${Ch.heightText(p)} · ${esc(Ch.bloomText(p))}${p.annual ? " · annual" : p.shrub ? " · shrub" : ""}</div></div>` +
         (on ? `<div class="pc-qty"><button type="button" class="q-" title="One fewer">−</button><b title="${n} in the bed">${n}</b><button type="button" class="q+" title="One more">+</button></div>` : `<button type="button" class="pc-add" title="Add ${esc(p.name)} to the bed">+ Add</button>`);
       d.onclick = e => { if (e.target.closest(".pc-qty")) return; if (eatLibClick && Date.now() - eatLibClick < 400) return; if (!on) togglePlant(p.id); };
       d.addEventListener("pointerdown", e => libDragDown(e, p)); d.addEventListener("dragstart", e => e.preventDefault());   // no browser image-drag
@@ -1378,8 +1385,8 @@
     }
   }
   const refreshLibGroup = bindSelectBtn("libGroup",
-    () => Object.entries(GROUPINGS).map(([value, g]) => ({ value, label: g.label })).concat([{ value: "none", label: "No groups" }]),
-    () => S.filter.group || "season",
+    () => [{ value: "none", label: "Show all" }].concat(Object.entries(GROUPINGS).map(([value, g]) => ({ value, label: g.label }))),
+    () => S.filter.group || "none",
     v => { S.filter.group = v; renderLibrary(); save(); });
   const refreshLibSort = bindSelectBtn("libSort",
     () => [{ value: "name", label: "A to Z" }, { value: "height", label: "Short to tall" }, { value: "bloom", label: "First to bloom" }],
@@ -1461,9 +1468,10 @@
   // (two or more lines), still centered on that middle line
   function carePills(p) {
     const c = window.Care.careFor(p), items = [];
-    ["prep", "cut", "trim"].forEach(k => { if (c[k]) items.push([k, c[k], CARE_LAB[k] + ": " + c[k].text + (k === "prep" || (k === "cut" && !c.prep) ? " " + c.divide : "")]); });
+    ["prep", "cut", "trim"].forEach(k => { if (c[k]) items.push([k, c[k], (p.annual && k === "cut" ? "Pull out" : p.shrub && k === "cut" ? "Prune" : CARE_LAB[k]) + ": " + c[k].text + (k === "prep" || (k === "cut" && !c.prep) ? " " + c.divide : "")]); });
     if (c.divideW) items.push(["divide", c.divideW, "Divide: " + c.divideW.text]);
-    ["lift", "replant", "mulch"].forEach(k => { if (c[k]) items.push([k, c[k], (c.winter.how === "annual" && k === "replant" ? "Plant new" : c.winter.how === "pot" && k === "lift" ? "Bring indoors" : CARE_LAB[k]) + ": " + c[k].text]); });
+    const how = p.annual ? "annual" : (c.winter && c.winter.how) || "";   // annuals have no winter care
+    ["lift", "replant", "mulch"].forEach(k => { if (c[k]) items.push([k, c[k], (how === "annual" && k === "replant" ? "Plant new" : how === "pot" && k === "lift" ? "Bring indoors" : CARE_LAB[k]) + ": " + c[k].text]); });
     items.sort((x, y) => x[1].a - y[1].a);
     const ends = [];                                   // where each stacked line is busy until, in % across the track
     items.forEach(it => {
@@ -2027,8 +2035,10 @@
     const sunL = { full: "Full sun", part: "Part shade", shade: "Shade" };
     const list = (arr, map) => (arr || []).map(k => map[k]).filter(Boolean).join(", ");
     const sun = list(pr.sun, sunL);
-    $("#hdrTitle").textContent = nm ? nm + " Planner" : "Perennial Bed Planner";
-    $("#hdrSub").textContent = [sun, "All perennials", "Zone 6B", "Southern Michigan"].filter(Boolean).join(" · ");
+    if (nm) $("#hdrTitle").textContent = nm + " Planner";
+    else $("#hdrTitle").innerHTML = PLANTS.some(p => p.annual || p.shrub) ? 'Perennial Bed Planner <i class="friends">and friends</i>' : "Perennial Bed Planner";
+    const kindsTxt = (() => { const ann = S.prefs.kinds.includes("annual") && PLANTS.some(p => p.annual), shr = S.prefs.kinds.includes("shrub") && PLANTS.some(p => p.shrub); return ann && shr ? "Perennials, annuals and shrubs" : ann ? "Perennials and annuals" : shr ? "Perennials and shrubs" : "All perennials"; })();
+    $("#hdrSub").textContent = [sun, kindsTxt, "Zone 6B", "Southern Michigan"].filter(Boolean).join(" · ");
     if ($("#gName").value !== (S.name || "")) $("#gName").value = S.name || "";
     renderSteps(); }
   $("#gName").addEventListener("input", e => { S.name = e.target.value; renderName(); save(); });
@@ -2058,7 +2068,7 @@
   });
   $("#q").addEventListener("input", e => { S.filter.q = e.target.value; renderLibrary(); save(); });
   // one click puts the Plants filters back to showing everything (the sort order stays)
-  $("#fReset").onclick = () => { Object.assign(S.filter, { q: "", height: "", sun: "", color: "" }); $("#q").value = ""; refreshHeight(); refreshSun(); renderLibrary(); save(); };
+  $("#fReset").onclick = () => { Object.assign(S.filter, { q: "", height: "", sun: "", color: "", group: "none" }); $("#q").value = ""; refreshHeight(); refreshSun(); refreshLibGroup(); renderLibrary(); save(); };
   $("#bloomFilter").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; S.bloomFilter = b.dataset.f; document.querySelectorAll("#bloomFilter button").forEach(x => x.classList.toggle("on", x === b)); renderBloom(); save(); });
   // groundcovers to offer: low plants that suit the step-2 choices (sun, origin, safety)
   function groundcovers() {

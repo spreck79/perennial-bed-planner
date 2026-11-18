@@ -1,0 +1,135 @@
+{
+  "id": "vervain",
+  "facts": {
+    "code": "BlVe",
+    "name": "Blue Vervain",
+    "latin": "Verbena hastata",
+    "native": true,
+    "kind": "clump",
+    "hLo": 24,
+    "hHi": 60,
+    "spacing": 18,
+    "bloom": [
+      7,
+      9.9
+    ],
+    "color": "Violet-blue pencil spikes",
+    "colors": [
+      "blue",
+      "purple"
+    ],
+    "hex": "#6F5CC4",
+    "txt": "#FFFFFF",
+    "light": "Full sun to part sun",
+    "sun": [
+      "full",
+      "part"
+    ],
+    "moisture": "Moist to wet; good in a rain garden",
+    "notes": "Branched candelabras of thin violet-blue spikes that open from the bottom up through late summer. A Michigan wet-meadow native for rain gardens and damp spots, loved by bees and butterflies. Short-lived, but it reseeds without taking over, and its bitter leaves keep most animals away.",
+    "toxic": null,
+    "zones": [
+      3,
+      9
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "Verbena hastata (blue vervain) 1 (39413055482).jpg",
+      "by": "James St. John",
+      "lic": "CC BY 2.0",
+      "licUrl": "https://creativecommons.org/licenses/by/2.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Michigan Wildflower Farm: Wetland species list",
+        "url": "https://www.michiganwildflowerfarm.com/seed-species-and-pricing/wetland-species/",
+        "note": "Same grower, wetland list."
+      }
+    ],
+    "garden": [
+      {
+        "title": "Romence Gardens (Grand Rapids garden center): Verbena hastata",
+        "url": "https://romencegardens.com/collections/plant-type-perennials/products/verbena-hastata",
+        "note": "Sold at a Grand Rapids garden center; 2 to 5 ft tall, full to part sun, zones 3 to 9, deer resistant."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "New Moon Nursery: Verbena hastata plant page",
+      "url": "https://newmoonnursery.com/plant/Verbena-hastata",
+      "topic": "Plant facts",
+      "note": "2 to 6 ft tall; blooms July and August for about six weeks; full or part sun in moist to wet soil; zones 3 to 9; bitter leaves most animals won't eat."
+    }
+  ],
+  "companions": [
+    {
+      "id": "coneflower",
+      "why": "Surround blue vervain with wet-meadow plants such as ironweed, monarda, purple coneflower, golden Alexanders and mountain mint for a colorful, pollinator-friendly planting.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Minnesota Board of Water and Soil Resources: featured plant, Blue Vervain",
+          "url": "https://bwsr.state.mn.us/sites/default/files/2022-06/featured_plant_july_2022_blue_vervain.pdf",
+          "about": "vervain"
+        }
+      ]
+    },
+    {
+      "id": "zizia",
+      "why": "Surround blue vervain with wet-meadow plants such as ironweed, monarda, purple coneflower, golden Alexanders and mountain mint for a colorful, pollinator-friendly planting.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Minnesota Board of Water and Soil Resources: featured plant, Blue Vervain",
+          "url": "https://bwsr.state.mn.us/sites/default/files/2022-06/featured_plant_july_2022_blue_vervain.pdf",
+          "about": "vervain"
+        }
+      ]
+    },
+    {
+      "id": "mtnmint",
+      "why": "Surround blue vervain with wet-meadow plants such as ironweed, monarda, purple coneflower, golden Alexanders and mountain mint for a colorful, pollinator-friendly planting.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Minnesota Board of Water and Soil Resources: featured plant, Blue Vervain",
+          "url": "https://bwsr.state.mn.us/sites/default/files/2022-06/featured_plant_july_2022_blue_vervain.pdf",
+          "about": "vervain"
+        }
+      ]
+    },
+    {
+      "id": "beebalm",
+      "why": "Surround blue vervain with wet-meadow plants such as ironweed, monarda, purple coneflower, golden Alexanders and mountain mint for a colorful, pollinator-friendly planting.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Minnesota Board of Water and Soil Resources: featured plant, Blue Vervain",
+          "url": "https://bwsr.state.mn.us/sites/default/files/2022-06/featured_plant_july_2022_blue_vervain.pdf",
+          "about": "vervain"
+        }
+      ]
+    },
+    {
+      "id": "lobelia",
+      "why": "New Moon Nursery suggests pairing blue vervain with great blue lobelia (Lobelia siphilitica), among other wet-ground plants.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "New Moon Nursery: Blue Vervain",
+          "url": "https://newmoonnursery.com/plant/Verbena-hastata",
+          "about": "vervain"
+        }
+      ]
+    }
+  ]
+}

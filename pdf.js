@@ -690,6 +690,8 @@
         fill(rowOf(p) === "Front" ? C.leaf2 : C.leaf); doc.roundedRect(W - M - pw, py + 3, pw, 13, 6.5, 6.5, "F"); color("#FFFFFF"); text(row, W - M - pw / 2, py + 12, { align: "center" });
         { // tags line up from the right; when the full wording would run into the Latin name, they switch to short wording
           const tags = [];
+          if (p.shrub) tags.push(["SHRUB: PRUNE, DON'T CUT DOWN", "SHRUB", "#E8F0DA", "#3F6B3A"]);
+          if (p.annual) tags.push(["ANNUAL: PLANT EVERY SPRING", "ANNUAL", "#E8F0DA", "#3F6B3A"]);
           if (p.invasive) tags.push(["CAN ESCAPE THE GARDEN", "CAN SPREAD", "#FBE3CC", "#9A4E12"]);
           if (p.toxic && p.toxic.length) tags.push([toxLabel(p).toUpperCase(), "TOXIC", "#F6D9D5", "#9A2E24"]);
           if (window.winterCare && window.winterCare(p)) tags.push(window.isTender(p) ? ["NOT WINTER-HARDY HERE", "NOT HARDY HERE", "#DCE7F3", "#2F5D8C"] : ["MULCH FOR WINTER", "WINTER MULCH", "#DCE7F3", "#2F5D8C"]);

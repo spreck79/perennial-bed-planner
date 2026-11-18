@@ -1,0 +1,110 @@
+{
+  "id": "calendula",
+  "facts": {
+    "code": "Cale",
+    "name": "Calendula",
+    "latin": "Calendula officinalis",
+    "native": false,
+    "annual": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 12,
+    "hHi": 24,
+    "spacing": 12,
+    "bloom": [
+      6,
+      10.5
+    ],
+    "color": "Orange or yellow, sometimes cream (orange shown)",
+    "colors": [
+      "orange",
+      "yellow",
+      "white"
+    ],
+    "hex": "#F39A1E",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part sun; well-drained soil",
+    "sun": [
+      "full",
+      "part"
+    ],
+    "moisture": "Average; moderate watering",
+    "notes": "Also called pot marigold (not a true marigold). Bright orange or yellow daisies from early summer until a hard frost; bees and butterflies visit. An annual that likes cool weather: it may slow down in midsummer heat and picks up again when it cools. Snip off faded flowers to keep it blooming.",
+    "deer": "A",
+    "toxic": null
+  },
+  "photo": {
+    "credit": {
+      "file": "Calendula officinalis 1a.JPG",
+      "by": "Aiwok",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "MIgardener (Michigan seed company): Calendula, Pacific Beauty Mix",
+        "url": "https://migardener.com/collections/fall-gardening/products/calendula-pacificbeautymix",
+        "note": "Calendula officinalis seed sold by a Michigan company with a store in St. Clair, MI."
+      }
+    ]
+  },
+  "care": {
+    "group": "annual",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Wisconsin Horticulture (UW–Madison Extension): Calendula",
+      "url": "https://hort.extension.wisc.edu/articles/calendula-calendula-officinalis",
+      "topic": "Plant facts",
+      "note": "12 to 24 inches by variety; orange, yellow, white and bicolor flowers that bloom almost nonstop until the first heavy frost. May slow in hot weather and recover when it cools. Full sun, well-drained soil, little fertilizer; deadhead for more flowers. Reseeds, but not aggressively. Watch for aphids and powdery mildew."
+    },
+    {
+      "title": "Gardenia: Calendula officinalis (Pot Marigold)",
+      "url": "https://www.gardenia.net/plant/calendula-pot-marigold",
+      "topic": "Care timing",
+      "note": "1 to 2 ft tall and wide; full sun or part sun. If flowering fades in midsummer, cut it back hard."
+    },
+    {
+      "title": "Rutgers NJAES: Landscape Plants Rated by Deer Resistance (printable list)",
+      "url": "https://rutgersgardens.rutgers.edu/wp-content/uploads/2024/05/e271-1.pdf",
+      "topic": "Deer",
+      "note": "Annuals: calendula and strawflower are rated A (rarely damaged); California poppy, verbena and zinnia B (seldom severely damaged); cosmos C (occasionally severely damaged)."
+    },
+    {
+      "title": "ASPCA: Pot Marigold",
+      "url": "https://www.aspca.org/node/5287",
+      "topic": "Toxicity",
+      "note": "Non-toxic to dogs and cats."
+    }
+  ],
+  "companions": [
+    {
+      "id": "lavender",
+      "why": "Recommended companions for pot marigold include lavender and zinnias.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Calendula officinalis (Pot Marigold)",
+          "url": "https://www.gardenia.net/plant/calendula-pot-marigold",
+          "about": "calendula"
+        }
+      ]
+    },
+    {
+      "id": "zinnia",
+      "why": "Recommended companions for pot marigold include lavender and zinnias.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Calendula officinalis (Pot Marigold)",
+          "url": "https://www.gardenia.net/plant/calendula-pot-marigold",
+          "about": "calendula"
+        }
+      ]
+    }
+  ]
+}

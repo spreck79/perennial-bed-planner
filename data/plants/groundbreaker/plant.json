@@ -1,0 +1,134 @@
+{
+  "id": "groundbreaker",
+  "facts": {
+    "code": "GrBl",
+    "name": "Groundbreaker Blush Hydrangea",
+    "latin": "Hydrangea paniculata 'LC NO21' (Groundbreaker Blush)",
+    "native": false,
+    "shrub": true,
+    "kind": "mat",
+    "hLo": 12,
+    "hHi": 12,
+    "spacing": 24,
+    "bloom": [
+      7,
+      9.9
+    ],
+    "color": "White flower cones that turn blush pink",
+    "colors": [
+      "white",
+      "pink"
+    ],
+    "hex": "#EFD3DA",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part shade, at least 4 to 6 hours of direct sun",
+    "sun": [
+      "full",
+      "part"
+    ],
+    "moisture": "Evenly moist, well drained; steady summer water gives more flowers",
+    "notes": "A brand-new kind of panicle hydrangea that grows low and spreads like a groundcover, about 1 ft tall and 2 ft wide. White flower cones open in July and slowly blush pink, lasting into fall. It blooms on new growth, so pruning in late winter costs no flowers.",
+    "toxic": [
+      "people",
+      "dogs",
+      "cats"
+    ],
+    "toxSrc": "ASPCA lists hydrangea as toxic to dogs, cats and horses",
+    "zones": [
+      5,
+      8
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "2014-08-28 12 43 23 Hydrangea flowers in the cemetery at the intersection of Dutch Church Road (Rensselaer County Route 41) and Taborton Road (Rensselaer County Route 42) in Berlin, New York.JPG",
+      "by": "Famartin",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Plant Addicts: Groundbreaker Blush Hydrangea",
+        "url": "https://plantaddicts.com/groundbreaker-blush-hydrangea/",
+        "note": "Sold by Plant Addicts: about 12 in tall and 2 ft wide, zones 5 to 8, blooms July to September."
+      }
+    ]
+  },
+  "care": {
+    "group": "shrub",
+    "trim": false,
+    "prune": {
+      "from": 3,
+      "to": 4.2,
+      "short": "Late winter to early spring: trim to shape",
+      "text": "Prune in late winter or early spring, before new growth starts. It flowers on this year's new growth, so you lose no blooms. Trim lightly to shape the mound, or cut harder to keep it low and compact. Snipping off old flowers is optional."
+    }
+  },
+  "sources": [
+    {
+      "title": "Plant Addicts: Groundbreaker Blush Hydrangea",
+      "url": "https://plantaddicts.com/groundbreaker-blush-hydrangea/",
+      "topic": "Plant facts",
+      "note": "About 12 in tall and 2 ft wide; zones 5 to 8; part shade to full sun (4 to 6+ hours). White flowers from July turn blush pink and last up to 100 days. Prune in late winter or early spring (blooms on new wood). Moist, well-drained soil with compost; slightly acidic to neutral. Companions: allium and catmint in sun, coral bells in part shade."
+    },
+    {
+      "title": "Gardening Know How: The world's first groundcover hydrangea",
+      "url": "https://www.gardeningknowhow.com/ornamental/hydrangea/the-worlds-first-groundcover-hydrangea-is-a-color-changing-carpet-of-fabulous-flowers",
+      "topic": "Plant facts",
+      "note": "Groundbreaker Blush: white flower cones in July that deepen to blush pink; 12 in high and 24 in wide."
+    },
+    {
+      "title": "Illinois Extension: How to properly prune hydrangeas",
+      "url": "https://extension.illinois.edu/blogs/good-growing/2022-03-10-how-properly-prune-hydrangeas",
+      "topic": "Care timing",
+      "note": "Panicle hydrangeas flower on new wood, so prune them in late winter or early spring."
+    },
+    {
+      "title": "ASPCA: Hydrangea",
+      "url": "https://www.aspca.org/node/5012",
+      "topic": "Toxicity",
+      "note": "Hydrangea arborescens is toxic to dogs, cats and horses (cyanogenic glycoside): vomiting, depression, diarrhea."
+    }
+  ],
+  "companions": [
+    {
+      "id": "allium",
+      "why": "Allium and catmint pair with it in sunny borders.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Plant Addicts: Groundbreaker Blush Hydrangea",
+          "url": "https://plantaddicts.com/groundbreaker-blush-hydrangea/",
+          "about": "groundbreaker"
+        }
+      ]
+    },
+    {
+      "id": "catmint",
+      "why": "Allium and catmint pair with it in sunny borders.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Plant Addicts: Groundbreaker Blush Hydrangea",
+          "url": "https://plantaddicts.com/groundbreaker-blush-hydrangea/",
+          "about": "groundbreaker"
+        }
+      ]
+    },
+    {
+      "id": "coral",
+      "why": "Coral bells pair with it in part shade.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Plant Addicts: Groundbreaker Blush Hydrangea",
+          "url": "https://plantaddicts.com/groundbreaker-blush-hydrangea/",
+          "about": "groundbreaker"
+        }
+      ]
+    }
+  ]
+}

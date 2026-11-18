@@ -1,0 +1,146 @@
+{
+  "id": "hydrangea",
+  "facts": {
+    "code": "Hydr",
+    "name": "Hydrangea 'Annabelle'",
+    "latin": "Hydrangea arborescens 'Annabelle'",
+    "native": false,
+    "shrub": true,
+    "kind": "clump",
+    "hLo": 36,
+    "hHi": 60,
+    "spacing": 48,
+    "bloom": [
+      6.5,
+      8.5
+    ],
+    "color": "Huge white snowballs that open lime green",
+    "colors": [
+      "white"
+    ],
+    "hex": "#E6EBCF",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part shade; afternoon shade helps in hot spots",
+    "sun": [
+      "full",
+      "part"
+    ],
+    "moisture": "Moist, well drained; water in dry spells or the flowers flop",
+    "notes": "A tough, easy shrub with big white flower balls in early to midsummer that dry to tan and look good into winter. It blooms on new growth, so cutting it back each spring costs you no flowers and keeps it about 4 ft tall. Heavy flower heads can flop after rain.",
+    "deer": "C",
+    "toxic": [
+      "people",
+      "dogs",
+      "cats"
+    ],
+    "toxSrc": "ASPCA lists hydrangea as toxic to dogs, cats and horses",
+    "zones": [
+      3,
+      9
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "Hydrangea arborescens 'Annabelle' at Coker Arboretum 01.jpg",
+      "by": "Hameltion",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "English Gardens (Metro Detroit garden centers): Annabelle Hydrangea",
+        "url": "https://plants.englishgardens.com/12150001/Plant/206/Annabelle_Hydrangea",
+        "note": "Sold at English Gardens: about 4 ft tall and 5 ft wide, sun to shade, hardy to zone 3; best pruned to a few inches from the ground in spring since it blooms on new growth."
+      }
+    ]
+  },
+  "care": {
+    "group": "shrub",
+    "trim": false,
+    "prune": {
+      "from": 3,
+      "to": 4.3,
+      "short": "Mar to early Apr: cut stems back",
+      "text": "In March or early April, cut every stem back to a few inches above the ground. It flowers on this year's new growth, so you lose no blooms, and it keeps the shrub about 4 ft tall and wide. Leave the dried flower heads up over winter if you like the look."
+    }
+  },
+  "sources": [
+    {
+      "title": "Iowa State Extension: How should I prune my hydrangeas?",
+      "url": "https://yardandgarden.extension.iastate.edu/faq/how-should-i-prune-my-hydrangeas",
+      "topic": "Care timing",
+      "note": "Smooth hydrangea grows 4 to 5 ft tall and blooms on new growth; it can be pruned back to the ground in March or early April. 'Annabelle' is the most widely grown kind."
+    },
+    {
+      "title": "Horticulture magazine: All About Gardening With Native Smooth Hydrangeas",
+      "url": "https://hortmag.com/plants/smooth-hydrangeas",
+      "topic": "Plant facts",
+      "note": "3 to 5 ft tall and wide. Full sun works with steady moisture; white kinds like part sun or dappled light. Pairs with ferns, native phlox, foamflower, sedges and hardy geraniums."
+    },
+    {
+      "title": "Rutgers NJAES: Landscape Plants Rated by Deer Resistance (page 24)",
+      "url": "https://extension.rutgers.edu/deer-resistant-plants?page=24",
+      "topic": "Deer",
+      "note": "Smooth hydrangea is rated C, occasionally severely damaged."
+    },
+    {
+      "title": "ASPCA: Hydrangea",
+      "url": "https://www.aspca.org/node/5012",
+      "topic": "Toxicity",
+      "note": "Hydrangea arborescens is toxic to dogs, cats and horses (cyanogenic glycoside): vomiting, depression, diarrhea."
+    }
+  ],
+  "companions": [
+    {
+      "id": "phlox",
+      "why": "Smooth hydrangea pairs with ferns, native phlox, foamflower, sedges as groundcovers, and hardy geraniums.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Horticulture magazine: All About Gardening With Native Smooth Hydrangeas",
+          "url": "https://hortmag.com/plants/smooth-hydrangeas",
+          "about": "hydrangea"
+        }
+      ]
+    },
+    {
+      "id": "foam",
+      "why": "Smooth hydrangea pairs with ferns, native phlox, foamflower, sedges as groundcovers, and hardy geraniums.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Horticulture magazine: All About Gardening With Native Smooth Hydrangeas",
+          "url": "https://hortmag.com/plants/smooth-hydrangeas",
+          "about": "hydrangea"
+        }
+      ]
+    },
+    {
+      "id": "sedge",
+      "why": "Smooth hydrangea pairs with ferns, native phlox, foamflower, sedges as groundcovers, and hardy geraniums.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Horticulture magazine: All About Gardening With Native Smooth Hydrangeas",
+          "url": "https://hortmag.com/plants/smooth-hydrangeas",
+          "about": "hydrangea"
+        }
+      ]
+    },
+    {
+      "id": "geranium",
+      "why": "Smooth hydrangea pairs with ferns, native phlox, foamflower, sedges as groundcovers, and hardy geraniums.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Horticulture magazine: All About Gardening With Native Smooth Hydrangeas",
+          "url": "https://hortmag.com/plants/smooth-hydrangeas",
+          "about": "hydrangea"
+        }
+      ]
+    }
+  ]
+}

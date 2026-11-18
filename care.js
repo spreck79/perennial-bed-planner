@@ -4,7 +4,7 @@
 (function () {
 
   // each plant's care, from the "care" part of its plant.json (gathered by plant-data.js)
-  const { CUT, TRIM, FALL_SHORT, FALL_WHY, DIVIDE, DIVIDE_NOTE, JUNE, EVERGREEN, DORMANCY } = window.CARE_DATA;
+  const { CUT, PRUNE = {}, TRIM, FALL_SHORT, FALL_WHY, DIVIDE, DIVIDE_NOTE, JUNE, EVERGREEN, DORMANCY } = window.CARE_DATA;
   const catOf = {}; Object.keys(CUT).forEach(k => CUT[k].forEach(id => (catOf[id] = k)));
 
   const W = (a, b, text, sum) => ({ a, b, text, sum });
@@ -14,6 +14,8 @@
   function divideText(p) { const t = divideBase(p); return DIVIDE_NOTE[p.id] ? t + " " + DIVIDE_NOTE[p.id] : t; }
   function divideBase(p) {
     const id = p.id, d = DIVIDE[id];
+    if (catOf[id] === "annual") return "An annual: nothing to divide.";
+    if (catOf[id] === "shrub") return "A shrub: don't divide it.";
     if (d === "never") return "Don't divide: the deep taproot breaks and the plant rarely recovers.";
     if (d === "fleshy") return "Divide only if crowded, in late August to September (fleshy roots do best in fall).";
     if (d === "summer") return "Divide every 3 to 4 years in late July to early August.";
@@ -27,6 +29,8 @@
 
   function divideShort(p) {
     const id = p.id, c = catOf[id], d = DIVIDE[id];
+    if (catOf[id] === "annual") return "Annual: no dividing";
+    if (catOf[id] === "shrub") return "Shrub: no dividing";
     if (d === "never") return "Don't divide";
     if (d === "fleshy") return "Late Aug to Sep, if crowded";
     if (d === "summer") return "Late Jul to early Aug";
@@ -82,6 +86,15 @@
         out.cut = W(a, a + 0.7, "Goes dormant in summer. Let the leaves yellow and fade on their own (they feed the roots), then clear them away. Later-growing neighbors fill the gap.", (dz ? dz.short : "Jun to early Jul") + ": clear leaves once yellow");
         break;
       }
+      case "shrub": {   // woody: pruned in its own window (from the plant file), never cut to the ground in fall
+        const pr = PRUNE[p.id];
+        if (pr) out.cut = W(pr.from, pr.to, pr.text, pr.short);
+        break;
+      }
+      case "annual":
+        out.replant = W(5.4, 5.95, "Plant after the last frost, usually mid to late May. It grows for one season, so plant new ones every spring.", "After last frost: plant");
+        out.cut = W(10.45, 11.0, "After frost kills it in fall, pull it out; it won't come back.", "After frost: pull it out");
+        break;
       case "bulb":
         out.prep = W(10.0, 10.95, "Plant new bulbs in October, 6 to 8 in deep in clumps, before the ground freezes.", "Oct: plant 6 to 8 in deep");
         out.cut = W(end + 1.4, end + 2.0, "Leave the leaves alone for at least 6 weeks after they start to fade (they feed next year's flowers), then cut them off.", "6+ weeks after leaves fade: cut off");
@@ -104,7 +117,7 @@
       }
     }
     // when to divide this plant (its own window, not a whole-garden one); none for plants that shouldn't be divided
-    if (!(wc && wc.status === "tender")) {
+    if (!(wc && wc.status === "tender") && catOf[p.id] !== "annual" && catOf[p.id] !== "shrub") {
       const id = p.id, k = catOf[id], d = DIVIDE[id];
       let dw = null;
       if (d === "never" || k === "bulb") dw = null;
@@ -130,6 +143,15 @@
     if (dig.length) extra.push({ lane: 2, k: "lift", a: 10.35, b: 11.1, label: "Dig up", text: "After the first frost (usually mid to late October): dig up, dry and store " + dig.map(p => p.name).join(", ") + " somewhere cool and frost-free. Replant after the last frost in May." });
     if (tender.length) extra.push({ lane: 2, k: "replant", a: 5.3, b: 6.05, label: "Replant", text: "After the last frost (usually mid to late May): plant " + tender.map(p => p.name).join(", ") + " back out." });
     if (edge.length) extra.push({ lane: 2, k: "mulch", a: 11.35, b: 12.0, label: "Mulch tender crowns", text: "Before the ground freezes: mulch the crowns of " + edge.map(p => p.name).join(", ") + ", which are hardy only to zone 6B." });
+    // annuals: planted after the last frost, pulled after frost (merged into the tender-plant bars when both are there, so the bars don't overlap)
+    const ann = (plants || []).filter(p => p.annual), annNames = ann.map(p => p.name).join(", ");
+    if (ann.length) {
+      const rp = extra.find(t => t.k === "replant"), lf = extra.find(t => t.k === "lift");
+      const plantT = "Plant annuals: " + annNames + ". They grow for one season, so they go in new every spring.";
+      const pullT = "Pull out annuals once frost kills them: " + annNames + ".";
+      if (rp) rp.text += " " + plantT; else extra.push({ lane: 2, k: "replant", a: 5.4, b: 5.95, label: "Plant annuals", text: "After the last frost (usually mid to late May): " + plantT[0].toLowerCase() + plantT.slice(1) });
+      if (lf) lf.text += " " + pullT; else extra.push({ lane: 2, k: "lift", a: 10.45, b: 11.0, label: "Pull annuals", text: "After frost: " + pullT[0].toLowerCase() + pullT.slice(1) });
+    }
     return extra.concat([
       { lane: 0, k: "prep", a: 4.0, b: 5.5, label: "Spring prep", text: "Early April: pull winter mulch off the crowns as the top layer thaws, and cut back any evergreen or early-growing plants before new growth starts (check each plant's own entry below for which ones). Mid-April to mid-May, once days stay around 50°F: cut the rest of last year's stems to 8 to 24 in. Waiting lets bees and butterflies that spent the winter in the stems and leaves get out first. Don't work the soil while it is wet." },
       { lane: 1, k: "divide", a: 4.3, b: 5.6, label: "Divide", text: "Divide summer- and fall-blooming plants as their shoots come up, if a clump is crowded or dying in the middle." },

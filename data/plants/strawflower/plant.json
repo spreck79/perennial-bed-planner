@@ -1,0 +1,93 @@
+{
+  "id": "strawflower",
+  "facts": {
+    "code": "Stra",
+    "name": "Strawflower",
+    "latin": "Xerochrysum bracteatum",
+    "native": false,
+    "annual": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 12,
+    "hHi": 42,
+    "spacing": 12,
+    "bloom": [
+      7,
+      10.5
+    ],
+    "color": "Yellow, orange, red, pink or white papery flowers (yellow shown)",
+    "colors": [
+      "yellow",
+      "orange",
+      "red",
+      "pink",
+      "white"
+    ],
+    "hex": "#F2C230",
+    "txt": "#2E3A2C",
+    "light": "Full sun; well-drained soil",
+    "sun": [
+      "full"
+    ],
+    "moisture": "Dry to average",
+    "notes": "Papery, crinkly flowers that keep their color fresh or dried, from midsummer until frost. An annual: plant after the last frost in late May. Cut flowers just as they start to open for drying; taller kinds may need a stake.",
+    "deer": "A",
+    "toxic": null
+  },
+  "photo": {
+    "credit": {
+      "file": "Xerochrysum bracteatum flowers.jpg",
+      "by": "Mark Marathon",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "Garden Hoard (Renegade Acres, Howell, MI): Strawflower 'Tall Double Mix' seeds",
+        "url": "https://www.gardenhoard.com/strawflower-tall-double-mix-seeds.html",
+        "note": "Xerochrysum bracteatum seed grown and sold by a farm in Howell, Michigan."
+      }
+    ]
+  },
+  "care": {
+    "group": "annual",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Illinois Extension: Plant of the week, Strawflower",
+      "url": "https://extension.illinois.edu/blogs/hort-home-landscape/2015-08-14-plant-week-strawflower",
+      "topic": "Plant facts",
+      "note": "Grows in average, dry to medium, well-drained soil in full sun and takes a little light shade. Start seed indoors 6 to 8 weeks before the last frost and plant out after. Lasts well cut and keeps its color dried."
+    },
+    {
+      "title": "Utah State University Extension: Strawflower Cut Flower Production",
+      "url": "https://extension.usu.edu/productionhort/research/strawflower-cut-flower-production-in-utah",
+      "topic": "Plant facts",
+      "note": "Full-sun annual with papery bracts up to 2 inches across on plants up to 42 inches tall; does well with little water."
+    },
+    {
+      "title": "Rutgers NJAES: Landscape Plants Rated by Deer Resistance (printable list)",
+      "url": "https://rutgersgardens.rutgers.edu/wp-content/uploads/2024/05/e271-1.pdf",
+      "topic": "Deer",
+      "note": "Annuals: calendula and strawflower are rated A (rarely damaged); California poppy, verbena and zinnia B (seldom severely damaged); cosmos C (occasionally severely damaged)."
+    }
+  ],
+  "companions": [
+    {
+      "id": "zinnia",
+      "why": "Plant strawflower with zinnias, basil, marigolds, sweet William and flax.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Epic Gardening: How to Plant, Grow, and Care for Strawflowers",
+          "url": "https://www.epicgardening.com/?p=144434",
+          "about": "strawflower"
+        }
+      ]
+    }
+  ]
+}

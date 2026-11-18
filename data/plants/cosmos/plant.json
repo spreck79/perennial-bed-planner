@@ -1,0 +1,134 @@
+{
+  "id": "cosmos",
+  "facts": {
+    "code": "Cosm",
+    "name": "Cosmos",
+    "latin": "Cosmos bipinnatus",
+    "native": false,
+    "annual": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 24,
+    "hHi": 60,
+    "spacing": 18,
+    "bloom": [
+      7,
+      10.5
+    ],
+    "color": "Pink, magenta, crimson or white daisies (pink shown)",
+    "colors": [
+      "pink",
+      "purple",
+      "red",
+      "white"
+    ],
+    "hex": "#E37BB2",
+    "txt": "#FFFFFF",
+    "light": "Full sun; poor to average, well-drained soil",
+    "sun": [
+      "full"
+    ],
+    "moisture": "Dry to average; takes dry spells once growing",
+    "notes": "Tall, airy plants with feathery leaves and big daisy flowers from midsummer until frost; bees and butterflies love them. An annual: plant after the last frost in late May. Skip the fertilizer (rich soil makes floppy plants), and snip off faded flowers to keep it blooming and to stop it from seeding everywhere.",
+    "deer": "C",
+    "toxic": null
+  },
+  "photo": {
+    "credit": {
+      "file": "2016 366 216 Sunlit (28137932273).jpg",
+      "by": "Edna Winti",
+      "lic": "CC BY 2.0",
+      "licUrl": "https://creativecommons.org/licenses/by/2.0"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "MIgardener (Michigan seed company): Picotee Cosmo",
+        "url": "https://migardener.com/products/picote-cosmo",
+        "note": "Cosmos bipinnatus seed sold by a Michigan company with a store in St. Clair, MI; easy to grow, about 2 ft and up."
+      }
+    ]
+  },
+  "care": {
+    "group": "annual",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Utah State University Extension: Cosmos in the Garden",
+      "url": "https://extension.usu.edu/yardandgarden/research/cosmos-in-the-garden.php",
+      "topic": "Plant facts",
+      "note": "Space cosmos 1 to 2 ft apart; closer plants hold each other up. Once growing it needs little water, no fertilizer and little care."
+    },
+    {
+      "title": "Oregon State University Extension: Cheery garden cosmos",
+      "url": "https://extension.oregonstate.edu/gardening/pollinators/cheery-garden-cosmos",
+      "topic": "Plant facts",
+      "note": "Garden cosmos (Cosmos bipinnatus) is still blooming strong into September, an easy pollinator annual."
+    },
+    {
+      "title": "Rutgers NJAES: Landscape Plants Rated by Deer Resistance (printable list)",
+      "url": "https://rutgersgardens.rutgers.edu/wp-content/uploads/2024/05/e271-1.pdf",
+      "topic": "Deer",
+      "note": "Annuals: calendula and strawflower are rated A (rarely damaged); California poppy, verbena and zinnia B (seldom severely damaged); cosmos C (occasionally severely damaged)."
+    },
+    {
+      "title": "Cats Protection: Safe plants guide",
+      "url": "https://www.cats.org.uk/media/gb1jkhcr/cats_protection-safe-plants-guide.pdf",
+      "topic": "Toxicity",
+      "note": "Cosmos is on the list of plants safe for cats. ASPCA doesn't list cosmos either way."
+    }
+  ],
+  "companions": [
+    {
+      "id": "zinnia",
+      "why": "Cosmos gives zinnias a contrast in height and texture.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Gardenia: Zinnia Flowers, a must-have for every garden",
+          "url": "https://www.gardenia.net/guide/zinnia-flowers-a-must-have-for-every-garden",
+          "about": "zinnia"
+        }
+      ]
+    },
+    {
+      "id": "rudbeckia",
+      "why": "Recommended companion for cosmos 'Dazzler': black-eyed Susan 'Goldsturm'.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Cosmos bipinnatus 'Dazzler'",
+          "url": "https://www.gardenia.net/plant/cosmos-bipinnatus-dazzler",
+          "about": "cosmos"
+        }
+      ]
+    },
+    {
+      "id": "gardenphlox",
+      "why": "Recommended companions for cosmos 'Cupcakes Blush' include garden phlox and lavender.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Cosmos bipinnatus 'Cupcakes Blush'",
+          "url": "https://www.gardenia.net/plant/cosmos-bipinnatus-cupcakes-blush",
+          "about": "cosmos"
+        }
+      ]
+    },
+    {
+      "id": "lavender",
+      "why": "Recommended companions for cosmos 'Cupcakes Blush' include garden phlox and lavender.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Cosmos bipinnatus 'Cupcakes Blush'",
+          "url": "https://www.gardenia.net/plant/cosmos-bipinnatus-cupcakes-blush",
+          "about": "cosmos"
+        }
+      ]
+    }
+  ]
+}
