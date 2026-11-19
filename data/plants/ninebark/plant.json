@@ -1,0 +1,111 @@
+{
+  "id": "ninebark",
+  "facts": {
+    "code": "Nine",
+    "name": "Ninebark",
+    "latin": "Physocarpus opulifolius",
+    "native": true,
+    "shrub": true,
+    "kind": "clump",
+    "hLo": 60,
+    "hHi": 96,
+    "spacing": 60,
+    "bloom": [
+      5.2,
+      6.3
+    ],
+    "color": "White to pale pink button clusters",
+    "colors": [
+      "white",
+      "pink"
+    ],
+    "hex": "#F3E9EA",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part shade",
+    "sun": [
+      "full",
+      "part"
+    ],
+    "moisture": "Adaptable: dry to wet, clay is fine",
+    "notes": "A tough Michigan native shrub with arching branches, clusters of white to pinkish flowers in late spring, red seed pods, and bark that peels in strips for winter interest. MSU says it can reach 6 to 9 ft; garden centers sell compact kinds with purple, red or gold leaves that stay smaller. Needs almost no care.",
+    "toxic": null,
+    "zones": [
+      2,
+      8
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "0 Physocarpus opulifolius - Samoëns.JPG",
+      "by": "Jean-Pol GRANDMONT",
+      "lic": "CC BY-SA 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "MSU Extension: Native plants for Michigan landscapes, Part 2: Shrubs",
+        "url": "https://www.canr.msu.edu/news/native_plants_for_michigan_landscapes_shrubs",
+        "note": "MSU lists common ninebark among native Michigan shrubs (6 to 9 ft) and says they are available at local nurseries and garden centers."
+      }
+    ]
+  },
+  "care": {
+    "group": "shrub",
+    "trim": false,
+    "prune": {
+      "from": 6.3,
+      "to": 8.5,
+      "short": "Right after it blooms; done by mid-August",
+      "text": "Prune as needed right after the flowers fade, and finish by mid-August so next year's flowers aren't cut off. To renew an old, overgrown shrub, cut it close to the ground in early spring before new growth starts."
+    }
+  },
+  "sources": [
+    {
+      "title": "Rita's Garden Path: Ninebark (Physocarpus opulifolius)",
+      "url": "https://ritasgardenpath.com/plants/286432-ninebark-physocarpus-opulifolius",
+      "topic": "Size and pruning",
+      "note": "5 to 8 ft tall, 4 to 6 ft wide; blooms May to June; zones 2 to 8. Prune right after bloom, finishing by mid-August; can be cut close to the ground in early spring to rejuvenate."
+    }
+  ],
+  "companions": [
+    {
+      "id": "hydrangea",
+      "why": "Flowering shrubs like hydrangea grow well with ninebark; lower-growing calendula makes a nice edging plant in front.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Plant Addicts: Ninebark Companion Plants",
+          "url": "https://plantaddicts.com/ninebark-companion-plants/",
+          "about": "ninebark"
+        }
+      ]
+    },
+    {
+      "id": "calendula",
+      "why": "Flowering shrubs like hydrangea grow well with ninebark; lower-growing calendula makes a nice edging plant in front.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Plant Addicts: Ninebark Companion Plants",
+          "url": "https://plantaddicts.com/ninebark-companion-plants/",
+          "about": "ninebark"
+        }
+      ]
+    },
+    {
+      "id": "coneflower",
+      "why": "Ninebark with black-eyed Susan, purple coneflower and serviceberry makes a lively garden display that draws wildlife.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Tennessee Wholesale Nursery: Native Ninebark Shrub Varieties",
+          "url": "https://tennesseewholesalenursery.com/blogs/tennessee-wholesale-nursery-blog/ninebark-shrub-varieties",
+          "about": "ninebark"
+        }
+      ]
+    }
+  ]
+}

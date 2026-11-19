@@ -1,0 +1,122 @@
+{
+  "id": "smoothaster",
+  "facts": {
+    "code": "SBAs",
+    "name": "Smooth Blue Aster",
+    "latin": "Symphyotrichum laeve",
+    "native": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 24,
+    "hHi": 36,
+    "spacing": 18,
+    "bloom": [
+      8.7,
+      10.5
+    ],
+    "color": "Lavender-blue with gold centers",
+    "colors": [
+      "blue",
+      "purple"
+    ],
+    "hex": "#9A9BDB",
+    "txt": "#2E3A2C",
+    "light": "Full sun to light shade",
+    "sun": [
+      "full",
+      "part"
+    ],
+    "moisture": "Dry to average, well drained",
+    "notes": "A Michigan native aster with smooth, blue-green leaves and clouds of lavender-blue daisies from late summer into October, feeding native bees, butterflies and moths late in the year. Shorter than New England aster and happy in dry, sunny spots. Deer like to eat it.",
+    "toxic": null,
+    "zones": [
+      3,
+      8
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "Smooth Blue Aster.jpg",
+      "by": "John Hilty",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "MSU Native Plants: Smooth blue aster",
+        "url": "https://www.canr.msu.edu/nativeplants/plant_facts/smooth_blue_aster",
+        "note": "Michigan native perennial in MSU's native plant trials; late bloomer (mid-August into early October) that draws pollinators and natural enemies."
+      },
+      {
+        "title": "Wild Cherry Farm (Michigan native nursery): Smooth Aster",
+        "url": "https://wildcherryfarm.com/shop-native-plants/p/smooth-aster-symphyotrichum-laeve",
+        "note": "Sold as a native plant by a Michigan nursery; a late bloomer native bees love."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "MSU Native Plants: Smooth blue aster fact sheet (PDF)",
+      "url": "https://www.canr.msu.edu/nativeplants/uploads/files/1Native_Plants_reupload/Smooth_blue_aster.pdf",
+      "topic": "Plant facts",
+      "note": "Bloom period mid-August through early October; available as seed, plugs and potted plants from Michigan native plant nurseries."
+    },
+    {
+      "title": "Roundstone Native Seed: Smooth Aster",
+      "url": "https://www.roundstoneseed.com/product/smooth-aster",
+      "topic": "Plant facts",
+      "note": "2 to 3 ft tall; dry to medium, well-drained soil in full sun, tolerates damper sites in part shade."
+    },
+    {
+      "title": "USDA NRCS Plant Guide: Smooth Blue Aster",
+      "url": "https://corpora.tika.apache.org/base/docs/govdocs1/302/302499.pdf",
+      "topic": "Deer",
+      "note": "Palatable to white-tailed deer. Popular in wildflower, native and butterfly gardens."
+    }
+  ],
+  "companions": [
+    {
+      "id": "anemone",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "bluestem",
+      "why": "Pair with dark-leaved Heuchera; combine with aster, tall sedums like 'Autumn Joy', yarrow, rudbeckias and purple coneflower.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Little Bluestem article",
+          "url": "https://hort.extension.wisc.edu/articles/little-bluestem-schizachyrium-scoparium/",
+          "about": "bluestem"
+        }
+      ]
+    },
+    {
+      "id": "sneezeweed",
+      "why": "Combines well with ornamental grasses, anise hyssop, beebalm, daylilies, fall asters, liatris, purple coneflower and rudbeckias.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Sneezeweed article",
+          "url": "https://hort.extension.wisc.edu/articles/helenium-helenium-autumnale/",
+          "about": "sneezeweed"
+        }
+      ]
+    }
+  ]
+}

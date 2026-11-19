@@ -1,0 +1,97 @@
+{
+  "id": "sensitivefern",
+  "facts": {
+    "code": "SeFe",
+    "name": "Sensitive Fern",
+    "latin": "Onoclea sensibilis",
+    "native": true,
+    "kind": "fern",
+    "hLo": 12,
+    "hHi": 30,
+    "spacing": 24,
+    "bloom": null,
+    "color": "Broad, light green fronds",
+    "colors": [
+      "green"
+    ],
+    "hex": "#8DBA5A",
+    "txt": "#2E3A2C",
+    "light": "Part sun to full shade; more sun only if the soil stays wet",
+    "sun": [
+      "part",
+      "shade"
+    ],
+    "moisture": "Moist to wet",
+    "notes": "A coarse, light green fern with broad, wavy-edged fronds, unlike the lacy look of most ferns. The fronds collapse at the first frost (that's the 'sensitive'), leaving stiff brown bead-like spore stalks that stand all winter. Spreads by roots into a groundcover, quickly in wet spots. Deer leave it alone.",
+    "toxic": [
+      "horses"
+    ],
+    "toxSrc": "UT Extension notes it is toxic to horses and livestock",
+    "zones": [
+      3,
+      8
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "2023-06-15 15 36 38 Sensitive ferns along Aquetong Lane in the Mountainview section of Ewing Township, Mercer County, New Jersey.jpg",
+      "by": "Famartin",
+      "lic": "CC BY-SA 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "MSU Native Plants: Sensitive fern fact sheet",
+        "url": "https://www.canr.msu.edu/nativeplants/uploads/files/Sensitive_fern.pdf",
+        "note": "MSU prairie fen fact sheet for a native fern of Michigan's wet areas; 6 to 30 in, shade tolerant."
+      }
+    ]
+  },
+  "care": {
+    "group": "fern",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "PerennialReference.com (Hallson Gardens): Onoclea, sensitive fern",
+      "url": "https://perennialreference.com/ferns/onoclea.html",
+      "topic": "Light, soil and spreading",
+      "note": "12 to 30 in; part sun to full shade, more sun if kept constantly wet; average to rich, acidic, moist to wet soil; zones 3 to 8. A vigorous spreader along ponds and streams, about as controlled as other spreading ferns in average gardens."
+    },
+    {
+      "title": "UT Extension Tennessee Yards: Onoclea sensibilis",
+      "url": "https://tnyards.utk.edu/onoclea-sensibilis",
+      "topic": "Toxicity",
+      "note": "Toxic and sometimes fatal to horses and livestock."
+    }
+  ],
+  "companions": [
+    {
+      "id": "lobelia",
+      "why": "A nice addition to the bog garden with plants such as lobelia, ligularia, rodgersia and water-loving iris, if you have the room.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "PerennialReference.com (Hallson Gardens): Onoclea, sensitive fern",
+          "url": "https://perennialreference.com/ferns/onoclea.html",
+          "about": "sensitivefern"
+        }
+      ]
+    },
+    {
+      "id": "ligularia",
+      "why": "A nice addition to the bog garden with plants such as lobelia, ligularia, rodgersia and water-loving iris, if you have the room.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "PerennialReference.com (Hallson Gardens): Onoclea, sensitive fern",
+          "url": "https://perennialreference.com/ferns/onoclea.html",
+          "about": "sensitivefern"
+        }
+      ]
+    }
+  ]
+}

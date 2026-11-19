@@ -1,0 +1,135 @@
+{
+  "id": "snapdragon",
+  "facts": {
+    "code": "Snap",
+    "name": "Snapdragon",
+    "latin": "Antirrhinum majus",
+    "native": false,
+    "annual": true,
+    "kind": "clump",
+    "hLo": 6,
+    "hHi": 36,
+    "spacing": 12,
+    "bloom": [
+      5.5,
+      10.5
+    ],
+    "color": "Spikes of pink, red, yellow, white or bicolor",
+    "colors": [
+      "pink",
+      "red",
+      "yellow",
+      "white",
+      "orange",
+      "purple"
+    ],
+    "hex": "#F08FA8",
+    "txt": "#2E3A2C",
+    "light": "Full sun to light shade",
+    "sun": [
+      "full",
+      "part"
+    ],
+    "moisture": "Evenly moist, well drained",
+    "notes": "Spikes of 'dragon-mouth' flowers in almost every color, from dwarf 6-inch edging types to 3-foot cut flowers. A cool-weather annual: it can go out in spring before other annuals and keeps blooming into fall until a hard frost. It may slow down in midsummer heat. Cut off faded spikes for more flowers, and stake the tall kinds.",
+    "toxic": null
+  },
+  "photo": {
+    "credit": {
+      "file": "File-Snapdragons.JPG",
+      "by": "Off2riorob",
+      "lic": "CC BY 3.0",
+      "licUrl": "https://creativecommons.org/licenses/by/3.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "MIgardener (Michigan seed company): Appleblossom Snapdragon",
+        "url": "https://migardener.com/collections/flowers-1/products/appleblossom-snapdragon",
+        "note": "Snapdragon (Antirrhinum majus) seed sold by a Michigan company; up to 2.5 ft, double flowers in rose and honey tones."
+      }
+    ]
+  },
+  "care": {
+    "group": "annual",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Illinois Extension: Snapdragon",
+      "url": "https://extension.illinois.edu/flowers/snapdragon",
+      "topic": "Growing",
+      "note": "Very cold tolerant; good for early spring and fall planting and does well until a very hard frost. Full sun to light shade, well-drained soil; 6 in to 3 ft; blooms May to October. Remove spent spikes to promote rebloom; stake tall kinds."
+    },
+    {
+      "title": "ASPCA: Common Snapdragon",
+      "url": "https://www.aspca.org/pet-care/aspca-poison-control/toxic-and-non-toxic-plants/common-snapdragon",
+      "topic": "Toxicity",
+      "note": "Non-toxic to dogs, cats and horses."
+    }
+  ],
+  "companions": [
+    {
+      "id": "zinnia",
+      "why": "Recommended companions: zinnia, Japanese anemones, coreopsis, black-eyed Susans and coneflowers.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Antirrhinum majus (Snapdragon)",
+          "url": "https://www.gardenia.net/plant/antirrhinum-majus-snapdragon",
+          "about": "snapdragon"
+        }
+      ]
+    },
+    {
+      "id": "anemone",
+      "why": "Recommended companions: zinnia, Japanese anemones, coreopsis, black-eyed Susans and coneflowers.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Antirrhinum majus (Snapdragon)",
+          "url": "https://www.gardenia.net/plant/antirrhinum-majus-snapdragon",
+          "about": "snapdragon"
+        }
+      ]
+    },
+    {
+      "id": "coreopsis",
+      "why": "Recommended companions: zinnia, Japanese anemones, coreopsis, black-eyed Susans and coneflowers.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Antirrhinum majus (Snapdragon)",
+          "url": "https://www.gardenia.net/plant/antirrhinum-majus-snapdragon",
+          "about": "snapdragon"
+        }
+      ]
+    },
+    {
+      "id": "rudbeckia",
+      "why": "Recommended companions: zinnia, Japanese anemones, coreopsis, black-eyed Susans and coneflowers.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Antirrhinum majus (Snapdragon)",
+          "url": "https://www.gardenia.net/plant/antirrhinum-majus-snapdragon",
+          "about": "snapdragon"
+        }
+      ]
+    },
+    {
+      "id": "coneflower",
+      "why": "Recommended companions: zinnia, Japanese anemones, coreopsis, black-eyed Susans and coneflowers.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Gardenia: Antirrhinum majus (Snapdragon)",
+          "url": "https://www.gardenia.net/plant/antirrhinum-majus-snapdragon",
+          "about": "snapdragon"
+        }
+      ]
+    }
+  ]
+}

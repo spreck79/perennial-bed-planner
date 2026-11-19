@@ -1,0 +1,128 @@
+{
+  "id": "bloodroot",
+  "facts": {
+    "code": "Bloo",
+    "name": "Bloodroot",
+    "latin": "Sanguinaria canadensis",
+    "native": true,
+    "kind": "clump",
+    "dormant": true,
+    "hLo": 6,
+    "hHi": 12,
+    "spacing": 12,
+    "bloom": [
+      4,
+      5
+    ],
+    "color": "White with gold centers",
+    "colors": [
+      "white"
+    ],
+    "hex": "#F7F5EE",
+    "txt": "#2E3A2C",
+    "light": "Part shade; morning sun and afternoon shade",
+    "sun": [
+      "part",
+      "shade"
+    ],
+    "moisture": "Moist, well drained, rich in organic matter",
+    "notes": "One of the first wildflowers of spring: a single white flower wrapped in a big scalloped leaf. Each flower lasts only a few days, and the plant disappears once the trees leaf out. The roots bleed red sap, which is where the name comes from. Ants spread the seeds, so it slowly makes a patch.",
+    "toxic": [
+      "people"
+    ],
+    "toxSrc": "Cornell Botanic Gardens and the USGS list it as poisonous; the red sap is acrid",
+    "zones": [
+      3,
+      8
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "Bloodroot (Sanguinaria canadensis) - Flickr - Jay Sturner (5).jpg",
+      "by": "Jay Sturner",
+      "lic": "CC BY 2.0",
+      "licUrl": "https://creativecommons.org/licenses/by/2.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Wild Cherry Farm (Michigan native nursery): Bloodroot",
+        "url": "https://www.wildcherryfarm.com/shop-native-plants/p/bloodroot-sanguinaria-canadensis",
+        "note": "Sold as a native plant by a Michigan nursery; part shade, about 6 in tall, blooms April to May, deer resistant."
+      },
+      {
+        "title": "Wild Ones River City Chapter (Grand Rapids): 2026 native species list",
+        "url": "https://rivercitygrandrapids.wildones.org/wp-content/uploads/sites/21/2026/04/2026-Plant-Species-list_4-29-26.pdf",
+        "note": "On a Michigan Wild Ones chapter's 2026 native plant sale list."
+      }
+    ]
+  },
+  "care": {
+    "group": "ephemeral",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "Illinois Extension Good Growing: A favorite spring ephemeral, bloodroot",
+      "url": "https://extension.illinois.edu/blogs/good-growing/2023-03-17-favorite-spring-ephemeral-bloodroot",
+      "topic": "Light, soil and dormancy",
+      "note": "Best with morning sun and afternoon shade in moist, well-drained soil high in organic matter; slightly acidic soil preferred. The leaves fade once the tree canopy shades the ground, and the plant is gone until next spring."
+    },
+    {
+      "title": "Cornell Botanic Gardens: Bloodroot",
+      "url": "https://cornellbotanicgardens.org/plant/bloodroot",
+      "topic": "Toxicity",
+      "note": "Listed as poisonous; hardy to zone 3. Mammals avoid the acrid leaves."
+    }
+  ],
+  "companions": [
+    {
+      "id": "phlox",
+      "why": "Good companions: hepatica, great white trillium, wild blue phlox, spring beauty and wild ginger. Also planted with Virginia bluebells, spring beauties, woodland phlox and wild ginger for a natural look.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Bloodroot",
+          "url": "https://www.wildcherryfarm.com/shop-native-plants/p/bloodroot-sanguinaria-canadensis",
+          "about": "bloodroot"
+        },
+        {
+          "title": "Illinois Extension Good Growing: A favorite spring ephemeral, bloodroot",
+          "url": "https://extension.illinois.edu/blogs/good-growing/2023-03-17-favorite-spring-ephemeral-bloodroot",
+          "about": "bloodroot"
+        }
+      ]
+    },
+    {
+      "id": "ginger",
+      "why": "Good companions: hepatica, great white trillium, wild blue phlox, spring beauty and wild ginger. Also planted with Virginia bluebells, spring beauties, woodland phlox and wild ginger for a natural look.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Bloodroot",
+          "url": "https://www.wildcherryfarm.com/shop-native-plants/p/bloodroot-sanguinaria-canadensis",
+          "about": "bloodroot"
+        },
+        {
+          "title": "Illinois Extension Good Growing: A favorite spring ephemeral, bloodroot",
+          "url": "https://extension.illinois.edu/blogs/good-growing/2023-03-17-favorite-spring-ephemeral-bloodroot",
+          "about": "bloodroot"
+        }
+      ]
+    },
+    {
+      "id": "bluebells",
+      "why": "Plant with Virginia bluebells, spring beauties, woodland phlox and wild ginger for a natural look.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Illinois Extension Good Growing: A favorite spring ephemeral, bloodroot",
+          "url": "https://extension.illinois.edu/blogs/good-growing/2023-03-17-favorite-spring-ephemeral-bloodroot",
+          "about": "bloodroot"
+        }
+      ]
+    }
+  ]
+}

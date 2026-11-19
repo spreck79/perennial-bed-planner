@@ -1,0 +1,127 @@
+{
+  "id": "harebell",
+  "facts": {
+    "code": "Hare",
+    "name": "Harebell",
+    "latin": "Campanula rotundifolia",
+    "native": true,
+    "kind": "clump",
+    "hLo": 6,
+    "hHi": 18,
+    "spacing": 12,
+    "bloom": [
+      6,
+      9
+    ],
+    "color": "Blue-violet nodding bells",
+    "colors": [
+      "blue",
+      "purple"
+    ],
+    "hex": "#7E86D6",
+    "txt": "#FFFFFF",
+    "light": "Full sun for the most flowers; takes part shade",
+    "sun": [
+      "full",
+      "part"
+    ],
+    "moisture": "Dry to average; sandy or rocky soil is fine",
+    "notes": "Dainty blue bells nodding on thread-thin stems from early summer into fall. Tougher than it looks: it grows on Michigan's sand dunes and in rock cracks, and handles drought. Plant it in a group near the front of the bed, where taller plants won't crowd it out. Not the weedy creeping bellflower, which has bigger flowers and wider leaves.",
+    "toxic": null,
+    "zones": [
+      3,
+      8
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "20200531Campanula rotundifolia.jpg",
+      "by": "AnRo0002",
+      "lic": "CC0",
+      "licUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Wild Ones River City Chapter (Grand Rapids): Harebell",
+        "url": "https://rivercitygrandrapids.wildones.org/wp-content/uploads/sites/21/2015/11/Harebell.pdf",
+        "note": "Michigan Wild Ones plant sheet: harebells grow in clumps on many Michigan dunes; 6 to 18 in; blooms early summer into late fall."
+      },
+      {
+        "title": "Wild Cherry Farm (Michigan native nursery): Harebell",
+        "url": "https://goose-prism-azcx.squarespace.com/shop-native-plants/p/harebell-campanula-rotundifolia",
+        "note": "Sold as a native plant by a Michigan nursery; 12 in, blooms June to September, full to part sun, dry soil, deer resistant."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "New Moon Nurseries: Campanula rotundifolia",
+      "url": "https://newmoonnursery.com/plant/Campanula-rotundifolia",
+      "topic": "Zones and size",
+      "note": "Drought tolerant; 6 to 18 in tall, about 1 ft wide; zones 3 to 8."
+    },
+    {
+      "title": "Wild Ones River City Chapter (Grand Rapids): Harebell",
+      "url": "https://rivercitygrandrapids.wildones.org/wp-content/uploads/sites/21/2015/11/Harebell.pdf",
+      "topic": "Care",
+      "note": "Full sun gives the most flowers; dry to average soil. Thin out taller, aggressive neighbors that crowd it. Young plants may flop for a couple of years and do best in groups. Seedlings bloom in their second year."
+    }
+  ],
+  "companions": [
+    {
+      "id": "noddingonion",
+      "why": "Good companions: pussytoes, nodding wild onion, columbine, prairie smoke and beardtongues.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Harebell",
+          "url": "https://goose-prism-azcx.squarespace.com/shop-native-plants/p/harebell-campanula-rotundifolia",
+          "about": "harebell"
+        }
+      ]
+    },
+    {
+      "id": "columbine",
+      "why": "Good companions: pussytoes, nodding wild onion, columbine, prairie smoke and beardtongues.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Harebell",
+          "url": "https://goose-prism-azcx.squarespace.com/shop-native-plants/p/harebell-campanula-rotundifolia",
+          "about": "harebell"
+        }
+      ]
+    },
+    {
+      "id": "prairiesmoke",
+      "why": "Good companions: pussytoes, nodding wild onion, columbine, prairie smoke and beardtongues.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Harebell",
+          "url": "https://goose-prism-azcx.squarespace.com/shop-native-plants/p/harebell-campanula-rotundifolia",
+          "about": "harebell"
+        }
+      ]
+    },
+    {
+      "id": "penstemon",
+      "why": "Good companions: pussytoes, nodding wild onion, columbine, prairie smoke and beardtongues.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Harebell",
+          "url": "https://goose-prism-azcx.squarespace.com/shop-native-plants/p/harebell-campanula-rotundifolia",
+          "about": "harebell"
+        }
+      ]
+    }
+  ]
+}

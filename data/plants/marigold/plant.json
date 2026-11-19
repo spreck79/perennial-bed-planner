@@ -1,0 +1,112 @@
+{
+  "id": "marigold",
+  "facts": {
+    "code": "Mari",
+    "name": "Marigold",
+    "latin": "Tagetes erecta and T. patula",
+    "native": false,
+    "annual": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 6,
+    "hHi": 36,
+    "spacing": 12,
+    "bloom": [
+      6.5,
+      10.5
+    ],
+    "color": "Yellow, gold, orange or red-brown pompoms",
+    "colors": [
+      "yellow",
+      "orange",
+      "red"
+    ],
+    "hex": "#F6C21C",
+    "txt": "#2E3A2C",
+    "light": "Full sun (6 to 8 hours)",
+    "sun": [
+      "full"
+    ],
+    "moisture": "Average, well drained; takes heat and dry spells",
+    "notes": "The classic sunny annual: French marigolds stay small (under a foot) for edging, while African marigolds grow 2 to 3 ft with big pompom flowers. Plant after the last frost in late May. Pinch young plants to make them bushy and snip off faded flowers to keep them blooming until frost. Pot marigold (calendula) is a different plant.",
+    "toxic": [
+      "dogs",
+      "cats"
+    ],
+    "toxSrc": "Pet Poison Helpline: Tagetes marigolds are mildly toxic; can upset the stomach and the sap can irritate skin"
+  },
+  "photo": {
+    "credit": {
+      "file": "01873jfTagetes erecta French Marigoldfvf 04.jpg",
+      "by": "Judgefloro",
+      "lic": "CC0",
+      "licUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  },
+  "status": {
+    "kind": "garden",
+    "sources": [
+      {
+        "title": "MIgardener (Michigan seed company): Crackerjack Marigold Mix",
+        "url": "https://migardener.com/collections/all-seeds/products/crackerjack-marigold-mix",
+        "note": "African marigold (Tagetes erecta) seed sold by a Michigan company (grown in Michigan; store in St. Clair, MI); about 2 ft, full sun, blooms summer into fall."
+      }
+    ]
+  },
+  "care": {
+    "group": "annual",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "UW-Madison Extension: Marigolds",
+      "url": "https://hort.extension.wisc.edu/articles/marigolds/",
+      "topic": "Growing",
+      "note": "Full sun (6 to 8 hours), well-drained soil. Sow outdoors once the soil is above 65°F, or start indoors about 8 weeks early and plant out after frost. Pinch tips for bushier plants; deadhead to keep flowers coming and reduce disease."
+    },
+    {
+      "title": "Gardenia: Marigold plant care and growing guide",
+      "url": "https://www.gardenia.net/guide/learn-how-to-grow-and-care-marigold",
+      "topic": "Types",
+      "note": "African marigold (T. erecta) grows 3 to 4 ft with big double flowers; French marigold (T. patula) is compact, 6 to 12 in; both handle poor soil, heat and drought."
+    }
+  ],
+  "companions": [
+    {
+      "id": "zinnia",
+      "why": "Marigolds and zinnias can be planted together: both like warm summers and well-drained, slightly dry soil.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Epic Gardening: Can You Plant Marigolds and Zinnias Together?",
+          "url": "https://www.epicgardening.com/marigolds-zinnias/",
+          "about": "marigold"
+        }
+      ]
+    },
+    {
+      "id": "cosmos",
+      "why": "Marigolds pair beautifully with zinnias, cosmos, celosia, salvia and petunias.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Trailing Petunia: Mixing Marigolds with Other Flower Seeds for Continuous Color",
+          "url": "https://www.trailingpetunia.com/blogs/news/mixing-marigolds-with-other-flower-seeds-for-continuous-color",
+          "about": "marigold"
+        }
+      ]
+    },
+    {
+      "id": "salvia",
+      "why": "Salvia's blue and purple spikes make a rich contrast with golden marigolds, and together they draw pollinators.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Trailing Petunia: Mixing Marigolds with Other Flower Seeds for Continuous Color",
+          "url": "https://www.trailingpetunia.com/blogs/news/mixing-marigolds-with-other-flower-seeds-for-continuous-color",
+          "about": "marigold"
+        }
+      ]
+    }
+  ]
+}

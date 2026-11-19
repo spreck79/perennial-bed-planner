@@ -1,0 +1,97 @@
+{
+  "id": "spottedbeebalm",
+  "facts": {
+    "code": "SBBa",
+    "name": "Spotted Bee Balm",
+    "latin": "Monarda punctata",
+    "native": true,
+    "kind": "clump",
+    "hLo": 12,
+    "hHi": 36,
+    "spacing": 12,
+    "bloom": [
+      7,
+      9
+    ],
+    "color": "Spotted yellow flowers in pink-lavender bracts",
+    "colors": [
+      "pink",
+      "purple",
+      "white"
+    ],
+    "hex": "#C9A6C9",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part sun",
+    "sun": [
+      "full",
+      "part"
+    ],
+    "moisture": "Dry to average, sandy, well drained",
+    "notes": "An odd and lovely bee balm: tiers of purple-spotted yellow flowers ringed by pink and lavender bracts, stacked up the stem. A magnet for native bees and wasps, more drought tolerant than other bee balms, and its smell keeps deer and rabbits away. Often short-lived, but it reseeds in open, sandy soil.",
+    "toxic": null,
+    "zones": [
+      3,
+      9
+    ]
+  },
+  "photo": {
+    "focus": [
+      0.5,
+      0.42
+    ],
+    "credit": {
+      "file": "Monarda punctata 191241484.jpg",
+      "by": "Michelle Wong",
+      "lic": "CC BY 4.0",
+      "licUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "MSU Native Plants: Horsemint (Spotted bee balm)",
+        "url": "https://www.canr.msu.edu/nativeplants/plant_facts/horsemint_spotted_bee_balm",
+        "note": "Michigan native in MSU's native plant trials; tolerates extremely dry soil; blooms through August; 1 to 3 ft."
+      },
+      {
+        "title": "Wild Ones Keweenaw Chapter (Michigan): Spotted Bee Balm plant sheet",
+        "url": "https://keweenaw.wildones.org/wp-content/uploads/sites/84/2021/06/Spotted-bee-balm-PIS.pdf",
+        "note": "Michigan Wild Ones native plant sheet; full sun, sandy, dry soil, about 2 ft, July to September."
+      }
+    ],
+    "garden": [
+      {
+        "title": "English Gardens (Metro Detroit garden centers): Spotted Beebalm",
+        "url": "https://plants.englishgardens.com/12150001/Plant/Print?id=21744",
+        "note": "In a Michigan garden center's plant list; self-seeding, hardy to zone 3."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "MSU Native Plants: Horsemint (Spotted bee balm)",
+      "url": "https://www.canr.msu.edu/nativeplants/plant_facts/horsemint_spotted_bee_balm",
+      "topic": "Lifespan",
+      "note": "In MSU's trials many plants did not survive from the second to the third winter; from plugs it flowers in the second year."
+    }
+  ],
+  "companions": [
+    {
+      "id": "butterflyweed",
+      "why": "Attractive when paired with butterfly weed and lead plant.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Ones Keweenaw Chapter (Michigan): Spotted Bee Balm plant sheet",
+          "url": "https://keweenaw.wildones.org/wp-content/uploads/sites/84/2021/06/Spotted-bee-balm-PIS.pdf",
+          "about": "spottedbeebalm"
+        }
+      ]
+    }
+  ]
+}

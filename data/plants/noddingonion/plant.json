@@ -1,0 +1,155 @@
+{
+  "id": "noddingonion",
+  "facts": {
+    "code": "NoOn",
+    "name": "Nodding Onion",
+    "latin": "Allium cernuum",
+    "native": true,
+    "kind": "clump",
+    "hLo": 12,
+    "hHi": 24,
+    "spacing": 12,
+    "bloom": [
+      7,
+      8.7
+    ],
+    "color": "Pale pink to lilac nodding clusters",
+    "colors": [
+      "pink",
+      "purple",
+      "white"
+    ],
+    "hex": "#D9A7CF",
+    "txt": "#2E3A2C",
+    "light": "Full sun to part sun",
+    "sun": [
+      "full",
+      "part"
+    ],
+    "moisture": "Medium; dry to moist, well drained",
+    "notes": "A wild onion with grassy leaves and drooping clusters of little pink bells that look like small fireworks in midsummer. Bees love it, and its oniony smell keeps deer and rabbits away. Spreads slowly by seed and offsets. Good for the front of a sunny bed.",
+    "toxic": [
+      "dogs",
+      "cats",
+      "horses"
+    ],
+    "toxSrc": "ASPCA lists onion (Allium) as toxic",
+    "zones": [
+      4,
+      8
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "Allium cernuum - Flickr - aspidoscelis.jpg",
+      "by": "Patrick Alexander",
+      "lic": "CC0",
+      "licUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Wild Cherry Farm (Michigan native nursery): Nodding Onion",
+        "url": "https://wildcherryfarm.com/shop-native-plants/p/nodding-onion-allium-cernuum",
+        "note": "Sold as a Michigan native plant by a Michigan nursery; 1 to 2 ft, blooms July to August, full to part sun, deer resistant."
+      },
+      {
+        "title": "MSU Native Plants: Nodding wild onion",
+        "url": "https://www.canr.msu.edu/nativeplants/plant_facts/nodding_wild_onion",
+        "note": "In MSU's southern Lower Peninsula native plant trials; bloomed through August; about 2 ft; no deer browsing seen."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "New Moon Nurseries: Allium cernuum",
+      "url": "https://newmoonnursery.com/plant/Allium-cernuum",
+      "topic": "Size, soil and zones",
+      "note": "1 to 2 ft tall, 6 to 12 in wide; full or part sun; dry to average, well-drained soil; drought tolerant; zones 4 to 8. Its oniony smell keeps most herbivores away."
+    },
+    {
+      "title": "ASPCA: Daffodil, Tulip and Onion plant pages",
+      "url": "https://www.aspca.org/pet-care/aspca-poison-control/toxic-and-non-toxic-plants/daffodil",
+      "topic": "Spring bulbs",
+      "note": "Daffodil (Narcissus), tulip (Tulipa) and onion (Allium) are all listed as toxic to dogs, cats and horses."
+    }
+  ],
+  "companions": [
+    {
+      "id": "butterflyweed",
+      "why": "Good companions: butterfly weed, purple prairie clover, purple coneflower, Culver's root, obedient plant, rattlesnake master and switchgrass. In sunny sites, purple coneflower and butterfly weed bloom at the same time.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Nodding Onion",
+          "url": "https://wildcherryfarm.com/shop-native-plants/p/nodding-onion-allium-cernuum",
+          "about": "noddingonion"
+        },
+        {
+          "title": "New Moon Nurseries: Allium cernuum",
+          "url": "https://newmoonnursery.com/plant/Allium-cernuum",
+          "about": "noddingonion"
+        }
+      ]
+    },
+    {
+      "id": "coneflower",
+      "why": "Good companions: butterfly weed, purple prairie clover, purple coneflower, Culver's root, obedient plant, rattlesnake master and switchgrass. In sunny sites, purple coneflower and butterfly weed bloom at the same time.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Nodding Onion",
+          "url": "https://wildcherryfarm.com/shop-native-plants/p/nodding-onion-allium-cernuum",
+          "about": "noddingonion"
+        },
+        {
+          "title": "New Moon Nurseries: Allium cernuum",
+          "url": "https://newmoonnursery.com/plant/Allium-cernuum",
+          "about": "noddingonion"
+        }
+      ]
+    },
+    {
+      "id": "culvers",
+      "why": "Good companions: butterfly weed, purple prairie clover, purple coneflower, Culver's root, obedient plant, rattlesnake master and switchgrass.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Nodding Onion",
+          "url": "https://wildcherryfarm.com/shop-native-plants/p/nodding-onion-allium-cernuum",
+          "about": "noddingonion"
+        }
+      ]
+    },
+    {
+      "id": "obedient",
+      "why": "Good companions: butterfly weed, purple prairie clover, purple coneflower, Culver's root, obedient plant, rattlesnake master and switchgrass.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Nodding Onion",
+          "url": "https://wildcherryfarm.com/shop-native-plants/p/nodding-onion-allium-cernuum",
+          "about": "noddingonion"
+        }
+      ]
+    },
+    {
+      "id": "rattlesnake",
+      "why": "Good companions: butterfly weed, purple prairie clover, purple coneflower, Culver's root, obedient plant, rattlesnake master and switchgrass.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Nodding Onion",
+          "url": "https://wildcherryfarm.com/shop-native-plants/p/nodding-onion-allium-cernuum",
+          "about": "noddingonion"
+        }
+      ]
+    }
+  ]
+}

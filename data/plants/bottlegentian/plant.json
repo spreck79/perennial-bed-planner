@@ -1,0 +1,149 @@
+{
+  "id": "bottlegentian",
+  "facts": {
+    "code": "BoGe",
+    "name": "Bottle Gentian",
+    "latin": "Gentiana andrewsii",
+    "native": true,
+    "kind": "clump",
+    "hLo": 12,
+    "hHi": 24,
+    "spacing": 12,
+    "bloom": [
+      8.5,
+      10
+    ],
+    "color": "Deep blue, closed bottle-shaped flowers",
+    "colors": [
+      "blue",
+      "purple"
+    ],
+    "hex": "#3B4FB8",
+    "txt": "#FFFFFF",
+    "light": "Full sun to part shade",
+    "sun": [
+      "full",
+      "part"
+    ],
+    "moisture": "Moist to wet",
+    "notes": "One of the last flowers of fall: clusters of deep blue flowers that never open. Only strong bumblebees can pry their way in. Slow to get going but long-lived, and deer usually leave it alone. The stems tend to flop, so tuck it among sturdier plants.",
+    "toxic": null,
+    "zones": [
+      3,
+      6.5
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "Bottle Gentian (Gentiana andrewsii).jpg",
+      "by": "wackybadger",
+      "lic": "CC BY-SA 2.0",
+      "licUrl": "https://creativecommons.org/licenses/by-sa/2.0/"
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "Wild Cherry Farm (Michigan native nursery): Bottle Gentian",
+        "url": "https://www.wildcherryfarm.com/shop-native-plants/p/bottle-gentian-gentiana-andrewsii",
+        "note": "Sold as a Michigan native plant by a Michigan nursery; 1 to 2 ft, blooms August to October, full to part sun, medium to wet soil, deer resistant."
+      },
+      {
+        "title": "Wild Ones Keweenaw Chapter (Michigan): Bottle Gentian plant sheet",
+        "url": "https://keweenaw.wildones.org/wp-content/uploads/sites/84/2025/06/Bottle_gentian.pdf",
+        "note": "Michigan Wild Ones native plant sheet; moist to wet soil, full sun to part shade, zones 3 to 6, blooms August to October."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "companions": [
+    {
+      "id": "newengland",
+      "why": "Good companions: New England aster, obedient plant, blazing stars, turtlehead and lobelias.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Bottle Gentian",
+          "url": "https://www.wildcherryfarm.com/shop-native-plants/p/bottle-gentian-gentiana-andrewsii",
+          "about": "bottlegentian"
+        }
+      ]
+    },
+    {
+      "id": "obedient",
+      "why": "Good companions: New England aster, obedient plant, blazing stars, turtlehead and lobelias.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Bottle Gentian",
+          "url": "https://www.wildcherryfarm.com/shop-native-plants/p/bottle-gentian-gentiana-andrewsii",
+          "about": "bottlegentian"
+        }
+      ]
+    },
+    {
+      "id": "liatris",
+      "why": "Good companions: New England aster, obedient plant, blazing stars, turtlehead and lobelias.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Bottle Gentian",
+          "url": "https://www.wildcherryfarm.com/shop-native-plants/p/bottle-gentian-gentiana-andrewsii",
+          "about": "bottlegentian"
+        }
+      ]
+    },
+    {
+      "id": "turtle",
+      "why": "Good companions: New England aster, obedient plant, blazing stars, turtlehead and lobelias.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Bottle Gentian",
+          "url": "https://www.wildcherryfarm.com/shop-native-plants/p/bottle-gentian-gentiana-andrewsii",
+          "about": "bottlegentian"
+        }
+      ]
+    },
+    {
+      "id": "lobelia",
+      "why": "Good companions: New England aster, obedient plant, blazing stars, turtlehead and lobelias.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Bottle Gentian",
+          "url": "https://www.wildcherryfarm.com/shop-native-plants/p/bottle-gentian-gentiana-andrewsii",
+          "about": "bottlegentian"
+        }
+      ]
+    },
+    {
+      "id": "cardinal",
+      "why": "Good companions: New England aster, obedient plant, blazing stars, turtlehead and lobelias.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Cherry Farm (Michigan native nursery): Bottle Gentian",
+          "url": "https://www.wildcherryfarm.com/shop-native-plants/p/bottle-gentian-gentiana-andrewsii",
+          "about": "bottlegentian"
+        }
+      ]
+    },
+    {
+      "id": "mtnmint",
+      "why": "It tends to flop, so tuck it among sturdier plants, such as mountain mint.",
+      "aboutThisPlant": true,
+      "sources": [
+        {
+          "title": "Wild Ones Keweenaw Chapter (Michigan): Bottle Gentian plant sheet",
+          "url": "https://keweenaw.wildones.org/wp-content/uploads/sites/84/2025/06/Bottle_gentian.pdf",
+          "about": "bottlegentian"
+        }
+      ]
+    }
+  ]
+}

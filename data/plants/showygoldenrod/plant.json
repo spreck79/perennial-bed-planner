@@ -1,0 +1,115 @@
+{
+  "id": "showygoldenrod",
+  "facts": {
+    "code": "ShGo",
+    "name": "Showy Goldenrod",
+    "latin": "Solidago speciosa",
+    "native": true,
+    "kind": "clump",
+    "fam": "daisy",
+    "hLo": 24,
+    "hHi": 48,
+    "spacing": 18,
+    "bloom": [
+      8.7,
+      10.3
+    ],
+    "color": "Golden yellow plumes",
+    "colors": [
+      "yellow"
+    ],
+    "hex": "#E8C21E",
+    "txt": "#2E3A2C",
+    "light": "Full sun to light shade",
+    "sun": [
+      "full",
+      "part"
+    ],
+    "moisture": "Dry to average; drought tolerant once settled",
+    "notes": "A well-behaved Michigan native goldenrod: upright wands of gold that bloom a little later than most goldenrods, a late nectar source for monarchs and other pollinators. Unlike Canada goldenrod, it isn't known to be weedy, and it handles dry sites.",
+    "toxic": null,
+    "zones": [
+      3,
+      9
+    ]
+  },
+  "photo": {
+    "credit": {
+      "file": "Showy goldenrod (53074948692).jpg",
+      "by": "U.S. Fish and Wildlife Service - Midwest Region",
+      "lic": "Public domain",
+      "licUrl": ""
+    }
+  },
+  "status": {
+    "kind": "native",
+    "sources": [
+      {
+        "title": "MSU Native Plants: Showy goldenrod",
+        "url": "https://www.canr.msu.edu/nativeplants/plant_facts/showy_goldenrod",
+        "note": "Michigan native perennial in MSU's native plant trials; late bloomer that suits dry sites, and unlike Canada goldenrod it isn't known to be a weed."
+      },
+      {
+        "title": "Wild Ones Keweenaw (Michigan): Showy Goldenrod",
+        "url": "https://keweenaw.wildones.org/wp-content/uploads/sites/84/2021/06/Showy_goldenrodPIS.pdf",
+        "note": "Michigan native plant sheet: blooms later than most goldenrods, a late nectar source for monarchs and other pollinators."
+      }
+    ]
+  },
+  "care": {
+    "group": "spring",
+    "trim": false
+  },
+  "sources": [
+    {
+      "title": "MSU Native Plants: Showy goldenrod fact sheet (PDF)",
+      "url": "https://www.canr.msu.edu:443/nativeplants/uploads/files/Showy_goldenrod.pdf",
+      "topic": "Plant facts",
+      "note": "Native east of the Rocky Mountains; tested at MSU for plants blooming mid-August through early October."
+    },
+    {
+      "title": "Delaware Nature (DNRT): Showy Goldenrod",
+      "url": "https://dnrt.org/showy-goldenrod/",
+      "topic": "Plant facts",
+      "note": "1 to 3 ft; open woods and prairies; blooms August to September."
+    }
+  ],
+  "companions": [
+    {
+      "id": "anemone",
+      "why": "Pair with fall aster, bugbane, eupatorium, goldenrod, sedum or toad lily; near bleeding heart; with variegated hosta and grasses.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Japanese Anemone article",
+          "url": "https://hort.extension.wisc.edu/articles/anemone-honorine-jobert/",
+          "about": "anemone"
+        }
+      ]
+    },
+    {
+      "id": "liatris",
+      "why": "Combines with yellow flowers such as coreopsis and goldenrod, pink ones such as purple coneflower, prairie grasses and silver plants such as Stachys (lamb's ear).",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Wisconsin Horticulture (UW–Madison Extension): Blazing Star article",
+          "url": "https://hort.extension.wisc.edu/articles/liatris/",
+          "about": "liatris"
+        }
+      ]
+    },
+    {
+      "id": "obedient",
+      "why": "A border is brightened when obedient plant is planted alongside goldenrods, little bluestem and purple coneflower.",
+      "aboutThisPlant": false,
+      "sources": [
+        {
+          "title": "Mt. Cuba Center: Obedient Plant",
+          "url": "https://mtcubacenter.org/plants/obedient-plant/",
+          "about": "obedient"
+        }
+      ]
+    }
+  ]
+}
